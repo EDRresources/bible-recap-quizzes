@@ -1,19 +1,22 @@
 import json
 import os
 import re
-import subprocess
 import urllib.request
 
-# Find the quiz HTML file that was pushed in this commit
-sha = os.environ["GITHUB_SHA"]
-result = subprocess.run(
-    ["git", "diff-tree", "--no-commit-id", "-r", "--name-only", sha],
-    capture_output=True, text=True
-)
-files = [f for f in result.stdout.strip().split("\n") if re.match(r"biblerecap_quiz_day.*\.html", f)]
+# Find the quiz HTML file from the GitHub push event payload
+event_path = os.environ.get("GITHUB_EVENT_PATH", "")
+files = []
+
+if event_path and os.path.exists(event_path):
+    with open(event_path) as f:
+        event = json.load(f)
+    for commit in event.get("commits", []):
+        files.extend(commit.get("added", []))
+        files.extend(commit.get("modified", []))
+    files = [f for f in files if re.match(r"biblerecap_quiz_day.*\.html", f)]
 
 if not files:
-    print("No quiz HTML file found in this commit — skipping email.")
+    print("No quiz HTML file found in this push event — skipping email.")
     exit(0)
 
 quiz_file = files[0]
@@ -32,6 +35,8 @@ day_num = int(mmdd[2:])
 month_names = ["", "January", "February", "March", "April", "May", "June",
                "July", "August", "September", "October", "November", "December"]
 month_name = month_names[month_num]
+
+print(f"Found quiz file: {quiz_file} (Day {day}, {month_name} {day_num})")
 
 # Build GitHub Pages URL
 pages_url = f"https://edrresources.github.io/bible-recap-quizzes/{quiz_file}"
@@ -55,12 +60,12 @@ if os.path.exists(meta_file):
 
 # Build email HTML
 passages_section = (
-    f'<p style="font-family:Georgia,serif;font-size:15px;color:#2c1a00;margin-top:8px;">'
+    '<p style="font-family:Georgia,serif;font-size:15px;color:#2c1a00;margin-top:8px;">'
     f'<strong>Passages:</strong> {passages_html}</p>'
 ) if passages_html else ""
 
 summary_section = (
-    f'<p style="font-family:Georgia,serif;font-size:15px;color:#2c1a00;margin-top:12px;">'
+    '<p style="font-family:Georgia,serif;font-size:15px;color:#2c1a00;margin-top:12px;">'
     f'{summary_html}</p>'
 ) if summary_html else ""
 
@@ -71,26 +76,17 @@ psalm_section = (
     + psalm_html
 ) if psalm_html else ""
 
-html_body = f"""
-<div style="font-family:Georgia,serif;max-width:600px;margin:0 auto;color:#2c1a00;">
-  <p style="font-size:16px;margin:0 0 8px 0;">
-    <strong>Day {day} &mdash; {date_str}</strong>
-  </p>
-  {passages_section}
-  {summary_section}
-  {psalm_section}
-  <p style="margin-top:24px;">
-    <a href="{pages_url}"
-       style="font-family:Georgia,serif;font-size:16px;color:#7a4a00;font-weight:bold;text-decoration:none;">
-      &#9670; Open Today&rsquo;s Quiz &rarr;
-    </a>
-  </p>
-  <hr style="border:none;border-top:1px solid #c9a84c;margin:20px 0 12px;">
-  <p style="font-size:12px;color:#6b4f1a;margin:0;">
-    The Bible Recap &middot; Daily Quiz &middot; Day {day} &middot; 10 challenging questions
-  </p>
-</div>
-"""
+html_body = (
+    '<div style="font-family:Georgia,serif;max-width:600px;margin:0 auto;color:#2c1a00;">'
+    f'<p style="font-size:16px;margin:0 0 8px 0;"><strong>Day {day} &mdash; {date_str}</strong></p>'
+    + passages_section
+    + summary_section
+    + psalm_section
+    + f'<p style="margin-top:24px;"><a href="{pages_url}" style="font-family:Georgia,serif;font-size:16px;color:#7a4a00;font-weight:bold;text-decoration:none;">&#9670; Open Today&rsquo;s Quiz &rarr;</a></p>'
+    + '<hr style="border:none;border-top:1px solid #c9a84c;margin:20px 0 12px;">'
+    + f'<p style="font-size:12px;color:#6b4f1a;margin:0;">The Bible Recap &middot; Daily Quiz &middot; Day {day} &middot; 10 challenging questions</p>'
+    + '</div>'
+)
 
 payload = json.dumps({
     "from": "onboarding@resend.dev",
@@ -98,6 +94,8 @@ payload = json.dumps({
     "subject": f"Bible Recap Quiz \u2014 Day {day} \u2014 {date_str}",
     "html": html_body
 }).encode()
+
+print(f"Sending email to erik.d.roberson@gmail.com and eden.roberson@gmail.com...")
 
 req = urllib.request.Request(
     "https://api.resend.com/emails",
@@ -110,4 +108,4 @@ req = urllib.request.Request(
 
 with urllib.request.urlopen(req) as resp:
     result = json.loads(resp.read())
-    print(f"Email sent successfully\! ID: {result.get('id')}")
+    print(f"Email sent\! ID: {result.get('id')}")
