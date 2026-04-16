@@ -1,0 +1,690 @@
+<\!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Recap Quiz — Day 107 — April 17, 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2rem 1rem 4rem;
+    font-family: 'Crimson Text', serif;
+  }
+  .scroll-wrap { width: 100%; max-width: 760px; position: relative; }
+  .gold-strip {
+    height: 18px;
+    background: linear-gradient(90deg, #3a2a00 0%, #c9a84c 20%, #f0d080 50%, #c9a84c 80%, #3a2a00 100%);
+    border-radius: 3px 3px 0 0;
+  }
+  .gold-strip.bottom { border-radius: 0 0 3px 3px; }
+  .parchment {
+    background: linear-gradient(160deg, #f5ecd6 0%, #ecdbb4 40%, #dfc99a 70%, #d4b87a 100%);
+    padding: 2.5rem 2.8rem 2.8rem;
+    position: relative;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.7), inset 0 0 60px rgba(160,120,40,0.15);
+  }
+  .quiz-header { text-align: center; margin-bottom: 1.8rem; }
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #6b4f1a;
+    margin-bottom: 0.5rem;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #2c1a00;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+  .badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin: 0.6rem 0;
+  }
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    padding: 3px 9px;
+    border-radius: 3px;
+    font-weight: 700;
+  }
+  .badge-challenging { background: #7a4a00; color: #f0d080; border: 1px solid #c9a84c; }
+  .badge-passage { background: rgba(44,26,0,0.12); color: #5a3a08; border: 1px solid #c9a84c; }
+  .ornament { color: #c9a84c; font-size: 1.3rem; margin: 0.4rem 0; display: block; }
+  .progress-wrap { margin-bottom: 1.6rem; display: flex; align-items: center; gap: 0.7rem; }
+  .progress-track {
+    flex: 1; height: 6px;
+    background: rgba(100,70,10,0.2);
+    border-radius: 3px; overflow: hidden;
+    border: 1px solid rgba(201,168,76,0.3);
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #f0d080);
+    border-radius: 3px; width: 0%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem; color: #6b4f1a;
+    white-space: nowrap; letter-spacing: 0.08em;
+    min-width: 52px; text-align: right;
+  }
+  .q-card { display: none; animation: fadeIn 0.4s ease; }
+  .q-card.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .q-meta { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem; }
+  .q-number { font-family: 'Cinzel', serif; font-size: 0.65rem; color: #8b6820; letter-spacing: 0.1em; }
+  .badge-detail {
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem; letter-spacing: 0.1em;
+    padding: 2px 7px; border-radius: 3px; font-weight: 700;
+    background: #1a2d5c; color: #a8c0f0; border: 1px solid #3a5aaa;
+  }
+  .q-text { font-size: 1.15rem; color: #1e1000; line-height: 1.55; margin-bottom: 1.2rem; font-style: italic; }
+  .choices { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; }
+  .choice-btn {
+    display: flex; align-items: flex-start; gap: 0.8rem;
+    background: rgba(255,245,220,0.55);
+    border: 1.5px solid rgba(201,168,76,0.4);
+    border-radius: 5px; padding: 0.75rem 1rem;
+    cursor: pointer; text-align: left;
+    font-family: 'Crimson Text', serif; font-size: 1.05rem;
+    color: #2c1a00; line-height: 1.45;
+    transition: background 0.2s, border-color 0.2s; width: 100%;
+  }
+  .choice-btn:hover:not(:disabled) { background: rgba(240,208,128,0.35); border-color: #c9a84c; }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif; font-size: 0.75rem; font-weight: 700;
+    color: #8b6820; min-width: 20px; padding-top: 2px;
+  }
+  .choice-btn.correct { background: rgba(26,92,42,0.18); border-color: #1a5c2a; color: #0d2e14; }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong { background: rgba(139,26,26,0.12); border-color: #8b1a1a; color: #3a0808; }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+  .feedback {
+    display: none; padding: 0.9rem 1.1rem; border-radius: 5px;
+    margin-top: 0.5rem; animation: fadeIn 0.3s ease;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb { background: rgba(26,92,42,0.1); border-left: 4px solid #1a5c2a; }
+  .feedback.wrong-fb { background: rgba(139,26,26,0.08); border-left: 4px solid #8b1a1a; }
+  .feedback-verdict {
+    font-family: 'Cinzel', serif; font-size: 0.7rem;
+    letter-spacing: 0.1em; font-weight: 700; margin-bottom: 0.3rem;
+  }
+  .feedback.correct-fb .feedback-verdict { color: #1a5c2a; }
+  .feedback.wrong-fb .feedback-verdict { color: #8b1a1a; }
+  .feedback-ref { font-family: 'Cinzel', serif; font-size: 0.65rem; color: #8b6820; letter-spacing: 0.08em; margin-bottom: 0.3rem; }
+  .feedback-text { font-size: 1rem; color: #2c1a00; line-height: 1.5; }
+  .next-btn {
+    display: none; margin-top: 1rem;
+    font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.12em;
+    color: #f0d080;
+    background: linear-gradient(135deg, #5a3a00, #7a5200);
+    border: 1.5px solid #c9a84c; border-radius: 4px;
+    padding: 0.55rem 1.4rem; cursor: pointer; transition: background 0.2s;
+  }
+  .next-btn:hover { background: linear-gradient(135deg, #7a5200, #9a6a00); }
+  #results-screen { display: none; text-align: center; animation: fadeIn 0.5s ease; }
+  .score-ring-wrap { margin: 1.2rem auto; width: 140px; height: 140px; }
+  .score-ring-wrap svg { width: 100%; height: 100%; }
+  .ring-bg { fill: none; stroke: rgba(100,70,10,0.2); stroke-width: 10; }
+  .ring-fill {
+    fill: none; stroke-width: 10; stroke-linecap: round;
+    transform: rotate(-90deg); transform-origin: 70px 70px;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-number { font-family: 'Cinzel', serif; font-size: 2rem; font-weight: 700; color: #2c1a00; margin: 0.3rem 0; }
+  .score-denom { font-size: 1rem; color: #6b4f1a; }
+  .score-message { font-family: 'Cinzel', serif; font-size: 0.9rem; letter-spacing: 0.08em; color: #4a2e00; margin: 0.5rem 0 1.4rem; }
+  .take-again-btn {
+    font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.12em;
+    color: #f0d080;
+    background: linear-gradient(135deg, #5a3a00, #7a5200);
+    border: 1.5px solid #c9a84c; border-radius: 4px;
+    padding: 0.6rem 1.6rem; cursor: pointer; transition: background 0.2s; margin-bottom: 1.8rem;
+  }
+  .take-again-btn:hover { background: linear-gradient(135deg, #7a5200, #9a6a00); }
+  .review-title {
+    font-family: 'Cinzel', serif; font-size: 0.8rem; letter-spacing: 0.15em;
+    color: #6b4f1a; margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(201,168,76,0.4); padding-bottom: 0.5rem;
+  }
+  .review-item {
+    text-align: left; margin-bottom: 1.1rem; padding: 0.8rem 1rem;
+    border-radius: 5px; background: rgba(255,245,220,0.4);
+    border-left: 4px solid #c9a84c;
+  }
+  .review-item.rev-correct { border-left-color: #1a5c2a; background: rgba(26,92,42,0.07); }
+  .review-item.rev-wrong   { border-left-color: #8b1a1a; background: rgba(139,26,26,0.07); }
+  .review-q { font-size: 0.95rem; font-style: italic; color: #2c1a00; margin-bottom: 0.3rem; }
+  .review-ans { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.06em; color: #5a3a08; }
+  .review-ans .rev-c { color: #1a5c2a; font-weight: 700; }
+  .review-ans .rev-w { color: #8b1a1a; font-weight: 700; }
+  hr.ornament-rule { border: none; border-top: 1px solid rgba(201,168,76,0.4); margin: 1.6rem 0; }
+  @media (max-width: 520px) {
+    .parchment { padding: 1.8rem 1.4rem 2rem; }
+    .quiz-title { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="scroll-wrap">
+  <div class="gold-strip"></div>
+  <div class="parchment">
+
+    <div class="quiz-header">
+      <div class="date-line">FRIDAY, APRIL 17, 2026 &middot; DAY 107</div>
+      <div class="quiz-title">The Bible Recap<br>Daily Quiz</div>
+      <span class="ornament">&#10022; &#10022; &#10022;</span>
+      <div class="badge-row">
+        <span class="badge badge-challenging">&#9670; CHALLENGING</span>
+        <span class="badge badge-passage">1 SAMUEL 25</span>
+        <span class="badge badge-passage">1 SAMUEL 26</span>
+        <span class="badge badge-passage">1 SAMUEL 27</span>
+      </div>
+    </div>
+
+    <hr class="ornament-rule">
+
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
+      <div class="progress-label" id="prog-label">0 / 10</div>
+    </div>
+
+    <div id="quiz-area">
+
+      <\!-- Q1 -->
+      <div class="q-card active" id="q1">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 1 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <p class="q-text">The text describes Nabal as a very wealthy man. How many sheep and how many goats did he own?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="1" data-idx="0"><span class="choice-letter">A</span><span>1,000 sheep and 500 goats</span></button>
+          <button class="choice-btn" data-q="1" data-idx="1"><span class="choice-letter">B</span><span>2,000 sheep and 1,000 goats</span></button>
+          <button class="choice-btn" data-q="1" data-idx="2"><span class="choice-letter">C</span><span>3,000 sheep and 1,000 goats</span></button>
+          <button class="choice-btn" data-q="1" data-idx="3"><span class="choice-letter">D</span><span>5,000 sheep and 2,000 goats</span></button>
+        </div>
+        <div class="feedback" id="fb1">
+          <div class="feedback-verdict" id="fbv1"></div>
+          <div class="feedback-ref">1 Samuel 25:2</div>
+          <div class="feedback-text">The text records that Nabal had three thousand sheep and a thousand goats. His enormous flocks were being sheared at the very moment David made his request, making Nabal's stingy refusal all the more striking. He had abundance to spare and gave nothing.</div>
+        </div>
+        <button class="next-btn" id="next1">Next Question &rarr;</button>
+      </div>
+
+      <\!-- Q2 -->
+      <div class="q-card" id="q2">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 2 OF 10</span>
+        </div>
+        <p class="q-text">When David's men brought his request to Nabal, Nabal refused and insulted David. What specific accusation did Nabal make against David in his refusal?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="2" data-idx="0"><span class="choice-letter">A</span><span>He accused David of being a traitor who had turned against King Saul</span></button>
+          <button class="choice-btn" data-q="2" data-idx="1"><span class="choice-letter">B</span><span>He called David a servant who had broken away from his master</span></button>
+          <button class="choice-btn" data-q="2" data-idx="2"><span class="choice-letter">C</span><span>He claimed David's men had stolen sheep from his flocks</span></button>
+          <button class="choice-btn" data-q="2" data-idx="3"><span class="choice-letter">D</span><span>He accused David of being a Philistine sympathizer threatening the kingdom</span></button>
+        </div>
+        <div class="feedback" id="fb2">
+          <div class="feedback-verdict" id="fbv2"></div>
+          <div class="feedback-ref">1 Samuel 25:10&ndash;11</div>
+          <div class="feedback-text">Nabal sneered, "Who is David?... There are many servants nowadays who are breaking away from their masters." He dismissed David as nothing more than a runaway slave -- a calculated insult against the man God had already anointed as Israel's future king.</div>
+        </div>
+        <button class="next-btn" id="next2">Next Question &rarr;</button>
+      </div>
+
+      <\!-- Q3 -->
+      <div class="q-card" id="q3">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 3 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <p class="q-text">How many young men did David send to deliver his request to Nabal?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="3" data-idx="0"><span class="choice-letter">A</span><span>Five</span></button>
+          <button class="choice-btn" data-q="3" data-idx="1"><span class="choice-letter">B</span><span>Ten</span></button>
+          <button class="choice-btn" data-q="3" data-idx="2"><span class="choice-letter">C</span><span>Twelve</span></button>
+          <button class="choice-btn" data-q="3" data-idx="3"><span class="choice-letter">D</span><span>Twenty</span></button>
+        </div>
+        <div class="feedback" id="fb3">
+          <div class="feedback-verdict" id="fbv3"></div>
+          <div class="feedback-ref">1 Samuel 25:5</div>
+          <div class="feedback-text">David sent ten young men, instructing them to greet Nabal in his name and make the request respectfully. The delegation's size was diplomatically deliberate -- enough to represent David's authority, but not so large as to appear threatening.</div>
+        </div>
+        <button class="next-btn" id="next3">Next Question &rarr;</button>
+      </div>
+
+      <\!-- Q4 -->
+      <div class="q-card" id="q4">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 4 OF 10</span>
+        </div>
+        <p class="q-text">In her appeal to David, Abigail used a vivid image to describe how God would deal with David's enemies. What was that image?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="4" data-idx="0"><span class="choice-letter">A</span><span>He would sweep them away like flood waters before a storm</span></button>
+          <button class="choice-btn" data-q="4" data-idx="1"><span class="choice-letter">B</span><span>He would drive them into the sea as he did to Egypt's army</span></button>
+          <button class="choice-btn" data-q="4" data-idx="2"><span class="choice-letter">C</span><span>He would hurl them away as from the hollow of a sling</span></button>
+          <button class="choice-btn" data-q="4" data-idx="3"><span class="choice-letter">D</span><span>He would scatter them like chaff before a dry wind</span></button>
+        </div>
+        <div class="feedback" id="fb4">
+          <div class="feedback-verdict" id="fbv4"></div>
+          <div class="feedback-ref">1 Samuel 25:29</div>
+          <div class="feedback-text">Abigail told David that God would "sling out the lives of your enemies as from the hollow of a sling." The image carries double weight: the sling was David's own famous weapon against Goliath, and now Abigail uses it to urge David to trust God for vengeance rather than seizing it himself.</div>
+        </div>
+        <button class="next-btn" id="next4">Next Question &rarr;</button>
+      </div>
+
+      <\!-- Q5 -->
+      <div class="q-card" id="q5">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 5 OF 10</span>
+        </div>
+        <p class="q-text">When Abigail returned home after secretly meeting David, she found Nabal in a particular condition. What was it, and what did she do as a result?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="5" data-idx="0"><span class="choice-letter">A</span><span>He was mourning the death of a servant, so she waited three days before speaking</span></button>
+          <button class="choice-btn" data-q="5" data-idx="1"><span class="choice-letter">B</span><span>He was feasting and very drunk, so she told him nothing until morning</span></button>
+          <button class="choice-btn" data-q="5" data-idx="2"><span class="choice-letter">C</span><span>He was meeting with Saul's officers, so she waited until they departed</span></button>
+          <button class="choice-btn" data-q="5" data-idx="3"><span class="choice-letter">D</span><span>He was asleep in his tent, so she woke him at dawn to speak</span></button>
+        </div>
+        <div class="feedback" id="fb5">
+          <div class="feedback-verdict" id="fbv5"></div>
+          <div class="feedback-ref">1 Samuel 25:36</div>
+          <div class="feedback-text">Nabal was holding a great feast "like the feast of a king," and "he was very drunk." So Abigail "told him nothing at all until the morning light." Her restraint showed wisdom -- a drunk Nabal could not meaningfully receive the news. She waited for sobriety before delivering the sobering truth.</div>
+        </div>
+        <button class="next-btn" id="next5">Next Question &rarr;</button>
+      </div>
+
+      <\!-- Q6 -->
+      <div class="q-card" id="q6">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 6 OF 10</span>
+        </div>
+        <p class="q-text">The morning after his feast, when Abigail told Nabal what she had done to avert David's attack, what happened to Nabal physically?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="6" data-idx="0"><span class="choice-letter">A</span><span>He flew into a violent rage and drove Abigail out of the house</span></button>
+          <button class="choice-btn" data-q="6" data-idx="1"><span class="choice-letter">B</span><span>He wept bitterly and confessed his foolishness before all his servants</span></button>
+          <button class="choice-btn" data-q="6" data-idx="2"><span class="choice-letter">C</span><span>His heart died within him and he became like a stone</span></button>
+          <button class="choice-btn" data-q="6" data-idx="3"><span class="choice-letter">D</span><span>He immediately mounted his donkey and rode to find Saul</span></button>
+        </div>
+        <div class="feedback" id="fb6">
+          <div class="feedback-verdict" id="fbv6"></div>
+          <div class="feedback-ref">1 Samuel 25:37&ndash;38</div>
+          <div class="feedback-text">Upon hearing the news, "his heart died within him, and he became as a stone." About ten days later, the LORD struck Nabal and he died. The text presents his physical collapse as divine judgment -- God avenged David without David having to lift a hand, exactly as Abigail had promised.</div>
+        </div>
+        <button class="next-btn" id="next6">Next Question &rarr;</button>
+      </div>
+
+      <\!-- Q7 -->
+      <div class="q-card" id="q7">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 7 OF 10</span>
+        </div>
+        <p class="q-text">When David and Abishai crept into Saul's camp at night, no one detected them. What reason does the text give for why the entire camp slept so soundly?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="7" data-idx="0"><span class="choice-letter">A</span><span>The soldiers had marched all day and were exhausted from the pursuit</span></button>
+          <button class="choice-btn" data-q="7" data-idx="1"><span class="choice-letter">B</span><span>David's men had introduced sleeping herbs into the camp's water supply</span></button>
+          <button class="choice-btn" data-q="7" data-idx="2"><span class="choice-letter">C</span><span>A deep sleep from the LORD had fallen upon them all</span></button>
+          <button class="choice-btn" data-q="7" data-idx="3"><span class="choice-letter">D</span><span>Abishai distracted the sentries while David slipped through the lines</span></button>
+        </div>
+        <div class="feedback" id="fb7">
+          <div class="feedback-verdict" id="fbv7"></div>
+          <div class="feedback-ref">1 Samuel 26:12</div>
+          <div class="feedback-text">The text states plainly: "no man saw it or knew it, nor did any awake, for they were all asleep, because a deep sleep from the LORD had fallen upon them." God himself subdued three thousand armed soldiers, making David's deliberate restraint toward Saul all the more striking.</div>
+        </div>
+        <button class="next-btn" id="next7">Next Question &rarr;</button>
+      </div>
+
+      <\!-- Q8 -->
+      <div class="q-card" id="q8">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 8 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <p class="q-text">David took two specific items from beside the sleeping Saul as proof that he had been close enough to kill the king. What were those two items?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="8" data-idx="0"><span class="choice-letter">A</span><span>Saul's sword and his royal signet ring</span></button>
+          <button class="choice-btn" data-q="8" data-idx="1"><span class="choice-letter">B</span><span>Saul's cloak and a piece of his armor</span></button>
+          <button class="choice-btn" data-q="8" data-idx="2"><span class="choice-letter">C</span><span>Saul's spear and the water jug that was at his head</span></button>
+          <button class="choice-btn" data-q="8" data-idx="3"><span class="choice-letter">D</span><span>Saul's crown and his battle bow</span></button>
+        </div>
+        <div class="feedback" id="fb8">
+          <div class="feedback-verdict" id="fbv8"></div>
+          <div class="feedback-ref">1 Samuel 26:11&ndash;12</div>
+          <div class="feedback-text">David took "the spear and the jar of water from Saul's head" -- both objects at the king's most exposed position while he slept. When David displayed them from a safe hilltop, they served as undeniable evidence of how close he had come, and of his conscious choice not to strike.</div>
+        </div>
+        <button class="next-btn" id="next8">Next Question &rarr;</button>
+      </div>
+
+      <\!-- Q9 -->
+      <div class="q-card" id="q9">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 9 OF 10</span>
+        </div>
+        <p class="q-text">After David called out from a distance and exposed that he had spared Saul's life again, what was Saul's response?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="9" data-idx="0"><span class="choice-letter">A</span><span>Saul wept openly and declared David his rightful heir before the whole army</span></button>
+          <button class="choice-btn" data-q="9" data-idx="1"><span class="choice-letter">B</span><span>Saul admitted he had sinned and acted foolishly, then blessed David</span></button>
+          <button class="choice-btn" data-q="9" data-idx="2"><span class="choice-letter">C</span><span>Saul swore a solemn oath by the LORD never to pursue David again</span></button>
+          <button class="choice-btn" data-q="9" data-idx="3"><span class="choice-letter">D</span><span>Saul commanded Abner to stand the army down and escort David safely home</span></button>
+        </div>
+        <div class="feedback" id="fb9">
+          <div class="feedback-verdict" id="fbv9"></div>
+          <div class="feedback-ref">1 Samuel 26:21, 25</div>
+          <div class="feedback-text">Saul confessed, "I have sinned. Return, my son David, for I will no more do you harm... I have acted foolishly, and have made a great mistake." He then blessed David: "You will do great things and surely triumph." Yet David did not return -- he had heard such words from Saul before and knew better than to trust them.</div>
+        </div>
+        <button class="next-btn" id="next9">Next Question &rarr;</button>
+      </div>
+
+      <\!-- Q10 -->
+      <div class="q-card" id="q10">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 10 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <p class="q-text">After David fled to Philistine territory and Achish gave him Ziklag as a base, how long did the text say David lived in the land of the Philistines?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="10" data-idx="0"><span class="choice-letter">A</span><span>Six months</span></button>
+          <button class="choice-btn" data-q="10" data-idx="1"><span class="choice-letter">B</span><span>One year</span></button>
+          <button class="choice-btn" data-q="10" data-idx="2"><span class="choice-letter">C</span><span>One year and four months</span></button>
+          <button class="choice-btn" data-q="10" data-idx="3"><span class="choice-letter">D</span><span>Two years</span></button>
+        </div>
+        <div class="feedback" id="fb10">
+          <div class="feedback-verdict" id="fbv10"></div>
+          <div class="feedback-ref">1 Samuel 27:7</div>
+          <div class="feedback-text">The text states precisely: "the number of days that David lived in the country of the Philistines was a year and four months." During this time David raided Israel's enemies while deceiving Achish into thinking he was raiding Judah -- leaving no survivors who could contradict his story. It was a morally complicated season in David's life.</div>
+        </div>
+        <button class="next-btn" id="next10">Show Results</button>
+      </div>
+
+    </div><\!-- /#quiz-area -->
+
+    <\!-- RESULTS SCREEN -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg viewBox="0 0 140 140">
+          <circle class="ring-bg" cx="70" cy="70" r="56"/>
+          <circle class="ring-fill" id="score-ring" cx="70" cy="70" r="56"
+                  stroke-dasharray="351.858"
+                  stroke-dashoffset="351.858"/>
+        </svg>
+      </div>
+      <div class="score-number"><span id="score-num">0</span><span class="score-denom"> / 10</span></div>
+      <div class="score-message" id="score-msg"></div>
+      <button class="take-again-btn" id="take-again">Take Again</button>
+      <hr class="ornament-rule">
+      <div class="review-title">QUESTION REVIEW</div>
+      <div id="review-list"></div>
+    </div>
+
+  </div><\!-- /.parchment -->
+  <div class="gold-strip bottom"></div>
+</div><\!-- /.scroll-wrap -->
+
+<script>
+(function () {
+  var questions = [
+    {
+      text: "The text describes Nabal as a very wealthy man. How many sheep and how many goats did he own?",
+      detail: true,
+      choices: ["1,000 sheep and 500 goats","2,000 sheep and 1,000 goats","3,000 sheep and 1,000 goats","5,000 sheep and 2,000 goats"],
+      correct: 2,
+      ref: "1 Samuel 25:2",
+      explanation: "The text records that Nabal had three thousand sheep and a thousand goats. His enormous flocks were being sheared at the very moment David made his request, making Nabal's stingy refusal all the more striking. He had abundance to spare and gave nothing."
+    },
+    {
+      text: "When David's men brought his request to Nabal, Nabal refused and insulted David. What specific accusation did Nabal make against David in his refusal?",
+      detail: false,
+      choices: [
+        "He accused David of being a traitor who had turned against King Saul",
+        "He called David a servant who had broken away from his master",
+        "He claimed David's men had stolen sheep from his flocks",
+        "He accused David of being a Philistine sympathizer threatening the kingdom"
+      ],
+      correct: 1,
+      ref: "1 Samuel 25:10\u201311",
+      explanation: "Nabal sneered, 'Who is David?... There are many servants nowadays who are breaking away from their masters.' He dismissed David as nothing more than a runaway slave -- a calculated insult against the man God had already anointed as Israel's future king."
+    },
+    {
+      text: "How many young men did David send to deliver his request to Nabal?",
+      detail: true,
+      choices: ["Five","Ten","Twelve","Twenty"],
+      correct: 1,
+      ref: "1 Samuel 25:5",
+      explanation: "David sent ten young men, instructing them to greet Nabal respectfully and make his request in an honorable manner. The delegation's size was diplomatically deliberate -- enough to represent David's authority, but not so large as to appear threatening."
+    },
+    {
+      text: "In her appeal to David, Abigail used a vivid image to describe how God would deal with David's enemies. What was that image?",
+      detail: false,
+      choices: [
+        "He would sweep them away like flood waters before a storm",
+        "He would drive them into the sea as he did to Egypt's army",
+        "He would hurl them away as from the hollow of a sling",
+        "He would scatter them like chaff before a dry wind"
+      ],
+      correct: 2,
+      ref: "1 Samuel 25:29",
+      explanation: "Abigail told David that God would 'sling out the lives of your enemies as from the hollow of a sling.' The image carries double weight: the sling was David's own famous weapon against Goliath, and now Abigail uses it to urge David to trust God for vengeance rather than seizing it himself."
+    },
+    {
+      text: "When Abigail returned home after secretly meeting David, she found Nabal in a particular condition. What was it, and what did she do as a result?",
+      detail: false,
+      choices: [
+        "He was mourning the death of a servant, so she waited three days before speaking",
+        "He was feasting and very drunk, so she told him nothing until morning",
+        "He was meeting with Saul's officers, so she waited until they departed",
+        "He was asleep in his tent, so she woke him at dawn to speak"
+      ],
+      correct: 1,
+      ref: "1 Samuel 25:36",
+      explanation: "Nabal was holding a great feast 'like the feast of a king,' and 'he was very drunk.' So Abigail 'told him nothing at all until the morning light.' Her restraint showed wisdom -- a drunk Nabal could not meaningfully receive the news. She waited for sobriety before delivering the sobering truth."
+    },
+    {
+      text: "The morning after his feast, when Abigail told Nabal what she had done to avert David's attack, what happened to Nabal physically?",
+      detail: false,
+      choices: [
+        "He flew into a violent rage and drove Abigail out of the house",
+        "He wept bitterly and confessed his foolishness before all his servants",
+        "His heart died within him and he became like a stone",
+        "He immediately mounted his donkey and rode to find Saul"
+      ],
+      correct: 2,
+      ref: "1 Samuel 25:37\u201338",
+      explanation: "Upon hearing the news, 'his heart died within him, and he became as a stone.' About ten days later, the LORD struck Nabal and he died. The text presents his physical collapse as divine judgment -- God avenged David without David having to lift a hand, exactly as Abigail had promised."
+    },
+    {
+      text: "When David and Abishai crept into Saul's camp at night, no one detected them. What reason does the text give for why the entire camp slept so soundly?",
+      detail: false,
+      choices: [
+        "The soldiers had marched all day and were exhausted from the pursuit",
+        "David's men had introduced sleeping herbs into the camp's water supply",
+        "A deep sleep from the LORD had fallen upon them all",
+        "Abishai distracted the sentries while David slipped through the lines"
+      ],
+      correct: 2,
+      ref: "1 Samuel 26:12",
+      explanation: "The text states plainly: 'no man saw it or knew it, nor did any awake, for they were all asleep, because a deep sleep from the LORD had fallen upon them.' God himself subdued three thousand armed soldiers, making David's deliberate restraint toward Saul all the more striking."
+    },
+    {
+      text: "David took two specific items from beside the sleeping Saul as proof that he had been close enough to kill the king. What were those two items?",
+      detail: true,
+      choices: [
+        "Saul's sword and his royal signet ring",
+        "Saul's cloak and a piece of his armor",
+        "Saul's spear and the water jug that was at his head",
+        "Saul's crown and his battle bow"
+      ],
+      correct: 2,
+      ref: "1 Samuel 26:11\u201312",
+      explanation: "David took 'the spear and the jar of water from Saul's head' -- both objects at the king's most exposed position while he slept. When David displayed them from a safe hilltop, they served as undeniable evidence of how close he had come, and of his conscious choice not to strike."
+    },
+    {
+      text: "After David called out from a distance and exposed that he had spared Saul's life again, what was Saul's response?",
+      detail: false,
+      choices: [
+        "Saul wept openly and declared David his rightful heir before the whole army",
+        "Saul admitted he had sinned and acted foolishly, then blessed David",
+        "Saul swore a solemn oath by the LORD never to pursue David again",
+        "Saul commanded Abner to stand the army down and escort David safely home"
+      ],
+      correct: 1,
+      ref: "1 Samuel 26:21, 25",
+      explanation: "Saul confessed, 'I have sinned. Return, my son David, for I will no more do you harm... I have acted foolishly, and have made a great mistake.' He then blessed David: 'You will do great things and surely triumph.' Yet David did not return -- he had heard such words from Saul before and knew better than to trust them."
+    },
+    {
+      text: "After David fled to Philistine territory and Achish gave him Ziklag as a base, how long did the text say David lived in the land of the Philistines?",
+      detail: true,
+      choices: ["Six months","One year","One year and four months","Two years"],
+      correct: 2,
+      ref: "1 Samuel 27:7",
+      explanation: "The text states precisely: 'the number of days that David lived in the country of the Philistines was a year and four months.' During this time David raided Israel's enemies while deceiving Achish into thinking he was raiding Judah -- leaving no survivors who could contradict his story. It was a morally complicated season in David's life."
+    }
+  ];
+
+  var letters = ['A','B','C','D'];
+  var state = {
+    current: 0, score: 0,
+    answered: new Array(10).fill(false),
+    userAnswers: new Array(10).fill(-1)
+  };
+
+  function updateProgress(answered) {
+    document.getElementById('prog-fill').style.width = (answered * 10) + '%';
+    document.getElementById('prog-label').textContent = answered + ' / 10';
+  }
+
+  function showQuestion(idx) {
+    document.querySelectorAll('.q-card').forEach(function(c){ c.classList.remove('active'); });
+    document.getElementById('q' + (idx + 1)).classList.add('active');
+    state.current = idx;
+  }
+
+  function handleAnswer(qIdx, chosenIdx) {
+    if (state.answered[qIdx]) return;
+    state.answered[qIdx] = true;
+    state.userAnswers[qIdx] = chosenIdx;
+    var q = questions[qIdx];
+    var qNum = qIdx + 1;
+    var card = document.getElementById('q' + qNum);
+    var btns = card.querySelectorAll('.choice-btn');
+    var fb = document.getElementById('fb' + qNum);
+    var fbv = document.getElementById('fbv' + qNum);
+    var nextBtn = document.getElementById('next' + qNum);
+    btns.forEach(function(btn){ btn.disabled = true; });
+    if (chosenIdx === q.correct) {
+      state.score++;
+      btns[chosenIdx].classList.add('correct');
+      fb.classList.add('show','correct-fb');
+      fbv.textContent = '\u2713 Correct';
+    } else {
+      btns[chosenIdx].classList.add('wrong');
+      btns[q.correct].classList.add('correct');
+      fb.classList.add('show','wrong-fb');
+      fbv.textContent = '\u2717 Incorrect';
+    }
+    updateProgress(state.answered.filter(Boolean).length);
+    nextBtn.style.display = 'inline-block';
+  }
+
+  function showResults() {
+    document.getElementById('quiz-area').style.display = 'none';
+    var rs = document.getElementById('results-screen');
+    rs.style.display = 'block';
+    var pct = state.score / 10;
+    var circumference = 351.858;
+    var ring = document.getElementById('score-ring');
+    ring.style.stroke = pct >= 0.8 ? '#1a5c2a' : pct >= 0.5 ? '#c9a84c' : '#8b1a1a';
+    setTimeout(function(){ ring.style.strokeDashoffset = circumference - (pct * circumference); }, 80);
+    document.getElementById('score-num').textContent = state.score;
+    var msg;
+    if (state.score === 10) msg = 'Perfect score\! Every detail was in your heart.';
+    else if (state.score >= 8) msg = 'Excellent \u2014 you read closely and carefully.';
+    else if (state.score >= 6) msg = 'Good work. A second read will sharpen those details.';
+    else if (state.score >= 4) msg = 'Keep digging \u2014 the narrative rewards careful attention.';
+    else msg = "Return to the text and read again. God's word is worth every pass.";
+    document.getElementById('score-msg').textContent = msg;
+    var rl = document.getElementById('review-list');
+    rl.innerHTML = '';
+    questions.forEach(function(q, i){
+      var div = document.createElement('div');
+      div.className = 'review-item ' + (state.userAnswers[i] === q.correct ? 'rev-correct' : 'rev-wrong');
+      var qp = document.createElement('p');
+      qp.className = 'review-q';
+      qp.textContent = (i+1) + '. ' + q.text;
+      var ap = document.createElement('p');
+      ap.className = 'review-ans';
+      var correct = letters[q.correct] + ' \u2014 ' + q.choices[q.correct];
+      if (state.userAnswers[i] === q.correct) {
+        ap.innerHTML = '<span class="rev-c">Your answer: ' + correct + '</span>';
+      } else {
+        var yours = state.userAnswers[i] >= 0 ? (letters[state.userAnswers[i]] + ' \u2014 ' + q.choices[state.userAnswers[i]]) : 'No answer';
+        ap.innerHTML = '<span class="rev-w">Your answer: ' + yours + '</span><br><span class="rev-c">Correct: ' + correct + '</span>';
+      }
+      div.appendChild(qp);
+      div.appendChild(ap);
+      rl.appendChild(div);
+    });
+  }
+
+  function resetQuiz() {
+    state.score = 0;
+    state.answered = new Array(10).fill(false);
+    state.userAnswers = new Array(10).fill(-1);
+    document.getElementById('results-screen').style.display = 'none';
+    document.getElementById('quiz-area').style.display = 'block';
+    updateProgress(0);
+    for (var i = 1; i <= 10; i++) {
+      var card = document.getElementById('q' + i);
+      card.classList.remove('active');
+      card.querySelectorAll('.choice-btn').forEach(function(b){
+        b.disabled = false;
+        b.classList.remove('correct','wrong');
+      });
+      document.getElementById('fb' + i).classList.remove('show','correct-fb','wrong-fb');
+      document.getElementById('fbv' + i).textContent = '';
+      document.getElementById('next' + i).style.display = 'none';
+    }
+    document.getElementById('q1').classList.add('active');
+    state.current = 0;
+  }
+
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('.choice-btn');
+    if (btn) {
+      handleAnswer(parseInt(btn.getAttribute('data-q'), 10) - 1, parseInt(btn.getAttribute('data-idx'), 10));
+      return;
+    }
+    var nb = e.target.closest('.next-btn');
+    if (nb) {
+      var num = parseInt(nb.id.replace('next',''), 10);
+      if (num < 10) showQuestion(num);
+      else showResults();
+      return;
+    }
+    if (e.target.closest('#take-again')) resetQuiz();
+  });
+
+  updateProgress(0);
+})();
+</script>
+</body>
+</html>
