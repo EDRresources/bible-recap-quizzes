@@ -77,7 +77,7 @@ print(f"RESEND_API_KEY present: {bool(api_key)} (length {len(api_key)})")
 
 payload = json.dumps({
     "from": "onboarding@resend.dev",
-    "to": ["erik.d.roberson@gmail.com", "eden.roberson@gmail.com"],
+    "to": ["erik.d.roberson@gmail.com"],
     "subject": f"Bible Recap Quiz \u2014 Day {day} \u2014 {date_str}",
     "html": html_body
 }).encode()
