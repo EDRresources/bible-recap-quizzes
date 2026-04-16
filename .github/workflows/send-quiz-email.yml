@@ -1,0 +1,118 @@
+name: Send Daily Quiz Email
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'biblerecap_quiz_day*.html'
+
+jobs:
+  send-email:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Find pushed quiz file
+        id: quiz
+        run: |
+          # Get the most recently pushed quiz HTML file
+          QUIZ_FILE=$(git diff-tree --no-commit-id -r --name-only ${{ github.sha }} | grep 'biblerecap_quiz_day.*\.html' | head -1)
+          echo "file=$QUIZ_FILE" >> $GITHUB_OUTPUT
+
+          # Derive day number and date from filename (biblerecap_quiz_day###_MMDD.html)
+          BASENAME=$(basename "$QUIZ_FILE" .html)
+          DAY=$(echo "$BASENAME" | sed 's/biblerecap_quiz_day\([0-9]*\)_.*/\1/')
+          MMDD=$(echo "$BASENAME" | sed 's/biblerecap_quiz_day[0-9]*_\([0-9]*\)/\1/')
+          echo "day=$DAY" >> $GITHUB_OUTPUT
+          echo "mmdd=$MMDD" >> $GITHUB_OUTPUT
+
+          # Build the GitHub Pages URL
+          PAGES_URL="https://edrresources.github.io/bible-recap-quizzes/${QUIZ_FILE}"
+          echo "url=$PAGES_URL" >> $GITHUB_OUTPUT
+
+          # Check for companion metadata JSON
+          META_FILE="${BASENAME}.json"
+          if [ -f "$META_FILE" ]; then
+            echo "has_meta=true" >> $GITHUB_OUTPUT
+            echo "meta_file=$META_FILE" >> $GITHUB_OUTPUT
+          else
+            echo "has_meta=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build and send email
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        run: |
+          DAY="${{ steps.quiz.outputs.day }}"
+          URL="${{ steps.quiz.outputs.url }}"
+          HAS_META="${{ steps.quiz.outputs.has_meta }}"
+          META_FILE="${{ steps.quiz.outputs.meta_file }}"
+
+          # Build email body from metadata if available, else use simple fallback
+          if [ "$HAS_META" = "true" ]; then
+            DATE_STR=$(python3 -c "import json; d=json.load(open('$META_FILE')); print(d.get('date',''))")
+            PASSAGES_HTML=$(python3 -c "import json; d=json.load(open('$META_FILE')); passages=d.get('passages',[]); print('<br>'.join(passages))")
+            SUMMARY=$(python3 -c "import json; d=json.load(open('$META_FILE')); print(d.get('summary',''))")
+            PSALM_HTML=$(python3 -c "import json; d=json.load(open('$META_FILE')); print(d.get('psalm_rows_html',''))")
+          else
+            DATE_STR="Day ${DAY}"
+            PASSAGES_HTML=""
+            SUMMARY=""
+            PSALM_HTML=""
+          fi
+
+          # Build HTML email
+          python3 - <<PYEOF
+          import json, os, urllib.request
+
+          day = os.environ.get('DAY', '')
+          url = os.environ.get('URL', '')
+          date_str = """$DATE_STR"""
+          passages_html = """$PASSAGES_HTML"""
+          summary = """$SUMMARY"""
+          psalm_html = """$PSALM_HTML"""
+
+          passages_section = f'<p style="font-family:Georgia,serif;font-size:15px;color:#2c1a00;margin-top:8px;"><strong>Passages:</strong> {passages_html}</p>' if passages_html else ''
+          summary_section = f'<p style="font-family:Georgia,serif;font-size:15px;color:#2c1a00;margin-top:12px;">{summary}</p>' if summary else ''
+          psalm_section = f'<hr style="border:none;border-top:1px solid #c9a84c;margin:16px 0;"><p style="font-family:Georgia,serif;font-size:13px;color:#6b4f1a;"><strong>Psalm Reference</strong></p>{psalm_html}' if psalm_html else ''
+
+          html_body = f"""
+          <div style="font-family:Georgia,serif;max-width:600px;margin:0 auto;">
+            <p style="font-size:15px;color:#2c1a00;">
+              <strong>Day {day} &mdash; {date_str}</strong>
+            </p>
+            {passages_section}
+            {summary_section}
+            {psalm_section}
+            <p style="margin-top:20px;">
+              <a href="{url}" style="font-family:Georgia,serif;font-size:16px;color:#7a4a00;font-weight:bold;text-decoration:none;">&#9670; Open Today&rsquo;s Quiz &rarr;</a>
+            </p>
+            <hr style="border:none;border-top:1px solid #c9a84c;margin:16px 0;">
+            <p style="font-family:Georgia,serif;font-size:12px;color:#6b4f1a;">The Bible Recap &middot; Daily Quiz &middot; Day {day} &middot; 10 challenging questions</p>
+          </div>
+          """
+
+          payload = json.dumps({
+            "from": "onboarding@resend.dev",
+            "to": ["erik.d.roberson@gmail.com", "eden.roberson@gmail.com"],
+            "subject": f"Bible Recap Quiz \u2014 Day {day} \u2014 {date_str}",
+            "html": html_body
+          }).encode()
+
+          req = urllib.request.Request(
+            "https://api.resend.com/emails",
+            data=payload,
+            headers={
+              "Authorization": f"Bearer {os.environ['RESEND_API_KEY']}",
+              "Content-Type": "application/json"
+            }
+          )
+          with urllib.request.urlopen(req) as resp:
+            result = json.loads(resp.read())
+            print(f"Email sent successfully: {result}")
+          PYEOF
+        env:
+          DAY: ${{ steps.quiz.outputs.day }}
+          URL: ${{ steps.quiz.outputs.url }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
