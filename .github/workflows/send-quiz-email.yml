@@ -15,9 +15,9 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Send email via Resend
+      - name: Send email via Gmail
         env:
-          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
         run: |
           QUIZ_FILE=$(git diff --name-only HEAD~1 HEAD | grep 'biblerecap_quiz_day.*\.html' | head -1)
           echo "Detected quiz file: '$QUIZ_FILE'"

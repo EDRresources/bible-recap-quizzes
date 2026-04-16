@@ -1,8 +1,10 @@
 import json
 import os
 import re
-import subprocess
+import smtplib
 import sys
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 quiz_file = os.environ.get("QUIZ_FILE", "").strip()
 print(f"QUIZ_FILE env var: '{quiz_file}'")
@@ -72,36 +74,21 @@ html_body = (
     + '</div>'
 )
 
-api_key = os.environ.get("RESEND_API_KEY", "")
-print(f"RESEND_API_KEY present: {bool(api_key)} (length {len(api_key)})")
+gmail_user = "erik.d.roberson@gmail.com"
+gmail_password = os.environ.get("GMAIL_APP_PASSWORD", "")
+recipients = ["erik.d.roberson@gmail.com", "eden.roberson@gmail.com"]
 
-payload = {
-    "from": "onboarding@resend.dev",
-    "to": ["erik.d.roberson@gmail.com", "eden.roberson@gmail.com"],
-    "subject": f"Bible Recap Quiz \u2014 Day {day} \u2014 {date_str}",
-    "html": html_body
-}
+print(f"GMAIL_APP_PASSWORD present: {bool(gmail_password)} (length {len(gmail_password)})")
+print(f"Sending to: {recipients}")
 
-payload_file = "/tmp/resend_payload.json"
-with open(payload_file, "w") as f:
-    json.dump(payload, f)
+msg = MIMEMultipart("alternative")
+msg["Subject"] = f"Bible Recap Quiz \u2014 Day {day} \u2014 {date_str}"
+msg["From"] = gmail_user
+msg["To"] = ", ".join(recipients)
+msg.attach(MIMEText(html_body, "html"))
 
-print("Calling Resend API via curl...")
-result = subprocess.run([
-    "curl", "-s", "-w", "\nHTTP_STATUS:%{http_code}",
-    "-X", "POST", "https://api.resend.com/emails",
-    "-H", f"Authorization: Bearer {api_key}",
-    "-H", "Content-Type: application/json",
-    "-d", f"@{payload_file}"
-], capture_output=True, text=True)
-
-output = result.stdout
-print(f"curl stdout: {output}")
-if result.stderr:
-    print(f"curl stderr: {result.stderr}")
-
-if "HTTP_STATUS:2" in output:
+print("Connecting to Gmail SMTP...")
+with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+    server.login(gmail_user, gmail_password)
+    server.sendmail(gmail_user, recipients, msg.as_string())
     print("Email sent successfully\!")
-else:
-    print("Email send failed.")
-    sys.exit(1)
