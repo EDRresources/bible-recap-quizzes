@@ -1,21 +1,21 @@
 import json
 import os
 import re
-import urllib.request
-import urllib.error
+import subprocess
+import sys
 
 quiz_file = os.environ.get("QUIZ_FILE", "").strip()
 print(f"QUIZ_FILE env var: '{quiz_file}'")
 
 if not quiz_file:
     print("No quiz file passed — skipping.")
-    exit(0)
+    sys.exit(0)
 
 basename = os.path.splitext(quiz_file)[0]
 m = re.match(r"biblerecap_quiz_day(\d+)_(\d{4})", basename)
 if not m:
     print(f"Could not parse filename: {quiz_file}")
-    exit(1)
+    sys.exit(1)
 
 day = m.group(1)
 mmdd = m.group(2)
@@ -75,28 +75,33 @@ html_body = (
 api_key = os.environ.get("RESEND_API_KEY", "")
 print(f"RESEND_API_KEY present: {bool(api_key)} (length {len(api_key)})")
 
-payload = json.dumps({
+payload = {
     "from": "onboarding@resend.dev",
     "to": ["erik.d.roberson@gmail.com"],
     "subject": f"Bible Recap Quiz \u2014 Day {day} \u2014 {date_str}",
     "html": html_body
-}).encode()
+}
 
-print("Calling Resend API...")
-req = urllib.request.Request(
-    "https://api.resend.com/emails",
-    data=payload,
-    headers={
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json"
-    }
-)
+payload_file = "/tmp/resend_payload.json"
+with open(payload_file, "w") as f:
+    json.dump(payload, f)
 
-try:
-    with urllib.request.urlopen(req) as resp:
-        result = json.loads(resp.read())
-        print(f"Email sent\! ID: {result.get('id')}")
-except urllib.error.HTTPError as e:
-    body = e.read().decode("utf-8", errors="replace")
-    print(f"HTTP {e.code} error from Resend: {body}")
-    raise
+print("Calling Resend API via curl...")
+result = subprocess.run([
+    "curl", "-s", "-w", "\nHTTP_STATUS:%{http_code}",
+    "-X", "POST", "https://api.resend.com/emails",
+    "-H", f"Authorization: Bearer {api_key}",
+    "-H", "Content-Type: application/json",
+    "-d", f"@{payload_file}"
+], capture_output=True, text=True)
+
+output = result.stdout
+print(f"curl stdout: {output}")
+if result.stderr:
+    print(f"curl stderr: {result.stderr}")
+
+if "HTTP_STATUS:2" in output:
+    print("Email sent successfully\!")
+else:
+    print("Email send failed.")
+    sys.exit(1)
