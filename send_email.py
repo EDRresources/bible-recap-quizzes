@@ -2,6 +2,7 @@ import json
 import os
 import re
 import urllib.request
+import urllib.error
 
 quiz_file = os.environ.get("QUIZ_FILE", "").strip()
 print(f"QUIZ_FILE env var: '{quiz_file}'")
@@ -29,7 +30,6 @@ print(f"Day {day}, {date_str}")
 
 pages_url = f"https://edrresources.github.io/bible-recap-quizzes/{quiz_file}"
 
-# Check for companion metadata JSON
 meta_file = basename + ".json"
 passages_html = ""
 summary_html = ""
@@ -92,6 +92,11 @@ req = urllib.request.Request(
     }
 )
 
-with urllib.request.urlopen(req) as resp:
-    result = json.loads(resp.read())
-    print(f"Email sent\! ID: {result.get('id')}")
+try:
+    with urllib.request.urlopen(req) as resp:
+        result = json.loads(resp.read())
+        print(f"Email sent\! ID: {result.get('id')}")
+except urllib.error.HTTPError as e:
+    body = e.read().decode("utf-8", errors="replace")
+    print(f"HTTP {e.code} error from Resend: {body}")
+    raise
