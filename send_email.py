@@ -76,7 +76,7 @@ html_body = (
 
 gmail_user = "erik.d.roberson@gmail.com"
 gmail_password = os.environ.get("GMAIL_APP_PASSWORD", "")
-recipients = ["erik.d.roberson@gmail.com", "eden.roberson@gmail.com"]
+recipients = ["erik.d.roberson@gmail.com"]
 
 print(f"GMAIL_APP_PASSWORD present: {bool(gmail_password)} (length {len(gmail_password)})")
 print(f"Sending to: {recipients}")
