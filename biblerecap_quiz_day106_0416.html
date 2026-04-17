@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Recap Quiz — Day 106 — April 16, 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2rem 1rem 4rem;
+    font-family: 'Crimson Text', serif;
+  }
+
+  /* ── Scroll container ── */
+  .scroll-wrap {
+    width: 100%;
+    max-width: 760px;
+    position: relative;
+  }
+
+  .gold-strip {
+    height: 18px;
+    background: linear-gradient(90deg, #3a2a00 0%, #c9a84c 20%, #f0d080 50%, #c9a84c 80%, #3a2a00 100%);
+    border-radius: 3px 3px 0 0;
+  }
+  .gold-strip.bottom { border-radius: 0 0 3px 3px; }
+
+  .parchment {
+    background: linear-gradient(160deg, #f5ecd6 0%, #ecdbb4 40%, #dfc99a 70%, #d4b87a 100%);
+    padding: 2.5rem 2.8rem 2.8rem;
+    position: relative;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.7), inset 0 0 60px rgba(160,120,40,0.15);
+  }
+
+  /* ── Header ── */
+  .quiz-header { text-align: center; margin-bottom: 1.8rem; }
+
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #6b4f1a;
+    margin-bottom: 0.5rem;
+  }
+
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #2c1a00;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+
+  .badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin: 0.6rem 0;
+  }
+
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    padding: 3px 9px;
+    border-radius: 3px;
+    font-weight: 700;
+  }
+  .badge-challenging { background: #7a4a00; color: #f0d080; border: 1px solid #c9a84c; }
+  .badge-passage { background: rgba(44,26,0,0.12); color: #5a3a08; border: 1px solid #c9a84c; }
+
+  .ornament { color: #c9a84c; font-size: 1.3rem; margin: 0.4rem 0; display: block; }
+
+  /* ── Progress bar ── */
+  .progress-wrap {
+    margin-bottom: 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  .progress-track {
+    flex: 1;
+    height: 6px;
+    background: rgba(100,70,10,0.2);
+    border-radius: 3px;
+    overflow: hidden;
+    border: 1px solid rgba(201,168,76,0.3);
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #f0d080);
+    border-radius: 3px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    color: #6b4f1a;
+    white-space: nowrap;
+    letter-spacing: 0.08em;
+    min-width: 52px;
+    text-align: right;
+  }
+
+  /* ── Question card ── */
+  .q-card {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  .q-card.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+  }
+  .q-number {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    color: #8b6820;
+    letter-spacing: 0.1em;
+  }
+  .badge-detail {
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-weight: 700;
+    background: #1a2d5c;
+    color: #a8c0f0;
+    border: 1px solid #3a5aaa;
+  }
+
+  .q-text {
+    font-size: 1.15rem;
+    color: #1e1000;
+    line-height: 1.55;
+    margin-bottom: 1.2rem;
+    font-style: italic;
+  }
+
+  /* ── Choices ── */
+  .choices { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; }
+
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    background: rgba(255,245,220,0.55);
+    border: 1.5px solid rgba(201,168,76,0.4);
+    border-radius: 5px;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2c1a00;
+    line-height: 1.45;
+    transition: background 0.2s, border-color 0.2s;
+    width: 100%;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(240,208,128,0.35);
+    border-color: #c9a84c;
+  }
+  .choice-btn:disabled { cursor: default; }
+
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #8b6820;
+    min-width: 20px;
+    padding-top: 2px;
+  }
+
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+    color: #0d2e14;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.12);
+    border-color: #8b1a1a;
+    color: #3a0808;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── Feedback ── */
+  .feedback {
+    display: none;
+    padding: 0.9rem 1.1rem;
+    border-radius: 5px;
+    margin-top: 0.5rem;
+    animation: fadeIn 0.3s ease;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.1);
+    border-left: 4px solid #1a5c2a;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.08);
+    border-left: 4px solid #8b1a1a;
+  }
+  .feedback-verdict {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .feedback.correct-fb .feedback-verdict { color: #1a5c2a; }
+  .feedback.wrong-fb .feedback-verdict { color: #8b1a1a; }
+
+  .feedback-ref {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    color: #8b6820;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.3rem;
+  }
+  .feedback-text { font-size: 1rem; color: #2c1a00; line-height: 1.5; }
+
+  /* ── Next button ── */
+  .next-btn {
+    display: none;
+    margin-top: 1rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    color: #f0d080;
+    background: linear-gradient(135deg, #5a3a00, #7a5200);
+    border: 1.5px solid #c9a84c;
+    border-radius: 4px;
+    padding: 0.55rem 1.4rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .next-btn:hover { background: linear-gradient(135deg, #7a5200, #9a6a00); }
+
+  /* ── Results ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+  }
+
+  .score-ring-wrap { margin: 1.2rem auto; width: 140px; height: 140px; }
+  .score-ring-wrap svg { width: 100%; height: 100%; }
+
+  .ring-bg { fill: none; stroke: rgba(100,70,10,0.2); stroke-width: 10; }
+  .ring-fill {
+    fill: none;
+    stroke-width: 10;
+    stroke-linecap: round;
+    transform: rotate(-90deg);
+    transform-origin: 70px 70px;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .score-number {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c1a00;
+    margin: 0.3rem 0;
+  }
+  .score-denom { font-size: 1rem; color: #6b4f1a; }
+
+  .score-message {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    color: #4a2e00;
+    margin: 0.5rem 0 1.4rem;
+  }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    color: #f0d080;
+    background: linear-gradient(135deg, #5a3a00, #7a5200);
+    border: 1.5px solid #c9a84c;
+    border-radius: 4px;
+    padding: 0.6rem 1.6rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-bottom: 1.8rem;
+  }
+  .take-again-btn:hover { background: linear-gradient(135deg, #7a5200, #9a6a00); }
+
+  /* ── Review ── */
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    color: #6b4f1a;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(201,168,76,0.4);
+    padding-bottom: 0.5rem;
+  }
+
+  .review-item {
+    text-align: left;
+    margin-bottom: 1.1rem;
+    padding: 0.8rem 1rem;
+    border-radius: 5px;
+    background: rgba(255,245,220,0.4);
+    border-left: 4px solid #c9a84c;
+  }
+  .review-item.rev-correct { border-left-color: #1a5c2a; background: rgba(26,92,42,0.07); }
+  .review-item.rev-wrong   { border-left-color: #8b1a1a; background: rgba(139,26,26,0.07); }
+
+  .review-q {
+    font-size: 0.95rem;
+    font-style: italic;
+    color: #2c1a00;
+    margin-bottom: 0.3rem;
+  }
+  .review-ans {
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+    color: #5a3a08;
+  }
+  .review-ans .rev-c { color: #1a5c2a; font-weight: 700; }
+  .review-ans .rev-w { color: #8b1a1a; font-weight: 700; }
+
+  hr.ornament-rule {
+    border: none;
+    border-top: 1px solid rgba(201,168,76,0.4);
+    margin: 1.6rem 0;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 520px) {
+    .parchment { padding: 1.8rem 1.4rem 2rem; }
+    .quiz-title { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="scroll-wrap">
+  <div class="gold-strip"></div>
+  <div class="parchment">
+
+    <!-- HEADER -->
+    <div class="quiz-header">
+      <div class="date-line">THURSDAY, APRIL 16, 2026 &middot; DAY 106</div>
+      <div class="quiz-title">The Bible Recap<br>Daily Quiz</div>
+      <span class="ornament">&#10022; &#10022; &#10022;</span>
+      <div class="badge-row">
+        <span class="badge badge-challenging">&#9670; CHALLENGING</span>
+        <span class="badge badge-passage">PSALM 56</span>
+        <span class="badge badge-passage">PSALM 120</span>
+        <span class="badge badge-passage">PSALMS 140–142</span>
+      </div>
+    </div>
+
+    <hr class="ornament-rule">
+
+    <!-- PROGRESS -->
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
+      <div class="progress-label" id="prog-label">0 / 10</div>
+    </div>
+
+    <!-- QUIZ AREA -->
+    <div id="quiz-area">
+
+      <!-- Q1 -->
+      <div class="q-card active" id="q1">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 1 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <p class="q-text">In Psalm 56, what does the psalmist ask God to do with his tears?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="1" data-idx="0"><span class="choice-letter">A</span><span>Count them like the stars in the sky and keep them in his memory</span></button>
+          <button class="choice-btn" data-q="1" data-idx="1"><span class="choice-letter">B</span><span>List them on a scroll and record them</span></button>
+          <button class="choice-btn" data-q="1" data-idx="2"><span class="choice-letter">C</span><span>Gather them in a heavenly vessel as an offering</span></button>
+          <button class="choice-btn" data-q="1" data-idx="3"><span class="choice-letter">D</span><span>Wipe them away and replace them with songs of joy</span></button>
+        </div>
+        <div class="feedback" id="fb1">
+          <div class="feedback-verdict" id="fbv1"></div>
+          <div class="feedback-ref">Psalm 56:8</div>
+          <div class="feedback-text">The psalmist prays, "Record my misery; list my tears on your scroll — are they not in your record?" This intimate image presents God as one who keeps careful account of every sorrow his people experience.</div>
+        </div>
+        <button class="next-btn" id="next1">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q2 -->
+      <div class="q-card" id="q2">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 2 OF 10</span>
+        </div>
+        <p class="q-text">According to Psalm 56:13, from what two things does the psalmist say God delivered him?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="2" data-idx="0"><span class="choice-letter">A</span><span>His enemies and those who pursue him with swords</span></button>
+          <button class="choice-btn" data-q="2" data-idx="1"><span class="choice-letter">B</span><span>Exile and imprisonment in a foreign land</span></button>
+          <button class="choice-btn" data-q="2" data-idx="2"><span class="choice-letter">C</span><span>Death and his feet from stumbling</span></button>
+          <button class="choice-btn" data-q="2" data-idx="3"><span class="choice-letter">D</span><span>The snare of the wicked and the pit of destruction</span></button>
+        </div>
+        <div class="feedback" id="fb2">
+          <div class="feedback-verdict" id="fbv2"></div>
+          <div class="feedback-ref">Psalm 56:13</div>
+          <div class="feedback-text">The psalm closes: "For you have delivered me from death and my feet from stumbling, that I may walk before God in the light of life." Both death and stumbling represent the twin dangers threatening the psalmist.</div>
+        </div>
+        <button class="next-btn" id="next2">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q3 -->
+      <div class="q-card" id="q3">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 3 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <p class="q-text">What specific refrain appears twice in Psalm 56 — once near the beginning and once near the end?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="3" data-idx="0"><span class="choice-letter">A</span><span>"Hear my prayer, O God; listen to the words of my mouth."</span></button>
+          <button class="choice-btn" data-q="3" data-idx="1"><span class="choice-letter">B</span><span>"Be merciful to me, for men hotly pursue me all day long."</span></button>
+          <button class="choice-btn" data-q="3" data-idx="2"><span class="choice-letter">C</span><span>"In God I trust and am not afraid. What can man do to me?"</span></button>
+          <button class="choice-btn" data-q="3" data-idx="3"><span class="choice-letter">D</span><span>"I will present my thank offerings to you, O LORD."</span></button>
+        </div>
+        <div class="feedback" id="fb3">
+          <div class="feedback-verdict" id="fbv3"></div>
+          <div class="feedback-ref">Psalm 56:4, 11</div>
+          <div class="feedback-text">The refrain "In God I trust and am not afraid. What can man do to me?" appears in verse 4 and again in verse 11, bracketing the psalm's central confession of trust in the midst of mortal danger.</div>
+        </div>
+        <button class="next-btn" id="next3">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q4 -->
+      <div class="q-card" id="q4">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 4 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <p class="q-text">In Psalm 120, what two specific places does the psalmist say he dwells, lamenting his life among enemies?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="4" data-idx="0"><span class="choice-letter">A</span><span>Egypt and Babylon</span></button>
+          <button class="choice-btn" data-q="4" data-idx="1"><span class="choice-letter">B</span><span>Edom and Moab</span></button>
+          <button class="choice-btn" data-q="4" data-idx="2"><span class="choice-letter">C</span><span>Meshech and Kedar</span></button>
+          <button class="choice-btn" data-q="4" data-idx="3"><span class="choice-letter">D</span><span>Philistia and Tyre</span></button>
+        </div>
+        <div class="feedback" id="fb4">
+          <div class="feedback-verdict" id="fbv4"></div>
+          <div class="feedback-ref">Psalm 120:5</div>
+          <div class="feedback-text">"Woe to me that I dwell in Meshech, that I live among the tents of Kedar!" These distant, hostile peoples — one near the Black Sea, one in the Arabian desert — represent the psalmist's sense of living far from peace and surrounded by those who love war.</div>
+        </div>
+        <button class="next-btn" id="next4">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q5 -->
+      <div class="q-card" id="q5">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 5 OF 10</span>
+        </div>
+        <p class="q-text">According to Psalm 120:4, with what will the LORD punish the deceitful tongue?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="5" data-idx="0"><span class="choice-letter">A</span><span>The rod of his anger and the staff of his wrath</span></button>
+          <button class="choice-btn" data-q="5" data-idx="1"><span class="choice-letter">B</span><span>A warrior's sharp arrows, with burning coals of the broom bush</span></button>
+          <button class="choice-btn" data-q="5" data-idx="2"><span class="choice-letter">C</span><span>A consuming fire and floods of mighty waters</span></button>
+          <button class="choice-btn" data-q="5" data-idx="3"><span class="choice-letter">D</span><span>The sword of the righteous and divine judgment in the assembly</span></button>
+        </div>
+        <div class="feedback" id="fb5">
+          <div class="feedback-verdict" id="fbv5"></div>
+          <div class="feedback-ref">Psalm 120:4</div>
+          <div class="feedback-text">"He will punish you with a warrior's sharp arrows, with burning coals of the broom bush." The broom bush was known for producing especially hot, long-lasting coals — an image of thorough, consuming judgment for the lying tongue.</div>
+        </div>
+        <button class="next-btn" id="next5">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q6 -->
+      <div class="q-card" id="q6">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 6 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <p class="q-text">Psalm 140:9 describes a specific judgment on those who surround the psalmist. What does it say should engulf them?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="6" data-idx="0"><span class="choice-letter">A</span><span>The burning coals and miry pits they prepared for others</span></button>
+          <button class="choice-btn" data-q="6" data-idx="1"><span class="choice-letter">B</span><span>The nets and snares they laid along the path</span></button>
+          <button class="choice-btn" data-q="6" data-idx="2"><span class="choice-letter">C</span><span>The mischief of their own lips</span></button>
+          <button class="choice-btn" data-q="6" data-idx="3"><span class="choice-letter">D</span><span>The violence they stirred up against the innocent</span></button>
+        </div>
+        <div class="feedback" id="fb6">
+          <div class="feedback-verdict" id="fbv6"></div>
+          <div class="feedback-ref">Psalm 140:9</div>
+          <div class="feedback-text">"Those who surround me proudly rear their heads; may the mischief of their lips engulf them." It is not fire or flood but the very evil their own lips have plotted that becomes their undoing — a fitting poetic justice.</div>
+        </div>
+        <button class="next-btn" id="next6">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q7 -->
+      <div class="q-card" id="q7">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 7 OF 10</span>
+        </div>
+        <p class="q-text">In Psalm 141:2, the psalmist compares his prayer and the lifting of his hands to two things. What are they?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="7" data-idx="0"><span class="choice-letter">A</span><span>A burnt offering and a wave offering before the altar</span></button>
+          <button class="choice-btn" data-q="7" data-idx="1"><span class="choice-letter">B</span><span>Incense and the evening sacrifice</span></button>
+          <button class="choice-btn" data-q="7" data-idx="2"><span class="choice-letter">C</span><span>Oil poured out and the morning grain offering</span></button>
+          <button class="choice-btn" data-q="7" data-idx="3"><span class="choice-letter">D</span><span>The peace offering and the firstfruits presented to God</span></button>
+        </div>
+        <div class="feedback" id="fb7">
+          <div class="feedback-verdict" id="fbv7"></div>
+          <div class="feedback-ref">Psalm 141:2</div>
+          <div class="feedback-text">"May my prayer be set before you like incense; may the lifting up of my hands be like the evening sacrifice." This verse became influential in early Christian worship, connecting prayer with the temple's daily rhythm of incense and sacrifice.</div>
+        </div>
+        <button class="next-btn" id="next7">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q8 -->
+      <div class="q-card" id="q8">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 8 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <p class="q-text">In Psalm 141:5, the psalmist welcomes something that he compares to "oil on my head" — saying his head "will not refuse it." What is this welcome thing?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="8" data-idx="0"><span class="choice-letter">A</span><span>The presence of God's Spirit resting upon him</span></button>
+          <button class="choice-btn" data-q="8" data-idx="1"><span class="choice-letter">B</span><span>A strike or rebuke from a righteous man</span></button>
+          <button class="choice-btn" data-q="8" data-idx="2"><span class="choice-letter">C</span><span>The blessing and anointing of a faithful priest</span></button>
+          <button class="choice-btn" data-q="8" data-idx="3"><span class="choice-letter">D</span><span>The comfort offered by righteous companions in distress</span></button>
+        </div>
+        <div class="feedback" id="fb8">
+          <div class="feedback-verdict" id="fbv8"></div>
+          <div class="feedback-ref">Psalm 141:5</div>
+          <div class="feedback-text">"Let a righteous man strike me — that is a kindness; let him rebuke me — that is oil on my head. My head will not refuse it." The psalmist sees correction from the godly as a gift — more valuable than the flattery of evildoers — and compares it to the honor of being anointed.</div>
+        </div>
+        <button class="next-btn" id="next8">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q9 -->
+      <div class="q-card" id="q9">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 9 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <p class="q-text">In Psalm 142, when the psalmist looks to his right for help, what does he find?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="9" data-idx="0"><span class="choice-letter">A</span><span>A remnant of faithful companions who have stayed with him</span></button>
+          <button class="choice-btn" data-q="9" data-idx="1"><span class="choice-letter">B</span><span>The LORD, who is his shield and strong deliverer</span></button>
+          <button class="choice-btn" data-q="9" data-idx="2"><span class="choice-letter">C</span><span>No one — no one is concerned for him and he has no refuge</span></button>
+          <button class="choice-btn" data-q="9" data-idx="3"><span class="choice-letter">D</span><span>His enemies, who have set snares along his path</span></button>
+        </div>
+        <div class="feedback" id="fb9">
+          <div class="feedback-verdict" id="fbv9"></div>
+          <div class="feedback-ref">Psalm 142:4</div>
+          <div class="feedback-text">"Look and see, there is no one at my right hand; no one is concerned for me. I have no refuge; no one cares for my life." In the ancient world, a defender stood at one's right hand; the psalmist finds that position empty — making his cry to God all the more urgent.</div>
+        </div>
+        <button class="next-btn" id="next9">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q10 -->
+      <div class="q-card" id="q10">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 10 OF 10</span>
+        </div>
+        <p class="q-text">At the end of Psalm 142, the psalmist asks God to set him free from his "prison." What does he say will happen immediately after this freedom comes?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="10" data-idx="0"><span class="choice-letter">A</span><span>He will return to Jerusalem and offer thank offerings at the temple</span></button>
+          <button class="choice-btn" data-q="10" data-idx="1"><span class="choice-letter">B</span><span>He will praise God's name and the righteous will gather around him because of God's bounty</span></button>
+          <button class="choice-btn" data-q="10" data-idx="2"><span class="choice-letter">C</span><span>He will walk before God in the light of life, no longer stumbling</span></button>
+          <button class="choice-btn" data-q="10" data-idx="3"><span class="choice-letter">D</span><span>He will declare God's works to every generation and tell of his salvation</span></button>
+        </div>
+        <div class="feedback" id="fb10">
+          <div class="feedback-verdict" id="fbv10"></div>
+          <div class="feedback-ref">Psalm 142:7</div>
+          <div class="feedback-text">"Set me free from my prison, that I may praise your name. Then the righteous will gather about me because of your bounty to me." The psalmist envisions his deliverance as both a personal act of worship and a communal event — the righteous community drawn together by God's generous grace.</div>
+        </div>
+        <button class="next-btn" id="next10">Show Results</button>
+      </div>
+
+    </div><!-- /#quiz-area -->
+
+    <!-- RESULTS -->
+    <div id="results-screen">
+      <span class="ornament">&#10022; &#10022; &#10022;</span>
+      <div class="score-ring-wrap">
+        <svg viewBox="0 0 140 140">
+          <circle class="ring-bg" cx="70" cy="70" r="56"/>
+          <circle class="ring-fill" id="score-ring" cx="70" cy="70" r="56"
+            stroke-dasharray="351.858" stroke-dashoffset="351.858"/>
+          <text x="70" y="65" text-anchor="middle" font-family="Cinzel, serif"
+            font-size="26" font-weight="700" fill="#2c1a00" id="score-num">0</text>
+          <text x="70" y="83" text-anchor="middle" font-family="Cinzel, serif"
+            font-size="13" fill="#6b4f1a" id="score-den">/ 10</text>
+        </svg>
+      </div>
+      <p class="score-message" id="score-msg"></p>
+      <button class="take-again-btn" id="take-again">&#8635; Take Again</button>
+      <hr class="ornament-rule">
+      <p class="review-title">QUESTION REVIEW</p>
+      <div id="review-list"></div>
+    </div>
+
+  </div><!-- /.parchment -->
+  <div class="gold-strip bottom"></div>
+</div><!-- /.scroll-wrap -->
+
+<script>
+(function () {
+  // ── Quiz Data ──────────────────────────────────────────────────────────────
+  var questions = [
+    {
+      text: "In Psalm 56, what does the psalmist ask God to do with his tears?",
+      choices: [
+        "Count them like the stars in the sky and keep them in his memory",
+        "List them on a scroll and record them",
+        "Gather them in a heavenly vessel as an offering",
+        "Wipe them away and replace them with songs of joy"
+      ],
+      correct: 1
+    },
+    {
+      text: "According to Psalm 56:13, from what two things does the psalmist say God delivered him?",
+      choices: [
+        "His enemies and those who pursue him with swords",
+        "Exile and imprisonment in a foreign land",
+        "Death and his feet from stumbling",
+        "The snare of the wicked and the pit of destruction"
+      ],
+      correct: 2
+    },
+    {
+      text: "What specific refrain appears twice in Psalm 56 — once near the beginning and once near the end?",
+      choices: [
+        "\"Hear my prayer, O God; listen to the words of my mouth.\"",
+        "\"Be merciful to me, for men hotly pursue me all day long.\"",
+        "\"In God I trust and am not afraid. What can man do to me?\"",
+        "\"I will present my thank offerings to you, O LORD.\""
+      ],
+      correct: 2
+    },
+    {
+      text: "In Psalm 120, what two specific places does the psalmist say he dwells, lamenting his life among enemies?",
+      choices: [
+        "Egypt and Babylon",
+        "Edom and Moab",
+        "Meshech and Kedar",
+        "Philistia and Tyre"
+      ],
+      correct: 2
+    },
+    {
+      text: "According to Psalm 120:4, with what will the LORD punish the deceitful tongue?",
+      choices: [
+        "The rod of his anger and the staff of his wrath",
+        "A warrior's sharp arrows, with burning coals of the broom bush",
+        "A consuming fire and floods of mighty waters",
+        "The sword of the righteous and divine judgment in the assembly"
+      ],
+      correct: 1
+    },
+    {
+      text: "Psalm 140:9 describes a specific judgment on those who surround the psalmist. What does it say should engulf them?",
+      choices: [
+        "The burning coals and miry pits they prepared for others",
+        "The nets and snares they laid along the path",
+        "The mischief of their own lips",
+        "The violence they stirred up against the innocent"
+      ],
+      correct: 2
+    },
+    {
+      text: "In Psalm 141:2, the psalmist compares his prayer and the lifting of his hands to two things. What are they?",
+      choices: [
+        "A burnt offering and a wave offering before the altar",
+        "Incense and the evening sacrifice",
+        "Oil poured out and the morning grain offering",
+        "The peace offering and the firstfruits presented to God"
+      ],
+      correct: 1
+    },
+    {
+      text: "In Psalm 141:5, the psalmist welcomes something that he compares to \"oil on my head\" — saying his head \"will not refuse it.\" What is this welcome thing?",
+      choices: [
+        "The presence of God's Spirit resting upon him",
+        "A strike or rebuke from a righteous man",
+        "The blessing and anointing of a faithful priest",
+        "The comfort offered by righteous companions in distress"
+      ],
+      correct: 1
+    },
+    {
+      text: "In Psalm 142, when the psalmist looks to his right for help, what does he find?",
+      choices: [
+        "A remnant of faithful companions who have stayed with him",
+        "The LORD, who is his shield and strong deliverer",
+        "No one — no one is concerned for him and he has no refuge",
+        "His enemies, who have set snares along his path"
+      ],
+      correct: 2
+    },
+    {
+      text: "At the end of Psalm 142, the psalmist asks God to set him free from his \"prison.\" What does he say will happen immediately after this freedom comes?",
+      choices: [
+        "He will return to Jerusalem and offer thank offerings at the temple",
+        "He will praise God's name and the righteous will gather around him because of God's bounty",
+        "He will walk before God in the light of life, no longer stumbling",
+        "He will declare God's works to every generation and tell of his salvation"
+      ],
+      correct: 1
+    }
+  ];
+
+  var letters = ['A', 'B', 'C', 'D'];
+  var state = {
+    current: 0,
+    score: 0,
+    answered: new Array(10).fill(false),
+    userAnswers: new Array(10).fill(-1)
+  };
+
+  // ── Helpers ────────────────────────────────────────────────────────────────
+  function updateProgress(answered) {
+    var pct = answered * 10;
+    document.getElementById('prog-fill').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = answered + ' / 10';
+  }
+
+  function showQuestion(idx) {
+    var cards = document.querySelectorAll('.q-card');
+    cards.forEach(function (c) { c.classList.remove('active'); });
+    document.getElementById('q' + (idx + 1)).classList.add('active');
+    state.current = idx;
+  }
+
+  function handleAnswer(qIdx, chosenIdx) {
+    if (state.answered[qIdx]) return;
+    state.answered[qIdx] = true;
+    state.userAnswers[qIdx] = chosenIdx;
+
+    var q = questions[qIdx];
+    var qNum = qIdx + 1;
+    var card = document.getElementById('q' + qNum);
+    var btns = card.querySelectorAll('.choice-btn');
+    var fb = document.getElementById('fb' + qNum);
+    var fbv = document.getElementById('fbv' + qNum);
+    var nextBtn = document.getElementById('next' + qNum);
+
+    btns.forEach(function (btn) { btn.disabled = true; });
+
+    if (chosenIdx === q.correct) {
+      state.score++;
+      btns[chosenIdx].classList.add('correct');
+      fb.classList.add('show', 'correct-fb');
+      fbv.textContent = '✓ Correct';
+    } else {
+      btns[chosenIdx].classList.add('wrong');
+      btns[q.correct].classList.add('correct');
+      fb.classList.add('show', 'wrong-fb');
+      fbv.textContent = '✗ Incorrect';
+    }
+
+    var answeredCount = state.answered.filter(Boolean).length;
+    updateProgress(answeredCount);
+    nextBtn.style.display = 'inline-block';
+  }
+
+  function showResults() {
+    document.getElementById('quiz-area').style.display = 'none';
+    var rs = document.getElementById('results-screen');
+    rs.style.display = 'block';
+
+    var pct = state.score / 10;
+    var circumference = 351.858;
+    var offset = circumference - (pct * circumference);
+    var ring = document.getElementById('score-ring');
+    var color = pct >= 0.8 ? '#1a5c2a' : pct >= 0.5 ? '#c9a84c' : '#8b1a1a';
+    ring.style.stroke = color;
+
+    setTimeout(function () { ring.style.strokeDashoffset = offset; }, 80);
+
+    document.getElementById('score-num').textContent = state.score;
+
+    var msg;
+    if (state.score === 10) {
+      msg = 'Perfect score! Every detail was in your heart.';
+    } else if (state.score >= 8) {
+      msg = 'Excellent — you read closely and carefully.';
+    } else if (state.score >= 6) {
+      msg = 'Good work. A second read will sharpen those details.';
+    } else if (state.score >= 4) {
+      msg = 'Keep digging — the Psalms reward careful attention.';
+    } else {
+      msg = 'Return to the text and listen again. God\'s word is worth every pass.';
+    }
+    document.getElementById('score-msg').textContent = msg;
+
+    // Build review
+    var rl = document.getElementById('review-list');
+    rl.innerHTML = '';
+    questions.forEach(function (q, i) {
+      var div = document.createElement('div');
+      div.className = 'review-item ' + (state.userAnswers[i] === q.correct ? 'rev-correct' : 'rev-wrong');
+
+      var qp = document.createElement('p');
+      qp.className = 'review-q';
+      qp.textContent = (i + 1) + '. ' + q.text;
+
+      var ap = document.createElement('p');
+      ap.className = 'review-ans';
+      var correct = letters[q.correct] + ' — ' + q.choices[q.correct];
+      if (state.userAnswers[i] === q.correct) {
+        ap.innerHTML = '<span class="rev-c">Your answer: ' + correct + '</span>';
+      } else {
+        var yours = state.userAnswers[i] >= 0 ? (letters[state.userAnswers[i]] + ' — ' + q.choices[state.userAnswers[i]]) : 'No answer';
+        ap.innerHTML = '<span class="rev-w">Your answer: ' + yours + '</span><br><span class="rev-c">Correct: ' + correct + '</span>';
+      }
+
+      div.appendChild(qp);
+      div.appendChild(ap);
+      rl.appendChild(div);
+    });
+  }
+
+  function resetQuiz() {
+    state.score = 0;
+    state.answered = new Array(10).fill(false);
+    state.userAnswers = new Array(10).fill(-1);
+
+    document.getElementById('results-screen').style.display = 'none';
+    document.getElementById('quiz-area').style.display = 'block';
+    updateProgress(0);
+
+    for (var i = 1; i <= 10; i++) {
+      var card = document.getElementById('q' + i);
+      card.classList.remove('active');
+      var btns = card.querySelectorAll('.choice-btn');
+      btns.forEach(function (b) {
+        b.disabled = false;
+        b.classList.remove('correct', 'wrong');
+      });
+      var fb = document.getElementById('fb' + i);
+      fb.classList.remove('show', 'correct-fb', 'wrong-fb');
+      document.getElementById('fbv' + i).textContent = '';
+      document.getElementById('next' + i).style.display = 'none';
+    }
+
+    document.getElementById('q1').classList.add('active');
+    state.current = 0;
+  }
+
+  // ── Event delegation ───────────────────────────────────────────────────────
+  document.addEventListener('click', function (e) {
+    // Choice buttons
+    var btn = e.target.closest('.choice-btn');
+    if (btn) {
+      var qNum = parseInt(btn.getAttribute('data-q'), 10);
+      var idx = parseInt(btn.getAttribute('data-idx'), 10);
+      handleAnswer(qNum - 1, idx);
+      return;
+    }
+
+    // Next buttons
+    var nb = e.target.closest('.next-btn');
+    if (nb) {
+      var nid = nb.id; // e.g. "next3"
+      var num = parseInt(nid.replace('next', ''), 10);
+      if (num < 10) {
+        showQuestion(num); // show next card (0-indexed = num)
+      } else {
+        showResults();
+      }
+      return;
+    }
+
+    // Take Again
+    if (e.target.closest('#take-again')) {
+      resetQuiz();
+    }
+  });
+
+  // ── Init ───────────────────────────────────────────────────────────────────
+  updateProgress(0);
+})();
+</script>
+</body>
+</html>
