@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Recap Quiz — Day 108 — April 18, 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2rem 1rem 4rem;
+    font-family: 'Crimson Text', serif;
+  }
+  .scroll-wrap { width: 100%; max-width: 760px; position: relative; }
+  .gold-strip {
+    height: 18px;
+    background: linear-gradient(90deg, #3a2a00 0%, #c9a84c 20%, #f0d080 50%, #c9a84c 80%, #3a2a00 100%);
+    border-radius: 3px 3px 0 0;
+  }
+  .gold-strip.bottom { border-radius: 0 0 3px 3px; }
+  .parchment {
+    background: linear-gradient(160deg, #f5ecd6 0%, #ecdbb4 40%, #dfc99a 70%, #d4b87a 100%);
+    padding: 2.5rem 2.8rem 2.8rem;
+    position: relative;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.7), inset 0 0 60px rgba(160,120,40,0.15);
+  }
+  .quiz-header { text-align: center; margin-bottom: 1.8rem; }
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #6b4f1a;
+    margin-bottom: 0.5rem;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #2c1a00;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+  .badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin: 0.6rem 0;
+  }
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    padding: 3px 9px;
+    border-radius: 3px;
+    font-weight: 700;
+  }
+  .badge-challenging { background: #7a4a00; color: #f0d080; border: 1px solid #c9a84c; }
+  .badge-passage { background: rgba(44,26,0,0.12); color: #5a3a08; border: 1px solid #c9a84c; }
+  .ornament { color: #c9a84c; font-size: 1.3rem; margin: 0.4rem 0; display: block; }
+  .progress-wrap { margin-bottom: 1.6rem; display: flex; align-items: center; gap: 0.7rem; }
+  .progress-track {
+    flex: 1; height: 6px;
+    background: rgba(100,70,10,0.2);
+    border-radius: 3px; overflow: hidden;
+    border: 1px solid rgba(201,168,76,0.3);
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #f0d080);
+    border-radius: 3px; width: 0%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem; color: #6b4f1a;
+    white-space: nowrap; letter-spacing: 0.08em;
+    min-width: 52px; text-align: right;
+  }
+  .q-card { display: none; animation: fadeIn 0.4s ease; }
+  .q-card.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .q-meta { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem; }
+  .q-number { font-family: 'Cinzel', serif; font-size: 0.65rem; color: #8b6820; letter-spacing: 0.1em; }
+  .badge-detail {
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem; letter-spacing: 0.1em;
+    padding: 2px 7px; border-radius: 3px; font-weight: 700;
+    background: #1a2d5c; color: #a8c0f0; border: 1px solid #3a5aaa;
+  }
+  .q-text { font-size: 1.15rem; color: #1e1000; line-height: 1.55; margin-bottom: 1.2rem; font-style: italic; }
+  .choices { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; }
+  .choice-btn {
+    display: flex; align-items: flex-start; gap: 0.8rem;
+    background: rgba(255,245,220,0.55);
+    border: 1.5px solid rgba(201,168,76,0.4);
+    border-radius: 5px; padding: 0.75rem 1rem;
+    cursor: pointer; text-align: left;
+    font-family: 'Crimson Text', serif; font-size: 1.05rem;
+    color: #2c1a00; line-height: 1.45;
+    transition: background 0.2s, border-color 0.2s; width: 100%;
+  }
+  .choice-btn:hover:not(:disabled) { background: rgba(240,208,128,0.35); border-color: #c9a84c; }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif; font-size: 0.75rem; font-weight: 700;
+    color: #8b6820; min-width: 20px; padding-top: 2px;
+  }
+  .choice-btn.correct { background: rgba(26,92,42,0.18); border-color: #1a5c2a; color: #0d2e14; }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong { background: rgba(139,26,26,0.12); border-color: #8b1a1a; color: #3a0808; }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+  .feedback {
+    display: none; padding: 0.9rem 1.1rem; border-radius: 5px;
+    margin-top: 0.5rem; animation: fadeIn 0.3s ease;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb { background: rgba(26,92,42,0.1); border-left: 4px solid #1a5c2a; }
+  .feedback.wrong-fb { background: rgba(139,26,26,0.08); border-left: 4px solid #8b1a1a; }
+  .feedback-verdict {
+    font-family: 'Cinzel', serif; font-size: 0.7rem;
+    letter-spacing: 0.1em; font-weight: 700; margin-bottom: 0.3rem;
+  }
+  .feedback.correct-fb .feedback-verdict { color: #1a5c2a; }
+  .feedback.wrong-fb .feedback-verdict { color: #8b1a1a; }
+  .feedback-ref { font-family: 'Cinzel', serif; font-size: 0.65rem; color: #8b6820; letter-spacing: 0.08em; margin-bottom: 0.3rem; }
+  .feedback-text { font-size: 1rem; color: #2c1a00; line-height: 1.5; }
+  .next-btn {
+    display: none; margin-top: 1rem;
+    font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.12em;
+    color: #f0d080;
+    background: linear-gradient(135deg, #5a3a00, #7a5200);
+    border: 1.5px solid #c9a84c; border-radius: 4px;
+    padding: 0.55rem 1.4rem; cursor: pointer; transition: background 0.2s;
+  }
+  .next-btn:hover { background: linear-gradient(135deg, #7a5200, #9a6a00); }
+  #results-screen { display: none; text-align: center; animation: fadeIn 0.5s ease; }
+  .score-ring-wrap { margin: 1.2rem auto; width: 140px; height: 140px; }
+  .score-ring-wrap svg { width: 100%; height: 100%; }
+  .ring-bg { fill: none; stroke: rgba(100,70,10,0.2); stroke-width: 10; }
+  .ring-fill {
+    fill: none; stroke-width: 10; stroke-linecap: round;
+    transform: rotate(-90deg); transform-origin: 70px 70px;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-number { font-family: 'Cinzel', serif; font-size: 2rem; font-weight: 700; color: #2c1a00; margin: 0.3rem 0; }
+  .score-denom { font-size: 1rem; color: #6b4f1a; }
+  .score-message { font-family: 'Cinzel', serif; font-size: 0.9rem; letter-spacing: 0.08em; color: #4a2e00; margin: 0.5rem 0 1.4rem; }
+  .take-again-btn {
+    font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.12em;
+    color: #f0d080;
+    background: linear-gradient(135deg, #5a3a00, #7a5200);
+    border: 1.5px solid #c9a84c; border-radius: 4px;
+    padding: 0.6rem 1.6rem; cursor: pointer; transition: background 0.2s; margin-bottom: 1.8rem;
+  }
+  .take-again-btn:hover { background: linear-gradient(135deg, #7a5200, #9a6a00); }
+  .review-title {
+    font-family: 'Cinzel', serif; font-size: 0.8rem; letter-spacing: 0.15em;
+    color: #6b4f1a; margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(201,168,76,0.4); padding-bottom: 0.5rem;
+  }
+  .review-item {
+    text-align: left; margin-bottom: 1.1rem; padding: 0.8rem 1rem;
+    border-radius: 5px; background: rgba(255,245,220,0.4);
+    border-left: 4px solid #c9a84c;
+  }
+  .review-item.rev-correct { border-left-color: #1a5c2a; background: rgba(26,92,42,0.07); }
+  .review-item.rev-wrong   { border-left-color: #8b1a1a; background: rgba(139,26,26,0.07); }
+  .review-q { font-size: 0.95rem; font-style: italic; color: #2c1a00; margin-bottom: 0.3rem; }
+  .review-ans { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.06em; color: #5a3a08; }
+  .review-ans .rev-c { color: #1a5c2a; font-weight: 700; }
+  .review-ans .rev-w { color: #8b1a1a; font-weight: 700; }
+  hr.ornament-rule { border: none; border-top: 1px solid rgba(201,168,76,0.4); margin: 1.6rem 0; }
+  @media (max-width: 520px) {
+    .parchment { padding: 1.8rem 1.4rem 2rem; }
+    .quiz-title { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="scroll-wrap">
+  <div class="gold-strip"></div>
+  <div class="parchment">
+
+    <div class="quiz-header">
+      <div class="date-line">SATURDAY, APRIL 18, 2026 &middot; DAY 108</div>
+      <div class="quiz-title">The Bible Recap<br>Daily Quiz</div>
+      <span class="ornament">&#10022; &#10022; &#10022;</span>
+      <div class="badge-row">
+        <span class="badge badge-challenging">&#9670; CHALLENGING</span>
+        <span class="badge badge-passage">PSALM 17</span>
+        <span class="badge badge-passage">PSALM 35</span>
+        <span class="badge badge-passage">PSALM 54</span>
+        <span class="badge badge-passage">PSALM 63</span>
+      </div>
+    </div>
+
+    <hr class="ornament-rule">
+
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
+      <div class="progress-label" id="prog-label">0 / 10</div>
+    </div>
+
+    <div id="quiz-area">
+
+      <!-- Q1 -->
+      <div class="q-card active" id="q1">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 1 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <p class="q-text">In Psalm 17, David appeals to God to vindicate him. What specific action does David say God performed during the night as evidence of his integrity?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="1" data-idx="0"><span class="choice-letter">A</span><span>God heard his prayer and delivered him from his enemies while he slept</span></button>
+          <button class="choice-btn" data-q="1" data-idx="1"><span class="choice-letter">B</span><span>God visited him at night and tested him, finding nothing wrong</span></button>
+          <button class="choice-btn" data-q="1" data-idx="2"><span class="choice-letter">C</span><span>God appeared to him in a dream and confirmed his anointing as king</span></button>
+          <button class="choice-btn" data-q="1" data-idx="3"><span class="choice-letter">D</span><span>God kept watch over him through the night as a shepherd guards his flock</span></button>
+        </div>
+        <div class="feedback" id="fb1">
+          <div class="feedback-verdict" id="fbv1"></div>
+          <div class="feedback-ref">Psalm 17:3</div>
+          <div class="feedback-text">David declares: "You have tried my heart, you have visited me by night, you have tested me, and you will find nothing; I have purposed that my mouth will not transgress." The nighttime visit is divine examination -- God scrutinizes David's inmost heart and comes away finding no wickedness. This is David's boldest claim: he is innocent of the charges his enemies press against him.</div>
+        </div>
+        <button class="next-btn" id="next1">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q2 -->
+      <div class="q-card" id="q2">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 2 OF 10</span>
+        </div>
+        <p class="q-text">In Psalm 17, David asks God to protect him using a tender and intimate image. What does David ask God to keep him as, and what does he ask God to hide him under?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="2" data-idx="0"><span class="choice-letter">A</span><span>Keep him as a lamp burning in darkness; hide him within the fortress of God's name</span></button>
+          <button class="choice-btn" data-q="2" data-idx="1"><span class="choice-letter">B</span><span>Keep him as the apple of your eye; hide him in the shadow of your wings</span></button>
+          <button class="choice-btn" data-q="2" data-idx="2"><span class="choice-letter">C</span><span>Keep him as a firstborn son; hide him beneath your outstretched arm</span></button>
+          <button class="choice-btn" data-q="2" data-idx="3"><span class="choice-letter">D</span><span>Keep him as a sheep of your pasture; hide him behind the shield of your truth</span></button>
+        </div>
+        <div class="feedback" id="fb2">
+          <div class="feedback-verdict" id="fbv2"></div>
+          <div class="feedback-ref">Psalm 17:8</div>
+          <div class="feedback-text">David pleads: "Keep me as the apple of your eye; hide me in the shadow of your wings." "Apple of the eye" refers to the pupil -- the most sensitive and carefully protected part of the eye. Together with the sheltering image of wings (as a mother bird protects her young), this verse expresses both David's vulnerability and his confidence in God's fierce, tender protection.</div>
+        </div>
+        <button class="next-btn" id="next2">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q3 -->
+      <div class="q-card" id="q3">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 3 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <p class="q-text">Psalm 17 concludes with a striking contrast between the wicked and the righteous regarding what they receive. What does David say about the wicked in this contrast, and what is his own hope?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="3" data-idx="0"><span class="choice-letter">A</span><span>The wicked are cut off in their prime, but David will dwell in the house of the LORD forever</span></button>
+          <button class="choice-btn" data-q="3" data-idx="1"><span class="choice-letter">B</span><span>The wicked treasure up wrath for themselves, but David will be clothed in righteousness</span></button>
+          <button class="choice-btn" data-q="3" data-idx="2"><span class="choice-letter">C</span><span>The wicked receive their portion in this life with full bellies, but David will behold God's face and be satisfied with his likeness when he awakes</span></button>
+          <button class="choice-btn" data-q="3" data-idx="3"><span class="choice-letter">D</span><span>The wicked prosper for a season and leave wealth to their children, but David will inherit the earth</span></button>
+        </div>
+        <div class="feedback" id="fb3">
+          <div class="feedback-verdict" id="fbv3"></div>
+          <div class="feedback-ref">Psalm 17:14&ndash;15</div>
+          <div class="feedback-text">David writes of wicked men "whose portion is in this life" -- their bellies are filled with God's treasure, their children have plenty, yet that earthly reward is all they get. By contrast: "As for me, I shall behold your face in righteousness; when I awake, I shall be satisfied with your likeness." David's hope transcends this life. Many see in verse 15 an early glimpse of resurrection hope -- waking to see God's face in full.</div>
+        </div>
+        <button class="next-btn" id="next3">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q4 -->
+      <div class="q-card" id="q4">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 4 OF 10</span>
+        </div>
+        <p class="q-text">In Psalm 35, David asks God to fight on his behalf using military imagery. Which specific weapons does David ask God to take up when rising to his defense?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="4" data-idx="0"><span class="choice-letter">A</span><span>Bow and arrows, and the sword of the Spirit</span></button>
+          <button class="choice-btn" data-q="4" data-idx="1"><span class="choice-letter">B</span><span>Shield and buckler, and draw the spear and javelin</span></button>
+          <button class="choice-btn" data-q="4" data-idx="2"><span class="choice-letter">C</span><span>Helmet and breastplate, and brandish the sword of justice</span></button>
+          <button class="choice-btn" data-q="4" data-idx="3"><span class="choice-letter">D</span><span>Chariot and horsemen, and scatter David's enemies like chaff</span></button>
+        </div>
+        <div class="feedback" id="fb4">
+          <div class="feedback-verdict" id="fbv4"></div>
+          <div class="feedback-ref">Psalm 35:2&ndash;3</div>
+          <div class="feedback-text">David calls out: "Take hold of shield and buckler and rise for my help! Draw the spear and javelin against my pursuers! Say to my soul, 'I am your salvation!'" The imagery is of God suiting up as a warrior champion. David doesn't just ask for divine aid -- he asks God to personally arm himself and charge into battle. The request that God speak assurance -- "I am your salvation" -- reveals that David needs both rescue and the word that assures him rescue is coming.</div>
+        </div>
+        <button class="next-btn" id="next4">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q5 -->
+      <div class="q-card" id="q5">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 5 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <p class="q-text">Psalm 35 reveals something striking about how David had previously behaved toward these same enemies who now attack him. What did David do when they were sick?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="5" data-idx="0"><span class="choice-letter">A</span><span>He prayed once for them and then left them in God's hands</span></button>
+          <button class="choice-btn" data-q="5" data-idx="1"><span class="choice-letter">B</span><span>He sent gifts of food and oil to their households while they recovered</span></button>
+          <button class="choice-btn" data-q="5" data-idx="2"><span class="choice-letter">C</span><span>He humbled himself with fasting, clothed himself in sackcloth, and mourned as for a brother or mother</span></button>
+          <button class="choice-btn" data-q="5" data-idx="3"><span class="choice-letter">D</span><span>He summoned the priests to offer sacrifices on their behalf at the tabernacle</span></button>
+        </div>
+        <div class="feedback" id="fb5">
+          <div class="feedback-verdict" id="fbv5"></div>
+          <div class="feedback-ref">Psalm 35:13&ndash;14</div>
+          <div class="feedback-text">David testifies: "But I, when they were sick -- I wore sackcloth; I afflicted myself with fasting; I prayed with head bowed on my chest. I went about as though I grieved for my friend or my brother; I bowed down heavily, as one who laments his mother." The depth of David's former compassion -- mourning like a bereaved family member -- makes the ingratitude of these enemies all the more bitter and all the more an injustice requiring God's intervention.</div>
+        </div>
+        <button class="next-btn" id="next5">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q6 -->
+      <div class="q-card" id="q6">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 6 OF 10</span>
+        </div>
+        <p class="q-text">Psalm 35 contains a verse quoted by Jesus in the New Testament to describe his own experience. Which phrase from Psalm 35 does Jesus apply to himself, and where in the Gospels does he quote it?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="6" data-idx="0"><span class="choice-letter">A</span><span>"They hated me without a cause" — quoted in John 15:25 regarding those who hate both Jesus and the Father</span></button>
+          <button class="choice-btn" data-q="6" data-idx="1"><span class="choice-letter">B</span><span>"False witnesses rise up against me" — quoted in Matthew 26:59 during Jesus' trial before the Sanhedrin</span></button>
+          <button class="choice-btn" data-q="6" data-idx="2"><span class="choice-letter">C</span><span>"They repaid me evil for good" — quoted in Luke 23:34 as Jesus prayed for those crucifying him</span></button>
+          <button class="choice-btn" data-q="6" data-idx="3"><span class="choice-letter">D</span><span>"How long, O Lord, will you look on?" — quoted in Mark 15:34 as Jesus cried out from the cross</span></button>
+        </div>
+        <div class="feedback" id="fb6">
+          <div class="feedback-verdict" id="fbv6"></div>
+          <div class="feedback-ref">Psalm 35:19; John 15:25</div>
+          <div class="feedback-text">David writes in Psalm 35:19: "Let not those rejoice over me who are wrongfully my foes, and let not those wink the eye who hate me without cause." Jesus quotes this exact phrase in John 15:25 -- "They hated me without a cause" -- to explain the world's hostility toward him and his disciples. David's unjust suffering prefigures the perfect innocence of the one his enemies condemned. What was true of David the type is supremely true of Christ the antitype.</div>
+        </div>
+        <button class="next-btn" id="next6">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q7 -->
+      <div class="q-card" id="q7">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 7 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <p class="q-text">The superscription of Psalm 54 provides a specific historical occasion for the psalm. What event prompted David to write it?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="7" data-idx="0"><span class="choice-letter">A</span><span>When Doeg the Edomite reported to Saul that David had received bread and the sword of Goliath from Ahimelech</span></button>
+          <button class="choice-btn" data-q="7" data-idx="1"><span class="choice-letter">B</span><span>When the Ziphites went to Saul and told him that David was hiding among them</span></button>
+          <button class="choice-btn" data-q="7" data-idx="2"><span class="choice-letter">C</span><span>When Saul threw a spear at David while he was playing the lyre in the king's court</span></button>
+          <button class="choice-btn" data-q="7" data-idx="3"><span class="choice-letter">D</span><span>When the men of Keilah were willing to hand David over to Saul despite David having rescued their city</span></button>
+        </div>
+        <div class="feedback" id="fb7">
+          <div class="feedback-verdict" id="fbv7"></div>
+          <div class="feedback-ref">Psalm 54 superscription; 1 Samuel 23:19</div>
+          <div class="feedback-text">The superscription reads: "A Maskil of David, when the Ziphites went and told Saul, 'Is not David hiding among us?'" The Ziphites, fellow Judahites, betrayed the location of their kinsman David to Saul -- not once but twice (see also 1 Sam 26). This treachery from within his own tribe made the wound sharper. Psalm 54 is David's raw, urgent cry for God to save him from the consequences of this betrayal.</div>
+        </div>
+        <button class="next-btn" id="next7">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q8 -->
+      <div class="q-card" id="q8">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 8 OF 10</span>
+        </div>
+        <p class="q-text">In Psalm 54, David quickly moves from crisis to confidence. What does he identify as the turning point -- the single theological affirmation that anchors his hope amid the threat?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="8" data-idx="0"><span class="choice-letter">A</span><span>"The LORD has anointed me king; therefore no weapon formed against me shall prosper"</span></button>
+          <button class="choice-btn" data-q="8" data-idx="1"><span class="choice-letter">B</span><span>"Behold, God is my helper; the Lord is the upholder of my life"</span></button>
+          <button class="choice-btn" data-q="8" data-idx="2"><span class="choice-letter">C</span><span>"He will send from heaven and save me; God will put to shame him who tramples on me"</span></button>
+          <button class="choice-btn" data-q="8" data-idx="3"><span class="choice-letter">D</span><span>"I have set the LORD always before me; because he is at my right hand, I shall not be shaken"</span></button>
+        </div>
+        <div class="feedback" id="fb8">
+          <div class="feedback-verdict" id="fbv8"></div>
+          <div class="feedback-ref">Psalm 54:4</div>
+          <div class="feedback-text">"Behold, God is my helper; the Lord is the upholder of my life." After only two verses of lament, David pivots on this single "Behold" -- an invitation to redirect attention from the threat to the Savior. "Upholder of my life" (ESV) renders a Hebrew word meaning the one who sustains or props up -- God is the structural support that keeps David from collapse. This one affirmation is enough to shift the entire psalm's tone from plea to praise.</div>
+        </div>
+        <button class="next-btn" id="next8">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q9 -->
+      <div class="q-card" id="q9">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 9 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <p class="q-text">Psalm 63 opens with David expressing an intense, physical longing for God. In addition to his soul thirsting for God, what physical sensation does David use to describe his longing, and where is he when he writes this?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="9" data-idx="0"><span class="choice-letter">A</span><span>His eyes grow dim and his hands tremble -- he is in the depths of a cave</span></button>
+          <button class="choice-btn" data-q="9" data-idx="1"><span class="choice-letter">B</span><span>His flesh faints for God as in a dry and weary land where there is no water -- he is in the wilderness of Judah</span></button>
+          <button class="choice-btn" data-q="9" data-idx="2"><span class="choice-letter">C</span><span>His bones waste away and his heart melts -- he is far from the sanctuary in the land of the Philistines</span></button>
+          <button class="choice-btn" data-q="9" data-idx="3"><span class="choice-letter">D</span><span>His feet stumble and his strength fails -- he is wandering in the hill country of Ephraim</span></button>
+        </div>
+        <div class="feedback" id="fb9">
+          <div class="feedback-verdict" id="fbv9"></div>
+          <div class="feedback-ref">Psalm 63:1 (superscription)</div>
+          <div class="feedback-text">The superscription places David "in the wilderness of Judah." He opens: "O God, you are my God; earnestly I seek you; my soul thirsts for you; my flesh faints for you, as in a dry and weary land where there is no water." The physical setting -- parched desert -- becomes the metaphor for spiritual longing. His body knows what thirst feels like; his soul aches for God with exactly that same urgency. The outer landscape mirrors the inner cry.</div>
+        </div>
+        <button class="next-btn" id="next9">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q10 -->
+      <div class="q-card" id="q10">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 10 OF 10</span>
+        </div>
+        <p class="q-text">In Psalm 63, David makes a remarkable declaration about the relative value of God's steadfast love compared to something else. What does he say God's steadfast love is better than, and what is his response to this reality?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="10" data-idx="0"><span class="choice-letter">A</span><span>Better than silver and gold -- so David will bring offerings to the sanctuary all his days</span></button>
+          <button class="choice-btn" data-q="10" data-idx="1"><span class="choice-letter">B</span><span>Better than life itself -- so his lips will praise God</span></button>
+          <button class="choice-btn" data-q="10" data-idx="2"><span class="choice-letter">C</span><span>Better than victory in battle -- so David will shout for joy before his enemies</span></button>
+          <button class="choice-btn" data-q="10" data-idx="3"><span class="choice-letter">D</span><span>Better than the finest wheat -- so David will bless God with every meal he eats</span></button>
+        </div>
+        <div class="feedback" id="fb10">
+          <div class="feedback-verdict" id="fbv10"></div>
+          <div class="feedback-ref">Psalm 63:3</div>
+          <div class="feedback-text">"Because your steadfast love is better than life, my lips will praise you." This is one of the most radical declarations in all of Scripture. Life itself -- the most fundamental good, the thing every creature clings to -- is declared inferior to God's covenant love (Hebrew: *hesed*). David says: even if staying alive cost me God's love, it would not be worth the price. The response is praise -- not because life is being preserved, but because *hesed* is present. This verse anchors the entire psalm's confidence even in the wilderness.</div>
+        </div>
+        <button class="next-btn" id="next10">See Results &rarr;</button>
+      </div>
+
+    </div><!-- end #quiz-area -->
+
+    <!-- Results Screen -->
+    <div id="results-screen">
+      <span class="ornament">&#10022; &#10022; &#10022;</span>
+      <div class="score-ring-wrap">
+        <svg viewBox="0 0 140 140">
+          <circle class="ring-bg" cx="70" cy="70" r="58"/>
+          <circle class="ring-fill" id="ring-fill" cx="70" cy="70" r="58"
+            stroke="#c9a84c"
+            stroke-dasharray="364.42"
+            stroke-dashoffset="364.42"/>
+        </svg>
+      </div>
+      <div class="score-number"><span id="final-score">0</span><span class="score-denom"> / 10</span></div>
+      <div class="score-message" id="score-msg"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">&#8635; Take Again</button>
+      <hr class="ornament-rule">
+      <div class="review-title">QUESTION REVIEW</div>
+      <div id="review-list"></div>
+    </div>
+
+  </div><!-- end .parchment -->
+  <div class="gold-strip bottom"></div>
+</div><!-- end .scroll-wrap -->
+
+<script>
+const TOTAL = 10;
+const correctAnswers = {
+  1: 1,  // B
+  2: 1,  // B
+  3: 2,  // C
+  4: 1,  // B
+  5: 2,  // C
+  6: 0,  // A
+  7: 1,  // B
+  8: 1,  // B
+  9: 1,  // B
+  10: 1  // B
+};
+
+const questionTexts = [
+  "In Psalm 17, David appeals to God to vindicate him. What specific action does David say God performed during the night as evidence of his integrity?",
+  "In Psalm 17, David asks God to protect him using a tender and intimate image. What does David ask God to keep him as, and what does he ask God to hide him under?",
+  "Psalm 17 concludes with a striking contrast between the wicked and the righteous regarding what they receive. What does David say about the wicked in this contrast, and what is his own hope?",
+  "In Psalm 35, David asks God to fight on his behalf using military imagery. Which specific weapons does David ask God to take up when rising to his defense?",
+  "Psalm 35 reveals something striking about how David had previously behaved toward these same enemies who now attack him. What did David do when they were sick?",
+  "Psalm 35 contains a verse quoted by Jesus in the New Testament to describe his own experience. Which phrase from Psalm 35 does Jesus apply to himself, and where in the Gospels does he quote it?",
+  "The superscription of Psalm 54 provides a specific historical occasion for the psalm. What event prompted David to write it?",
+  "In Psalm 54, David quickly moves from crisis to confidence. What does he identify as the turning point -- the single theological affirmation that anchors his hope amid the threat?",
+  "Psalm 63 opens with David expressing an intense, physical longing for God. In addition to his soul thirsting for God, what physical sensation does David use to describe his longing, and where is he when he writes this?",
+  "In Psalm 63, David makes a remarkable declaration about the relative value of God's steadfast love compared to something else. What does he say God's steadfast love is better than, and what is his response to this reality?"
+];
+
+const choiceLabels = ['A','B','C','D'];
+let userAnswers = {};
+let score = 0;
+let currentQ = 1;
+let answered = false;
+
+function handleChoice(qNum, idx) {
+  if (answered) return;
+  answered = true;
+  userAnswers[qNum] = idx;
+
+  const correct = correctAnswers[qNum];
+  const btns = document.querySelectorAll(`[data-q="${qNum}"]`);
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === correct) btn.classList.add('correct');
+    else if (i === idx && i !== correct) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('fb' + qNum);
+  const fbv = document.getElementById('fbv' + qNum);
+  if (idx === correct) {
+    score++;
+    fb.classList.add('correct-fb');
+    fbv.textContent = '✓ CORRECT';
+  } else {
+    fb.classList.add('wrong-fb');
+    fbv.textContent = '✗ INCORRECT';
+  }
+  fb.classList.add('show');
+
+  const nextBtn = document.getElementById('next' + qNum);
+  nextBtn.style.display = 'inline-block';
+
+  const answered_count = Object.keys(userAnswers).length;
+  document.getElementById('prog-fill').style.width = (answered_count / TOTAL * 100) + '%';
+  document.getElementById('prog-label').textContent = answered_count + ' / ' + TOTAL;
+}
+
+function nextQuestion(qNum) {
+  document.getElementById('q' + qNum).classList.remove('active');
+  if (qNum < TOTAL) {
+    answered = false;
+    currentQ = qNum + 1;
+    const nextCard = document.getElementById('q' + currentQ);
+    nextCard.classList.add('active');
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('quiz-area').style.display = 'none';
+  document.getElementById('prog-fill').style.width = '100%';
+  document.getElementById('prog-label').textContent = TOTAL + ' / ' + TOTAL;
+
+  const rs = document.getElementById('results-screen');
+  rs.style.display = 'block';
+  document.getElementById('final-score').textContent = score;
+
+  const msgs = [
+    "Keep reading — the Word rewards persistence.",
+    "A solid start — return to these Psalms again.",
+    "Good effort — the details reward close reading.",
+    "Well done — you read carefully.",
+    "Excellent — these Psalms are becoming yours.",
+    "Outstanding — a true student of the Word!"
+  ];
+  const msgIdx = Math.min(Math.floor(score / 2), msgs.length - 1);
+  document.getElementById('score-msg').textContent = msgs[msgIdx];
+
+  const circumference = 364.42;
+  const offset = circumference - (score / TOTAL) * circumference;
+  setTimeout(() => {
+    document.getElementById('ring-fill').style.strokeDashoffset = offset;
+    const color = score >= 8 ? '#1a5c2a' : score >= 5 ? '#c9a84c' : '#8b1a1a';
+    document.getElementById('ring-fill').style.stroke = color;
+  }, 100);
+
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  for (let i = 1; i <= TOTAL; i++) {
+    const userIdx = userAnswers[i];
+    const corrIdx = correctAnswers[i];
+    const isRight = userIdx === corrIdx;
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (isRight ? 'rev-correct' : 'rev-wrong');
+    div.innerHTML = `<div class="review-q">${i}. ${questionTexts[i-1]}</div>
+      <div class="review-ans">
+        Your answer: <span class="${isRight ? 'rev-c' : 'rev-w'}">${choiceLabels[userIdx]}</span>
+        ${!isRight ? '&nbsp;&nbsp;Correct: <span class="rev-c">' + choiceLabels[corrIdx] + '</span>' : ''}
+      </div>`;
+    reviewList.appendChild(div);
+  }
+}
+
+function resetQuiz() {
+  userAnswers = {};
+  score = 0;
+  currentQ = 1;
+  answered = false;
+
+  for (let i = 1; i <= TOTAL; i++) {
+    const card = document.getElementById('q' + i);
+    card.classList.remove('active');
+    const btns = card.querySelectorAll('.choice-btn');
+    btns.forEach(b => { b.disabled = false; b.classList.remove('correct','wrong'); });
+    const fb = document.getElementById('fb' + i);
+    fb.classList.remove('show','correct-fb','wrong-fb');
+    document.getElementById('fbv' + i).textContent = '';
+    document.getElementById('next' + i).style.display = 'none';
+  }
+
+  document.getElementById('q1').classList.add('active');
+  document.getElementById('prog-fill').style.width = '0%';
+  document.getElementById('prog-label').textContent = '0 / 10';
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('quiz-area').style.display = 'block';
+  document.getElementById('ring-fill').style.strokeDashoffset = '364.42';
+}
+
+// Attach click listeners
+document.querySelectorAll('.choice-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const q = parseInt(btn.dataset.q);
+    const idx = parseInt(btn.dataset.idx);
+    handleChoice(q, idx);
+  });
+});
+
+for (let i = 1; i <= TOTAL; i++) {
+  document.getElementById('next' + i).addEventListener('click', () => nextQuestion(i));
+}
+</script>
+</body>
+</html>
