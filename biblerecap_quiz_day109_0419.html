@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Recap Quiz — Day 109 — April 19, 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2rem 1rem 4rem;
+    font-family: 'Crimson Text', serif;
+  }
+  .scroll-wrap { width: 100%; max-width: 760px; position: relative; }
+  .gold-strip {
+    height: 18px;
+    background: linear-gradient(90deg, #3a2a00 0%, #c9a84c 20%, #f0d080 50%, #c9a84c 80%, #3a2a00 100%);
+    border-radius: 3px 3px 0 0;
+  }
+  .gold-strip.bottom { border-radius: 0 0 3px 3px; }
+  .parchment {
+    background: linear-gradient(160deg, #f5ecd6 0%, #ecdbb4 40%, #dfc99a 70%, #d4b87a 100%);
+    padding: 2.5rem 2.8rem 2.8rem;
+    position: relative;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.7), inset 0 0 60px rgba(160,120,40,0.15);
+  }
+  .quiz-header { text-align: center; margin-bottom: 1.8rem; }
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #6b4f1a;
+    margin-bottom: 0.5rem;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #2c1a00;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+  .badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin: 0.6rem 0;
+  }
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    padding: 3px 9px;
+    border-radius: 3px;
+    font-weight: 700;
+  }
+  .badge-challenging { background: #7a4a00; color: #f0d080; border: 1px solid #c9a84c; }
+  .badge-passage { background: rgba(44,26,0,0.12); color: #5a3a08; border: 1px solid #c9a84c; }
+  .ornament { color: #c9a84c; font-size: 1.3rem; margin: 0.4rem 0; display: block; }
+  .progress-wrap { margin-bottom: 1.6rem; display: flex; align-items: center; gap: 0.7rem; }
+  .progress-track {
+    flex: 1; height: 6px;
+    background: rgba(100,70,10,0.2);
+    border-radius: 3px; overflow: hidden;
+    border: 1px solid rgba(201,168,76,0.3);
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #f0d080);
+    border-radius: 3px; width: 0%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem; color: #6b4f1a;
+    white-space: nowrap; letter-spacing: 0.08em;
+    min-width: 52px; text-align: right;
+  }
+  .q-card { display: none; animation: fadeIn 0.4s ease; }
+  .q-card.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .q-meta { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem; }
+  .q-number { font-family: 'Cinzel', serif; font-size: 0.65rem; color: #8b6820; letter-spacing: 0.1em; }
+  .badge-detail {
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem; letter-spacing: 0.1em;
+    padding: 2px 7px; border-radius: 3px; font-weight: 700;
+    background: #1a2d5c; color: #a8c0f0; border: 1px solid #3a5aaa;
+  }
+  .q-text { font-size: 1.15rem; color: #1e1000; line-height: 1.55; margin-bottom: 1.2rem; font-style: italic; }
+  .choices { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; }
+  .choice-btn {
+    display: flex; align-items: flex-start; gap: 0.8rem;
+    background: rgba(255,245,220,0.55);
+    border: 1.5px solid rgba(201,168,76,0.4);
+    border-radius: 5px; padding: 0.75rem 1rem;
+    cursor: pointer; text-align: left;
+    font-family: 'Crimson Text', serif; font-size: 1.05rem;
+    color: #2c1a00; line-height: 1.45;
+    transition: background 0.2s, border-color 0.2s; width: 100%;
+  }
+  .choice-btn:hover:not(:disabled) { background: rgba(240,208,128,0.35); border-color: #c9a84c; }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif; font-size: 0.75rem; font-weight: 700;
+    color: #8b6820; min-width: 20px; padding-top: 2px;
+  }
+  .choice-btn.correct { background: rgba(26,92,42,0.18); border-color: #1a5c2a; color: #0d2e14; }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong { background: rgba(139,26,26,0.12); border-color: #8b1a1a; color: #3a0808; }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+  .feedback {
+    display: none; padding: 0.9rem 1.1rem; border-radius: 5px;
+    margin-top: 0.5rem; animation: fadeIn 0.3s ease;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb { background: rgba(26,92,42,0.1); border-left: 4px solid #1a5c2a; }
+  .feedback.wrong-fb { background: rgba(139,26,26,0.08); border-left: 4px solid #8b1a1a; }
+  .feedback-verdict {
+    font-family: 'Cinzel', serif; font-size: 0.7rem;
+    letter-spacing: 0.1em; font-weight: 700; margin-bottom: 0.3rem;
+  }
+  .feedback.correct-fb .feedback-verdict { color: #1a5c2a; }
+  .feedback.wrong-fb .feedback-verdict { color: #8b1a1a; }
+  .feedback-ref { font-family: 'Cinzel', serif; font-size: 0.65rem; color: #8b6820; letter-spacing: 0.08em; margin-bottom: 0.3rem; }
+  .feedback-text { font-size: 1rem; color: #2c1a00; line-height: 1.5; }
+  .next-btn {
+    display: none; margin-top: 1rem;
+    font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.12em;
+    color: #f0d080;
+    background: linear-gradient(135deg, #5a3a00, #7a5200);
+    border: 1.5px solid #c9a84c; border-radius: 4px;
+    padding: 0.55rem 1.4rem; cursor: pointer; transition: background 0.2s;
+  }
+  .next-btn:hover { background: linear-gradient(135deg, #7a5200, #9a6a00); }
+  #results-screen { display: none; text-align: center; animation: fadeIn 0.5s ease; }
+  .score-ring-wrap { margin: 1.2rem auto; width: 140px; height: 140px; }
+  .score-ring-wrap svg { width: 100%; height: 100%; }
+  .ring-bg { fill: none; stroke: rgba(100,70,10,0.2); stroke-width: 10; }
+  .ring-fill {
+    fill: none; stroke-width: 10; stroke-linecap: round;
+    transform: rotate(-90deg); transform-origin: 70px 70px;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-number { font-family: 'Cinzel', serif; font-size: 2rem; font-weight: 700; color: #2c1a00; margin: 0.3rem 0; }
+  .score-denom { font-size: 1rem; color: #6b4f1a; }
+  .score-message { font-family: 'Cinzel', serif; font-size: 0.9rem; letter-spacing: 0.08em; color: #4a2e00; margin: 0.5rem 0 1.4rem; }
+  .take-again-btn {
+    font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.12em;
+    color: #f0d080;
+    background: linear-gradient(135deg, #5a3a00, #7a5200);
+    border: 1.5px solid #c9a84c; border-radius: 4px;
+    padding: 0.6rem 1.6rem; cursor: pointer; transition: background 0.2s; margin-bottom: 1.8rem;
+  }
+  .take-again-btn:hover { background: linear-gradient(135deg, #7a5200, #9a6a00); }
+  .review-title {
+    font-family: 'Cinzel', serif; font-size: 0.8rem; letter-spacing: 0.15em;
+    color: #6b4f1a; margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(201,168,76,0.4); padding-bottom: 0.5rem;
+  }
+  .review-item {
+    text-align: left; margin-bottom: 1.1rem; padding: 0.8rem 1rem;
+    border-radius: 5px; background: rgba(255,245,220,0.4);
+    border-left: 4px solid #c9a84c;
+  }
+  .review-item.rev-correct { border-left-color: #1a5c2a; background: rgba(26,92,42,0.07); }
+  .review-item.rev-wrong   { border-left-color: #8b1a1a; background: rgba(139,26,26,0.07); }
+  .review-q { font-size: 0.95rem; font-style: italic; color: #2c1a00; margin-bottom: 0.3rem; }
+  .review-ans { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.06em; color: #5a3a08; }
+  .review-ans .rev-c { color: #1a5c2a; font-weight: 700; }
+  .review-ans .rev-w { color: #8b1a1a; font-weight: 700; }
+  hr.ornament-rule { border: none; border-top: 1px solid rgba(201,168,76,0.4); margin: 1.6rem 0; }
+  @media (max-width: 520px) {
+    .parchment { padding: 1.8rem 1.4rem 2rem; }
+    .quiz-title { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="scroll-wrap">
+  <div class="gold-strip"></div>
+  <div class="parchment">
+
+    <div class="quiz-header">
+      <div class="date-line">SUNDAY, APRIL 19, 2026 &middot; DAY 109</div>
+      <div class="quiz-title">The Bible Recap<br>Daily Quiz</div>
+      <span class="ornament">&#10022; &#10022; &#10022;</span>
+      <div class="badge-row">
+        <span class="badge badge-challenging">&#9670; CHALLENGING</span>
+        <span class="badge badge-passage">1 SAMUEL 28&ndash;31</span>
+        <span class="badge badge-passage">PSALM 18</span>
+      </div>
+    </div>
+
+    <hr class="ornament-rule">
+
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
+      <div class="progress-label" id="prog-label">0 / 10</div>
+    </div>
+
+    <div id="quiz-area">
+
+      <!-- Q1 -->
+      <div class="q-card active" id="q1">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 1 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <p class="q-text">Before going to the medium at Endor, Saul sought guidance from the LORD by three different means &mdash; but the LORD did not answer him by any of them. What were those three means?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="1" data-idx="0"><span class="choice-letter">A</span><span>Prayer, fasting, and sacrifice at the high place</span></button>
+          <button class="choice-btn" data-q="1" data-idx="1"><span class="choice-letter">B</span><span>Consulting the Levites, reading the law of Moses, and making a vow</span></button>
+          <button class="choice-btn" data-q="1" data-idx="2"><span class="choice-letter">C</span><span>Dreams, the Urim, and prophets</span></button>
+          <button class="choice-btn" data-q="1" data-idx="3"><span class="choice-letter">D</span><span>The ark of the covenant, sacred lots, and the angel of the LORD</span></button>
+        </div>
+        <div class="feedback" id="fb1">
+          <div class="feedback-verdict" id="fbv1"></div>
+          <div class="feedback-ref">1 Samuel 28:6</div>
+          <div class="feedback-text">1 Samuel 28:6 records that Saul "inquired of the LORD, but the LORD did not answer him, either by dreams or by Urim or by prophets." These three were the recognized channels of divine communication in Israel: visionary dreams (as God had spoken to Samuel), the Urim (oracular lots kept by the priest), and the prophetic word. The silence on all three fronts drives Saul in desperation to seek a medium — a practice he himself had outlawed (v. 3) in obedience to the Mosaic law.</div>
+        </div>
+        <button class="next-btn" id="next1">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q2 -->
+      <div class="q-card" id="q2">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 2 OF 10</span>
+        </div>
+        <p class="q-text">When Samuel appeared to Saul at Endor, he delivered a precise prophecy about what would happen "tomorrow." Which option most accurately captures what Samuel said?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="2" data-idx="0"><span class="choice-letter">A</span><span>Saul would flee the battlefield in shame and be captured by the Philistines</span></button>
+          <button class="choice-btn" data-q="2" data-idx="1"><span class="choice-letter">B</span><span>Saul and his sons would be with Samuel, and the LORD would give the army of Israel into the hand of the Philistines</span></button>
+          <button class="choice-btn" data-q="2" data-idx="2"><span class="choice-letter">C</span><span>Jonathan would survive the battle but Saul would die alone on the field</span></button>
+          <button class="choice-btn" data-q="2" data-idx="3"><span class="choice-letter">D</span><span>The LORD would relent of his judgment if Saul repented and returned to Gilgal before dawn</span></button>
+        </div>
+        <div class="feedback" id="fb2">
+          <div class="feedback-verdict" id="fbv2"></div>
+          <div class="feedback-ref">1 Samuel 28:19</div>
+          <div class="feedback-text">Samuel's prophecy is devastating in its precision: "Tomorrow you and your sons will be with me. The LORD will also give the army of Israel into the hand of the Philistines." The phrase "with me" is a euphemism for death — joining Samuel in the realm of the dead. Option C is wrong because the text specifies that Saul's sons (including Jonathan) would also die. There is no conditional offer of repentance — Samuel's words are a verdict, not a warning.</div>
+        </div>
+        <button class="next-btn" id="next2">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q3 -->
+      <div class="q-card" id="q3">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 3 OF 10</span>
+        </div>
+        <p class="q-text">Achish, king of Gath, defended David to the other Philistine commanders who wanted him sent away. What specific comparison did Achish use to express his confidence in David?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="3" data-idx="0"><span class="choice-letter">A</span><span>"He is as faithful to me as a son is to his father, and has never given me cause to doubt him"</span></button>
+          <button class="choice-btn" data-q="3" data-idx="1"><span class="choice-letter">B</span><span>"He has fought for us like a lion among lambs — none of my own men could match his valor"</span></button>
+          <button class="choice-btn" data-q="3" data-idx="2"><span class="choice-letter">C</span><span>"He is as good in my sight as an angel of God"</span></button>
+          <button class="choice-btn" data-q="3" data-idx="3"><span class="choice-letter">D</span><span>"He is loyal to my house as a brother born, and his word has never failed"</span></button>
+        </div>
+        <div class="feedback" id="fb3">
+          <div class="feedback-verdict" id="fbv3"></div>
+          <div class="feedback-ref">1 Samuel 29:9</div>
+          <div class="feedback-text">In 1 Samuel 29:9, Achish tells David: "I know that you are as blameless in my sight as an angel of God." This is extraordinary praise from a pagan king — comparing David's trustworthiness to a divine being. The irony is striking: the Philistine king trusts David completely, while Saul (his own king) has spent years trying to kill him. Despite Achish's confidence, the other commanders will not hear of it and insist David be dismissed before battle.</div>
+        </div>
+        <button class="next-btn" id="next3">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q4 -->
+      <div class="q-card" id="q4">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 4 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <p class="q-text">The Philistine commanders were suspicious of David and quoted a specific song to justify their distrust. What song did they cite, and where had it originated?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="4" data-idx="0"><span class="choice-letter">A</span><span>"Saul has struck down his thousands, and David his ten thousands" &mdash; a song the women of Israel sang in celebration of David's victories</span></button>
+          <button class="choice-btn" data-q="4" data-idx="1"><span class="choice-letter">B</span><span>"The LORD has given David the land of the Philistines and Saul is cast from his throne" &mdash; a prophetic chant from Israel's seers</span></button>
+          <button class="choice-btn" data-q="4" data-idx="2"><span class="choice-letter">C</span><span>"David slew Goliath and ten thousand men, and now Saul is driven from his kingdom" &mdash; a victory hymn sung in Gath</span></button>
+          <button class="choice-btn" data-q="4" data-idx="3"><span class="choice-letter">D</span><span>"From the caves of Adullam to the halls of Gath, David's sword is mightier than all" &mdash; a battle song composed by David's men</span></button>
+        </div>
+        <div class="feedback" id="fb4">
+          <div class="feedback-verdict" id="fbv4"></div>
+          <div class="feedback-ref">1 Samuel 29:5</div>
+          <div class="feedback-text">1 Samuel 29:5 quotes the commanders: "Is not this David, of whom they sang to one another in dances, 'Saul has struck down his thousands, and David his ten thousands'?" This is the same refrain first recorded in 1 Samuel 18:7, where the women of Israel sang it after David killed Goliath — and which first planted jealousy in Saul's heart. Now the song has traveled all the way to Philistia, where it fuels the fear that forces David out of the battle entirely.</div>
+        </div>
+        <button class="next-btn" id="next4">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q5 -->
+      <div class="q-card" id="q5">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 5 OF 10</span>
+        </div>
+        <p class="q-text">When David and his men returned to Ziklag and found it burned and their families taken captive, the men were so distraught they spoke of stoning David. What does the text specifically say David did at this moment of extreme personal crisis?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="5" data-idx="0"><span class="choice-letter">A</span><span>He tore his clothes, put on sackcloth, and lay prostrate before the LORD until morning</span></button>
+          <button class="choice-btn" data-q="5" data-idx="1"><span class="choice-letter">B</span><span>He wept until he had no strength, then called for Abiathar the priest to inquire of the LORD</span></button>
+          <button class="choice-btn" data-q="5" data-idx="2"><span class="choice-letter">C</span><span>He strengthened himself in the LORD his God</span></button>
+          <button class="choice-btn" data-q="5" data-idx="3"><span class="choice-letter">D</span><span>He gathered his commanders and urged them to trust the LORD, then called for the ephod</span></button>
+        </div>
+        <div class="feedback" id="fb5">
+          <div class="feedback-verdict" id="fbv5"></div>
+          <div class="feedback-ref">1 Samuel 30:6</div>
+          <div class="feedback-text">1 Samuel 30:6 records the turning point: "And David was greatly distressed, for the people spoke of stoning him, because all the people were bitter in soul, each for his sons and daughters. But David strengthened himself in the LORD his God." The weeping until no strength (v. 4) was the response of all the men together; David's specific, personal response — setting him apart as leader — was to turn to God for inner strength. Only after this does he call for Abiathar and the ephod to inquire of the LORD (v. 7).</div>
+        </div>
+        <button class="next-btn" id="next5">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q6 -->
+      <div class="q-card" id="q6">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 6 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <p class="q-text">During the pursuit of the Amalekites, David's men found an Egyptian slave abandoned in a field and revived him. The text is precise about both his prior condition and what he was given to eat. Which option correctly records both details?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="6" data-idx="0"><span class="choice-letter">A</span><span>He had not eaten for a day and a half; they gave him water, bread, and a cluster of grapes</span></button>
+          <button class="choice-btn" data-q="6" data-idx="1"><span class="choice-letter">B</span><span>He had not eaten bread or drunk water for three days and three nights; they gave him bread, water, a piece of a fig cake, and two clusters of raisins</span></button>
+          <button class="choice-btn" data-q="6" data-idx="2"><span class="choice-letter">C</span><span>He had been wandering for two days without food; they gave him wine, dried figs, and salted meat</span></button>
+          <button class="choice-btn" data-q="6" data-idx="3"><span class="choice-letter">D</span><span>He had gone three days without food; they gave him water, roasted grain, and a portion of pressed dates</span></button>
+        </div>
+        <div class="feedback" id="fb6">
+          <div class="feedback-verdict" id="fbv6"></div>
+          <div class="feedback-ref">1 Samuel 30:11&ndash;12</div>
+          <div class="feedback-text">1 Samuel 30:11–12 specifies the menu with remarkable precision: "They gave him water to drink and food to eat — a piece of a cake of figs and two clusters of raisins. And when he had eaten, his spirit revived, for he had not eaten bread or drunk water for three days and three nights." This small act of compassion proved providential — the revived slave led David's forces directly to the Amalekite camp (v. 15), enabling the full recovery of every captive and all the plunder.</div>
+        </div>
+        <button class="next-btn" id="next6">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q7 -->
+      <div class="q-card" id="q7">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 7 OF 10</span>
+        </div>
+        <p class="q-text">After defeating the Amalekites, a dispute arose among David's men about sharing the plunder. What rule did David establish, and how does the text describe its lasting significance?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="7" data-idx="0"><span class="choice-letter">A</span><span>Warriors would receive a double share; those who stayed behind would receive one share &mdash; and this became the custom only for the tribe of Judah</span></button>
+          <button class="choice-btn" data-q="7" data-idx="1"><span class="choice-letter">B</span><span>Those who stayed with the supplies would share equally with those who went into battle &mdash; and this became a statute and a rule for Israel from that day forward</span></button>
+          <button class="choice-btn" data-q="7" data-idx="2"><span class="choice-letter">C</span><span>One tenth of the plunder would be set apart for the LORD's sanctuary; the rest divided equally among all who participated</span></button>
+          <button class="choice-btn" data-q="7" data-idx="3"><span class="choice-letter">D</span><span>The leader would distribute shares at his own discretion, weighing each man's contribution &mdash; a precedent David later codified in the laws of kingship</span></button>
+        </div>
+        <div class="feedback" id="fb7">
+          <div class="feedback-verdict" id="fbv7"></div>
+          <div class="feedback-ref">1 Samuel 30:24&ndash;25</div>
+          <div class="feedback-text">1 Samuel 30:24–25 records David's ruling: "As his share is who goes down into the battle, so shall his share be who stays by the baggage. They shall share alike." Then: "He made it a statute and a rule for Israel from that day forward to this day." David's counter-argument (v. 23) frames the victory as a gift from God, not earned wages — making equal sharing a theological statement. Those who stayed behind were not cowards but obedient to their orders, and the LORD's gift belongs to the whole community.</div>
+        </div>
+        <button class="next-btn" id="next7">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q8 -->
+      <div class="q-card" id="q8">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 8 OF 10</span>
+        </div>
+        <p class="q-text">The day after the battle on Mount Gilboa, the Philistines found Saul's body. The text records three distinct actions involving his head, his armor, and his body. Which option correctly lists all three?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="8" data-idx="0"><span class="choice-letter">A</span><span>They burned his body on the field, displayed his head in Ashdod, and sent his armor to the king of Gath</span></button>
+          <button class="choice-btn" data-q="8" data-idx="1"><span class="choice-letter">B</span><span>They cut off his head, put his armor in the temple of Ashtaroth, and fastened his body to the wall of Beth-shan</span></button>
+          <button class="choice-btn" data-q="8" data-idx="2"><span class="choice-letter">C</span><span>They cut off his head and sent it throughout Philistia, buried his armor at the shrine of Dagon, and threw his body into the valley</span></button>
+          <button class="choice-btn" data-q="8" data-idx="3"><span class="choice-letter">D</span><span>They stripped his armor and hung it in the temple of Baal-zebub at Ekron, and displayed his headless body at the gate of Megiddo</span></button>
+        </div>
+        <div class="feedback" id="fb8">
+          <div class="feedback-verdict" id="fbv8"></div>
+          <div class="feedback-ref">1 Samuel 31:9&ndash;10</div>
+          <div class="feedback-text">1 Samuel 31:9–10 records three distinct acts: "they cut off his head and stripped off his armor," then spread the news to their idols and their people, and finally "put his armor in the temple of Ashtaroth and fastened his body to the wall of Beth-shan." The grim public display was a declaration of Philistine triumph and divine blessing from their gods. But the men of Jabesh-gilead — the city Saul had once rescued from Nahash the Ammonite (1 Sam 11) — traveled through the night to take down the bodies and give them a proper burial, repaying his former kindness.</div>
+        </div>
+        <button class="next-btn" id="next8">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q9 -->
+      <div class="q-card" id="q9">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 9 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <p class="q-text">In Psalm 18's dramatic theophany, David describes God physically descending in response to his cry for help. As God "bowed the heavens and came down," what does the psalm specifically say was "under his feet"?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="9" data-idx="0"><span class="choice-letter">A</span><span>The foundations of the mountains, trembling and shaking at his approach</span></button>
+          <button class="choice-btn" data-q="9" data-idx="1"><span class="choice-letter">B</span><span>Coals of fire blazing forth with hailstones</span></button>
+          <button class="choice-btn" data-q="9" data-idx="2"><span class="choice-letter">C</span><span>The deep waters of the great sea, parted at his coming</span></button>
+          <button class="choice-btn" data-q="9" data-idx="3"><span class="choice-letter">D</span><span>Thick darkness</span></button>
+        </div>
+        <div class="feedback" id="fb9">
+          <div class="feedback-verdict" id="fbv9"></div>
+          <div class="feedback-ref">Psalm 18:9</div>
+          <div class="feedback-text">Psalm 18:9 reads: "He bowed the heavens and came down; thick darkness was under his feet." The theophany in Psalm 18 draws on the language of Sinai and the storm — smoke, fire, and coals appear in verse 8, and hailstones with thunder in verses 12–13. But "thick darkness under his feet" is the specific detail of verse 9 alone, echoing the cloud and thick darkness that accompanied God's appearance at Sinai (Deuteronomy 4:11; 5:22). The coals of fire make option B a plausible distractor, but they belong to a different verse.</div>
+        </div>
+        <button class="next-btn" id="next9">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q10 -->
+      <div class="q-card" id="q10">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 10 OF 10</span>
+        </div>
+        <p class="q-text">Toward the end of Psalm 18, David's praise extends beyond his deliverance from Saul to victories on an international scale. According to verses 43&ndash;45, how does David characterize the foreigners who submitted to him?</p>
+        <div class="choices">
+          <button class="choice-btn" data-q="10" data-idx="0"><span class="choice-letter">A</span><span>They were conquered in battle and their kings made to bow before David's throne in Jerusalem</span></button>
+          <button class="choice-btn" data-q="10" data-idx="1"><span class="choice-letter">B</span><span>They brought tribute willingly, recognizing that the LORD had ordained David as head over all nations</span></button>
+          <button class="choice-btn" data-q="10" data-idx="2"><span class="choice-letter">C</span><span>As soon as they heard of him they obeyed; foreigners came cringing to him, losing heart and coming trembling out of their fortresses</span></button>
+          <button class="choice-btn" data-q="10" data-idx="3"><span class="choice-letter">D</span><span>They were pursued and destroyed utterly so that not one of them remained to oppose Israel</span></button>
+        </div>
+        <div class="feedback" id="fb10">
+          <div class="feedback-verdict" id="fbv10"></div>
+          <div class="feedback-ref">Psalm 18:43&ndash;45</div>
+          <div class="feedback-text">Psalm 18:44–45 reads: "As soon as they heard of me they obeyed me; foreigners came cringing to me. Foreigners lost heart and came trembling out of their fortresses." Submission on the basis of reputation alone — without further battle — points beyond David's personal history to the reach of God's anointed king. Paul quotes verse 49 ("I will praise you among the Gentiles") in Romans 15:9 as a Messianic text, seeing in David's universal praise the foreshadowing of Christ's lordship over all nations. The psalm begins with one man's cry and ends with the whole world bowing.</div>
+        </div>
+        <button class="next-btn" id="next10">See Results &rarr;</button>
+      </div>
+
+    </div><!-- end #quiz-area -->
+
+    <!-- Results Screen -->
+    <div id="results-screen">
+      <span class="ornament">&#10022; &#10022; &#10022;</span>
+      <div class="score-ring-wrap">
+        <svg viewBox="0 0 140 140">
+          <circle class="ring-bg" cx="70" cy="70" r="58"/>
+          <circle class="ring-fill" id="ring-fill" cx="70" cy="70" r="58"
+            stroke="#c9a84c"
+            stroke-dasharray="364.42"
+            stroke-dashoffset="364.42"/>
+        </svg>
+      </div>
+      <div class="score-number"><span id="final-score">0</span><span class="score-denom"> / 10</span></div>
+      <div class="score-message" id="score-msg"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">&#8635; Take Again</button>
+      <hr class="ornament-rule">
+      <div class="review-title">QUESTION REVIEW</div>
+      <div id="review-list"></div>
+    </div>
+
+  </div><!-- end .parchment -->
+  <div class="gold-strip bottom"></div>
+</div><!-- end .scroll-wrap -->
+
+<script>
+const TOTAL = 10;
+const correctAnswers = {
+  1: 2,  // C
+  2: 1,  // B
+  3: 2,  // C
+  4: 0,  // A
+  5: 2,  // C
+  6: 1,  // B
+  7: 1,  // B
+  8: 1,  // B
+  9: 3,  // D
+  10: 2  // C
+};
+
+const questionTexts = [
+  "Before going to the medium at Endor, Saul sought guidance from the LORD by three different means — but the LORD did not answer him by any of them. What were those three means?",
+  "When Samuel appeared to Saul at Endor, he delivered a precise prophecy about what would happen \"tomorrow.\" Which option most accurately captures what Samuel said?",
+  "Achish, king of Gath, defended David to the other Philistine commanders who wanted him sent away. What specific comparison did Achish use to express his confidence in David?",
+  "The Philistine commanders were suspicious of David and quoted a specific song to justify their distrust. What song did they cite, and where had it originated?",
+  "When David and his men returned to Ziklag and found it burned and their families taken captive, the men spoke of stoning David. What does the text specifically say David did at this moment of extreme personal crisis?",
+  "During the pursuit of the Amalekites, David's men found an Egyptian slave abandoned in a field and revived him. The text is precise about both his prior condition and what he was given to eat. Which option correctly records both details?",
+  "After defeating the Amalekites, a dispute arose among David's men about sharing the plunder. What rule did David establish, and how does the text describe its lasting significance?",
+  "The day after the battle on Mount Gilboa, the Philistines found Saul's body. The text records three distinct actions involving his head, his armor, and his body. Which option correctly lists all three?",
+  "In Psalm 18's dramatic theophany, David describes God physically descending in response to his cry for help. As God \"bowed the heavens and came down,\" what does the psalm specifically say was \"under his feet\"?",
+  "Toward the end of Psalm 18, David's praise extends beyond his deliverance from Saul to victories on an international scale. According to verses 43–45, how does David characterize the foreigners who submitted to him?"
+];
+
+const choiceLabels = ['A','B','C','D'];
+let userAnswers = {};
+let score = 0;
+let currentQ = 1;
+let answered = false;
+
+function handleChoice(qNum, idx) {
+  if (answered) return;
+  answered = true;
+  userAnswers[qNum] = idx;
+
+  const correct = correctAnswers[qNum];
+  const btns = document.querySelectorAll(`[data-q="${qNum}"]`);
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === correct) btn.classList.add('correct');
+    else if (i === idx && i !== correct) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('fb' + qNum);
+  const fbv = document.getElementById('fbv' + qNum);
+  if (idx === correct) {
+    score++;
+    fb.classList.add('correct-fb');
+    fbv.textContent = '\u2713 CORRECT';
+  } else {
+    fb.classList.add('wrong-fb');
+    fbv.textContent = '\u2717 INCORRECT';
+  }
+  fb.classList.add('show');
+
+  const nextBtn = document.getElementById('next' + qNum);
+  nextBtn.style.display = 'inline-block';
+
+  const answered_count = Object.keys(userAnswers).length;
+  document.getElementById('prog-fill').style.width = (answered_count / TOTAL * 100) + '%';
+  document.getElementById('prog-label').textContent = answered_count + ' / ' + TOTAL;
+}
+
+function nextQuestion(qNum) {
+  document.getElementById('q' + qNum).classList.remove('active');
+  if (qNum < TOTAL) {
+    answered = false;
+    currentQ = qNum + 1;
+    const nextCard = document.getElementById('q' + currentQ);
+    nextCard.classList.add('active');
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('quiz-area').style.display = 'none';
+  document.getElementById('prog-fill').style.width = '100%';
+  document.getElementById('prog-label').textContent = TOTAL + ' / ' + TOTAL;
+
+  const rs = document.getElementById('results-screen');
+  rs.style.display = 'block';
+  document.getElementById('final-score').textContent = score;
+
+  const msgs = [
+    "Keep reading — the Word rewards persistence.",
+    "A solid start — return to these chapters again.",
+    "Good effort — the details reward close reading.",
+    "Well done — you read carefully.",
+    "Excellent — these passages are becoming yours.",
+    "Outstanding — a true student of the Word!"
+  ];
+  const msgIdx = Math.min(Math.floor(score / 2), msgs.length - 1);
+  document.getElementById('score-msg').textContent = msgs[msgIdx];
+
+  const circumference = 364.42;
+  const offset = circumference - (score / TOTAL) * circumference;
+  setTimeout(() => {
+    document.getElementById('ring-fill').style.strokeDashoffset = offset;
+    const color = score >= 8 ? '#1a5c2a' : score >= 5 ? '#c9a84c' : '#8b1a1a';
+    document.getElementById('ring-fill').style.stroke = color;
+  }, 100);
+
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  for (let i = 1; i <= TOTAL; i++) {
+    const userIdx = userAnswers[i];
+    const corrIdx = correctAnswers[i];
+    const isRight = userIdx === corrIdx;
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (isRight ? 'rev-correct' : 'rev-wrong');
+    div.innerHTML = `<div class="review-q">${i}. ${questionTexts[i-1]}</div>
+      <div class="review-ans">
+        Your answer: <span class="${isRight ? 'rev-c' : 'rev-w'}">${choiceLabels[userIdx]}</span>
+        ${!isRight ? '&nbsp;&nbsp;Correct: <span class="rev-c">' + choiceLabels[corrIdx] + '</span>' : ''}
+      </div>`;
+    reviewList.appendChild(div);
+  }
+}
+
+function resetQuiz() {
+  userAnswers = {};
+  score = 0;
+  currentQ = 1;
+  answered = false;
+
+  for (let i = 1; i <= TOTAL; i++) {
+    const card = document.getElementById('q' + i);
+    card.classList.remove('active');
+    const btns = card.querySelectorAll('.choice-btn');
+    btns.forEach(b => { b.disabled = false; b.classList.remove('correct','wrong'); });
+    const fb = document.getElementById('fb' + i);
+    fb.classList.remove('show','correct-fb','wrong-fb');
+    document.getElementById('fbv' + i).textContent = '';
+    document.getElementById('next' + i).style.display = 'none';
+  }
+
+  document.getElementById('q1').classList.add('active');
+  document.getElementById('prog-fill').style.width = '0%';
+  document.getElementById('prog-label').textContent = '0 / 10';
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('quiz-area').style.display = 'block';
+  document.getElementById('ring-fill').style.strokeDashoffset = '364.42';
+}
+
+// Attach click listeners
+document.querySelectorAll('.choice-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const q = parseInt(btn.dataset.q);
+    const idx = parseInt(btn.dataset.idx);
+    handleChoice(q, idx);
+  });
+});
+
+for (let i = 1; i <= TOTAL; i++) {
+  document.getElementById('next' + i).addEventListener('click', () => nextQuestion(i));
+}
+</script>
+</body>
+</html>
