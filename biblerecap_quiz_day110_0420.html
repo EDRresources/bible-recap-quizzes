@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Recap Quiz — Day 110 — April 20, 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2rem 1rem 4rem;
+    font-family: 'Crimson Text', serif;
+  }
+  .scroll-wrap { width: 100%; max-width: 760px; position: relative; }
+  .gold-strip {
+    height: 18px;
+    background: linear-gradient(90deg, #3a2a00 0%, #c9a84c 20%, #f0d080 50%, #c9a84c 80%, #3a2a00 100%);
+    border-radius: 3px 3px 0 0;
+  }
+  .gold-strip.bottom { border-radius: 0 0 3px 3px; }
+  .parchment {
+    background: linear-gradient(160deg, #f5ecd6 0%, #ecdbb4 40%, #dfc99a 70%, #d4b87a 100%);
+    padding: 2.5rem 2.8rem 2.8rem;
+    position: relative;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.7), inset 0 0 60px rgba(160,120,40,0.15);
+  }
+  .quiz-header { text-align: center; margin-bottom: 1.8rem; }
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #6b4f1a;
+    margin-bottom: 0.5rem;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #2c1a00;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+  .badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin: 0.6rem 0;
+  }
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    padding: 3px 9px;
+    border-radius: 3px;
+    font-weight: 700;
+  }
+  .badge-challenging { background: #7a4a00; color: #f0d080; border: 1px solid #c9a84c; }
+  .badge-passage { background: rgba(44,26,0,0.12); color: #5a3a08; border: 1px solid #c9a84c; }
+  .ornament { color: #c9a84c; font-size: 1.3rem; margin: 0.4rem 0; display: block; }
+  .progress-wrap { margin-bottom: 1.6rem; display: flex; align-items: center; gap: 0.7rem; }
+  .progress-track {
+    flex: 1; height: 6px;
+    background: rgba(100,70,10,0.2);
+    border-radius: 3px; overflow: hidden;
+    border: 1px solid rgba(201,168,76,0.3);
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #f0d080);
+    border-radius: 3px; width: 0%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem; color: #6b4f1a;
+    white-space: nowrap; letter-spacing: 0.08em;
+    min-width: 52px; text-align: right;
+  }
+  .q-card { display: none; animation: fadeIn 0.4s ease; }
+  .q-card.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .q-meta { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem; }
+  .q-number { font-family: 'Cinzel', serif; font-size: 0.65rem; color: #8b6820; letter-spacing: 0.1em; }
+  .badge-detail {
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem; letter-spacing: 0.1em;
+    padding: 2px 7px; border-radius: 3px; font-weight: 700;
+    background: #1a2d5c; color: #a8c0f0; border: 1px solid #3a5aaa;
+  }
+  .q-text { font-size: 1.15rem; color: #1e1000; line-height: 1.55; margin-bottom: 1.2rem; font-style: italic; }
+  .choices { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; }
+  .choice-btn {
+    display: flex; align-items: flex-start; gap: 0.8rem;
+    background: rgba(255,245,220,0.55);
+    border: 1.5px solid rgba(201,168,76,0.4);
+    border-radius: 5px; padding: 0.75rem 1rem;
+    cursor: pointer; text-align: left;
+    font-family: 'Crimson Text', serif; font-size: 1.05rem;
+    color: #2c1a00; line-height: 1.45;
+    transition: background 0.2s, border-color 0.2s; width: 100%;
+  }
+  .choice-btn:hover:not(:disabled) { background: rgba(240,208,128,0.35); border-color: #c9a84c; }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif; font-size: 0.75rem; font-weight: 700;
+    color: #8b6820; min-width: 20px; padding-top: 2px;
+  }
+  .choice-btn.correct { background: rgba(26,92,42,0.18); border-color: #1a5c2a; color: #0d2e14; }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong { background: rgba(139,26,26,0.12); border-color: #8b1a1a; color: #3a0808; }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+  .feedback {
+    display: none; padding: 0.9rem 1.1rem; border-radius: 5px;
+    margin-top: 0.5rem; animation: fadeIn 0.3s ease;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb { background: rgba(26,92,42,0.1); border-left: 4px solid #1a5c2a; }
+  .feedback.wrong-fb { background: rgba(139,26,26,0.08); border-left: 4px solid #8b1a1a; }
+  .feedback-verdict {
+    font-family: 'Cinzel', serif; font-size: 0.7rem;
+    letter-spacing: 0.1em; font-weight: 700; margin-bottom: 0.3rem;
+  }
+  .feedback.correct-fb .feedback-verdict { color: #1a5c2a; }
+  .feedback.wrong-fb .feedback-verdict { color: #8b1a1a; }
+  .feedback-ref { font-family: 'Cinzel', serif; font-size: 0.65rem; color: #8b6820; letter-spacing: 0.08em; margin-bottom: 0.3rem; }
+  .feedback-text { font-size: 1rem; color: #2c1a00; line-height: 1.5; }
+  .next-btn {
+    display: none; margin-top: 1rem;
+    font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.12em;
+    color: #f0d080;
+    background: linear-gradient(135deg, #5a3a00, #7a5200);
+    border: 1.5px solid #c9a84c; border-radius: 4px;
+    padding: 0.55rem 1.4rem; cursor: pointer; transition: background 0.2s;
+  }
+  .next-btn:hover { background: linear-gradient(135deg, #7a5200, #9a6a00); }
+  #results-screen { display: none; text-align: center; animation: fadeIn 0.5s ease; }
+  .score-ring-wrap { margin: 1.2rem auto; width: 140px; height: 140px; }
+  .score-ring-wrap svg { width: 100%; height: 100%; }
+  .ring-bg { fill: none; stroke: rgba(100,70,10,0.2); stroke-width: 10; }
+  .ring-fill {
+    fill: none; stroke: #c9a84c; stroke-width: 10;
+    stroke-dasharray: 364.42; stroke-dashoffset: 364.42;
+    transform: rotate(-90deg); transform-origin: 50% 50%;
+    transition: stroke-dashoffset 1.2s ease, stroke 0.4s ease;
+  }
+  .score-number {
+    font-family: 'Cinzel', serif; font-size: 2.8rem; font-weight: 700;
+    color: #2c1a00; margin-bottom: 0.3rem;
+  }
+  .score-denom { font-size: 1.4rem; color: #8b6820; }
+  .score-message {
+    font-family: 'Crimson Text', serif; font-size: 1.15rem;
+    color: #4a2e00; font-style: italic; margin-bottom: 1.2rem;
+  }
+  .take-again-btn {
+    font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.12em;
+    color: #f0d080;
+    background: linear-gradient(135deg, #5a3a00, #7a5200);
+    border: 1.5px solid #c9a84c; border-radius: 4px;
+    padding: 0.6rem 1.6rem; cursor: pointer; margin-bottom: 1.5rem;
+    transition: background 0.2s;
+  }
+  .take-again-btn:hover { background: linear-gradient(135deg, #7a5200, #9a6a00); }
+  .ornament-rule {
+    border: none; border-top: 1.5px solid rgba(201,168,76,0.4);
+    margin: 1rem 0;
+  }
+  .review-title {
+    font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.15em;
+    color: #8b6820; margin-bottom: 1rem;
+  }
+  .review-item {
+    text-align: left; padding: 0.75rem 1rem; border-radius: 5px;
+    margin-bottom: 0.6rem; border-left: 4px solid transparent;
+  }
+  .rev-correct { background: rgba(26,92,42,0.08); border-color: #1a5c2a; }
+  .rev-wrong { background: rgba(139,26,26,0.07); border-color: #8b1a1a; }
+  .review-q { font-size: 0.98rem; color: #2c1a00; margin-bottom: 0.25rem; line-height: 1.45; }
+  .review-ans { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.08em; color: #6b4f1a; }
+  .rev-c { color: #1a5c2a; font-weight: 700; }
+  .rev-w { color: #8b1a1a; font-weight: 700; }
+  @media (max-width: 600px) {
+    .parchment { padding: 1.8rem 1.4rem 2rem; }
+    .quiz-title { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="scroll-wrap">
+  <div class="gold-strip"></div>
+  <div class="parchment">
+
+    <!-- Header -->
+    <div class="quiz-header">
+      <div class="date-line">MONDAY, APRIL 20, 2026 &middot; DAY 110</div>
+      <div class="quiz-title">Daily Bible Recap Quiz</div>
+      <div class="badge-row">
+        <span class="badge badge-challenging">CHALLENGING</span>
+      </div>
+      <div class="badge-row">
+        <span class="badge badge-passage">Psalm 121</span>
+        <span class="badge badge-passage">Psalm 123</span>
+        <span class="badge badge-passage">Psalm 124</span>
+        <span class="badge badge-passage">Psalm 125</span>
+        <span class="badge badge-passage">Psalm 128</span>
+        <span class="badge badge-passage">Psalm 129</span>
+        <span class="badge badge-passage">Psalm 130</span>
+      </div>
+      <span class="ornament">&#10022;</span>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-wrap">
+      <div class="progress-track">
+        <div class="progress-fill" id="prog-fill"></div>
+      </div>
+      <div class="progress-label" id="prog-label">0 / 10</div>
+    </div>
+
+    <!-- Quiz Questions -->
+    <div id="quiz-area">
+
+      <!-- Question 1 -->
+      <div class="q-card active" id="q1">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 1 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <div class="q-text">Psalm 121 promises that two natural forces will not harm the LORD's protected traveler. Which option correctly pairs each threat with the period it corresponds to?</div>
+        <div class="choices">
+          <button class="choice-btn" data-q="1" data-idx="0"><span class="choice-letter">A</span><span>Heat by day and cold by night</span></button>
+          <button class="choice-btn" data-q="1" data-idx="1"><span class="choice-letter">B</span><span>The blazing sun at noon and the desert wind at evening</span></button>
+          <button class="choice-btn" data-q="1" data-idx="2"><span class="choice-letter">C</span><span>The sun by day and the moon by night</span></button>
+          <button class="choice-btn" data-q="1" data-idx="3"><span class="choice-letter">D</span><span>Storm by day and darkness by night</span></button>
+        </div>
+        <div class="feedback" id="fb1">
+          <div class="feedback-verdict" id="fbv1"></div>
+          <div class="feedback-ref">Psalm 121:6</div>
+          <div class="feedback-text">"The sun shall not strike you by day, nor the moon by night" (Psalm 121:6). Ancient peoples feared both the scorching power of the sun and the mysterious influence attributed to the moon at night (hence the word &ldquo;lunacy&rdquo;). Together they form a merism for all threats across the full span of time &mdash; the psalm's point is that the LORD's protective care is all-encompassing, day and night without exception.</div>
+        </div>
+        <button class="next-btn" id="next1">Next Question &rarr;</button>
+      </div>
+
+      <!-- Question 2 -->
+      <div class="q-card" id="q2">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 2 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <div class="q-text">In Psalm 123, the community's upward gaze toward God is compared to a servant's gaze toward a master. What specific part of the master is the servant's gaze directed toward in this comparison?</div>
+        <div class="choices">
+          <button class="choice-btn" data-q="2" data-idx="0"><span class="choice-letter">A</span><span>The master's hand</span></button>
+          <button class="choice-btn" data-q="2" data-idx="1"><span class="choice-letter">B</span><span>The master's face</span></button>
+          <button class="choice-btn" data-q="2" data-idx="2"><span class="choice-letter">C</span><span>The master's throne</span></button>
+          <button class="choice-btn" data-q="2" data-idx="3"><span class="choice-letter">D</span><span>The master's feet</span></button>
+        </div>
+        <div class="feedback" id="fb2">
+          <div class="feedback-verdict" id="fbv2"></div>
+          <div class="feedback-ref">Psalm 123:2</div>
+          <div class="feedback-text">"As the eyes of servants look to the hand of their master, as the eyes of a maidservant to the hand of her mistress, so our eyes look to the LORD our God, until he has mercy upon us" (Psalm 123:2). In the ancient household, servants watched the master's hand for gestured signals &mdash; a subtle movement that could direct, command, or grant. The image conveys utter attentiveness and complete dependence, not passive helplessness but alert, expectant trust directed toward the one who can act.</div>
+        </div>
+        <button class="next-btn" id="next2">Next Question &rarr;</button>
+      </div>
+
+      <!-- Question 3 -->
+      <div class="q-card" id="q3">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 3 OF 10</span>
+        </div>
+        <div class="q-text">Psalm 124 uses three successive images of violent water to describe the fate Israel narrowly escaped. In what order does the psalmist present these images?</div>
+        <div class="choices">
+          <button class="choice-btn" data-q="3" data-idx="0"><span class="choice-letter">A</span><span>The torrent, then the flood, then the raging waters</span></button>
+          <button class="choice-btn" data-q="3" data-idx="1"><span class="choice-letter">B</span><span>The flood, then the torrent, then the raging waters</span></button>
+          <button class="choice-btn" data-q="3" data-idx="2"><span class="choice-letter">C</span><span>The raging waters, then the torrent, then the flood</span></button>
+          <button class="choice-btn" data-q="3" data-idx="3"><span class="choice-letter">D</span><span>The flood, then the raging waters, then the torrent</span></button>
+        </div>
+        <div class="feedback" id="fb3">
+          <div class="feedback-verdict" id="fbv3"></div>
+          <div class="feedback-ref">Psalm 124:4&ndash;5</div>
+          <div class="feedback-text">"Then the flood would have swept us away, the torrent would have gone over us; then over us would have gone the raging waters" (Psalm 124:4&ndash;5). Each image escalates the threat &mdash; from an overwhelming surge to a rushing current to furious, billowing waters. The repeated "then" (Hebrew &lsquo;azai) marks a sequential, mounting tide of danger from which only the LORD's intervention could save. The water metaphor recalls the chaos of the sea in creation and the Exodus crossing.</div>
+        </div>
+        <button class="next-btn" id="next3">Next Question &rarr;</button>
+      </div>
+
+      <!-- Question 4 -->
+      <div class="q-card" id="q4">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 4 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <div class="q-text">After the water metaphors, Psalm 124 shifts to a completely different image for Israel's escape. What is the image, and what has happened to the instrument of captivity?</div>
+        <div class="choices">
+          <button class="choice-btn" data-q="4" data-idx="0"><span class="choice-letter">A</span><span>A deer has leaped over a hunter's pit; the pit has caved in</span></button>
+          <button class="choice-btn" data-q="4" data-idx="1"><span class="choice-letter">B</span><span>A fish has slipped through a net; the net has torn</span></button>
+          <button class="choice-btn" data-q="4" data-idx="2"><span class="choice-letter">C</span><span>A bird has escaped the snare of the fowler; the snare has been broken</span></button>
+          <button class="choice-btn" data-q="4" data-idx="3"><span class="choice-letter">D</span><span>A lamb has fled from a pen; the gate has been opened from within</span></button>
+        </div>
+        <div class="feedback" id="fb4">
+          <div class="feedback-verdict" id="fbv4"></div>
+          <div class="feedback-ref">Psalm 124:7</div>
+          <div class="feedback-text">"We have escaped like a bird from the snare of the fowler; the snare is broken, and we have escaped!" (Psalm 124:7). The shift from drowning water to a hidden trap underscores the variety of threats the LORD has defeated. The doubled "we have escaped" &mdash; beginning and ending the verse &mdash; conveys breathless, jubilant relief. Crucially, it is not that the bird broke free by its own strength: the snare was broken by another. Israel's deliverance is entirely from outside itself.</div>
+        </div>
+        <button class="next-btn" id="next4">Next Question &rarr;</button>
+      </div>
+
+      <!-- Question 5 -->
+      <div class="q-card" id="q5">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 5 OF 10</span>
+        </div>
+        <div class="q-text">Psalm 125 uses two geographical features of the land to make theological claims. Which option correctly identifies both comparisons the psalmist makes?</div>
+        <div class="choices">
+          <button class="choice-btn" data-q="5" data-idx="0"><span class="choice-letter">A</span><span>Those who trust in the LORD are like Mount Hermon; the LORD is like the valleys that channel water toward them</span></button>
+          <button class="choice-btn" data-q="5" data-idx="1"><span class="choice-letter">B</span><span>Those who trust in the LORD are like Mount Zion; the LORD surrounds his people as the mountains surround Jerusalem</span></button>
+          <button class="choice-btn" data-q="5" data-idx="2"><span class="choice-letter">C</span><span>Those who trust in the LORD are like the walls of Jerusalem; the LORD's protection is like the height of Zion above them</span></button>
+          <button class="choice-btn" data-q="5" data-idx="3"><span class="choice-letter">D</span><span>Those who trust in the LORD abide like the Jordan River; the LORD keeps their banks from overflowing</span></button>
+        </div>
+        <div class="feedback" id="fb5">
+          <div class="feedback-verdict" id="fbv5"></div>
+          <div class="feedback-ref">Psalm 125:1&ndash;2</div>
+          <div class="feedback-text">"Those who trust in the LORD are like Mount Zion, which cannot be moved, but abides forever. As the mountains surround Jerusalem, so the LORD surrounds his people, from this time forth and forevermore" (Psalm 125:1&ndash;2). The trusted one (Israel) is compared to the immovable mountain itself; the protector (the LORD) is the ring of mountains that makes Jerusalem naturally defensible. Remarkably, God does not merely inhabit one mountain &mdash; he is the entire surrounding range.</div>
+        </div>
+        <button class="next-btn" id="next5">Next Question &rarr;</button>
+      </div>
+
+      <!-- Question 6 -->
+      <div class="q-card" id="q6">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 6 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <div class="q-text">Psalm 125 promises that "the scepter of wickedness shall not rest on the land allotted to the righteous" and gives a specific reason for this assurance. What reason does the psalm provide?</div>
+        <div class="choices">
+          <button class="choice-btn" data-q="6" data-idx="0"><span class="choice-letter">A</span><span>Because the LORD will break it with his mighty arm at the appointed time</span></button>
+          <button class="choice-btn" data-q="6" data-idx="1"><span class="choice-letter">B</span><span>Because the covenant people will drive it away through faithful obedience</span></button>
+          <button class="choice-btn" data-q="6" data-idx="2"><span class="choice-letter">C</span><span>Because wickedness cannot abide in the presence of God's holy Zion</span></button>
+          <button class="choice-btn" data-q="6" data-idx="3"><span class="choice-letter">D</span><span>Lest the righteous stretch out their hands to do wrong</span></button>
+        </div>
+        <div class="feedback" id="fb6">
+          <div class="feedback-verdict" id="fbv6"></div>
+          <div class="feedback-ref">Psalm 125:3</div>
+          <div class="feedback-text">"For the scepter of wickedness shall not rest on the land allotted to the righteous, lest the righteous stretch out their hands to do wrong" (Psalm 125:3). This is a striking pastoral reason: prolonged oppression could tempt even the righteous to compromise, collaborate, or accommodate evil. God limits the duration of affliction not only to vindicate the innocent but to protect the faithful from the spiritual danger of gradual capitulation. The promise is pastoral before it is political.</div>
+        </div>
+        <button class="next-btn" id="next6">Next Question &rarr;</button>
+      </div>
+
+      <!-- Question 7 -->
+      <div class="q-card" id="q7">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 7 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <div class="q-text">Psalm 128 describes the domestic blessings of the man who fears the LORD using two agricultural images. Which option correctly identifies both images?</div>
+        <div class="choices">
+          <button class="choice-btn" data-q="7" data-idx="0"><span class="choice-letter">A</span><span>His wife will be like a blossoming fig tree; his children will be like ripening olives in a basket</span></button>
+          <button class="choice-btn" data-q="7" data-idx="1"><span class="choice-letter">B</span><span>His wife will be like a fruitful vine within his house; his children will be like olive shoots around his table</span></button>
+          <button class="choice-btn" data-q="7" data-idx="2"><span class="choice-letter">C</span><span>His wife will be like a cedar of Lebanon; his children will be like young shoots of wheat on the threshing floor</span></button>
+          <button class="choice-btn" data-q="7" data-idx="3"><span class="choice-letter">D</span><span>His wife will be like a well of living water; his children will be like branches of the vine trained on a wall</span></button>
+        </div>
+        <div class="feedback" id="fb7">
+          <div class="feedback-verdict" id="fbv7"></div>
+          <div class="feedback-ref">Psalm 128:3</div>
+          <div class="feedback-text">"Your wife will be like a fruitful vine within your house; your children will be like olive shoots around your table" (Psalm 128:3). Both images are agricultural: the vine that produces abundant fruit from within the household, and the olive tree that sends up productive shoots clustered at the base of the parent. The psalm frames domestic prosperity as a gift that flows organically from the fear of the LORD &mdash; not from personal ambition or achievement, but from a rightly ordered relationship with God.</div>
+        </div>
+        <button class="next-btn" id="next7">Next Question &rarr;</button>
+      </div>
+
+      <!-- Question 8 -->
+      <div class="q-card" id="q8">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 8 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <div class="q-text">Psalm 129 personifies Israel as a speaker recounting long suffering. The psalm uses a vivid agricultural metaphor to describe the oppression Israel has endured. What is that metaphor?</div>
+        <div class="choices">
+          <button class="choice-btn" data-q="8" data-idx="0"><span class="choice-letter">A</span><span>Plowers have plowed upon Israel's back and made long furrows</span></button>
+          <button class="choice-btn" data-q="8" data-idx="1"><span class="choice-letter">B</span><span>Enemies have threshed Israel like grain driven across a threshing floor</span></button>
+          <button class="choice-btn" data-q="8" data-idx="2"><span class="choice-letter">C</span><span>Oppressors have pressed Israel like grapes trampled in a winepress</span></button>
+          <button class="choice-btn" data-q="8" data-idx="3"><span class="choice-letter">D</span><span>Israel has been cut down repeatedly like grass on an open hillside</span></button>
+        </div>
+        <div class="feedback" id="fb8">
+          <div class="feedback-verdict" id="fbv8"></div>
+          <div class="feedback-ref">Psalm 129:3</div>
+          <div class="feedback-text">"The plowers plowed upon my back; they made long their furrows" (Psalm 129:3). The image is viscerally violent &mdash; Israel's back treated as a field to be worked over, furrowed deep by the oppressor's plow. Yet the very next verse reverses the power dynamic entirely: "The LORD is righteous; he has cut the cords of the wicked" (v.4). The instrument of oppression is turned back on those who wielded it. Israel survives not by strength but because God severs the cords that bind the plow to the plower.</div>
+        </div>
+        <button class="next-btn" id="next8">Next Question &rarr;</button>
+      </div>
+
+      <!-- Question 9 -->
+      <div class="q-card" id="q9">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 9 OF 10</span>
+        </div>
+        <div class="q-text">Psalm 129 closes with a wish that those who hate Zion would be like grass growing on housetops. The psalmist makes two specific points about the uselessness of this grass. Which option correctly captures both?</div>
+        <div class="choices">
+          <button class="choice-btn" data-q="9" data-idx="0"><span class="choice-letter">A</span><span>It withers without producing seeds, and the wind scatters it before it can be gathered</span></button>
+          <button class="choice-btn" data-q="9" data-idx="1"><span class="choice-letter">B</span><span>It cannot be gathered for fuel, and no merchant has any use for it</span></button>
+          <button class="choice-btn" data-q="9" data-idx="2"><span class="choice-letter">C</span><span>It withers before it grows up, and neither the reaper fills his hand nor the binder of sheaves fills his arms with it</span></button>
+          <button class="choice-btn" data-q="9" data-idx="3"><span class="choice-letter">D</span><span>It is too sparse to shelter under, and it leaves no stalk to mark the site of the harvest</span></button>
+        </div>
+        <div class="feedback" id="fb9">
+          <div class="feedback-verdict" id="fbv9"></div>
+          <div class="feedback-ref">Psalm 129:6&ndash;7</div>
+          <div class="feedback-text">"Let them be like the grass on the housetops, which withers before it grows up, with which the reaper does not fill his hand nor the binder of sheaves his arms" (Psalm 129:6&ndash;7). Housetop grass germinates in the thin soil of flat mud roofs but scorches before it can mature. The psalm then specifies the agricultural consequence: no reaper stoops for a handful, no binder bundles it into sheaves. The point is not destruction by force &mdash; it is utter futility. Those who oppose Zion produce nothing that can be counted, gathered, or kept.</div>
+        </div>
+        <button class="next-btn" id="next9">Next Question &rarr;</button>
+      </div>
+
+      <!-- Question 10 -->
+      <div class="q-card" id="q10">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 10 OF 10</span>
+        </div>
+        <div class="q-text">Psalm 130:4 makes a theologically counterintuitive statement about the purpose of divine forgiveness. Which option correctly states what the verse says and why it is surprising?</div>
+        <div class="choices">
+          <button class="choice-btn" data-q="10" data-idx="0"><span class="choice-letter">A</span><span>"With you there is forgiveness so that iniquity will no longer be held against us" — surprising because it seems to imply sin is simply erased without consequence</span></button>
+          <button class="choice-btn" data-q="10" data-idx="1"><span class="choice-letter">B</span><span>"With you there is forgiveness, that you may be feared" — surprising because forgiveness here is the very basis for fearing God, not a reason to fear him less</span></button>
+          <button class="choice-btn" data-q="10" data-idx="2"><span class="choice-letter">C</span><span>"With you there is forgiveness for all who call upon your name" — surprising because the psalm does not mention calling by name anywhere else</span></button>
+          <button class="choice-btn" data-q="10" data-idx="3"><span class="choice-letter">D</span><span>"With you there is forgiveness, that we may draw near" — surprising because the psalm began with the speaker already crying out to God</span></button>
+        </div>
+        <div class="feedback" id="fb10">
+          <div class="feedback-verdict" id="fbv10"></div>
+          <div class="feedback-ref">Psalm 130:4</div>
+          <div class="feedback-text">"But with you there is forgiveness, that you may be feared" (Psalm 130:4). The logic runs against instinct: one might expect that forgiveness would diminish the fear of God, since punishment is withheld. The psalmist insists the opposite &mdash; it is the experience of undeserved, freely given forgiveness that produces the deepest, most genuine reverence. Luther called this verse central to understanding true repentance, noting that it is God's grace, not his wrath alone, that draws the sinner into holy awe. Paul echoes the same logic: "the kindness of God leads you to repentance" (Romans 2:4), and the great NT declaration of forgiveness in Romans 3 culminates not in casual ease but in doxology and transformed life.</div>
+        </div>
+        <button class="next-btn" id="next10">See Results &rarr;</button>
+      </div>
+
+    </div><!-- end #quiz-area -->
+
+    <!-- Results Screen -->
+    <div id="results-screen">
+      <span class="ornament">&#10022; &#10022; &#10022;</span>
+      <div class="score-ring-wrap">
+        <svg viewBox="0 0 140 140">
+          <circle class="ring-bg" cx="70" cy="70" r="58"/>
+          <circle class="ring-fill" id="ring-fill" cx="70" cy="70" r="58"
+            stroke="#c9a84c"
+            stroke-dasharray="364.42"
+            stroke-dashoffset="364.42"/>
+        </svg>
+      </div>
+      <div class="score-number"><span id="final-score">0</span><span class="score-denom"> / 10</span></div>
+      <div class="score-message" id="score-msg"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">&#8635; Take Again</button>
+      <hr class="ornament-rule">
+      <div class="review-title">QUESTION REVIEW</div>
+      <div id="review-list"></div>
+    </div>
+
+  </div><!-- end .parchment -->
+  <div class="gold-strip bottom"></div>
+</div><!-- end .scroll-wrap -->
+
+<script>
+const TOTAL = 10;
+const correctAnswers = {
+  1: 2,  // C
+  2: 0,  // A
+  3: 1,  // B
+  4: 2,  // C
+  5: 1,  // B
+  6: 3,  // D
+  7: 1,  // B
+  8: 0,  // A
+  9: 2,  // C
+  10: 1  // B
+};
+
+const questionTexts = [
+  "Psalm 121 promises that two natural forces will not harm the LORD's protected traveler. Which option correctly pairs each threat with the period it corresponds to?",
+  "In Psalm 123, the community's upward gaze toward God is compared to a servant's gaze toward a master. What specific part of the master is the servant's gaze directed toward in this comparison?",
+  "Psalm 124 uses three successive images of violent water to describe the fate Israel narrowly escaped. In what order does the psalmist present these images?",
+  "After the water metaphors, Psalm 124 shifts to a completely different image for Israel's escape. What is the image, and what has happened to the instrument of captivity?",
+  "Psalm 125 uses two geographical features of the land to make theological claims. Which option correctly identifies both comparisons the psalmist makes?",
+  "Psalm 125 promises that 'the scepter of wickedness shall not rest on the land allotted to the righteous' and gives a specific reason for this assurance. What reason does the psalm provide?",
+  "Psalm 128 describes the domestic blessings of the man who fears the LORD using two agricultural images. Which option correctly identifies both images?",
+  "Psalm 129 personifies Israel as a speaker recounting long suffering. The psalm uses a vivid agricultural metaphor to describe the oppression Israel has endured. What is that metaphor?",
+  "Psalm 129 closes with a wish that those who hate Zion would be like grass growing on housetops. The psalmist makes two specific points about the uselessness of this grass. Which option correctly captures both?",
+  "Psalm 130:4 makes a theologically counterintuitive statement about the purpose of divine forgiveness. Which option correctly states what the verse says and why it is surprising?"
+];
+
+const choiceLabels = ['A','B','C','D'];
+let userAnswers = {};
+let score = 0;
+let currentQ = 1;
+let answered = false;
+
+function handleChoice(qNum, idx) {
+  if (answered) return;
+  answered = true;
+  userAnswers[qNum] = idx;
+
+  const correct = correctAnswers[qNum];
+  const btns = document.querySelectorAll(`[data-q="${qNum}"]`);
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === correct) btn.classList.add('correct');
+    else if (i === idx && i !== correct) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('fb' + qNum);
+  const fbv = document.getElementById('fbv' + qNum);
+  if (idx === correct) {
+    score++;
+    fb.classList.add('correct-fb');
+    fbv.textContent = '\u2713 CORRECT';
+  } else {
+    fb.classList.add('wrong-fb');
+    fbv.textContent = '\u2717 INCORRECT';
+  }
+  fb.classList.add('show');
+
+  const nextBtn = document.getElementById('next' + qNum);
+  nextBtn.style.display = 'inline-block';
+
+  const answered_count = Object.keys(userAnswers).length;
+  document.getElementById('prog-fill').style.width = (answered_count / TOTAL * 100) + '%';
+  document.getElementById('prog-label').textContent = answered_count + ' / ' + TOTAL;
+}
+
+function nextQuestion(qNum) {
+  document.getElementById('q' + qNum).classList.remove('active');
+  if (qNum < TOTAL) {
+    answered = false;
+    currentQ = qNum + 1;
+    const nextCard = document.getElementById('q' + currentQ);
+    nextCard.classList.add('active');
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('quiz-area').style.display = 'none';
+  document.getElementById('prog-fill').style.width = '100%';
+  document.getElementById('prog-label').textContent = TOTAL + ' / ' + TOTAL;
+
+  const rs = document.getElementById('results-screen');
+  rs.style.display = 'block';
+  document.getElementById('final-score').textContent = score;
+
+  const msgs = [
+    "Keep reading — the Word rewards persistence.",
+    "A solid start — return to these chapters again.",
+    "Good effort — the details reward close reading.",
+    "Well done — you read carefully.",
+    "Excellent — these passages are becoming yours.",
+    "Outstanding — a true student of the Word!"
+  ];
+  const msgIdx = Math.min(Math.floor(score / 2), msgs.length - 1);
+  document.getElementById('score-msg').textContent = msgs[msgIdx];
+
+  const circumference = 364.42;
+  const offset = circumference - (score / TOTAL) * circumference;
+  setTimeout(() => {
+    document.getElementById('ring-fill').style.strokeDashoffset = offset;
+    const color = score >= 8 ? '#1a5c2a' : score >= 5 ? '#c9a84c' : '#8b1a1a';
+    document.getElementById('ring-fill').style.stroke = color;
+  }, 100);
+
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  for (let i = 1; i <= TOTAL; i++) {
+    const userIdx = userAnswers[i];
+    const corrIdx = correctAnswers[i];
+    const isRight = userIdx === corrIdx;
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (isRight ? 'rev-correct' : 'rev-wrong');
+    div.innerHTML = `<div class="review-q">${i}. ${questionTexts[i-1]}</div>
+      <div class="review-ans">
+        Your answer: <span class="${isRight ? 'rev-c' : 'rev-w'}">${choiceLabels[userIdx]}</span>
+        ${!isRight ? '&nbsp;&nbsp;Correct: <span class="rev-c">' + choiceLabels[corrIdx] + '</span>' : ''}
+      </div>`;
+    reviewList.appendChild(div);
+  }
+}
+
+function resetQuiz() {
+  userAnswers = {};
+  score = 0;
+  currentQ = 1;
+  answered = false;
+
+  for (let i = 1; i <= TOTAL; i++) {
+    const card = document.getElementById('q' + i);
+    card.classList.remove('active');
+    const btns = card.querySelectorAll('.choice-btn');
+    btns.forEach(b => { b.disabled = false; b.classList.remove('correct','wrong'); });
+    const fb = document.getElementById('fb' + i);
+    fb.classList.remove('show','correct-fb','wrong-fb');
+    document.getElementById('fbv' + i).textContent = '';
+    document.getElementById('next' + i).style.display = 'none';
+  }
+
+  document.getElementById('q1').classList.add('active');
+  document.getElementById('prog-fill').style.width = '0%';
+  document.getElementById('prog-label').textContent = '0 / 10';
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('quiz-area').style.display = 'block';
+  document.getElementById('ring-fill').style.strokeDashoffset = '364.42';
+}
+
+// Attach click listeners
+document.querySelectorAll('.choice-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const q = parseInt(btn.dataset.q);
+    const idx = parseInt(btn.dataset.idx);
+    handleChoice(q, idx);
+  });
+});
+
+for (let i = 1; i <= TOTAL; i++) {
+  document.getElementById('next' + i).addEventListener('click', () => nextQuestion(i));
+}
+</script>
+</body>
+</html>
