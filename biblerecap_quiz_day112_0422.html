@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Recap Quiz — Day 112 — April 22, 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2rem 1rem 4rem;
+    font-family: 'Crimson Text', serif;
+  }
+  .scroll-wrap { width: 100%; max-width: 760px; position: relative; }
+  .gold-strip {
+    height: 18px;
+    background: linear-gradient(90deg, #3a2a00 0%, #c9a84c 20%, #f0d080 50%, #c9a84c 80%, #3a2a00 100%);
+    border-radius: 3px 3px 0 0;
+  }
+  .gold-strip.bottom { border-radius: 0 0 3px 3px; }
+  .parchment {
+    background: linear-gradient(160deg, #f5ecd6 0%, #ecdbb4 40%, #dfc99a 70%, #d4b87a 100%);
+    padding: 2.5rem 2.8rem 2.8rem;
+    position: relative;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.7), inset 0 0 60px rgba(160,120,40,0.15);
+  }
+  .quiz-header { text-align: center; margin-bottom: 1.8rem; }
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #6b4f1a;
+    margin-bottom: 0.5rem;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #2c1a00;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+  .badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin: 0.6rem 0;
+  }
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    padding: 3px 9px;
+    border-radius: 3px;
+    font-weight: 700;
+  }
+  .badge-challenging { background: #7a4a00; color: #f0d080; border: 1px solid #c9a84c; }
+  .badge-passage { background: rgba(44,26,0,0.12); color: #5a3a08; border: 1px solid #c9a84c; }
+  .ornament { color: #c9a84c; font-size: 1.3rem; margin: 0.4rem 0; display: block; }
+  .progress-wrap { margin-bottom: 1.6rem; display: flex; align-items: center; gap: 0.7rem; }
+  .progress-track {
+    flex: 1; height: 6px;
+    background: rgba(100,70,10,0.2);
+    border-radius: 3px; overflow: hidden;
+    border: 1px solid rgba(201,168,76,0.3);
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #f0d080);
+    border-radius: 3px; width: 0%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem; color: #6b4f1a;
+    white-space: nowrap; letter-spacing: 0.08em;
+    min-width: 52px; text-align: right;
+  }
+  .q-card { display: none; animation: fadeIn 0.4s ease; }
+  .q-card.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .q-meta { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem; }
+  .q-number { font-family: 'Cinzel', serif; font-size: 0.65rem; color: #8b6820; letter-spacing: 0.1em; }
+  .badge-detail {
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem; letter-spacing: 0.1em;
+    padding: 2px 7px; border-radius: 3px; font-weight: 700;
+    background: #1a2d5c; color: #a8c0f0; border: 1px solid #3a5aaa;
+  }
+  .q-text { font-size: 1.15rem; color: #1e1000; line-height: 1.55; margin-bottom: 1.2rem; font-style: italic; }
+  .choices { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; }
+  .choice-btn {
+    display: flex; align-items: flex-start; gap: 0.8rem;
+    background: rgba(255,245,220,0.55);
+    border: 1.5px solid rgba(201,168,76,0.4);
+    border-radius: 5px; padding: 0.75rem 1rem;
+    cursor: pointer; text-align: left;
+    font-family: 'Crimson Text', serif; font-size: 1.05rem;
+    color: #2c1a00; line-height: 1.45;
+    transition: background 0.2s, border-color 0.2s; width: 100%;
+  }
+  .choice-btn:hover:not(:disabled) { background: rgba(240,208,128,0.35); border-color: #c9a84c; }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif; font-size: 0.75rem; font-weight: 700;
+    color: #8b6820; min-width: 20px; padding-top: 2px;
+  }
+  .choice-btn.correct { background: rgba(26,92,42,0.18); border-color: #1a5c2a; color: #0d2e14; }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong { background: rgba(139,26,26,0.12); border-color: #8b1a1a; color: #3a0808; }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+  .feedback {
+    display: none; padding: 0.9rem 1.1rem; border-radius: 5px;
+    margin-top: 0.5rem; animation: fadeIn 0.3s ease;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb { background: rgba(26,92,42,0.1); border-left: 4px solid #1a5c2a; }
+  .feedback.wrong-fb { background: rgba(139,26,26,0.08); border-left: 4px solid #8b1a1a; }
+  .feedback-verdict {
+    font-family: 'Cinzel', serif; font-size: 0.7rem;
+    letter-spacing: 0.1em; font-weight: 700; margin-bottom: 0.3rem;
+  }
+  .feedback.correct-fb .feedback-verdict { color: #1a5c2a; }
+  .feedback.wrong-fb .feedback-verdict { color: #8b1a1a; }
+  .feedback-ref { font-family: 'Cinzel', serif; font-size: 0.65rem; color: #8b6820; letter-spacing: 0.08em; margin-bottom: 0.3rem; }
+  .feedback-text { font-size: 1rem; color: #2c1a00; line-height: 1.5; }
+  .next-btn {
+    display: none; margin-top: 1rem;
+    font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.12em;
+    color: #f0d080;
+    background: linear-gradient(135deg, #5a3a00, #7a5200);
+    border: 1.5px solid #c9a84c; border-radius: 4px;
+    padding: 0.55rem 1.4rem; cursor: pointer; transition: background 0.2s;
+  }
+  .next-btn:hover { background: linear-gradient(135deg, #7a5200, #9a6a00); }
+  #results-screen { display: none; text-align: center; animation: fadeIn 0.5s ease; }
+  .score-ring-wrap { margin: 1.2rem auto; width: 140px; height: 140px; }
+  .score-ring-wrap svg { width: 100%; height: 100%; }
+  .ring-bg { fill: none; stroke: rgba(100,70,10,0.2); stroke-width: 10; }
+  .ring-fill {
+    fill: none; stroke: #c9a84c; stroke-width: 10;
+    stroke-dasharray: 364.42; stroke-dashoffset: 364.42;
+    transform: rotate(-90deg); transform-origin: 50% 50%;
+    transition: stroke-dashoffset 1.2s ease, stroke 0.4s ease;
+  }
+  .score-number {
+    font-family: 'Cinzel', serif; font-size: 2.8rem; font-weight: 700;
+    color: #2c1a00; margin-bottom: 0.3rem;
+  }
+  .score-denom { font-size: 1.4rem; color: #8b6820; }
+  .score-message {
+    font-family: 'Crimson Text', serif; font-size: 1.15rem;
+    color: #4a2e00; font-style: italic; margin-bottom: 1.2rem;
+  }
+  .take-again-btn {
+    font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.12em;
+    color: #f0d080;
+    background: linear-gradient(135deg, #5a3a00, #7a5200);
+    border: 1.5px solid #c9a84c; border-radius: 4px;
+    padding: 0.6rem 1.6rem; cursor: pointer; margin-bottom: 1.5rem;
+    transition: background 0.2s;
+  }
+  .take-again-btn:hover { background: linear-gradient(135deg, #7a5200, #9a6a00); }
+  .ornament-rule {
+    border: none; border-top: 1.5px solid rgba(201,168,76,0.4);
+    margin: 1rem 0;
+  }
+  .review-title {
+    font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.15em;
+    color: #8b6820; margin-bottom: 1rem;
+  }
+  .review-item {
+    text-align: left; padding: 0.75rem 1rem; border-radius: 5px;
+    margin-bottom: 0.6rem; border-left: 4px solid transparent;
+  }
+  .rev-correct { background: rgba(26,92,42,0.08); border-color: #1a5c2a; }
+  .rev-wrong { background: rgba(139,26,26,0.07); border-color: #8b1a1a; }
+  .review-q { font-size: 0.98rem; color: #2c1a00; margin-bottom: 0.25rem; line-height: 1.45; }
+  .review-ans { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.08em; color: #6b4f1a; }
+  .rev-c { color: #1a5c2a; font-weight: 700; }
+  .rev-w { color: #8b1a1a; font-weight: 700; }
+  @media (max-width: 600px) {
+    .parchment { padding: 1.8rem 1.4rem 2rem; }
+    .quiz-title { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="scroll-wrap">
+  <div class="gold-strip"></div>
+  <div class="parchment">
+
+    <!-- Header -->
+    <div class="quiz-header">
+      <div class="date-line">WEDNESDAY, APRIL 22, 2026 &middot; DAY 112</div>
+      <div class="quiz-title">Daily Bible Recap Quiz</div>
+      <div class="badge-row">
+        <span class="badge badge-challenging">CHALLENGING</span>
+      </div>
+      <div class="badge-row">
+        <span class="badge badge-passage">Psalm 6</span>
+        <span class="badge badge-passage">Psalm 8</span>
+        <span class="badge badge-passage">Psalm 9</span>
+        <span class="badge badge-passage">Psalm 10</span>
+        <span class="badge badge-passage">Psalm 14</span>
+        <span class="badge badge-passage">Psalm 16</span>
+        <span class="badge badge-passage">Psalm 19</span>
+        <span class="badge badge-passage">Psalm 21</span>
+      </div>
+      <span class="ornament">&#10022;</span>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-wrap">
+      <div class="progress-track">
+        <div class="progress-fill" id="prog-fill"></div>
+      </div>
+      <div class="progress-label" id="prog-label">0 / 10</div>
+    </div>
+
+    <!-- Quiz Questions -->
+    <div id="quiz-area">
+
+      <!-- Question 1 -->
+      <div class="q-card active" id="q1">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 1 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <div class="q-text">Psalm 6 is a prayer for healing and mercy. After opening with a plea not to be rebuked in anger, the psalmist immediately describes his distress. Which option accurately combines the two specific conditions he names in verses 2&ndash;3?</div>
+        <div class="choices">
+          <button class="choice-btn" data-q="1" data-idx="0"><span class="choice-letter">A</span><span>His heart is melting and his hands tremble without strength</span></button>
+          <button class="choice-btn" data-q="1" data-idx="1"><span class="choice-letter">B</span><span>His limbs are withered and his tears have dried up</span></button>
+          <button class="choice-btn" data-q="1" data-idx="2"><span class="choice-letter">C</span><span>His bones are troubled and his soul is greatly troubled</span></button>
+          <button class="choice-btn" data-q="1" data-idx="3"><span class="choice-letter">D</span><span>His flesh is wasting and his breath is nearly gone</span></button>
+        </div>
+        <div class="feedback" id="fb1">
+          <div class="feedback-verdict" id="fbv1"></div>
+          <div class="feedback-ref">Psalm 6:2&ndash;3</div>
+          <div class="feedback-text">"Be gracious to me, O LORD, for I am languishing; heal me, O LORD, for my bones are troubled. My soul also is greatly troubled" (Psalm 6:2&ndash;3). The Hebrew word for &ldquo;troubled&rdquo; (b&acirc;hal) suggests violent agitation &mdash; not mere sadness but inner upheaval. The psalmist&rsquo;s distress spans body (bones) and spirit (soul), which is characteristic of the lament psalms&rsquo; holistic view of human suffering. Both dimensions together form a complete cry for healing that anticipates Jesus&rsquo;s own deep soul-anguish in Gethsemane.</div>
+        </div>
+        <button class="next-btn" id="next1">Next Question &rarr;</button>
+      </div>
+
+      <!-- Question 2 -->
+      <div class="q-card" id="q2">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 2 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <div class="q-text">Psalm 8:1&ndash;2 declares that God has established something specific &ldquo;out of the mouth of babies and infants.&rdquo; What has God established there, and for what stated purpose?</div>
+        <div class="choices">
+          <button class="choice-btn" data-q="2" data-idx="0"><span class="choice-letter">A</span><span>Strength, to still the enemy and the avenger</span></button>
+          <button class="choice-btn" data-q="2" data-idx="1"><span class="choice-letter">B</span><span>Praise, so that the heavens may echo God&rsquo;s majesty above the earth</span></button>
+          <button class="choice-btn" data-q="2" data-idx="2"><span class="choice-letter">C</span><span>Song, to honor the name of the LORD above all the earth</span></button>
+          <button class="choice-btn" data-q="2" data-idx="3"><span class="choice-letter">D</span><span>Wisdom, to silence the proud who challenge the Creator</span></button>
+        </div>
+        <div class="feedback" id="fb2">
+          <div class="feedback-verdict" id="fbv2"></div>
+          <div class="feedback-ref">Psalm 8:1&ndash;2</div>
+          <div class="feedback-text">"Out of the mouth of babies and infants, you have established strength because of your foes, to still the enemy and the avenger" (Psalm 8:2). The Hebrew can also be rendered &ldquo;praise&rdquo; &mdash; the LXX chose that word, and Jesus quotes it that way in Matthew 21:16 when children shout hosannas in the temple. The divine irony is profound: the God whose name is majestic above all the heavens uses the weakest voices to silence his mightiest enemies, a pattern that reaches its climax in the weakness of the cross defeating death (1 Cor. 1:25).</div>
+        </div>
+        <button class="next-btn" id="next2">Next Question &rarr;</button>
+      </div>
+
+      <!-- Question 3 -->
+      <div class="q-card" id="q3">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 3 OF 10</span>
+        </div>
+        <div class="q-text">Psalm 9 celebrates God&rsquo;s justice against the wicked nations. The psalm uses a striking image of self-destruction to describe how the nations received judgment. Which option correctly identifies this image?</div>
+        <div class="choices">
+          <button class="choice-btn" data-q="3" data-idx="0"><span class="choice-letter">A</span><span>Their cities have become desolate ruins, their memory cut off forever</span></button>
+          <button class="choice-btn" data-q="3" data-idx="1"><span class="choice-letter">B</span><span>Their armies have been scattered to the ends of the earth by God&rsquo;s rebuke</span></button>
+          <button class="choice-btn" data-q="3" data-idx="2"><span class="choice-letter">C</span><span>They have sunk in the pit they themselves made; their foot has been caught in the net they hid</span></button>
+          <button class="choice-btn" data-q="3" data-idx="3"><span class="choice-letter">D</span><span>Their names have been blotted out from the book of the living and their kings brought low</span></button>
+        </div>
+        <div class="feedback" id="fb3">
+          <div class="feedback-verdict" id="fbv3"></div>
+          <div class="feedback-ref">Psalm 9:15</div>
+          <div class="feedback-text">"The nations have sunk in the pit that they made; in the net that they hid, their own foot has been caught" (Psalm 9:15). This retributive boomerang &mdash; the wicked undone by their own devices &mdash; runs throughout the Psalter and wisdom literature. It reaches its supreme expression in the cross: the powers that crucified Christ found that the cross was the instrument of their own defeat (Col. 2:15). The psalmist sees divine justice not merely as external punishment but as the wicked reaping the consequence of their own crafted evil.</div>
+        </div>
+        <button class="next-btn" id="next3">Next Question &rarr;</button>
+      </div>
+
+      <!-- Question 4 -->
+      <div class="q-card" id="q4">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 4 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <div class="q-text">Psalm 10 contains a sustained portrait of the wicked person&rsquo;s inner speech. Among the several self-congratulatory statements attributed to the wicked, which verse records his most explicit statement of false personal security regarding his own future?</div>
+        <div class="choices">
+          <button class="choice-btn" data-q="4" data-idx="0"><span class="choice-letter">A</span><span>&ldquo;There is no God; God has forgotten and hidden his face, he will never see it&rdquo;</span></button>
+          <button class="choice-btn" data-q="4" data-idx="1"><span class="choice-letter">B</span><span>&ldquo;I shall not be moved; throughout all generations I shall not meet adversity&rdquo;</span></button>
+          <button class="choice-btn" data-q="4" data-idx="2"><span class="choice-letter">C</span><span>&ldquo;God will not call me to account; the weak are crushed and fall under my power&rdquo;</span></button>
+          <button class="choice-btn" data-q="4" data-idx="3"><span class="choice-letter">D</span><span>&ldquo;No one sees what I do; the LORD has forgotten those who suffer under me&rdquo;</span></button>
+        </div>
+        <div class="feedback" id="fb4">
+          <div class="feedback-verdict" id="fbv4"></div>
+          <div class="feedback-ref">Psalm 10:6</div>
+          <div class="feedback-text">"He says in his heart, &lsquo;I shall not be moved; throughout all generations I shall not meet adversity&rsquo;" (Psalm 10:6). Psalm 10 does attribute several other godless thoughts to the wicked man (v. 4: &ldquo;There is no God&rdquo;; v. 11: &ldquo;God has forgotten&rdquo;; v. 13: &ldquo;You will not call to account&rdquo;), but verse 6 is his explicit statement of personal invulnerability. Remarkably, it inverts Psalm 16:8 &mdash; where the righteous man trusts in the LORD and declares &ldquo;I shall not be moved.&rdquo; The wicked man applies to himself what belongs only to one who trusts in God.</div>
+        </div>
+        <button class="next-btn" id="next4">Next Question &rarr;</button>
+      </div>
+
+      <!-- Question 5 -->
+      <div class="q-card" id="q5">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 5 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <div class="q-text">After declaring that &ldquo;there is none who does good, not even one,&rdquo; Psalm 14 shifts from God&rsquo;s heavenly diagnosis to a specific accusation against the evildoers concerning how they treat a particular group. What is the accusation?</div>
+        <div class="choices">
+          <button class="choice-btn" data-q="5" data-idx="0"><span class="choice-letter">A</span><span>They have set traps in the city gates and crushed the widow and orphan</span></button>
+          <button class="choice-btn" data-q="5" data-idx="1"><span class="choice-letter">B</span><span>They have stretched out their hands toward iniquity and filled their houses with violence</span></button>
+          <button class="choice-btn" data-q="5" data-idx="2"><span class="choice-letter">C</span><span>They eat up God&rsquo;s people as they eat bread and do not call upon the LORD</span></button>
+          <button class="choice-btn" data-q="5" data-idx="3"><span class="choice-letter">D</span><span>They have spoken lies against their neighbors and betrayed the innocent to the sword</span></button>
+        </div>
+        <div class="feedback" id="fb5">
+          <div class="feedback-verdict" id="fbv5"></div>
+          <div class="feedback-ref">Psalm 14:4</div>
+          <div class="feedback-text">"Have they no knowledge, all the evildoers who eat up my people as they eat bread and do not call upon the LORD?" (Psalm 14:4). The image is chilling: devouring the vulnerable is as casual and routine as a meal. The two clauses are linked &mdash; failure to call upon the LORD directly produces the exploitation of people. Paul quotes Psalm 14:1&ndash;3 in Romans 3:10&ndash;12 as part of his sweeping indictment that all humanity stands guilty before God, making the gift of righteousness through Christ the only possible hope for Jew and Gentile alike.</div>
+        </div>
+        <button class="next-btn" id="next5">Next Question &rarr;</button>
+      </div>
+
+      <!-- Question 6 -->
+      <div class="q-card" id="q6">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 6 OF 10</span>
+        </div>
+        <div class="q-text">Psalm 16 expresses complete trust in the LORD as the psalmist&rsquo;s sole good. The psalm also includes a specific negative vow regarding those who run after other gods. What does the psalmist refuse to do concerning those gods?</div>
+        <div class="choices">
+          <button class="choice-btn" data-q="6" data-idx="0"><span class="choice-letter">A</span><span>He will not bow at their altars or offer any sacrifice to them</span></button>
+          <button class="choice-btn" data-q="6" data-idx="1"><span class="choice-letter">B</span><span>He will not learn their prayers or follow the counsel of their priests</span></button>
+          <button class="choice-btn" data-q="6" data-idx="2"><span class="choice-letter">C</span><span>He will not pour out their drink offerings of blood to them</span></button>
+          <button class="choice-btn" data-q="6" data-idx="3"><span class="choice-letter">D</span><span>He will not take their names upon his lips</span></button>
+        </div>
+        <div class="feedback" id="fb6">
+          <div class="feedback-verdict" id="fbv6"></div>
+          <div class="feedback-ref">Psalm 16:4</div>
+          <div class="feedback-text">"The sorrows of those who run after another god shall multiply; their drink offerings of blood I will not pour out or take their names on my lips" (Psalm 16:4). The refusal goes beyond behavior &mdash; even speaking a foreign deity&rsquo;s name is off limits. This echoes Exodus 23:13 (&ldquo;make no mention of the names of other gods&rdquo;) and reveals how thoroughly exclusive the covenant relationship is. The sorrows of idolaters &mdash; multiplying &mdash; stand in stark contrast to the pleasant inheritance of the one who finds his portion in the LORD alone (v. 5&ndash;6).</div>
+        </div>
+        <button class="next-btn" id="next6">Next Question &rarr;</button>
+      </div>
+
+      <!-- Question 7 -->
+      <div class="q-card" id="q7">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 7 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <div class="q-text">In Psalm 16:5&ndash;6, the psalmist uses the imagery of land allotment to express contentment with God as his portion. Which option most accurately captures what verse 6 specifically says about his inheritance?</div>
+        <div class="choices">
+          <button class="choice-btn" data-q="7" data-idx="0"><span class="choice-letter">A</span><span>The lines have fallen for him in pleasant places and he has a beautiful inheritance</span></button>
+          <button class="choice-btn" data-q="7" data-idx="1"><span class="choice-letter">B</span><span>The LORD himself is his inheritance, satisfying beyond all earthly portions</span></button>
+          <button class="choice-btn" data-q="7" data-idx="2"><span class="choice-letter">C</span><span>His lot has been measured out in the good land and will never be taken from him</span></button>
+          <button class="choice-btn" data-q="7" data-idx="3"><span class="choice-letter">D</span><span>The boundary of his portion has been drawn with cords of glory and he lacks nothing</span></button>
+        </div>
+        <div class="feedback" id="fb7">
+          <div class="feedback-verdict" id="fbv7"></div>
+          <div class="feedback-ref">Psalm 16:6</div>
+          <div class="feedback-text">"The lines have fallen for me in pleasant places; indeed, I have a beautiful inheritance" (Psalm 16:6). The surveyor&rsquo;s measuring lines used to mark tribal land portions in Canaan (cf. Joshua 17) become the psalmist&rsquo;s metaphor for divine providence. Verse 5 identifies the LORD himself as his &ldquo;chosen portion and cup,&rdquo; and verse 6 declares the survey result: the land is pleasant, the inheritance beautiful. Peter quotes Psalm 16:8&ndash;11 at Pentecost (Acts 2:25&ndash;28) as a prophecy fulfilled in Christ&rsquo;s resurrection &mdash; the ultimate inheritance that does not see corruption.</div>
+        </div>
+        <button class="next-btn" id="next7">Next Question &rarr;</button>
+      </div>
+
+      <!-- Question 8 -->
+      <div class="q-card" id="q8">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 8 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <div class="q-text">Psalm 19:7&ndash;9 contains six parallel lines, each naming God&rsquo;s word with a different title and pairing it with a quality or effect. Which of the following is NOT one of the six titles used to describe God&rsquo;s word in this sequence?</div>
+        <div class="choices">
+          <button class="choice-btn" data-q="8" data-idx="0"><span class="choice-letter">A</span><span>The testimony of the LORD</span></button>
+          <button class="choice-btn" data-q="8" data-idx="1"><span class="choice-letter">B</span><span>The wisdom of the LORD</span></button>
+          <button class="choice-btn" data-q="8" data-idx="2"><span class="choice-letter">C</span><span>The precepts of the LORD</span></button>
+          <button class="choice-btn" data-q="8" data-idx="3"><span class="choice-letter">D</span><span>The fear of the LORD</span></button>
+        </div>
+        <div class="feedback" id="fb8">
+          <div class="feedback-verdict" id="fbv8"></div>
+          <div class="feedback-ref">Psalm 19:7&ndash;9</div>
+          <div class="feedback-text">The six titles in Psalm 19:7&ndash;9 are: the <em>law</em> (t&ocirc;r&acirc;), the <em>testimony</em> (&lsquo;&ecirc;d&ucirc;t), the <em>precepts</em> (piqqûd&icirc;m), the <em>commandment</em> (mi&scedil;w&acirc;), the <em>fear</em> (yir&rsquo;&acirc;), and the <em>rules / judgments</em> (mi&scaron;p&acirc;&tstrok;&icirc;m). &ldquo;Wisdom&rdquo; is never used as a title for God&rsquo;s word in this sequence, though the psalm strongly implies it: v. 7 says the testimony &ldquo;makes wise the simple.&rdquo; Note also that &ldquo;the fear of the LORD&rdquo; appears here not as a description of human piety but as a name for the Torah itself &mdash; the revealed word that structures holy reverence.</div>
+        </div>
+        <button class="next-btn" id="next8">Next Question &rarr;</button>
+      </div>
+
+      <!-- Question 9 -->
+      <div class="q-card" id="q9">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 9 OF 10</span>
+        </div>
+        <div class="q-text">The closing prayer of Psalm 19 distinguishes between two categories of sin and makes specific petitions about each. What are the two categories, and what is the psalmist&rsquo;s specific petition regarding the second, more dangerous one?</div>
+        <div class="choices">
+          <button class="choice-btn" data-q="9" data-idx="0"><span class="choice-letter">A</span><span>Sins of ignorance and sins of desire &mdash; he asks to be kept equally from both</span></button>
+          <button class="choice-btn" data-q="9" data-idx="1"><span class="choice-letter">B</span><span>Accidental sins and deliberate sins &mdash; he asks that deliberate sins be freely forgiven</span></button>
+          <button class="choice-btn" data-q="9" data-idx="2"><span class="choice-letter">C</span><span>Hidden faults and presumptuous sins &mdash; he asks that presumptuous sins not have dominion over him</span></button>
+          <button class="choice-btn" data-q="9" data-idx="3"><span class="choice-letter">D</span><span>Youthful sins and willful transgressions &mdash; he asks that God not remember them against him</span></button>
+        </div>
+        <div class="feedback" id="fb9">
+          <div class="feedback-verdict" id="fbv9"></div>
+          <div class="feedback-ref">Psalm 19:12&ndash;13</div>
+          <div class="feedback-text">"Who can discern his errors? Declare me innocent from hidden faults. Keep back your servant also from presumptuous sins; let them not have dominion over me!" (Psalm 19:12&ndash;13). Hidden faults (s&ecirc;g&icirc;&lsquo;&ocirc;t) are errors committed without full awareness; presumptuous sins (z&ecirc;d&icirc;m, &ldquo;the insolent ones&rdquo;) are deliberate, high-handed acts of rebellion. The petitions differ in kind: for hidden faults, the psalmist asks for acquittal; for presumptuous sins, he asks to be restrained &mdash; that they not &ldquo;have dominion.&rdquo; Paul echoes this exact word in Romans 6:14: &ldquo;sin will have no dominion over you, since you are not under law but under grace.&rdquo;</div>
+        </div>
+        <button class="next-btn" id="next9">Next Question &rarr;</button>
+      </div>
+
+      <!-- Question 10 -->
+      <div class="q-card" id="q10">
+        <div class="q-meta">
+          <span class="q-number">QUESTION 10 OF 10</span>
+          <span class="badge-detail">DETAIL</span>
+        </div>
+        <div class="q-text">Psalm 21 is a royal psalm of thanksgiving following victory. Verse 4 records something the king specifically asked of the LORD, and what God gave in response. What did the king ask for, and what precisely did God give?</div>
+        <div class="choices">
+          <button class="choice-btn" data-q="10" data-idx="0"><span class="choice-letter">A</span><span>He asked for life, and God gave him length of days forever and ever</span></button>
+          <button class="choice-btn" data-q="10" data-idx="1"><span class="choice-letter">B</span><span>He asked for victory in battle, and God gave him the necks of his enemies</span></button>
+          <button class="choice-btn" data-q="10" data-idx="2"><span class="choice-letter">C</span><span>He asked for a crown, and God set upon his head a crown of pure gold</span></button>
+          <button class="choice-btn" data-q="10" data-idx="3"><span class="choice-letter">D</span><span>He asked for joy in the LORD&rsquo;s strength, and God made him glad through his saving deeds</span></button>
+        </div>
+        <div class="feedback" id="fb10">
+          <div class="feedback-verdict" id="fbv10"></div>
+          <div class="feedback-ref">Psalm 21:4</div>
+          <div class="feedback-text">"He asked life of you; you gave it to him, length of days forever and ever" (Psalm 21:4). No historical king &mdash; not even David &mdash; received literal eternal life, which is why the church has read this as messianic. Peter&rsquo;s Pentecost sermon declares that God did not abandon the Christ to death (Acts 2:31&ndash;32); the writer of Hebrews says Christ &ldquo;holds his priesthood permanently, because he continues forever&rdquo; (Heb 7:24). The crown of gold in verse 3 is a gift the LORD placed on the king&rsquo;s head; the eternal life in verse 4 is what the king himself asked for &mdash; and only Christ has fully received that answer.</div>
+        </div>
+        <button class="next-btn" id="next10">Results &rarr;</button>
+      </div>
+
+    </div><!-- end #quiz-area -->
+
+    <!-- Results Screen -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg viewBox="0 0 120 120">
+          <circle class="ring-bg" cx="60" cy="60" r="58"/>
+          <circle class="ring-fill" id="ring-fill" cx="60" cy="60" r="58"/>
+        </svg>
+      </div>
+      <div class="score-number"><span id="final-score">0</span><span class="score-denom"> / 10</span></div>
+      <div class="score-message" id="score-msg"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">&#8635; Take Again</button>
+      <hr class="ornament-rule">
+      <div class="review-title">QUESTION REVIEW</div>
+      <div id="review-list"></div>
+    </div>
+
+  </div><!-- end .parchment -->
+  <div class="gold-strip bottom"></div>
+</div><!-- end .scroll-wrap -->
+
+<script>
+const TOTAL = 10;
+const correctAnswers = {
+  1: 2,  // C
+  2: 0,  // A
+  3: 2,  // C
+  4: 1,  // B
+  5: 2,  // C
+  6: 3,  // D
+  7: 0,  // A
+  8: 1,  // B
+  9: 2,  // C
+  10: 0  // A
+};
+
+const questionTexts = [
+  "Psalm 6 is a prayer for healing and mercy. After opening with a plea not to be rebuked in anger, the psalmist immediately describes his distress. Which option accurately combines the two specific conditions he names in verses 2\u20133?",
+  "Psalm 8:1\u20132 declares that God has established something specific \u201cout of the mouth of babies and infants.\u201d What has God established there, and for what stated purpose?",
+  "Psalm 9 celebrates God\u2019s justice against the wicked nations. The psalm uses a striking image of self-destruction to describe how the nations received judgment. Which option correctly identifies this image?",
+  "Psalm 10 contains a sustained portrait of the wicked person\u2019s inner speech. Among the several self-congratulatory statements attributed to the wicked, which verse records his most explicit statement of false personal security regarding his own future?",
+  "After declaring that \u201cthere is none who does good, not even one,\u201d Psalm 14 shifts from God\u2019s heavenly diagnosis to a specific accusation against the evildoers concerning how they treat a particular group. What is the accusation?",
+  "Psalm 16 expresses complete trust in the LORD as the psalmist\u2019s sole good. The psalm also includes a specific negative vow regarding those who run after other gods. What does the psalmist refuse to do concerning those gods?",
+  "In Psalm 16:5\u20136, the psalmist uses the imagery of land allotment to express contentment with God as his portion. Which option most accurately captures what verse 6 specifically says about his inheritance?",
+  "Psalm 19:7\u20139 contains six parallel lines, each naming God\u2019s word with a different title and pairing it with a quality or effect. Which of the following is NOT one of the six titles used to describe God\u2019s word in this sequence?",
+  "The closing prayer of Psalm 19 distinguishes between two categories of sin and makes specific petitions about each. What are the two categories, and what is the psalmist\u2019s specific petition regarding the second, more dangerous one?",
+  "Psalm 21 is a royal psalm of thanksgiving following victory. Verse 4 records something the king specifically asked of the LORD, and what God gave in response. What did the king ask for, and what precisely did God give?"
+];
+
+const choiceLabels = ['A','B','C','D'];
+let userAnswers = {};
+let score = 0;
+let currentQ = 1;
+let answered = false;
+
+function handleChoice(qNum, idx) {
+  if (answered) return;
+  answered = true;
+  userAnswers[qNum] = idx;
+
+  const correct = correctAnswers[qNum];
+  const btns = document.querySelectorAll(`[data-q="${qNum}"]`);
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === correct) btn.classList.add('correct');
+    else if (i === idx && i !== correct) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('fb' + qNum);
+  const fbv = document.getElementById('fbv' + qNum);
+  if (idx === correct) {
+    score++;
+    fb.classList.add('correct-fb');
+    fbv.textContent = '\u2713 CORRECT';
+  } else {
+    fb.classList.add('wrong-fb');
+    fbv.textContent = '\u2717 INCORRECT';
+  }
+  fb.classList.add('show');
+
+  const nextBtn = document.getElementById('next' + qNum);
+  nextBtn.style.display = 'inline-block';
+
+  const answered_count = Object.keys(userAnswers).length;
+  document.getElementById('prog-fill').style.width = (answered_count / TOTAL * 100) + '%';
+  document.getElementById('prog-label').textContent = answered_count + ' / ' + TOTAL;
+}
+
+function nextQuestion(qNum) {
+  document.getElementById('q' + qNum).classList.remove('active');
+  if (qNum < TOTAL) {
+    answered = false;
+    currentQ = qNum + 1;
+    const nextCard = document.getElementById('q' + currentQ);
+    nextCard.classList.add('active');
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('quiz-area').style.display = 'none';
+  document.getElementById('prog-fill').style.width = '100%';
+  document.getElementById('prog-label').textContent = TOTAL + ' / ' + TOTAL;
+
+  const rs = document.getElementById('results-screen');
+  rs.style.display = 'block';
+  document.getElementById('final-score').textContent = score;
+
+  const msgs = [
+    "Keep reading \u2014 the Word rewards persistence.",
+    "A solid start \u2014 return to these psalms again.",
+    "Good effort \u2014 the details reward close reading.",
+    "Well done \u2014 you read carefully.",
+    "Excellent \u2014 these passages are becoming yours.",
+    "Outstanding \u2014 a true student of the Word!"
+  ];
+  const msgIdx = Math.min(Math.floor(score / 2), msgs.length - 1);
+  document.getElementById('score-msg').textContent = msgs[msgIdx];
+
+  const circumference = 364.42;
+  const offset = circumference - (score / TOTAL) * circumference;
+  setTimeout(() => {
+    document.getElementById('ring-fill').style.strokeDashoffset = offset;
+    const color = score >= 8 ? '#1a5c2a' : score >= 5 ? '#c9a84c' : '#8b1a1a';
+    document.getElementById('ring-fill').style.stroke = color;
+  }, 100);
+
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  for (let i = 1; i <= TOTAL; i++) {
+    const userIdx = userAnswers[i];
+    const corrIdx = correctAnswers[i];
+    const isRight = userIdx === corrIdx;
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (isRight ? 'rev-correct' : 'rev-wrong');
+    div.innerHTML = `<div class="review-q">${i}. ${questionTexts[i-1]}</div>
+      <div class="review-ans">
+        Your answer: <span class="${isRight ? 'rev-c' : 'rev-w'}">${choiceLabels[userIdx]}</span>
+        ${!isRight ? '&nbsp;&nbsp;Correct: <span class="rev-c">' + choiceLabels[corrIdx] + '</span>' : ''}
+      </div>`;
+    reviewList.appendChild(div);
+  }
+}
+
+function resetQuiz() {
+  userAnswers = {};
+  score = 0;
+  currentQ = 1;
+  answered = false;
+
+  for (let i = 1; i <= TOTAL; i++) {
+    const card = document.getElementById('q' + i);
+    card.classList.remove('active');
+    const btns = card.querySelectorAll('.choice-btn');
+    btns.forEach(b => { b.disabled = false; b.classList.remove('correct','wrong'); });
+    const fb = document.getElementById('fb' + i);
+    fb.classList.remove('show','correct-fb','wrong-fb');
+    document.getElementById('fbv' + i).textContent = '';
+    document.getElementById('next' + i).style.display = 'none';
+  }
+
+  document.getElementById('q1').classList.add('active');
+  document.getElementById('prog-fill').style.width = '0%';
+  document.getElementById('prog-label').textContent = '0 / 10';
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('quiz-area').style.display = 'block';
+  document.getElementById('ring-fill').style.strokeDashoffset = '364.42';
+}
+
+// Attach click listeners
+document.querySelectorAll('.choice-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const q = parseInt(btn.dataset.q);
+    const idx = parseInt(btn.dataset.idx);
+    handleChoice(q, idx);
+  });
+});
+
+for (let i = 1; i <= TOTAL; i++) {
+  document.getElementById('next' + i).addEventListener('click', () => nextQuestion(i));
+}
+</script>
+</body>
+</html>
