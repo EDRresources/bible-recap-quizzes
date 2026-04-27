@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 118 Bible Recap Quiz — Psalms 81, 88, 92–93</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 18px;
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.15);
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.3s ease forwards;
+  }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+    color: #1a3d1e;
+    display: block;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.1);
+    border: 1px solid #8b1a1a;
+    color: #5a0e0e;
+    display: block;
+  }
+  .feedback-icon { font-weight: 700; margin-right: 6px; }
+  .feedback-ref {
+    font-style: italic;
+    color: #5a4020;
+    font-size: 0.95rem;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.visible { display: inline-block; }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 22px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.15); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1e1208;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: #9a7a3a;
+    letter-spacing: 0.1em;
+  }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1e1208;
+    margin-bottom: 8px;
+  }
+  .results-message {
+    font-size: 1.08rem;
+    color: #3a2510;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #9a7a3a;
+    margin-bottom: 14px;
+    text-align: left;
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    padding-bottom: 8px;
+  }
+  .review-item {
+    text-align: left;
+    margin-bottom: 14px;
+    padding: 12px 14px;
+    border-radius: 4px;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.1);
+    border-left: 3px solid #1a5c2a;
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.08);
+    border-left: 3px solid #8b1a1a;
+  }
+  .review-q { font-weight: 600; color: #1e1208; margin-bottom: 4px; }
+  .review-ans { font-size: 0.93rem; color: #3a2510; }
+  .review-correct-lbl { color: #1a5c2a; font-weight: 600; }
+  .review-wrong-lbl   { color: #8b1a1a; font-weight: 600; }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .take-again-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  @media (max-width: 520px) {
+    .card { padding: 22px 18px; }
+    .quiz-title { font-size: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- Header -->
+  <div class="quiz-header">
+    <div class="quiz-date">
+      <span class="ornament">✦</span>
+      Tuesday, April 28, 2026 &middot; Day 118
+      <span class="ornament">✦</span>
+    </div>
+    <div class="quiz-title">The Bible Recap — Daily Quiz</div>
+    <div class="passage-tags">
+      <span class="passage-tag">Psalm 81</span>
+      <span class="passage-tag">Psalm 88</span>
+      <span class="passage-tag">Psalm 92</span>
+      <span class="passage-tag">Psalm 93</span>
+    </div>
+    <div><span class="difficulty-badge">Challenging</span></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap"><div class="progress-bar" id="prog-bar"></div></div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- Card -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">In Psalm 81, what name does God use to refer to Israel when stating that He established a statute at the time of the Exodus?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(1,'A')"><span class="choice-letter">A</span>Judah</button>
+        <button class="choice-btn" onclick="answer(1,'B')"><span class="choice-letter">B</span>Jacob</button>
+        <button class="choice-btn" onclick="answer(1,'C')"><span class="choice-letter">C</span>Joseph</button>
+        <button class="choice-btn" onclick="answer(1,'D')"><span class="choice-letter">D</span>Israel</button>
+      </div>
+      <div class="feedback" id="fb1"></div>
+      <button class="next-btn" id="next1" onclick="next(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+      </div>
+      <div class="question-text">According to Psalm 81, when Israel called in distress, how does God say He answered them?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(2,'A')"><span class="choice-letter">A</span>He sent the prophet Moses to deliver His word</button>
+        <button class="choice-btn" onclick="answer(2,'B')"><span class="choice-letter">B</span>He answered them out of a thundercloud</button>
+        <button class="choice-btn" onclick="answer(2,'C')"><span class="choice-letter">C</span>He parted the waters before them</button>
+        <button class="choice-btn" onclick="answer(2,'D')"><span class="choice-letter">D</span>He gave them manna and quail in the wilderness</button>
+      </div>
+      <div class="feedback" id="fb2"></div>
+      <button class="next-btn" id="next2" onclick="next(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+      </div>
+      <div class="question-text">In Psalm 81, what does God promise He would have done if Israel had listened to Him and walked in His ways?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(3,'A')"><span class="choice-letter">A</span>Given them an everlasting king and dynasty</button>
+        <button class="choice-btn" onclick="answer(3,'B')"><span class="choice-letter">B</span>Built His temple in their midst immediately</button>
+        <button class="choice-btn" onclick="answer(3,'C')"><span class="choice-letter">C</span>Quickly subdued their enemies and fed them with the finest wheat and honey from the rock</button>
+        <button class="choice-btn" onclick="answer(3,'D')"><span class="choice-letter">D</span>Given them rest on every side and peace with all nations</button>
+      </div>
+      <div class="feedback" id="fb3"></div>
+      <button class="next-btn" id="next3" onclick="next(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">Who is identified as the author of Psalm 88 in its superscription?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(4,'A')"><span class="choice-letter">A</span>David</button>
+        <button class="choice-btn" onclick="answer(4,'B')"><span class="choice-letter">B</span>Asaph</button>
+        <button class="choice-btn" onclick="answer(4,'C')"><span class="choice-letter">C</span>Ethan the Ezrahite</button>
+        <button class="choice-btn" onclick="answer(4,'D')"><span class="choice-letter">D</span>Heman the Ezrahite</button>
+      </div>
+      <div class="feedback" id="fb4"></div>
+      <button class="next-btn" id="next4" onclick="next(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">Psalm 88 is unique among lament psalms because it ends with no resolution or turn to praise. What are the very last words of the psalm?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(5,'A')"><span class="choice-letter">A</span>"Yet I will hope in the LORD my God"</button>
+        <button class="choice-btn" onclick="answer(5,'B')"><span class="choice-letter">B</span>"darkness is my closest friend"</button>
+        <button class="choice-btn" onclick="answer(5,'C')"><span class="choice-letter">C</span>"Why do you hide your face from me?"</button>
+        <button class="choice-btn" onclick="answer(5,'D')"><span class="choice-letter">D</span>"I am like a man without strength"</button>
+      </div>
+      <div class="feedback" id="fb5"></div>
+      <button class="next-btn" id="next5" onclick="next(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+      </div>
+      <div class="question-text">In Psalm 88, how does the psalmist describe his condition among the dead?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(6,'A')"><span class="choice-letter">A</span>He fears joining the dead and cries out for rescue</button>
+        <button class="choice-btn" onclick="answer(6,'B')"><span class="choice-letter">B</span>He is set apart with the dead, like the slain who lie in the grave whom God remembers no more</button>
+        <button class="choice-btn" onclick="answer(6,'C')"><span class="choice-letter">C</span>He has descended to Sheol but trusts God will bring him back</button>
+        <button class="choice-btn" onclick="answer(6,'D')"><span class="choice-letter">D</span>He calls on the dead to join him in praising God</button>
+      </div>
+      <div class="feedback" id="fb6"></div>
+      <button class="next-btn" id="next6" onclick="next(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">What is the superscription of Psalm 92, and what makes it unique in the entire Psalter?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(7,'A')"><span class="choice-letter">A</span>"A Maskil of Asaph" — the only maskil assigned to Asaph</button>
+        <button class="choice-btn" onclick="answer(7,'B')"><span class="choice-letter">B</span>"A Song for the Sabbath Day" — the only psalm bearing this designation</button>
+        <button class="choice-btn" onclick="answer(7,'C')"><span class="choice-letter">C</span>"A Prayer for the New Moon" — the only psalm tied to that festival</button>
+        <button class="choice-btn" onclick="answer(7,'D')"><span class="choice-letter">D</span>"A Contemplation of the Sons of Korah" — their only creation hymn</button>
+      </div>
+      <div class="feedback" id="fb7"></div>
+      <button class="next-btn" id="next7" onclick="next(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+      </div>
+      <div class="question-text">According to Psalm 92, to what two things does the psalmist compare the flourishing of the righteous?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(8,'A')"><span class="choice-letter">A</span>An olive tree and a spreading vine</button>
+        <button class="choice-btn" onclick="answer(8,'B')"><span class="choice-letter">B</span>A cedar of Lebanon and an oak of Bashan</button>
+        <button class="choice-btn" onclick="answer(8,'C')"><span class="choice-letter">C</span>A palm tree and a cedar of Lebanon</button>
+        <button class="choice-btn" onclick="answer(8,'D')"><span class="choice-letter">D</span>A mighty river and a mountain spring</button>
+      </div>
+      <div class="feedback" id="fb8"></div>
+      <button class="next-btn" id="next8" onclick="next(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+      </div>
+      <div class="question-text">In Psalm 93, what does the psalmist say is established and cannot be moved?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(9,'A')"><span class="choice-letter">A</span>The covenant God made with Abraham</button>
+        <button class="choice-btn" onclick="answer(9,'B')"><span class="choice-letter">B</span>The throne of David</button>
+        <button class="choice-btn" onclick="answer(9,'C')"><span class="choice-letter">C</span>The world</button>
+        <button class="choice-btn" onclick="answer(9,'D')"><span class="choice-letter">D</span>The mountains of Zion</button>
+      </div>
+      <div class="feedback" id="fb9"></div>
+      <button class="next-btn" id="next9" onclick="next(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">Psalm 93 concludes with a declaration about what aspect of God's "statutes" and His "house"?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(10,'A')"><span class="choice-letter">A</span>Their severity and power over nations</button>
+        <button class="choice-btn" onclick="answer(10,'B')"><span class="choice-letter">B</span>Their ancient age and enduring wisdom</button>
+        <button class="choice-btn" onclick="answer(10,'C')"><span class="choice-letter">C</span>His statutes stand firm, and holiness adorns His house for endless days</button>
+        <button class="choice-btn" onclick="answer(10,'D')"><span class="choice-letter">D</span>Their mercy and compassion toward the humble</button>
+      </div>
+      <div class="feedback" id="fb10"></div>
+      <button class="next-btn" id="next10" onclick="showResults()">See Results &rarr;</button>
+    </div>
+
+    <!-- Results -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 120 120">
+          <circle class="score-ring-bg" cx="60" cy="60" r="54"/>
+          <circle class="score-ring-fill" id="ring-fill" cx="60" cy="60" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <span class="score-num" id="score-num">0</span>
+          <span class="score-denom">out of 10</span>
+        </div>
+      </div>
+      <div class="results-title" id="results-title"></div>
+      <div class="results-message" id="results-message"></div>
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">&#8635; Take Again</button>
+    </div>
+
+  </div><!-- /.card -->
+</div><!-- /.outer-wrap -->
+
+<script>
+  const ANSWERS = {
+    1: 'C', 2: 'B', 3: 'C', 4: 'D', 5: 'B',
+    6: 'B', 7: 'B', 8: 'C', 9: 'C', 10: 'C'
+  };
+
+  const FEEDBACK = {
+    1: {
+      correct: "Correct! Psalm 81:5 says God 'established it as a decree for Joseph when he went out against Egypt.' The name Joseph poetically represents the northern tribes descended from him, or Israel as a whole — a subtle but meaningful detail.",
+      wrong: "The correct answer is C — Joseph. Psalm 81:5 uses the name Joseph rather than the expected 'Israel' or 'Jacob,' likely as a poetic reference to the northern tribes descended from Joseph (Ephraim and Manasseh).",
+      ref: "Psalm 81:5"
+    },
+    2: {
+      correct: "Correct! Psalm 81:7 records God's words: 'I answered you out of a thundercloud; I tested you at the waters of Meribah.' God's voice from the thundercloud echoes the theophany at Sinai.",
+      wrong: "The correct answer is B. Psalm 81:7 has God saying, 'I answered you out of a thundercloud; I tested you at the waters of Meribah.' The thundercloud imagery connects to the Sinai revelation.",
+      ref: "Psalm 81:7"
+    },
+    3: {
+      correct: "Correct! Psalm 81:13-16 records God's lament: if only Israel had listened, He would have quickly subdued their enemies, fed them 'with the finest of wheat,' and satisfied them 'with honey from the rock.' The unconditional promise becomes a mournful 'what could have been.'",
+      wrong: "The correct answer is C. Psalm 81:13-16 describes what God would have done: subdued enemies swiftly and provided 'the finest of wheat' and 'honey from the rock.' The contrast between what was offered and what Israel chose is the psalm's aching center.",
+      ref: "Psalm 81:13–16"
+    },
+    4: {
+      correct: "Correct! Psalm 88's superscription names it 'A song. A psalm of the Sons of Korah... of Heman the Ezrahite.' Heman is also listed in 1 Kings 4:31 as a man of wisdom. (Ethan the Ezrahite is the author of Psalm 89 — a common mix-up.)",
+      wrong: "The correct answer is D — Heman the Ezrahite. Psalm 88:1 attributes the psalm to Heman. Ethan the Ezrahite is the author of the adjacent Psalm 89, which makes them easy to confuse.",
+      ref: "Psalm 88:1 (superscription)"
+    },
+    5: {
+      correct: "Correct! Psalm 88 ends with the devastating line 'darkness is my closest friend' (v.18). It is the only psalm in the Psalter that begins in distress and ends with no turn to hope, praise, or trust — just darkness. This makes it a unique and raw expression of faith in suffering.",
+      wrong: "The correct answer is B — 'darkness is my closest friend.' Psalm 88:18 ends without any resolution. Unlike almost every other lament psalm, there is no pivot to confidence or praise. The psalm ends exactly where it began: in the dark.",
+      ref: "Psalm 88:18"
+    },
+    6: {
+      correct: "Correct! Psalm 88:5 says the psalmist is 'set apart with the dead, like the slain who lie in the grave, whom you remember no more.' The anguish is that he already feels as if God has forgotten him — as the dead are forgotten.",
+      wrong: "The correct answer is B. Psalm 88:5 describes the psalmist as 'set apart with the dead, like the slain who lie in the grave, whom you remember no more.' He does not trust that God will rescue him — the psalm offers no such hope. That is precisely what makes it so striking.",
+      ref: "Psalm 88:4–5"
+    },
+    7: {
+      correct: "Correct! Psalm 92 is titled 'A psalm. A song. For the Sabbath day' — the only psalm in the entire Psalter with this designation. Its themes of rest, God's works, and the flourishing of the righteous fit the Sabbath perfectly.",
+      wrong: "The correct answer is B. Psalm 92:1 superscription reads 'A psalm. A song. For the Sabbath day.' No other psalm in the 150 carries that designation, making it the Psalter's unique Sabbath hymn.",
+      ref: "Psalm 92:1 (superscription)"
+    },
+    8: {
+      correct: "Correct! Psalm 92:12 says, 'The righteous will flourish like a palm tree, they will grow like a cedar of Lebanon.' Both images convey upright stature, deep roots, and long endurance — vivid portraits of godly perseverance.",
+      wrong: "The correct answer is C — a palm tree and a cedar of Lebanon. Psalm 92:12 uses both images to describe the flourishing of the righteous: 'The righteous will flourish like a palm tree, they will grow like a cedar of Lebanon.'",
+      ref: "Psalm 92:12"
+    },
+    9: {
+      correct: "Correct! Psalm 93:1 declares, 'The world is firmly established; it cannot be moved.' Immediately after saying the LORD reigns and is robed in majesty, the psalmist grounds the stability of all creation in God's sovereign reign.",
+      wrong: "The correct answer is C — the world. Psalm 93:1 says 'The world is firmly established; it cannot be moved.' Creation's stability is rooted in the LORD's eternal kingship, not in itself.",
+      ref: "Psalm 93:1"
+    },
+    10: {
+      correct: "Correct! Psalm 93:5 closes the psalm: 'Your statutes, LORD, stand firm; holiness adorns your house for endless days.' The psalm pairs the cosmic stability of creation (v.1) with the moral stability of God's Word and the purity of His worship.",
+      wrong: "The correct answer is C. Psalm 93:5 says 'Your statutes, LORD, stand firm; holiness adorns your house for endless days.' The psalm's final note is not power or mercy but holiness and permanence — the fitting capstone to an enthronement hymn.",
+      ref: "Psalm 93:5"
+    }
+  };
+
+  const QUESTIONS = {
+    1: "In Psalm 81, what name does God use to refer to Israel when stating that He established a statute at the time of the Exodus?",
+    2: "According to Psalm 81, when Israel called in distress, how does God say He answered them?",
+    3: "In Psalm 81, what does God promise He would have done if Israel had listened to Him and walked in His ways?",
+    4: "Who is identified as the author of Psalm 88 in its superscription?",
+    5: "Psalm 88 is unique among lament psalms because it ends with no resolution or turn to praise. What are the very last words of the psalm?",
+    6: "In Psalm 88, how does the psalmist describe his condition among the dead?",
+    7: "What is the superscription of Psalm 92, and what makes it unique in the entire Psalter?",
+    8: "According to Psalm 92, to what two things does the psalmist compare the flourishing of the righteous?",
+    9: "In Psalm 93, what does the psalmist say is established and cannot be moved?",
+    10: "Psalm 93 concludes with a declaration about what aspect of God's 'statutes' and His 'house'?"
+  };
+
+  const CHOICES = {
+    1: { A: "Judah", B: "Jacob", C: "Joseph", D: "Israel" },
+    2: { A: "He sent the prophet Moses to deliver His word", B: "He answered them out of a thundercloud", C: "He parted the waters before them", D: "He gave them manna and quail in the wilderness" },
+    3: { A: "Given them an everlasting king and dynasty", B: "Built His temple in their midst immediately", C: "Quickly subdued their enemies and fed them with the finest wheat and honey from the rock", D: "Given them rest on every side and peace with all nations" },
+    4: { A: "David", B: "Asaph", C: "Ethan the Ezrahite", D: "Heman the Ezrahite" },
+    5: { A: '"Yet I will hope in the LORD my God"', B: '"darkness is my closest friend"', C: '"Why do you hide your face from me?"', D: '"I am like a man without strength"' },
+    6: { A: "He fears joining the dead and cries out for rescue", B: "He is set apart with the dead, like the slain who lie in the grave whom God remembers no more", C: "He has descended to Sheol but trusts God will bring him back", D: "He calls on the dead to join him in praising God" },
+    7: { A: '"A Maskil of Asaph" — the only maskil assigned to Asaph', B: '"A Song for the Sabbath Day" — the only psalm bearing this designation', C: '"A Prayer for the New Moon" — the only psalm tied to that festival', D: '"A Contemplation of the Sons of Korah" — their only creation hymn' },
+    8: { A: "An olive tree and a spreading vine", B: "A cedar of Lebanon and an oak of Bashan", C: "A palm tree and a cedar of Lebanon", D: "A mighty river and a mountain spring" },
+    9: { A: "The covenant God made with Abraham", B: "The throne of David", C: "The world", D: "The mountains of Zion" },
+    10: { A: "Their severity and power over nations", B: "Their ancient age and enduring wisdom", C: "His statutes stand firm, and holiness adorns His house for endless days", D: "Their mercy and compassion toward the humble" }
+  };
+
+  let userAnswers = {};
+  let currentQ = 1;
+
+  function answer(qNum, choice) {
+    if (userAnswers[qNum]) return;
+    userAnswers[qNum] = choice;
+
+    const correct = ANSWERS[qNum];
+    const btns = document.querySelectorAll(`#q${qNum} .choice-btn`);
+    const letters = ['A','B','C','D'];
+
+    btns.forEach((btn, idx) => {
+      btn.disabled = true;
+      if (letters[idx] === correct) btn.classList.add('correct');
+      else if (letters[idx] === choice && choice !== correct) btn.classList.add('wrong');
+    });
+
+    const fb = document.getElementById(`fb${qNum}`);
+    const isCorrect = (choice === correct);
+    fb.className = 'feedback ' + (isCorrect ? 'correct-fb' : 'wrong-fb');
+    fb.innerHTML = `<span class="feedback-icon">${isCorrect ? '✓' : '✗'}</span>${isCorrect ? FEEDBACK[qNum].correct : FEEDBACK[qNum].wrong}<span class="feedback-ref">— ${FEEDBACK[qNum].ref}</span>`;
+
+    document.getElementById(`next${qNum}`).classList.add('visible');
+    updateProgress(qNum);
+  }
+
+  function next(qNum) {
+    document.getElementById(`q${qNum}`).classList.remove('active');
+    const nextQ = qNum + 1;
+    if (nextQ <= 10) {
+      document.getElementById(`q${nextQ}`).classList.add('active');
+      currentQ = nextQ;
+    }
+  }
+
+  function updateProgress(qNum) {
+    const pct = Math.round((qNum / 10) * 100);
+    document.getElementById('prog-bar').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = `Question ${qNum} of 10`;
+  }
+
+  function showResults() {
+    document.getElementById('q10').classList.remove('active');
+    const rs = document.getElementById('results-screen');
+    rs.style.display = 'block';
+
+    // Score
+    let score = 0;
+    for (let i = 1; i <= 10; i++) {
+      if (userAnswers[i] === ANSWERS[i]) score++;
+    }
+
+    document.getElementById('score-num').textContent = score;
+
+    // Ring animation
+    const circumference = 339.3;
+    const offset = circumference - (score / 10) * circumference;
+    setTimeout(() => {
+      document.getElementById('ring-fill').style.strokeDashoffset = offset;
+    }, 100);
+
+    // Title & message
+    const titles = ['Keep Studying', 'Keep Digging', 'Good Effort', 'Solid Work', 'Well Done', 'Well Done', 'Great Work', 'Excellent!', 'Outstanding!', 'Near Perfect!', 'Perfect Score!'];
+    const messages = [
+      "Every reading plants a seed. Return to these psalms and let them speak again.",
+      "The Psalms reward slow, repeated reading. Try again — you'll catch more each time.",
+      "Good engagement with difficult poetry. These psalms repay close attention.",
+      "Solid grasp of the material. A few details await your discovery.",
+      "You know these psalms well. The nuances are starting to come through.",
+      "You know these psalms well. The nuances are starting to come through.",
+      "Great attentiveness to the text. The details of Scripture are revealing themselves.",
+      "Excellent close reading! You are hearing what the psalmists are saying.",
+      "Outstanding mastery of these difficult psalms — especially the darkness of Psalm 88.",
+      "Near-perfect! You have absorbed these songs deeply.",
+      "Perfect! You have heard every word. May they sing in your heart all day."
+    ];
+    document.getElementById('results-title').textContent = titles[score];
+    document.getElementById('results-message').textContent = messages[score];
+
+    // Review list
+    const reviewList = document.getElementById('review-list');
+    for (let i = 1; i <= 10; i++) {
+      const ua = userAnswers[i] || '—';
+      const ca = ANSWERS[i];
+      const isC = ua === ca;
+      const div = document.createElement('div');
+      div.className = 'review-item ' + (isC ? 'r-correct' : 'r-wrong');
+      div.innerHTML = `<div class="review-q">Q${i}. ${QUESTIONS[i]}</div>
+        <div class="review-ans">
+          <span class="${isC ? 'review-correct-lbl' : 'review-wrong-lbl'}">${isC ? '✓ Correct' : '✗ Your answer: ' + ua + ' — ' + (CHOICES[i][ua] || '—')}</span>
+          ${!isC ? `<br><span style="color:#1a5c2a;">Correct: ${ca} — ${CHOICES[i][ca]}</span>` : ''}
+          <br><span style="font-style:italic;color:#5a4020;">${FEEDBACK[i].ref}</span>
+        </div>`;
+      reviewList.appendChild(div);
+    }
+
+    document.getElementById('prog-bar').style.width = '100%';
+    document.getElementById('prog-label').textContent = 'Complete';
+  }
+
+  function resetQuiz() {
+    userAnswers = {};
+    currentQ = 1;
+
+    for (let i = 1; i <= 10; i++) {
+      const block = document.getElementById(`q${i}`);
+      block.classList.remove('active');
+      const btns = block.querySelectorAll('.choice-btn');
+      btns.forEach(b => { b.disabled = false; b.classList.remove('correct','wrong'); });
+      const fb = document.getElementById(`fb${i}`);
+      fb.className = 'feedback';
+      fb.innerHTML = '';
+      document.getElementById(`next${i}`).classList.remove('visible');
+    }
+
+    document.getElementById('results-screen').style.display = 'none';
+    document.getElementById('ring-fill').style.strokeDashoffset = '339.3';
+    document.getElementById('review-list').innerHTML = '';
+    document.getElementById('q1').classList.add('active');
+    document.getElementById('prog-bar').style.width = '10%';
+    document.getElementById('prog-label').textContent = 'Question 1 of 10';
+  }
+</script>
+</body>
+</html>
