@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 119 Bible Recap Quiz — 1 Chronicles 7–10</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 18px;
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.15);
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.3s ease forwards;
+  }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+    color: #1a3d1e;
+    display: block;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.1);
+    border: 1px solid #8b1a1a;
+    color: #5a0e0e;
+    display: block;
+  }
+  .feedback-icon { font-weight: 700; margin-right: 6px; }
+  .feedback-ref {
+    font-style: italic;
+    color: #5a4020;
+    font-size: 0.95rem;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.visible { display: inline-block; }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 22px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.15); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1e1208;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: #9a7a3a;
+    letter-spacing: 0.1em;
+  }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1e1208;
+    margin-bottom: 8px;
+  }
+  .results-message {
+    font-size: 1.08rem;
+    color: #3a2510;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #9a7a3a;
+    margin-bottom: 14px;
+    text-align: left;
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    padding-bottom: 8px;
+  }
+  .review-item {
+    text-align: left;
+    margin-bottom: 14px;
+    padding: 12px 14px;
+    border-radius: 4px;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.1);
+    border-left: 3px solid #1a5c2a;
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.08);
+    border-left: 3px solid #8b1a1a;
+  }
+  .review-q { font-weight: 600; color: #1e1208; margin-bottom: 4px; }
+  .review-ans { font-size: 0.93rem; color: #3a2510; }
+  .review-correct-lbl { color: #1a5c2a; font-weight: 600; }
+  .review-wrong-lbl   { color: #8b1a1a; font-weight: 600; }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .take-again-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  @media (max-width: 520px) {
+    .card { padding: 22px 18px; }
+    .quiz-title { font-size: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- Header -->
+  <div class="quiz-header">
+    <div class="quiz-date">
+      <span class="ornament">✦</span>
+      Wednesday, April 29, 2026 &middot; Day 119
+      <span class="ornament">✦</span>
+    </div>
+    <div class="quiz-title">The Bible Recap — Daily Quiz</div>
+    <div class="passage-tags">
+      <span class="passage-tag">1 Chronicles 7</span>
+      <span class="passage-tag">1 Chronicles 8</span>
+      <span class="passage-tag">1 Chronicles 9</span>
+      <span class="passage-tag">1 Chronicles 10</span>
+    </div>
+    <div><span class="difficulty-badge">Challenging</span></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap"><div class="progress-bar" id="prog-bar"></div></div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- Card -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">In 1 Chronicles 7, which daughter of Ephraim is credited with building three specific cities in the hill country?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(1,'A')"><span class="choice-letter">A</span>Maacah</button>
+        <button class="choice-btn" onclick="answer(1,'B')"><span class="choice-letter">B</span>Dinah</button>
+        <button class="choice-btn" onclick="answer(1,'C')"><span class="choice-letter">C</span>Sheerah</button>
+        <button class="choice-btn" onclick="answer(1,'D')"><span class="choice-letter">D</span>Milcah</button>
+      </div>
+      <div class="feedback" id="fb1"></div>
+      <button class="next-btn" id="next1" onclick="next(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+      </div>
+      <div class="question-text">According to 1 Chronicles 7, why did Ephraim mourn for many days, and what did he name the son born to him afterward — and what does that name signify?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(2,'A')"><span class="choice-letter">A</span>His firstborn Shuthelah died of plague; he named the next son Tahath, meaning "compensation"</button>
+        <button class="choice-btn" onclick="answer(2,'B')"><span class="choice-letter">B</span>His sons Ezer and Elead were killed by men of Gath while raiding livestock; he named the next son Beriah, meaning "in misfortune"</button>
+        <button class="choice-btn" onclick="answer(2,'C')"><span class="choice-letter">C</span>His wife died giving birth; he named the son Zabad, meaning "he has given"</button>
+        <button class="choice-btn" onclick="answer(2,'D')"><span class="choice-letter">D</span>Raiders stole his flocks and slew his servants; he named the son Eleadah, meaning "God has adorned"</button>
+      </div>
+      <div class="feedback" id="fb2"></div>
+      <button class="next-btn" id="next2" onclick="next(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">The genealogy of Ephraim in 1 Chronicles 7 ends by naming which future leader of Israel as one of his descendants?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(3,'A')"><span class="choice-letter">A</span>Caleb son of Jephunneh</button>
+        <button class="choice-btn" onclick="answer(3,'B')"><span class="choice-letter">B</span>Gideon son of Joash</button>
+        <button class="choice-btn" onclick="answer(3,'C')"><span class="choice-letter">C</span>Samuel the prophet</button>
+        <button class="choice-btn" onclick="answer(3,'D')"><span class="choice-letter">D</span>Joshua son of Nun</button>
+      </div>
+      <div class="feedback" id="fb3"></div>
+      <button class="next-btn" id="next3" onclick="next(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">In 1 Chronicles 8:33, the genealogy of Saul traces back through Kish to which named ancestor — making that person Saul's grandfather?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(4,'A')"><span class="choice-letter">A</span>Abiel</button>
+        <button class="choice-btn" onclick="answer(4,'B')"><span class="choice-letter">B</span>Ner</button>
+        <button class="choice-btn" onclick="answer(4,'C')"><span class="choice-letter">C</span>Jeiel</button>
+        <button class="choice-btn" onclick="answer(4,'D')"><span class="choice-letter">D</span>Abner</button>
+      </div>
+      <div class="feedback" id="fb4"></div>
+      <button class="next-btn" id="next4" onclick="next(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+      </div>
+      <div class="question-text">According to 1 Chronicles 9, which tribes are specifically mentioned as the first groups to resettle in Jerusalem after the exile — alongside the priests, Levites, and temple servants?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(5,'A')"><span class="choice-letter">A</span>Judah, Benjamin, and Levi</button>
+        <button class="choice-btn" onclick="answer(5,'B')"><span class="choice-letter">B</span>Judah, Benjamin, Ephraim, and Manasseh</button>
+        <button class="choice-btn" onclick="answer(5,'C')"><span class="choice-letter">C</span>Judah, Simeon, Ephraim, and Gad</button>
+        <button class="choice-btn" onclick="answer(5,'D')"><span class="choice-letter">D</span>Benjamin, Zebulun, Issachar, and Asher</button>
+      </div>
+      <div class="feedback" id="fb5"></div>
+      <button class="next-btn" id="next5" onclick="next(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">In 1 Chronicles 9, which Levite is specifically named as having sole charge of making the flat cakes for the temple?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(6,'A')"><span class="choice-letter">A</span>Obed-edom the gatekeeper</button>
+        <button class="choice-btn" onclick="answer(6,'B')"><span class="choice-letter">B</span>Shallum son of Kore</button>
+        <button class="choice-btn" onclick="answer(6,'C')"><span class="choice-letter">C</span>Mattithiah, firstborn of Shallum the Korahite</button>
+        <button class="choice-btn" onclick="answer(6,'D')"><span class="choice-letter">D</span>Eleazar son of Phinehas</button>
+      </div>
+      <div class="feedback" id="fb6"></div>
+      <button class="next-btn" id="next6" onclick="next(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+      </div>
+      <div class="question-text">According to 1 Chronicles 9, which family of Levites had charge of the showbread (bread of the Presence), preparing it every Sabbath?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(7,'A')"><span class="choice-letter">A</span>The sons of Merari</button>
+        <button class="choice-btn" onclick="answer(7,'B')"><span class="choice-letter">B</span>The sons of Gershom</button>
+        <button class="choice-btn" onclick="answer(7,'C')"><span class="choice-letter">C</span>The sons of Aaron</button>
+        <button class="choice-btn" onclick="answer(7,'D')"><span class="choice-letter">D</span>The kinsmen of the Kohathites</button>
+      </div>
+      <div class="feedback" id="fb7"></div>
+      <button class="next-btn" id="next7" onclick="next(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+      </div>
+      <div class="question-text">In 1 Chronicles 10, after the Philistines found Saul's body on Mount Gilboa, what did they do with his head and his armor?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(8,'A')"><span class="choice-letter">A</span>They buried his armor with military honors and sent his head to the king of Gath</button>
+        <button class="choice-btn" onclick="answer(8,'B')"><span class="choice-letter">B</span>They fastened his head in the temple of Dagon and put his armor in the house of their gods</button>
+        <button class="choice-btn" onclick="answer(8,'C')"><span class="choice-letter">C</span>They displayed both at the city gate of Beth-shan</button>
+        <button class="choice-btn" onclick="answer(8,'D')"><span class="choice-letter">D</span>They sent his armor to the king of Egypt as a tribute gift and mounted his head at Ashkelon</button>
+      </div>
+      <div class="feedback" id="fb8"></div>
+      <button class="next-btn" id="next8" onclick="next(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">When the valiant men of Jabesh-gilead recovered Saul's remains from the Philistines, where exactly did they bury his bones — and what did they do for seven days afterward?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(9,'A')"><span class="choice-letter">A</span>They buried him in Gibeah his hometown and held a feast of remembrance</button>
+        <button class="choice-btn" onclick="answer(9,'B')"><span class="choice-letter">B</span>They buried his bones under the oak in Jabesh and fasted seven days</button>
+        <button class="choice-btn" onclick="answer(9,'C')"><span class="choice-letter">C</span>They buried him in the cave at Machpelah and mourned with lamentation</button>
+        <button class="choice-btn" onclick="answer(9,'D')"><span class="choice-letter">D</span>They interred his bones at the tabernacle in Shiloh and offered burnt offerings</button>
+      </div>
+      <div class="feedback" id="fb9"></div>
+      <button class="next-btn" id="next9" onclick="next(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+      </div>
+      <div class="question-text">In the Chronicler's explicit theological summary at the end of 1 Chronicles 10, what two specific sins does he name as the reason Saul died and the kingdom was transferred to David?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(10,'A')"><span class="choice-letter">A</span>He disobeyed Samuel's command and showed favoritism to his son Jonathan</button>
+        <button class="choice-btn" onclick="answer(10,'B')"><span class="choice-letter">B</span>He offered an unauthorized sacrifice at Gilgal and failed to destroy the Amalekites completely</button>
+        <button class="choice-btn" onclick="answer(10,'C')"><span class="choice-letter">C</span>He broke faith with the LORD by not keeping His command, and he consulted a medium rather than seeking the LORD</button>
+        <button class="choice-btn" onclick="answer(10,'D')"><span class="choice-letter">D</span>He trusted in chariots and foreign alliances and refused to repent when confronted by the prophet</button>
+      </div>
+      <div class="feedback" id="fb10"></div>
+      <button class="next-btn" id="next10" onclick="showResults()">See Results &rarr;</button>
+    </div>
+
+    <!-- Results -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 120 120">
+          <circle class="score-ring-bg" cx="60" cy="60" r="54"/>
+          <circle class="score-ring-fill" id="ring-fill" cx="60" cy="60" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <span class="score-num" id="score-num">0</span>
+          <span class="score-denom">out of 10</span>
+        </div>
+      </div>
+      <div class="results-title" id="results-title"></div>
+      <div class="results-message" id="results-message"></div>
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">&#8635; Take Again</button>
+    </div>
+
+  </div><!-- /.card -->
+</div><!-- /.outer-wrap -->
+
+<script>
+  const ANSWERS = {
+    1: 'C', 2: 'B', 3: 'D', 4: 'B', 5: 'B',
+    6: 'C', 7: 'D', 8: 'B', 9: 'B', 10: 'C'
+  };
+
+  const FEEDBACK = {
+    1: {
+      correct: "Correct! 1 Chronicles 7:24 records: 'His daughter was Sheerah, who built both Lower and Upper Beth-horon, and Uzzen-sheerah.' She is one of the very few women in Scripture credited with founding cities — a remarkable detail buried in the genealogies.",
+      wrong: "The correct answer is C — Sheerah. 1 Chronicles 7:24 says she built Lower Beth-horon, Upper Beth-horon, and Uzzen-sheerah (which bears her name). It is an extraordinary note in the middle of a genealogical list.",
+      ref: "1 Chronicles 7:24"
+    },
+    2: {
+      correct: "Correct! 1 Chronicles 7:21-23 explains that Ezer and Elead were killed by the men of Gath when they came down to raid livestock. 'Ephraim their father mourned many days, and his brothers came to comfort him. And Ephraim went in to his wife, and she conceived and bore a son. And he called his name Beriah, because disaster had befallen his house.'",
+      wrong: "The correct answer is B. According to 1 Chronicles 7:21-23, Ezer and Elead were slain by Gittites during a livestock raid. Ephraim mourned at length, and afterward named his next son Beriah — a name tied to the Hebrew word for 'calamity' or 'misfortune.'",
+      ref: "1 Chronicles 7:21–23"
+    },
+    3: {
+      correct: "Correct! 1 Chronicles 7:27 closes the Ephraim genealogy with 'Non his son, Joshua his son' — linking the great military leader of the conquest directly to the tribe of Ephraim. It is a brief but significant note, grounding Joshua's identity in the genealogical record.",
+      wrong: "The correct answer is D — Joshua son of Nun. 1 Chronicles 7:27 ends the Ephraim section by naming Joshua as a descendant, reminding the reader that one of Israel's greatest leaders came from this troubled tribe.",
+      ref: "1 Chronicles 7:27"
+    },
+    4: {
+      correct: "Correct! 1 Chronicles 8:33 states: 'Ner fathered Kish, Kish fathered Saul.' This makes Ner Saul's grandfather. Abner, the famous general, was also a son of Ner — making him Saul's uncle. The lineage matters for understanding the politics of Saul's court.",
+      wrong: "The correct answer is B — Ner. 1 Chronicles 8:33 traces the line as Ner → Kish → Saul. This is also consistent with 1 Samuel 14:51. Abner son of Ner was Saul's cousin and commander of his army.",
+      ref: "1 Chronicles 8:33"
+    },
+    5: {
+      correct: "Correct! 1 Chronicles 9:3 specifically names 'some of the people of Judah, Benjamin, Ephraim, and Manasseh' as the first settlers in Jerusalem after the exile. The inclusion of Ephraim and Manasseh — northern tribes — signals that Chronicles envisions a reunified all-Israel community.",
+      wrong: "The correct answer is B — Judah, Benjamin, Ephraim, and Manasseh. 1 Chronicles 9:3 deliberately includes northern tribal members among those resettling Jerusalem, reflecting the Chronicler's theological vision of a restored, unified Israel.",
+      ref: "1 Chronicles 9:3"
+    },
+    6: {
+      correct: "Correct! 1 Chronicles 9:31 names Mattithiah specifically: 'Mattithiah, one of the Levites, the firstborn of Shallum the Korahite, was entrusted with making the flat cakes.' This is one of the most precise assignments in the entire temple-service registry.",
+      wrong: "The correct answer is C — Mattithiah, firstborn of Shallum the Korahite. 1 Chronicles 9:31 singles him out by name as the Levite responsible for the flat cakes, a remarkable level of specificity in the Chronicler's cataloguing of temple roles.",
+      ref: "1 Chronicles 9:31"
+    },
+    7: {
+      correct: "Correct! 1 Chronicles 9:32 assigns this duty to the Kohathites: 'Also some of their kinsmen of the Kohathites had charge of the showbread, to prepare it every Sabbath.' The Kohathites carried the most sacred objects of the tabernacle — the ark, the table, and the lampstand — so the assignment of the bread of the Presence to them is consistent.",
+      wrong: "The correct answer is D — the kinsmen of the Kohathites. 1 Chronicles 9:32 specifically assigns the showbread to them for weekly preparation. The Kohathites had a long history of responsibility for the most holy items in Israel's worship.",
+      ref: "1 Chronicles 9:32"
+    },
+    8: {
+      correct: "Correct! 1 Chronicles 10:10 records that the Philistines 'put his armor in the temple of their gods and fastened his head in the temple of Dagon.' What a contrast to Saul's fear that the uncircumcised would abuse him — that is precisely what happened. The parallel account in 1 Samuel 31 also mentions his body fastened to the wall of Beth-shan.",
+      wrong: "The correct answer is B. 1 Chronicles 10:10 says the Philistines fastened Saul's head in the temple of Dagon and stored his armor in the house of their gods. Saul had asked his armor-bearer to kill him specifically to avoid this kind of dishonor from the uncircumcised.",
+      ref: "1 Chronicles 10:10"
+    },
+    9: {
+      correct: "Correct! 1 Chronicles 10:12 records: '...and took away the body of Saul and the bodies of his sons, and brought them to Jabesh. And they buried their bones under the oak in Jabesh and fasted seven days.' The men of Jabesh-gilead had a special loyalty to Saul going back to his first military victory (1 Samuel 11), which makes their honor of him fitting.",
+      wrong: "The correct answer is B. According to 1 Chronicles 10:12, the men of Jabesh-gilead buried Saul's bones under the oak in Jabesh and fasted seven days. Their loyalty to Saul traced back to the beginning of his reign, when he had rescued Jabesh from Nahash the Ammonite.",
+      ref: "1 Chronicles 10:12"
+    },
+    10: {
+      correct: "Correct! 1 Chronicles 10:13-14 gives the Chronicler's explicit verdict: 'So Saul died for his breach of faith. He broke faith with the LORD in that he did not keep the command of the LORD, and also consulted a medium, seeking guidance. He did not seek guidance from the LORD. Therefore the LORD put him to death and turned the kingdom over to David the son of Jesse.' The Chronicler's whole concern is whether Israel's leaders sought God — Saul did not.",
+      wrong: "The correct answer is C. 1 Chronicles 10:13-14 names two failures: breaking faith by not keeping the LORD's command, and consulting a medium instead of seeking the LORD. The Chronicler omits many of the nuances from 1 Samuel and focuses this theological summary sharply on Saul's failure to seek God.",
+      ref: "1 Chronicles 10:13–14"
+    }
+  };
+
+  const QUESTIONS = {
+    1: "In 1 Chronicles 7, which daughter of Ephraim is credited with building three specific cities in the hill country?",
+    2: "According to 1 Chronicles 7, why did Ephraim mourn for many days, and what did he name the son born to him afterward — and what does that name signify?",
+    3: "The genealogy of Ephraim in 1 Chronicles 7 ends by naming which future leader of Israel as one of his descendants?",
+    4: "In 1 Chronicles 8:33, the genealogy of Saul traces back through Kish to which named ancestor — making that person Saul's grandfather?",
+    5: "According to 1 Chronicles 9, which tribes are specifically mentioned as the first groups to resettle in Jerusalem after the exile — alongside the priests, Levites, and temple servants?",
+    6: "In 1 Chronicles 9, which Levite is specifically named as having sole charge of making the flat cakes for the temple?",
+    7: "According to 1 Chronicles 9, which family of Levites had charge of the showbread (bread of the Presence), preparing it every Sabbath?",
+    8: "In 1 Chronicles 10, after the Philistines found Saul's body on Mount Gilboa, what did they do with his head and his armor?",
+    9: "When the valiant men of Jabesh-gilead recovered Saul's remains from the Philistines, where exactly did they bury his bones — and what did they do for seven days afterward?",
+    10: "In the Chronicler's explicit theological summary at the end of 1 Chronicles 10, what two specific sins does he name as the reason Saul died and the kingdom was transferred to David?"
+  };
+
+  const CHOICES = {
+    1: { A: "Maacah", B: "Dinah", C: "Sheerah", D: "Milcah" },
+    2: { A: "His firstborn Shuthelah died of plague; he named the next son Tahath, meaning \"compensation\"", B: "His sons Ezer and Elead were killed by men of Gath while raiding livestock; he named the next son Beriah, meaning \"in misfortune\"", C: "His wife died giving birth; he named the son Zabad, meaning \"he has given\"", D: "Raiders stole his flocks and slew his servants; he named the son Eleadah, meaning \"God has adorned\"" },
+    3: { A: "Caleb son of Jephunneh", B: "Gideon son of Joash", C: "Samuel the prophet", D: "Joshua son of Nun" },
+    4: { A: "Abiel", B: "Ner", C: "Jeiel", D: "Abner" },
+    5: { A: "Judah, Benjamin, and Levi", B: "Judah, Benjamin, Ephraim, and Manasseh", C: "Judah, Simeon, Ephraim, and Gad", D: "Benjamin, Zebulun, Issachar, and Asher" },
+    6: { A: "Obed-edom the gatekeeper", B: "Shallum son of Kore", C: "Mattithiah, firstborn of Shallum the Korahite", D: "Eleazar son of Phinehas" },
+    7: { A: "The sons of Merari", B: "The sons of Gershom", C: "The sons of Aaron", D: "The kinsmen of the Kohathites" },
+    8: { A: "They buried his armor with military honors and sent his head to the king of Gath", B: "They fastened his head in the temple of Dagon and put his armor in the house of their gods", C: "They displayed both at the city gate of Beth-shan", D: "They sent his armor to the king of Egypt as a tribute gift and mounted his head at Ashkelon" },
+    9: { A: "They buried him in Gibeah his hometown and held a feast of remembrance", B: "They buried his bones under the oak in Jabesh and fasted seven days", C: "They buried him in the cave at Machpelah and mourned with lamentation", D: "They interred his bones at the tabernacle in Shiloh and offered burnt offerings" },
+    10: { A: "He disobeyed Samuel's command and showed favoritism to his son Jonathan", B: "He offered an unauthorized sacrifice at Gilgal and failed to destroy the Amalekites completely", C: "He broke faith with the LORD by not keeping His command, and he consulted a medium rather than seeking the LORD", D: "He trusted in chariots and foreign alliances and refused to repent when confronted by the prophet" }
+  };
+
+  let userAnswers = {};
+  let currentQ = 1;
+
+  function answer(qNum, choice) {
+    if (userAnswers[qNum]) return;
+    userAnswers[qNum] = choice;
+
+    const correct = ANSWERS[qNum];
+    const btns = document.querySelectorAll(`#q${qNum} .choice-btn`);
+    const letters = ['A','B','C','D'];
+
+    btns.forEach((btn, idx) => {
+      btn.disabled = true;
+      if (letters[idx] === correct) btn.classList.add('correct');
+      else if (letters[idx] === choice && choice !== correct) btn.classList.add('wrong');
+    });
+
+    const fb = document.getElementById(`fb${qNum}`);
+    const isCorrect = (choice === correct);
+    fb.className = 'feedback ' + (isCorrect ? 'correct-fb' : 'wrong-fb');
+    fb.innerHTML = `<span class="feedback-icon">${isCorrect ? '&#10003;' : '&#10007;'}</span>${isCorrect ? FEEDBACK[qNum].correct : FEEDBACK[qNum].wrong}<span class="feedback-ref">&#8212; ${FEEDBACK[qNum].ref}</span>`;
+
+    document.getElementById(`next${qNum}`).classList.add('visible');
+    updateProgress(qNum);
+  }
+
+  function next(qNum) {
+    document.getElementById(`q${qNum}`).classList.remove('active');
+    const nextQ = qNum + 1;
+    if (nextQ <= 10) {
+      document.getElementById(`q${nextQ}`).classList.add('active');
+      currentQ = nextQ;
+    }
+  }
+
+  function updateProgress(qNum) {
+    const pct = Math.round((qNum / 10) * 100);
+    document.getElementById('prog-bar').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = `Question ${qNum} of 10`;
+  }
+
+  function showResults() {
+    document.getElementById('q10').classList.remove('active');
+    const rs = document.getElementById('results-screen');
+    rs.style.display = 'block';
+
+    let score = 0;
+    for (let i = 1; i <= 10; i++) {
+      if (userAnswers[i] === ANSWERS[i]) score++;
+    }
+
+    document.getElementById('score-num').textContent = score;
+
+    const circumference = 339.3;
+    const offset = circumference - (score / 10) * circumference;
+    setTimeout(() => {
+      document.getElementById('ring-fill').style.strokeDashoffset = offset;
+    }, 100);
+
+    let title, message;
+    if (score === 10) {
+      title = "Perfect Score!";
+      message = "Flawless. Every detail of these genealogies and narratives was at your fingertips — from Sheerah's cities to Saul's two-fold failure. The Word has taken root deeply.";
+    } else if (score >= 8) {
+      title = "Excellent Work!";
+      message = "Strong mastery of 1 Chronicles 7-10. You navigated the genealogies of Ephraim, Benjamin, and the temple servants, and understood the Chronicler's theological verdict on Saul's reign.";
+    } else if (score >= 6) {
+      title = "Well Done!";
+      message = "Good work through some demanding material. The details of who served where, and the Chronicler's sharp theological summary of Saul's death, are worth a second look.";
+    } else if (score >= 4) {
+      title = "Keep Pressing In";
+      message = "These chapters reward close reading. The genealogies are dense but full of surprising gems — like Sheerah the city-builder, Joshua's lineage, and the Kohathites' charge of the showbread.";
+    } else {
+      title = "Don't Be Discouraged";
+      message = "These are challenging chapters, often skimmed for being 'just genealogies.' But the Chronicler hides profound theology here. Read again slowly — the details tell a bigger story of God's faithfulness.";
+    }
+
+    document.getElementById('results-title').textContent = title;
+    document.getElementById('results-message').textContent = message;
+
+    const reviewList = document.getElementById('review-list');
+    reviewList.innerHTML = '';
+    for (let i = 1; i <= 10; i++) {
+      const isCorrect = (userAnswers[i] === ANSWERS[i]);
+      const item = document.createElement('div');
+      item.className = 'review-item ' + (isCorrect ? 'r-correct' : 'r-wrong');
+      const choiceText = CHOICES[i][userAnswers[i]] || '(no answer)';
+      const correctText = CHOICES[i][ANSWERS[i]];
+      item.innerHTML = `<div class="review-q">Q${i}: ${QUESTIONS[i]}</div>
+        <div class="review-ans">
+          ${isCorrect
+            ? `<span class="review-correct-lbl">&#10003; Correct:</span> ${choiceText}`
+            : `<span class="review-wrong-lbl">&#10007; Your answer:</span> ${choiceText}<br><span class="review-correct-lbl">Correct:</span> ${correctText}`
+          }
+        </div>`;
+      reviewList.appendChild(item);
+    }
+  }
+
+  function resetQuiz() {
+    userAnswers = {};
+    currentQ = 1;
+    document.getElementById('results-screen').style.display = 'none';
+    for (let i = 1; i <= 10; i++) {
+      const block = document.getElementById(`q${i}`);
+      block.classList.remove('active');
+      block.querySelectorAll('.choice-btn').forEach(btn => {
+        btn.disabled = false;
+        btn.classList.remove('correct','wrong');
+      });
+      const fb = document.getElementById(`fb${i}`);
+      fb.className = 'feedback';
+      fb.innerHTML = '';
+      document.getElementById(`next${i}`).classList.remove('visible');
+    }
+    document.getElementById('q1').classList.add('active');
+    document.getElementById('prog-bar').style.width = '10%';
+    document.getElementById('prog-label').textContent = 'Question 1 of 10';
+    document.getElementById('ring-fill').style.strokeDashoffset = '339.3';
+  }
+</script>
+</body>
+</html>
