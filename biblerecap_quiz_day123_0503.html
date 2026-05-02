@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 123 Bible Recap Quiz — Psalms 106–107</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 18px;
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.15);
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.3s ease forwards;
+  }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+    color: #1a3d1e;
+    display: block;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.1);
+    border: 1px solid #8b1a1a;
+    color: #5a0e0e;
+    display: block;
+  }
+  .feedback-icon { font-weight: 700; margin-right: 6px; }
+  .feedback-ref {
+    font-style: italic;
+    color: #5a4020;
+    font-size: 0.95rem;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.visible { display: inline-block; }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 22px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.15); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1e1208;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: #9a7a3a;
+    letter-spacing: 0.1em;
+  }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1e1208;
+    margin-bottom: 8px;
+  }
+  .results-message {
+    font-size: 1.08rem;
+    color: #3a2510;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #9a7a3a;
+    margin-bottom: 14px;
+    text-align: left;
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    padding-bottom: 8px;
+  }
+  .review-item {
+    text-align: left;
+    margin-bottom: 14px;
+    padding: 12px 14px;
+    border-radius: 4px;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.1);
+    border-left: 3px solid #1a5c2a;
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.08);
+    border-left: 3px solid #8b1a1a;
+  }
+  .review-q { font-weight: 600; color: #1e1208; margin-bottom: 4px; }
+  .review-ans { font-size: 0.93rem; color: #3a2510; }
+  .review-correct-lbl { color: #1a5c2a; font-weight: 600; }
+  .review-wrong-lbl   { color: #8b1a1a; font-weight: 600; }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .take-again-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  @media (max-width: 520px) {
+    .card { padding: 22px 18px; }
+    .quiz-title { font-size: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- Header -->
+  <div class="quiz-header">
+    <div class="quiz-date">
+      <span class="ornament">✦</span>
+      Sunday, May 3, 2026 &middot; Day 123
+      <span class="ornament">✦</span>
+    </div>
+    <div class="quiz-title">The Bible Recap &mdash; Daily Quiz</div>
+    <div class="passage-tags">
+      <span class="passage-tag">Psalm 106</span>
+      <span class="passage-tag">Psalm 107</span>
+    </div>
+    <div><span class="difficulty-badge">Challenging</span></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap"><div class="progress-bar" id="prog-bar"></div></div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- Card -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">Psalm 106 recounts the crossing of the Red Sea in verse 9 using imagery that differs from the familiar Exodus account. Which of the following best matches the exact language of Psalm 106:9?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(1,'A')"><span class="choice-letter">A</span>He divided the sea so that the waters stood like a wall on their right hand and on their left</button>
+        <button class="choice-btn" onclick="answer(1,'B')"><span class="choice-letter">B</span>He caused a great east wind to blow all night, and the sea parted, and the people walked through on dry ground</button>
+        <button class="choice-btn" onclick="answer(1,'C')"><span class="choice-letter">C</span>He rebuked the Red Sea, and it became dry, and he led them through the deep as through a desert</button>
+        <button class="choice-btn" onclick="answer(1,'D')"><span class="choice-letter">D</span>He stretched out his hand over the sea and the waters were divided, opening a corridor of dry ground</button>
+      </div>
+      <div class="feedback" id="fb1"></div>
+      <button class="next-btn" id="next1" onclick="next(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+      </div>
+      <div class="question-text">After recording that the Israelites "believed his words" and "sang his praise," Psalm 106 reports they "soon forgot his works." What does the psalm say the people did in response to this forgetting, and what was the specific consequence described in verse 15?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(2,'A')"><span class="choice-letter">A</span>They grumbled against Moses and demanded to return to Egypt; God struck their leaders with lightning and plague</button>
+        <button class="choice-btn" onclick="answer(2,'B')"><span class="choice-letter">B</span>They made a golden calf and bowed down to it; God threatened to destroy the nation but relented when Moses interceded</button>
+        <button class="choice-btn" onclick="answer(2,'C')"><span class="choice-letter">C</span>They had a wanton craving in the wilderness and put God to the test; he gave them what they asked but sent a wasting disease among them</button>
+        <button class="choice-btn" onclick="answer(2,'D')"><span class="choice-letter">D</span>They refused to enter Canaan and feared the giants; God condemned the generation to die in the wilderness over forty years</button>
+      </div>
+      <div class="feedback" id="fb2"></div>
+      <button class="next-btn" id="next2" onclick="next(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">Psalm 106:20 contains a verse Paul explicitly quotes in Romans 1:23 as a type of all pagan idolatry. What precise exchange does Psalm 106:20 say Israel made at Horeb?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(3,'A')"><span class="choice-letter">A</span>They traded their calling as a holy nation for the customs and practices of the surrounding Gentile peoples</button>
+        <button class="choice-btn" onclick="answer(3,'B')"><span class="choice-letter">B</span>They exchanged the glory of God for the image of an ox that eats grass</button>
+        <button class="choice-btn" onclick="answer(3,'C')"><span class="choice-letter">C</span>They swapped the truth of God for a lie and worshiped and served the creature rather than the Creator</button>
+        <button class="choice-btn" onclick="answer(3,'D')"><span class="choice-letter">D</span>They gave up their inheritance in the land for the temporary pleasures of foreign worship at the high places</button>
+      </div>
+      <div class="feedback" id="fb3"></div>
+      <button class="next-btn" id="next3" onclick="next(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+      </div>
+      <div class="question-text">When Psalm 106 recounts the Baal of Peor episode, a plague is raging among the people. Who stopped the plague, and how does the psalm describe the theological significance of that act (vv. 30–31)?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(4,'A')"><span class="choice-letter">A</span>Moses fell on his face before the tabernacle and interceded; this was credited to him as an act of priestly atonement for the congregation</button>
+        <button class="choice-btn" onclick="answer(4,'B')"><span class="choice-letter">B</span>Aaron took his censer and stood between the living and the dead; the plague was stopped and his faithfulness was counted as an offering</button>
+        <button class="choice-btn" onclick="answer(4,'C')"><span class="choice-letter">C</span>The elders of Israel assembled in sackcloth and fasted until the LORD relented; their repentance was accepted as a ransom for the people</button>
+        <button class="choice-btn" onclick="answer(4,'D')"><span class="choice-letter">D</span>Phinehas stood up and intervened, the plague was stayed, and it was counted to him as righteousness from generation to generation forever</button>
+      </div>
+      <div class="feedback" id="fb4"></div>
+      <button class="next-btn" id="next4" onclick="next(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">Psalm 106:32–33 recounts the episode at the waters of Meribah. Rather than describing the water miracle itself, on what effect of Israel's rebellion does the psalmist focus — and what does Moses do as a result?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(5,'A')"><span class="choice-letter">A</span>Moses doubted God's power before the people; God withheld the water temporarily to expose Moses's lack of faith</button>
+        <button class="choice-btn" onclick="answer(5,'B')"><span class="choice-letter">B</span>The people's rebellion made Moses's spirit bitter, and he spoke rashly with his lips</button>
+        <button class="choice-btn" onclick="answer(5,'C')"><span class="choice-letter">C</span>Moses struck the rock in anger rather than speaking to it; God withdrew the miracle and left them without water</button>
+        <button class="choice-btn" onclick="answer(5,'D')"><span class="choice-letter">D</span>The people blamed Moses for leading them into the desert; Moses threatened them in God's name and was publicly rebuked</button>
+      </div>
+      <div class="feedback" id="fb5"></div>
+      <button class="next-btn" id="next5" onclick="next(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+      </div>
+      <div class="question-text">In Psalm 107's second deliverance scene (vv. 10–16), prisoners sit in "darkness and in the shadow of death, bound in affliction and in irons." Why does the psalm say they were in this condition?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(6,'A')"><span class="choice-letter">A</span>They had been captured by enemies when they refused to fight and had fled from the battle in cowardice</button>
+        <button class="choice-btn" onclick="answer(6,'B')"><span class="choice-letter">B</span>They had accumulated debts they could not repay and were held in a foreign creditor's prison</button>
+        <button class="choice-btn" onclick="answer(6,'C')"><span class="choice-letter">C</span>They had rebelled against the words of God and spurned the counsel of the Most High</button>
+        <button class="choice-btn" onclick="answer(6,'D')"><span class="choice-letter">D</span>Foreign kings had seized them as political hostages to secure their nation's compliance with tribute demands</button>
+      </div>
+      <div class="feedback" id="fb6"></div>
+      <button class="next-btn" id="next6" onclick="next(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">In the third deliverance scene of Psalm 107 (vv. 17–22), people who "suffer affliction through their sinful ways" cry to the LORD. What striking phrase does verse 20 use to describe how God healed them — a phrase the early church would later apply to Christ?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(7,'A')"><span class="choice-letter">A</span>He covered them with his hand and breathed life back into their failing bodies, and they were restored</button>
+        <button class="choice-btn" onclick="answer(7,'B')"><span class="choice-letter">B</span>He sent out his word and healed them, and delivered them from their destruction</button>
+        <button class="choice-btn" onclick="answer(7,'C')"><span class="choice-letter">C</span>He commanded the fever to depart and restored their strength, body and soul, to the full</button>
+        <button class="choice-btn" onclick="answer(7,'D')"><span class="choice-letter">D</span>He went down among them and bore their afflictions so they might be made whole and live</button>
+      </div>
+      <div class="feedback" id="fb7"></div>
+      <button class="next-btn" id="next7" onclick="next(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+      </div>
+      <div class="question-text">In Psalm 107's fourth deliverance scene (vv. 23–32), sailors on a storm-tossed sea cry out to God. What vivid physical image does verse 27 use to describe the sailors' terror just before they cry to the LORD?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(8,'A')"><span class="choice-letter">A</span>They wept aloud and threw their cargo and equipment overboard to lighten the vessel in the raging sea</button>
+        <button class="choice-btn" onclick="answer(8,'B')"><span class="choice-letter">B</span>They reeled and staggered like drunken men and were at their wits' end</button>
+        <button class="choice-btn" onclick="answer(8,'C')"><span class="choice-letter">C</span>They clutched the ropes and mast and were swept off their feet by the crashing and towering waves</button>
+        <button class="choice-btn" onclick="answer(8,'D')"><span class="choice-letter">D</span>They fell to the deck and cried out to every god they knew, but no one answered them in their distress</button>
+      </div>
+      <div class="feedback" id="fb8"></div>
+      <button class="next-btn" id="next8" onclick="next(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">In the closing reversal-poem of Psalm 107 (vv. 33–42), the psalmist describes God's sovereignty over human fortunes. What contrasting fates does he assign to "princes" and to "the needy" in verses 40–41?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(9,'A')"><span class="choice-letter">A</span>Princes are stripped of power and scattered, while the needy are elevated to thrones and given honor in the city gate</button>
+        <button class="choice-btn" onclick="answer(9,'B')"><span class="choice-letter">B</span>Princes are silenced in affliction and their cities left desolate, while the needy are made to flourish like a well-watered garden</button>
+        <button class="choice-btn" onclick="answer(9,'C')"><span class="choice-letter">C</span>He pours contempt on princes and makes them wander in trackless wastes, but raises up the needy out of affliction and makes their families like flocks</button>
+        <button class="choice-btn" onclick="answer(9,'D')"><span class="choice-letter">D</span>Princes who oppress are cut off by sudden plague, while the needy who trust in God receive the inheritance of the land</button>
+      </div>
+      <div class="feedback" id="fb9"></div>
+      <button class="next-btn" id="next9" onclick="next(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+      </div>
+      <div class="question-text">Psalm 107 closes with a single wisdom verse (v. 43) that ties together the psalm's entire meditation on God's hesed. What does the verse say the wise person attends to and considers?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(10,'A')"><span class="choice-letter">A</span>The ways of God in history, who raises up the poor and brings down the mighty from their thrones in every generation</button>
+        <button class="choice-btn" onclick="answer(10,'B')"><span class="choice-letter">B</span>The covenant of the LORD, which endures from generation to generation and is never forgotten by God</button>
+        <button class="choice-btn" onclick="answer(10,'C')"><span class="choice-letter">C</span>The steadfast love of the LORD</button>
+        <button class="choice-btn" onclick="answer(10,'D')"><span class="choice-letter">D</span>The mighty works of God which he has done for the redeemed since the days of the exodus from Egypt</button>
+      </div>
+      <div class="feedback" id="fb10"></div>
+      <button class="next-btn" id="next10" onclick="showResults()">See Results &rarr;</button>
+    </div>
+
+    <!-- Results -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 120 120">
+          <circle class="score-ring-bg" cx="60" cy="60" r="54"/>
+          <circle class="score-ring-fill" id="ring-fill" cx="60" cy="60" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <span class="score-num" id="score-num">0</span>
+          <span class="score-denom">out of 10</span>
+        </div>
+      </div>
+      <div class="results-title" id="results-title"></div>
+      <div class="results-message" id="results-message"></div>
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">&#8635; Take Again</button>
+    </div>
+
+  </div><!-- /.card -->
+</div><!-- /.outer-wrap -->
+
+<script>
+  const ANSWERS = {
+    1: 'C', 2: 'C', 3: 'B', 4: 'D', 5: 'B',
+    6: 'C', 7: 'B', 8: 'B', 9: 'C', 10: 'C'
+  };
+
+  const FEEDBACK = {
+    1: {
+      correct: "Correct! Psalm 106:9 says: 'He rebuked the Red Sea, and it became dry, and he led them through the deep as through a desert.' The verb 'rebuked' is striking — it is divine command, not mechanism. The imagery of walking through 'the deep as through a desert' echoes Israel's later hope of a new exodus through barren places.",
+      wrong: "The correct answer is C. Psalm 106:9 uses the language of rebuke rather than division: 'He rebuked the Red Sea, and it became dry, and he led them through the deep as through a desert.' The psalm focuses on God's authority over creation — a rebuke suffices — and uses the phrase 'as through a desert' rather than walls of water.",
+      ref: "Psalm 106:9"
+    },
+    2: {
+      correct: "Correct! Psalm 106:13-15 reads: 'But they soon forgot his works; they did not wait for his counsel. But they had a wanton craving in the wilderness, and put God to the test in the desert; he gave them what they asked, but sent a wasting disease among them.' God answered the craving — but at lethal cost. Giving people what they demand, when they demand it in faithless impatience, is not always a blessing.",
+      wrong: "The correct answer is C. Psalm 106:13-15 records that after their initial faith the people craved and tested God in the wilderness. He gave them what they asked, 'but sent a wasting disease among them' (literally 'leanness into their soul' in many translations). The other incidents in the options all occur later in the psalm's catalogue.",
+      ref: "Psalm 106:13–15"
+    },
+    3: {
+      correct: "Correct! Psalm 106:20 says: 'They exchanged the glory of God for the image of an ox that eats grass.' Paul cites this verse almost verbatim in Romans 1:23, expanding it to describe all of humanity's idolatrous exchange. The absurdity the psalmist highlights — trading the living God's glory for a grass-eating ox — is the point Paul drives home.",
+      wrong: "The correct answer is B. Psalm 106:20 reads: 'They exchanged the glory of God for the image of an ox that eats grass.' Option C sounds like Romans 1:25, which is Paul's own commentary on the exchange, not the Psalm's language itself. The psalmist's phrase about a grass-eating ox captures the sheer absurdity of Israel's idolatry.",
+      ref: "Psalm 106:20 (cf. Romans 1:23)"
+    },
+    4: {
+      correct: "Correct! Psalm 106:30-31 records: 'Then Phinehas stood up and intervened, and the plague was stayed. And that was counted to him as righteousness from generation to generation forever.' The same forensic language used of Abraham's faith ('counted as righteousness') is applied here to Phinehas's zeal — an act of covenant faithfulness that credited righteousness to him permanently in the memory of Israel.",
+      wrong: "The correct answer is D — Phinehas. Psalm 106:30-31 singles out Phinehas's intervention as stopping the plague, and then uses the remarkable language of it being 'counted to him as righteousness from generation to generation forever.' This is the same vocabulary as Abraham's faith in Genesis 15:6, applied now to an act of covenant zeal.",
+      ref: "Psalm 106:30–31"
+    },
+    5: {
+      correct: "Correct! Psalm 106:32-33 focuses not on the water itself but on what the people's rebellion did to Moses: 'They angered him at the waters of Meribah, and it went ill with Moses on their account, for they made his spirit bitter, and he spoke rashly with his lips.' The psalmist places the moral weight of Moses's failure on the people's provocation — a notable interpretive move that partially exculpates Moses while condemning Israel.",
+      wrong: "The correct answer is B. Psalm 106:32-33 focuses on what Israel's rebellion did to Moses internally: 'they made his spirit bitter, and he spoke rashly with his lips.' The psalm does not describe Moses striking the rock here — it focuses on the people's effect on Moses's spirit, making a subtle theological point about how one person's sin can entangle another.",
+      ref: "Psalm 106:32–33"
+    },
+    6: {
+      correct: "Correct! Psalm 107:11 explains the prisoners' condition: 'for they had rebelled against the words of God and spurned the counsel of the Most High.' Their captivity is not random misfortune but the consequence of defying God's word. The psalm does not sentimentalize suffering — it names sin as the root — while still depicting God as the deliverer who hears their cry.",
+      wrong: "The correct answer is C. Psalm 107:11 says the prisoners were bound 'for they had rebelled against the words of God and spurned the counsel of the Most High.' This is the psalm's consistent pattern: the distress is connected to human failure, yet God delivers those who cry out from within the consequences of their own rebellion.",
+      ref: "Psalm 107:11"
+    },
+    7: {
+      correct: "Correct! Psalm 107:20 says: 'He sent out his word and healed them, and delivered them from their destruction.' The phrase 'sent out his word' anticipates the Prologue of John's Gospel — the Word who was sent to heal and deliver. The early church read this verse as a type of Christ, the living Word who came to deliver humanity from destruction.",
+      wrong: "The correct answer is B. Psalm 107:20 uses the striking phrase: 'He sent out his word and healed them, and delivered them from their destruction.' This is the only place in these scenes where God's mode of action is described so theologically — not a hand or an angel but his word going forth to heal. The early church naturally connected this to Christ as the Word of God.",
+      ref: "Psalm 107:20"
+    },
+    8: {
+      correct: "Correct! Psalm 107:27 says the sailors 'reeled and staggered like drunken men and were at their wits' end.' The phrase 'at their wits' end' has passed into common English from this very verse. The comparison to drunkenness captures disorientation, helplessness, and loss of control — the moment just before they cry to God.",
+      wrong: "The correct answer is B. Psalm 107:27 describes the sailors reeling and staggering 'like drunken men' and being 'at their wits' end' — one of the most vivid images in the Psalter. The expression 'at their wits' end' is a direct English borrowing from this verse (KJV). It is the image of total human helplessness just before divine rescue.",
+      ref: "Psalm 107:27"
+    },
+    9: {
+      correct: "Correct! Psalm 107:40-41 reads: 'He pours contempt on princes and makes them wander in trackless wastes; but he raises up the needy out of affliction and makes their families like flocks.' The contrast is stark — princes wander homeless in wilderness while the poor multiply like flocks. This reversal theme runs through the Psalter and reaches its fullest expression in the Magnificat.",
+      wrong: "The correct answer is C. Psalm 107:40-41 says God 'pours contempt on princes and makes them wander in trackless wastes' while he 'raises up the needy out of affliction and makes their families like flocks.' The specific images of 'trackless wastes' (the desolate wandering) and 'families like flocks' (the multiplication of the poor) are what close reading reveals.",
+      ref: "Psalm 107:40–41"
+    },
+    10: {
+      correct: "Correct! Psalm 107:43 closes: 'Whoever is wise, let him attend to these things; let them consider the steadfast love of the LORD.' The Hebrew word here is hesed — the covenant love that runs like a refrain through the entire psalm ('Oh give thanks to the LORD... for his steadfast love endures forever'; the fourfold refrain). All wisdom, the psalmist says, leads back to meditating on that love.",
+      wrong: "The correct answer is C — the steadfast love of the LORD (Hebrew: hesed). Psalm 107:43 says: 'Whoever is wise, let him attend to these things; let them consider the steadfast love of the LORD.' The word hesed is the heartbeat of Psalm 107, repeated in the opening verse and the four refrains. The psalm ends by making hesed the object of wise reflection.",
+      ref: "Psalm 107:43"
+    }
+  };
+
+  const QUESTIONS = {
+    1: "Psalm 106 recounts the crossing of the Red Sea in verse 9 using imagery that differs from the familiar Exodus account. Which of the following best matches the exact language of Psalm 106:9?",
+    2: "After recording that the Israelites 'believed his words' and 'sang his praise,' Psalm 106 reports they 'soon forgot his works.' What does the psalm say the people did in response to this forgetting, and what was the specific consequence described in verse 15?",
+    3: "Psalm 106:20 contains a verse Paul explicitly quotes in Romans 1:23 as a type of all pagan idolatry. What precise exchange does Psalm 106:20 say Israel made at Horeb?",
+    4: "When Psalm 106 recounts the Baal of Peor episode, a plague is raging among the people. Who stopped the plague, and how does the psalm describe the theological significance of that act (vv. 30–31)?",
+    5: "Psalm 106:32–33 recounts the episode at the waters of Meribah. Rather than describing the water miracle itself, on what effect of Israel's rebellion does the psalmist focus — and what does Moses do as a result?",
+    6: "In Psalm 107's second deliverance scene (vv. 10–16), prisoners sit in 'darkness and in the shadow of death, bound in affliction and in irons.' Why does the psalm say they were in this condition?",
+    7: "In the third deliverance scene of Psalm 107 (vv. 17–22), people who 'suffer affliction through their sinful ways' cry to the LORD. What striking phrase does verse 20 use to describe how God healed them — a phrase the early church would later apply to Christ?",
+    8: "In Psalm 107's fourth deliverance scene (vv. 23–32), sailors on a storm-tossed sea cry out to God. What vivid physical image does verse 27 use to describe the sailors' terror just before they cry to the LORD?",
+    9: "In the closing reversal-poem of Psalm 107 (vv. 33–42), the psalmist describes God's sovereignty over human fortunes. What contrasting fates does he assign to 'princes' and to 'the needy' in verses 40–41?",
+    10: "Psalm 107 closes with a single wisdom verse (v. 43) that ties together the psalm's entire meditation on God's hesed. What does the verse say the wise person attends to and considers?"
+  };
+
+  const CHOICES = {
+    1: { A: "He divided the sea so that the waters stood like a wall on their right hand and on their left", B: "He caused a great east wind to blow all night, and the sea parted, and the people walked through on dry ground", C: "He rebuked the Red Sea, and it became dry, and he led them through the deep as through a desert", D: "He stretched out his hand over the sea and the waters were divided, opening a corridor of dry ground" },
+    2: { A: "They grumbled against Moses and demanded to return to Egypt; God struck their leaders with lightning and plague", B: "They made a golden calf and bowed down to it; God threatened to destroy the nation but relented when Moses interceded", C: "They had a wanton craving in the wilderness and put God to the test; he gave them what they asked but sent a wasting disease among them", D: "They refused to enter Canaan and feared the giants; God condemned the generation to die in the wilderness over forty years" },
+    3: { A: "They traded their calling as a holy nation for the customs and practices of the surrounding Gentile peoples", B: "They exchanged the glory of God for the image of an ox that eats grass", C: "They swapped the truth of God for a lie and worshiped and served the creature rather than the Creator", D: "They gave up their inheritance in the land for the temporary pleasures of foreign worship at the high places" },
+    4: { A: "Moses fell on his face before the tabernacle and interceded; this was credited to him as an act of priestly atonement for the congregation", B: "Aaron took his censer and stood between the living and the dead; the plague was stopped and his faithfulness was counted as an offering", C: "The elders of Israel assembled in sackcloth and fasted until the LORD relented; their repentance was accepted as a ransom for the people", D: "Phinehas stood up and intervened, the plague was stayed, and it was counted to him as righteousness from generation to generation forever" },
+    5: { A: "Moses doubted God's power before the people; God withheld the water temporarily to expose Moses's lack of faith", B: "The people's rebellion made Moses's spirit bitter, and he spoke rashly with his lips", C: "Moses struck the rock in anger rather than speaking to it; God withdrew the miracle and left them without water", D: "The people blamed Moses for leading them into the desert; Moses threatened them in God's name and was publicly rebuked" },
+    6: { A: "They had been captured by enemies when they refused to fight and had fled from the battle in cowardice", B: "They had accumulated debts they could not repay and were held in a foreign creditor's prison", C: "They had rebelled against the words of God and spurned the counsel of the Most High", D: "Foreign kings had seized them as political hostages to secure their nation's compliance with tribute demands" },
+    7: { A: "He covered them with his hand and breathed life back into their failing bodies, and they were restored", B: "He sent out his word and healed them, and delivered them from their destruction", C: "He commanded the fever to depart and restored their strength, body and soul, to the full", D: "He went down among them and bore their afflictions so they might be made whole and live" },
+    8: { A: "They wept aloud and threw their cargo and equipment overboard to lighten the vessel in the raging sea", B: "They reeled and staggered like drunken men and were at their wits' end", C: "They clutched the ropes and mast and were swept off their feet by the crashing and towering waves", D: "They fell to the deck and cried out to every god they knew, but no one answered them in their distress" },
+    9: { A: "Princes are stripped of power and scattered, while the needy are elevated to thrones and given honor in the city gate", B: "Princes are silenced in affliction and their cities left desolate, while the needy are made to flourish like a well-watered garden", C: "He pours contempt on princes and makes them wander in trackless wastes, but raises up the needy out of affliction and makes their families like flocks", D: "Princes who oppress are cut off by sudden plague, while the needy who trust in God receive the inheritance of the land" },
+    10: { A: "The ways of God in history, who raises up the poor and brings down the mighty from their thrones in every generation", B: "The covenant of the LORD, which endures from generation to generation and is never forgotten by God", C: "The steadfast love of the LORD", D: "The mighty works of God which he has done for the redeemed since the days of the exodus from Egypt" }
+  };
+
+  let userAnswers = {};
+  let currentQ = 1;
+
+  function answer(qNum, choice) {
+    if (userAnswers[qNum]) return;
+    userAnswers[qNum] = choice;
+
+    const correct = ANSWERS[qNum];
+    const btns = document.querySelectorAll('#q' + qNum + ' .choice-btn');
+    const letters = ['A','B','C','D'];
+
+    btns.forEach(function(btn, idx) {
+      btn.disabled = true;
+      if (letters[idx] === correct) btn.classList.add('correct');
+      else if (letters[idx] === choice && choice !== correct) btn.classList.add('wrong');
+    });
+
+    const fb = document.getElementById('fb' + qNum);
+    const isCorrect = (choice === correct);
+    fb.className = 'feedback ' + (isCorrect ? 'correct-fb' : 'wrong-fb');
+    fb.innerHTML = '<span class="feedback-icon">' + (isCorrect ? '&#10003;' : '&#10007;') + '</span>' +
+      (isCorrect ? FEEDBACK[qNum].correct : FEEDBACK[qNum].wrong) +
+      '<span class="feedback-ref">&mdash; ' + FEEDBACK[qNum].ref + '</span>';
+
+    document.getElementById('next' + qNum).classList.add('visible');
+    updateProgress(qNum);
+  }
+
+  function next(qNum) {
+    document.getElementById('q' + qNum).classList.remove('active');
+    const nextQ = qNum + 1;
+    if (nextQ <= 10) {
+      document.getElementById('q' + nextQ).classList.add('active');
+      currentQ = nextQ;
+    }
+  }
+
+  function updateProgress(qNum) {
+    const pct = Math.round((qNum / 10) * 100);
+    document.getElementById('prog-bar').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = 'Question ' + qNum + ' of 10';
+  }
+
+  function showResults() {
+    document.getElementById('q10').classList.remove('active');
+    const rs = document.getElementById('results-screen');
+    rs.style.display = 'block';
+
+    let score = 0;
+    for (let i = 1; i <= 10; i++) {
+      if (userAnswers[i] === ANSWERS[i]) score++;
+    }
+
+    document.getElementById('score-num').textContent = score;
+
+    const circumference = 339.3;
+    const offset = circumference - (score / 10) * circumference;
+    setTimeout(function() {
+      document.getElementById('ring-fill').style.strokeDashoffset = offset;
+    }, 100);
+
+    let title, message;
+    if (score === 10) {
+      title = "Perfect Score!";
+      message = "Flawless. Every detail of these two great Psalms was at your fingertips — from the exact language of the Red Sea crossing to the sailors at their wits' end to the final meditation on hesed. The Word has taken root deeply.";
+    } else if (score >= 8) {
+      title = "Excellent Work!";
+      message = "Strong mastery of Psalms 106 and 107. You navigated Israel's confession of sin, the intervention of Phinehas, the four deliverance scenes, and the psalmist's closing wisdom with accuracy and care.";
+    } else if (score >= 6) {
+      title = "Well Done!";
+      message = "Good work through rich material. These psalms reward close reading — the precise phrase God uses to heal, the exact reason the prisoners are bound, the specific contrast between princes and the needy are worth another pass.";
+    } else if (score >= 4) {
+      title = "Keep Pressing In";
+      message = "These psalms are dense with theological precision. The language of exchange in Psalm 106:20, the 'sent out his word' in 107:20, and the wisdom conclusion in 107:43 are worth memorizing and meditating on slowly.";
+    } else {
+      title = "Don't Be Discouraged";
+      message = "Psalms 106 and 107 are among the richest in the Psalter — historical panorama and poetic precision in equal measure. Read them again slowly, noting the fourfold refrain and the steady drumbeat of hesed. The details will come.";
+    }
+
+    document.getElementById('results-title').textContent = title;
+    document.getElementById('results-message').textContent = message;
+
+    const reviewList = document.getElementById('review-list');
+    reviewList.innerHTML = '';
+    for (let i = 1; i <= 10; i++) {
+      const isCorrect = (userAnswers[i] === ANSWERS[i]);
+      const item = document.createElement('div');
+      item.className = 'review-item ' + (isCorrect ? 'r-correct' : 'r-wrong');
+      const choiceText = CHOICES[i][userAnswers[i]] || '(no answer)';
+      const correctText = CHOICES[i][ANSWERS[i]];
+      item.innerHTML = '<div class="review-q">Q' + i + ': ' + QUESTIONS[i] + '</div>' +
+        '<div class="review-ans">' +
+        (isCorrect
+          ? '<span class="review-correct-lbl">&#10003; Correct:</span> ' + choiceText
+          : '<span class="review-wrong-lbl">&#10007; Your answer:</span> ' + choiceText + '<br><span class="review-correct-lbl">Correct:</span> ' + correctText
+        ) +
+        '</div>';
+      reviewList.appendChild(item);
+    }
+  }
+
+  function resetQuiz() {
+    userAnswers = {};
+    currentQ = 1;
+    document.getElementById('results-screen').style.display = 'none';
+    for (let i = 1; i <= 10; i++) {
+      const block = document.getElementById('q' + i);
+      block.classList.remove('active');
+      block.querySelectorAll('.choice-btn').forEach(function(btn) {
+        btn.disabled = false;
+        btn.classList.remove('correct','wrong');
+      });
+      const fb = document.getElementById('fb' + i);
+      fb.className = 'feedback';
+      fb.innerHTML = '';
+      document.getElementById('next' + i).classList.remove('visible');
+    }
+    document.getElementById('q1').classList.add('active');
+    document.getElementById('prog-bar').style.width = '10%';
+    document.getElementById('prog-label').textContent = 'Question 1 of 10';
+    document.getElementById('ring-fill').style.strokeDashoffset = '339.3';
+  }
+</script>
+</body>
+</html>
