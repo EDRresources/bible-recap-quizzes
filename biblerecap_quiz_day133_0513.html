@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 133 Bible Recap Quiz — 2 Samuel 11–12, 1 Chronicles 20</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 18px;
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.15);
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.3s ease forwards;
+  }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+    color: #1a3d1e;
+    display: block;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.1);
+    border: 1px solid #8b1a1a;
+    color: #5a0e0e;
+    display: block;
+  }
+  .feedback-icon { font-weight: 700; margin-right: 6px; }
+  .feedback-ref {
+    font-style: italic;
+    color: #5a4020;
+    font-size: 0.95rem;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.visible { display: inline-block; }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 22px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.15); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1e1208;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: #9a7a3a;
+    letter-spacing: 0.1em;
+  }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1e1208;
+    margin-bottom: 8px;
+  }
+  .results-message {
+    font-size: 1.08rem;
+    color: #3a2510;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #9a7a3a;
+    margin-bottom: 14px;
+    text-align: left;
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    padding-bottom: 8px;
+  }
+  .review-item {
+    text-align: left;
+    margin-bottom: 14px;
+    padding: 12px 14px;
+    border-radius: 4px;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.1);
+    border-left: 3px solid #1a5c2a;
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.08);
+    border-left: 3px solid #8b1a1a;
+  }
+  .review-q { font-weight: 600; color: #1e1208; margin-bottom: 4px; }
+  .review-ans { font-size: 0.93rem; color: #3a2510; }
+  .review-correct-lbl { color: #1a5c2a; font-weight: 600; }
+  .review-wrong-lbl   { color: #8b1a1a; font-weight: 600; }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .take-again-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  @media (max-width: 520px) {
+    .card { padding: 22px 18px; }
+    .quiz-title { font-size: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- Header -->
+  <div class="quiz-header">
+    <div class="quiz-date">
+      <span class="ornament">✦</span>
+      Wednesday, May 13, 2026 &middot; Day 133
+      <span class="ornament">✦</span>
+    </div>
+    <div class="quiz-title">The Bible Recap &mdash; Daily Quiz</div>
+    <div class="passage-tags">
+      <span class="passage-tag">2 Samuel 11</span>
+      <span class="passage-tag">2 Samuel 12</span>
+      <span class="passage-tag">1 Chronicles 20</span>
+    </div>
+    <div><span class="difficulty-badge">Challenging</span></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap"><div class="progress-bar" id="prog-bar"></div></div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- Card -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">When David sent someone to inquire about the woman he saw bathing, what specific information came back to him?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(1,'A')"><span class="choice-letter">A</span>She was a widow from the tribe of Judah, a woman of great beauty from the region of Hebron</button>
+        <button class="choice-btn" onclick="answer(1,'B')"><span class="choice-letter">B</span>She was Bathsheba, the daughter of Eliam and the wife of Uriah the Hittite</button>
+        <button class="choice-btn" onclick="answer(1,'C')"><span class="choice-letter">C</span>She was the daughter of one of David&#39;s mighty men and had been recently betrothed to Uriah</button>
+        <button class="choice-btn" onclick="answer(1,'D')"><span class="choice-letter">D</span>She was a Hittite woman living in Jerusalem, the daughter of Ahithophel the king&#39;s counselor</button>
+      </div>
+      <div class="feedback" id="fb1"></div>
+      <button class="next-btn" id="next1" onclick="next(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+      </div>
+      <div class="question-text">Uriah refused to go home to his wife even after David sent him from the battle front and even after David got him drunk. What reason did Uriah give for his refusal?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(2,'A')"><span class="choice-letter">A</span>He feared that Joab would punish him for leaving the army without orders, and he was bound by his oath to the king</button>
+        <button class="choice-btn" onclick="answer(2,'B')"><span class="choice-letter">B</span>The ark of God and the armies of Israel and Judah were camping in the open field, and he would not enjoy domestic comforts while they endured such conditions</button>
+        <button class="choice-btn" onclick="answer(2,'C')"><span class="choice-letter">C</span>He suspected David&#39;s motives and chose to sleep at the palace entrance as a silent protest</button>
+        <button class="choice-btn" onclick="answer(2,'D')"><span class="choice-letter">D</span>Bathsheba had sent word that she was ritually unclean and could not receive him during her period of mourning</button>
+      </div>
+      <div class="feedback" id="fb2"></div>
+      <button class="next-btn" id="next2" onclick="next(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">David wrote a letter to Joab and sent it with Uriah himself as the bearer. What did the letter instruct Joab to do?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(3,'A')"><span class="choice-letter">A</span>Assign Uriah to lead the first assault on Rabbah&#39;s main gate so that he might either die honorably or be taken captive</button>
+        <button class="choice-btn" onclick="answer(3,'B')"><span class="choice-letter">B</span>Set Uriah in the forefront of the hardest fighting, then draw back from him so that he would be struck down and die</button>
+        <button class="choice-btn" onclick="answer(3,'C')"><span class="choice-letter">C</span>Send Uriah alone on a night raid against the city&#39;s water supply, without the support of other troops</button>
+        <button class="choice-btn" onclick="answer(3,'D')"><span class="choice-letter">D</span>Post Uriah as rearguard during the next major assault, where Joab knew casualties would be heaviest</button>
+      </div>
+      <div class="feedback" id="fb3"></div>
+      <button class="next-btn" id="next3" onclick="next(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">Before sending the battle report to David, Joab coached the messenger on exactly what to say. What was Joab&#39;s tactical reason for instructing the messenger to mention Uriah&#39;s death specifically?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(4,'A')"><span class="choice-letter">A</span>Joab wanted to honor Uriah publicly and ensure David would grant his family a pension from the royal treasury</button>
+        <button class="choice-btn" onclick="answer(4,'B')"><span class="choice-letter">B</span>Joab anticipated that David would be angry about the tactical error of approaching too close to the city wall; Uriah&#39;s death was the detail that would defuse that anger before it reached a verdict</button>
+        <button class="choice-btn" onclick="answer(4,'C')"><span class="choice-letter">C</span>Joab feared he would be accused of cowardice if the assault failed, so mentioning Uriah deflected blame onto one soldier&#39;s individual decision</button>
+        <button class="choice-btn" onclick="answer(4,'D')"><span class="choice-letter">D</span>Joab needed David to authorize additional troops, and Uriah&#39;s death demonstrated the severity of Ammonite resistance</button>
+      </div>
+      <div class="feedback" id="fb4"></div>
+      <button class="next-btn" id="next4" onclick="next(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+      </div>
+      <div class="question-text">In Nathan&#39;s parable, what did David declare should happen to the rich man who stole and slaughtered the poor man&#39;s ewe lamb?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(5,'A')"><span class="choice-letter">A</span>As the LORD lives, the man deserves to die, and he shall restore the lamb fourfold, because he did this thing and had no pity</button>
+        <button class="choice-btn" onclick="answer(5,'B')"><span class="choice-letter">B</span>He shall restore the lamb sevenfold and give a fifth of all his flocks to the poor man as additional restitution</button>
+        <button class="choice-btn" onclick="answer(5,'C')"><span class="choice-letter">C</span>He shall be brought before the elders, publicly shamed, and banished from his city for one year</button>
+        <button class="choice-btn" onclick="answer(5,'D')"><span class="choice-letter">D</span>He shall restore double and offer a guilt offering at the tabernacle, and the matter shall be forgiven</button>
+      </div>
+      <div class="feedback" id="fb5"></div>
+      <button class="next-btn" id="next5" onclick="next(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">Nathan announced God&#39;s specific judgment against David&#39;s house. Which of the following best captures what Nathan said God would do?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(6,'A')"><span class="choice-letter">A</span>God would give David&#39;s throne to one of his sons in his lifetime, and David would be forced to flee Jerusalem in shame</button>
+        <button class="choice-btn" onclick="answer(6,'B')"><span class="choice-letter">B</span>The sword would never depart from David&#39;s house; God would raise up evil against him from within his own household; his wives would be taken by his neighbor, who would lie with them openly in broad daylight — because David acted in secret, God would act before all Israel in the open sun</button>
+        <button class="choice-btn" onclick="answer(6,'C')"><span class="choice-letter">C</span>David&#39;s army would suffer three crushing defeats, and the crown of Israel would pass from his line after his death</button>
+        <button class="choice-btn" onclick="answer(6,'D')"><span class="choice-letter">D</span>God would take the kingdom from David&#39;s son and give it to a servant, just as he had taken it from Saul</button>
+      </div>
+      <div class="feedback" id="fb6"></div>
+      <button class="next-btn" id="next6" onclick="next(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+      </div>
+      <div class="question-text">After David confessed &ldquo;I have sinned against the LORD,&rdquo; what was Nathan&#39;s immediate response?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(7,'A')"><span class="choice-letter">A</span>&ldquo;The LORD has forgiven you, but you must go to the tabernacle and offer burnt offerings for seven days&rdquo;</button>
+        <button class="choice-btn" onclick="answer(7,'B')"><span class="choice-letter">B</span>&ldquo;The LORD also has put away your sin; you shall not die. Nevertheless, because by this deed you have utterly scorned the LORD, the child who is born to you shall die&rdquo;</button>
+        <button class="choice-btn" onclick="answer(7,'C')"><span class="choice-letter">C</span>&ldquo;Return to Bathsheba, confess your sin before the elders, and the LORD will restore what the sword has taken from you&rdquo;</button>
+        <button class="choice-btn" onclick="answer(7,'D')"><span class="choice-letter">D</span>&ldquo;Because you have repented in sackcloth, the LORD will spare the child, though the sword will remain in your house&rdquo;</button>
+      </div>
+      <div class="feedback" id="fb7"></div>
+      <button class="next-btn" id="next7" onclick="next(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+      </div>
+      <div class="question-text">While the child born to Bathsheba was ill, David fasted and lay on the ground. When the child died on the seventh day, what did David do that astonished his servants?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(8,'A')"><span class="choice-letter">A</span>He wept aloud and tore his robes, then prostrated himself before the ark for an entire day and night</button>
+        <button class="choice-btn" onclick="answer(8,'B')"><span class="choice-letter">B</span>He rose from the ground, washed, anointed himself, changed his clothes, went to the house of the LORD to worship, then came home and ate</button>
+        <button class="choice-btn" onclick="answer(8,'C')"><span class="choice-letter">C</span>He went immediately to comfort Bathsheba and declared that God&#39;s judgment had been satisfied</button>
+        <button class="choice-btn" onclick="answer(8,'D')"><span class="choice-letter">D</span>He resumed fasting for three more days in thanksgiving that the child&#39;s suffering had ended</button>
+      </div>
+      <div class="feedback" id="fb8"></div>
+      <button class="next-btn" id="next8" onclick="next(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">After Bathsheba bore a second son and they named him Solomon, God sent a special message through Nathan the prophet. What was that message?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(9,'A')"><span class="choice-letter">A</span>Nathan was to tell David that Solomon would build the temple and his throne would be established forever</button>
+        <button class="choice-btn" onclick="answer(9,'B')"><span class="choice-letter">B</span>Nathan was to give the child the name Jedidiah — &ldquo;beloved of the LORD&rdquo; — because the LORD loved him</button>
+        <button class="choice-btn" onclick="answer(9,'C')"><span class="choice-letter">C</span>Nathan was to anoint Solomon as the crown prince and declare him David&#39;s chosen heir before the court</button>
+        <button class="choice-btn" onclick="answer(9,'D')"><span class="choice-letter">D</span>Nathan was to tell Bathsheba that her mourning was ended and the reproach had been taken away from her</button>
+      </div>
+      <div class="feedback" id="fb9"></div>
+      <button class="next-btn" id="next9" onclick="next(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">In the battles against Philistine giants recorded in 1 Chronicles 20, a warrior at Gath had an extraordinary physical feature — six fingers on each hand and six toes on each foot, twenty-four in number — and he defied Israel. Who killed him?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(10,'A')"><span class="choice-letter">A</span>Sibbecai the Hushathite, the same warrior who had killed Sippai at the battle of Gezer</button>
+        <button class="choice-btn" onclick="answer(10,'B')"><span class="choice-letter">B</span>Elhanan son of Jair, who also slew Lahmi the brother of Goliath the Gittite</button>
+        <button class="choice-btn" onclick="answer(10,'C')"><span class="choice-letter">C</span>Jonathan son of Shimea, David&#39;s brother</button>
+        <button class="choice-btn" onclick="answer(10,'D')"><span class="choice-letter">D</span>Abishai son of Zeruiah, who commanded the army at Gath in Joab&#39;s absence</button>
+      </div>
+      <div class="feedback" id="fb10"></div>
+      <button class="next-btn" id="next10" onclick="showResults()">See Results &rarr;</button>
+    </div>
+
+    <!-- Results -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 130 130">
+          <circle class="score-ring-bg" cx="65" cy="65" r="54"/>
+          <circle class="score-ring-fill" id="ring-fill" cx="65" cy="65" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <span class="score-num" id="score-num">0</span>
+          <span class="score-denom">/ 10</span>
+        </div>
+      </div>
+      <div class="results-title" id="results-title"></div>
+      <div class="results-message" id="results-message"></div>
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+    </div>
+
+  </div><!-- .card -->
+</div><!-- .outer-wrap -->
+
+<script>
+  const TOTAL = 10;
+  const correctAnswers = {
+    1:'B', 2:'B', 3:'B', 4:'B', 5:'A', 6:'B', 7:'B', 8:'B', 9:'B', 10:'C'
+  };
+  const feedbackData = {
+    1: {
+      correct: "Correct! 2 Samuel 11:3 records the precise report David received: &ldquo;Is not this Bathsheba, the daughter of Eliam, the wife of Uriah the Hittite?&rdquo; Note the two identifying markers — her lineage and her married status. Both were warnings David ignored.",
+      wrong: "The text of 2 Samuel 11:3 is specific: the messenger reported that she was Bathsheba, the daughter of Eliam and the wife of Uriah the Hittite. Her identity as a married woman was plain from the first inquiry.",
+      ref: "2 Samuel 11:3"
+    },
+    2: {
+      correct: "Correct! Uriah&#39;s words in 2 Samuel 11:11 are remarkable: &ldquo;The ark and Israel and Judah dwell in booths, and my lord Joab and the servants of my lord are camping in the open field. Shall I then go to my house to eat and drink and lie with my wife? As you live, and as your soul lives, I will not do this thing.&rdquo; Uriah&#39;s military fidelity is a devastating contrast to David&#39;s moral failure.",
+      wrong: "According to 2 Samuel 11:11, Uriah invoked the condition of the ark, the armies, and Joab camping in the open field as the reason he refused to go home. His loyalty to his comrades shames the king who sent him back for deceptive purposes.",
+      ref: "2 Samuel 11:11"
+    },
+    3: {
+      correct: "Correct! David&#39;s letter in 2 Samuel 11:15 reads: &ldquo;Set Uriah in the forefront of the hardest fighting, and then draw back from him, that he may be struck down, and die.&rdquo; What makes this especially chilling is that Uriah himself carried the letter — unknowingly bearing the order for his own death.",
+      wrong: "2 Samuel 11:15 states the letter&#39;s contents plainly: &ldquo;Set Uriah in the forefront of the hardest fighting, and then draw back from him, that he may be struck down, and die.&rdquo; The macabre detail is that Uriah carried his own death warrant to Joab.",
+      ref: "2 Samuel 11:15"
+    },
+    4: {
+      correct: "Correct! In 2 Samuel 11:19&#8211;21, Joab tells the messenger: if the king&#39;s anger rises and he asks why you went so near the wall — remember Abimelech, who was killed by a millstone — then say, &lsquo;Your servant Uriah the Hittite is dead also.&rsquo; Joab anticipated David&#39;s tactical critique and pre-armed the messenger with Uriah&#39;s death as the silencing fact.",
+      wrong: "Joab&#39;s coaching in 2 Samuel 11:19&#8211;21 reveals his cunning: he anticipated David&#39;s anger at the poor military tactics of advancing near the wall, and instructed the messenger to report Uriah&#39;s death as the final detail — because he knew that news would end all other complaints.",
+      ref: "2 Samuel 11:19&#8211;21"
+    },
+    5: {
+      correct: "Correct! David&#39;s verdict in 2 Samuel 12:5&#8211;6 is: &ldquo;As the LORD lives, the man who has done this deserves to die, and he shall restore the lamb fourfold, because he did this thing, and because he had no pity.&rdquo; The fourfold restoration matches the Mosaic law for stealing livestock. David&#39;s own words became his self-condemnation.",
+      wrong: "2 Samuel 12:5&#8211;6 records David&#39;s verdict: the man deserves to die and shall restore fourfold, because he had no pity. The irony is sharp — David pronounces the just penalty on himself without knowing it. Nathan&#39;s &lsquo;You are the man&#39; lands the harder for it.",
+      ref: "2 Samuel 12:5&#8211;6"
+    },
+    6: {
+      correct: "Correct! Nathan&#39;s oracle in 2 Samuel 12:10&#8211;12 announces: the sword will never depart from David&#39;s house; God will raise up evil against him from his own household; his wives will be taken and given openly to his neighbor. The public nature of the punishment mirrors the secret nature of the sin — what David did in darkness, God will do before all Israel in the light of day.",
+      wrong: "The judgment in 2 Samuel 12:10&#8211;12 has three specific elements: a perpetual sword in David&#39;s house, evil rising from within his own household, and his wives being taken publicly by a neighbor. The final phrase — done in broad daylight before all Israel — stands in deliberate contrast to David&#39;s secret sin.",
+      ref: "2 Samuel 12:10&#8211;12"
+    },
+    7: {
+      correct: "Correct! Nathan&#39;s response in 2 Samuel 12:13&#8211;14 is a pure Gospel statement: &ldquo;The LORD also has put away your sin; you shall not die.&rdquo; God forgives immediately upon confession — but the consequences remain. The child will die because David&#39;s deed gave occasion to the enemies of the LORD to blaspheme.",
+      wrong: "Nathan&#39;s words in 2 Samuel 12:13&#8211;14 are: &ldquo;The LORD also has put away your sin; you shall not die. Nevertheless, because by this deed you have utterly scorned the LORD, the child who is born to you shall die.&rdquo; Forgiveness is immediate; consequences are not erased.",
+      ref: "2 Samuel 12:13&#8211;14"
+    },
+    8: {
+      correct: "Correct! 2 Samuel 12:20 records David&#39;s behavior after the child died: he rose from the ground, washed, anointed himself, changed his clothes, went to the house of the LORD and worshiped, then went home and ate. His servants were bewildered — he had mourned intensely while the child lived but composed himself at death. David&#39;s answer (vv. 22&#8211;23) reveals profound theology: fasting in hope while there was still life; resting in God&#39;s will once the child was gone.",
+      wrong: "After the child&#39;s death, David surprised his servants by rising, washing, anointing himself, changing clothes, worshiping at the house of the LORD, and eating — the opposite of what they expected. His explanation in 2 Samuel 12:22&#8211;23 is one of the most theologically rich statements in his story: &ldquo;Can I bring him back again? I shall go to him, but he will not return to me.&rdquo;",
+      ref: "2 Samuel 12:20&#8211;23"
+    },
+    9: {
+      correct: "Correct! 2 Samuel 12:24&#8211;25 records: &ldquo;The LORD loved him and sent a message through Nathan the prophet. So he named him Jedidiah, because of the LORD.&rdquo; Jedidiah means &ldquo;beloved of the LORD.&rdquo; In the very chapter that unfolds the consequences of David&#39;s worst sin, God names the child born of that union with a word of love — a quiet signal of grace pointing toward the great Beloved Son to come.",
+      wrong: "According to 2 Samuel 12:24&#8211;25, the LORD loved the child and directed Nathan to give him the name Jedidiah, meaning &ldquo;beloved of the LORD.&rdquo; It is a remarkable act of grace: in the same narrative that contains devastating judgment, God names David&#39;s son with a word of love.",
+      ref: "2 Samuel 12:24&#8211;25"
+    },
+    10: {
+      correct: "Correct! 1 Chronicles 20:6&#8211;7 records: &ldquo;And there was again war at Gath, where there was a man of great stature, who had six fingers on each hand and six toes on each foot, twenty-four in number, and he also was descended from the giants. And when he taunted Israel, Jonathan the son of Shimea, David&#39;s brother, struck him down.&rdquo; Shimea (also called Shammah) was Jesse&#39;s third son and David&#39;s older brother.",
+      wrong: "According to 1 Chronicles 20:6&#8211;7, it was Jonathan son of Shimea — David&#39;s own brother — who killed the giant at Gath with twenty-four fingers and toes. Sibbecai killed Sippai (v. 4); Elhanan killed Lahmi, brother of Goliath (v. 5); and Jonathan killed this particular giant.",
+      ref: "1 Chronicles 20:6&#8211;7"
+    }
+  };
+
+  const questionTexts = {
+    1: "When David sent to inquire about Bathsheba, what specific information came back?",
+    2: "Why did Uriah refuse to go home to his wife?",
+    3: "What did David&#39;s letter to Joab instruct?",
+    4: "Why did Joab coach the messenger to mention Uriah&#39;s death specifically?",
+    5: "What did David declare should happen to the man in Nathan&#39;s parable?",
+    6: "Which option best captures God&#39;s specific judgment as Nathan announced it?",
+    7: "What was Nathan&#39;s immediate response after David confessed his sin?",
+    8: "What did David do after the child died that astonished his servants?",
+    9: "What message did God send through Nathan after Solomon&#39;s birth?",
+    10: "Who killed the giant at Gath with twenty-four fingers and toes?"
+  };
+
+  const choiceTexts = {
+    1: { A: "A widow from Judah, a woman of great beauty from Hebron", B: "Bathsheba, daughter of Eliam and wife of Uriah the Hittite", C: "Daughter of one of David&#39;s mighty men, betrothed to Uriah", D: "A Hittite woman, daughter of Ahithophel the counselor" },
+    2: { A: "He feared Joab would punish him for leaving without orders", B: "The ark and Israel&#39;s armies were in the open field; he would not enjoy comforts while they endured hardship", C: "He suspected David&#39;s motives and stayed as a silent protest", D: "Bathsheba was ritually unclean and could not receive him" },
+    3: { A: "Assign Uriah to lead the first assault on Rabbah&#39;s main gate", B: "Set Uriah in the forefront of the hardest fighting, then draw back from him", C: "Send Uriah alone on a night raid against the city&#39;s water supply", D: "Post Uriah as rearguard during the next major assault" },
+    4: { A: "To honor Uriah publicly and secure a pension for his family", B: "To preempt David&#39;s anger at the tactical error of approaching the wall too closely", C: "To deflect blame for the failed assault onto one soldier&#39;s decision", D: "To justify a request for additional troops" },
+    5: { A: "The man deserves to die, and shall restore the lamb fourfold, because he had no pity", B: "He shall restore the lamb sevenfold and give a fifth of his flocks as restitution", C: "He shall be publicly shamed and banished from his city for one year", D: "He shall restore double and offer a guilt offering at the tabernacle" },
+    6: { A: "God would give David&#39;s throne to a son in his lifetime, forcing him to flee Jerusalem", B: "The sword would never depart from his house; evil would rise from within his household; his wives taken and given openly to a neighbor", C: "David&#39;s army would suffer three crushing defeats; the crown would pass from his line", D: "God would take the kingdom from David&#39;s son and give it to a servant" },
+    7: { A: "&ldquo;The LORD has forgiven you, but offer burnt offerings for seven days&rdquo;", B: "&ldquo;The LORD also has put away your sin; you shall not die. Nevertheless, the child shall die&rdquo;", C: "&ldquo;Return to Bathsheba, confess before the elders, and the LORD will restore you&rdquo;", D: "&ldquo;Because you repented in sackcloth, the LORD will spare the child&rdquo;" },
+    8: { A: "He wept and tore his robes, then prostrated himself before the ark for a day and night", B: "He rose, washed, anointed himself, changed clothes, worshiped at the house of the LORD, then came home and ate", C: "He went immediately to comfort Bathsheba and declared God&#39;s judgment satisfied", D: "He resumed fasting for three more days in thanksgiving" },
+    9: { A: "Nathan was to tell David that Solomon would build the temple and his throne be established forever", B: "Nathan was to name the child Jedidiah — &ldquo;beloved of the LORD&rdquo; — because the LORD loved him", C: "Nathan was to anoint Solomon as crown prince before the court", D: "Nathan was to tell Bathsheba her mourning was ended and her reproach removed" },
+    10: { A: "Sibbecai the Hushathite, who also killed Sippai at Gezer", B: "Elhanan son of Jair, who also slew Lahmi the brother of Goliath", C: "Jonathan son of Shimea, David&#39;s brother", D: "Abishai son of Zeruiah, commanding the army at Gath" }
+  };
+
+  let score = 0;
+  let userAnswers = {};
+  let currentQ = 1;
+
+  function answer(qNum, choice) {
+    const buttons = document.querySelectorAll(`#q${qNum} .choice-btn`);
+    buttons.forEach(btn => btn.disabled = true);
+
+    const correct = correctAnswers[qNum];
+    userAnswers[qNum] = choice;
+    const isCorrect = choice === correct;
+    if (isCorrect) score++;
+
+    const choiceLetters = ['A','B','C','D'];
+    buttons.forEach((btn, i) => {
+      if (choiceLetters[i] === correct) btn.classList.add('correct');
+      else if (choiceLetters[i] === choice && !isCorrect) btn.classList.add('wrong');
+    });
+
+    const fb = document.getElementById(`fb${qNum}`);
+    const data = feedbackData[qNum];
+    fb.innerHTML = `<span class="feedback-icon">${isCorrect ? '✓ Correct' : '✗ Incorrect'}</span>${isCorrect ? data.correct : data.wrong}<span class="feedback-ref">${data.ref}</span>`;
+    fb.className = `feedback ${isCorrect ? 'correct-fb' : 'wrong-fb'}`;
+
+    const nextBtn = document.getElementById(`next${qNum}`);
+    nextBtn.classList.add('visible');
+    updateProgress(qNum);
+  }
+
+  function next(qNum) {
+    document.getElementById(`q${qNum}`).classList.remove('active');
+    const nextQ = qNum + 1;
+    const nextBlock = document.getElementById(`q${nextQ}`);
+    if (nextBlock) {
+      nextBlock.classList.add('active');
+      currentQ = nextQ;
+      updateProgress(nextQ - 1);
+    }
+  }
+
+  function updateProgress(answered) {
+    const pct = Math.max(10, Math.round((answered / TOTAL) * 100));
+    document.getElementById('prog-bar').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = `Question ${Math.min(answered + 1, TOTAL)} of ${TOTAL}`;
+  }
+
+  function showResults() {
+    document.getElementById('q10').classList.remove('active');
+    const rs = document.getElementById('results-screen');
+    rs.style.display = 'block';
+
+    document.getElementById('prog-bar').style.width = '100%';
+    document.getElementById('prog-label').textContent = `Quiz Complete`;
+
+    document.getElementById('score-num').textContent = score;
+
+    const pct = score / TOTAL;
+    const circumference = 339.3;
+    const offset = circumference - (pct * circumference);
+    setTimeout(() => {
+      document.getElementById('ring-fill').style.strokeDashoffset = offset;
+    }, 100);
+
+    let title, msg;
+    if (score === 10) {
+      title = "Flawless — Eyes on Every Word";
+      msg = "A perfect score. You caught the fourfold verdict, the letter Uriah carried, and Jonathan son of Shimea at Gath. David&#39;s story is a painful reminder that even God&#39;s anointed falls — and that the LORD&#39;s forgiveness runs deeper still.";
+    } else if (score >= 8) {
+      title = "Sharp Reader";
+      msg = "You tracked the details closely. The text&#39;s weight lies in its precision — the names, the letters, the oaths — and you didn&#39;t miss much of it.";
+    } else if (score >= 6) {
+      title = "Solid Work";
+      msg = "You grasped the major movements. Review the questions you missed — the details God preserved in this text carry real theological freight.";
+    } else if (score >= 4) {
+      title = "A Foundation to Build On";
+      msg = "Some details slipped by this time. Read the passage again slowly — Nathan&#39;s parable, Joab&#39;s coaching, the name Jedidiah — each one repays careful attention.";
+    } else {
+      title = "Read It Again";
+      msg = "This chapter rewards slow, close reading. The contrast between Uriah&#39;s honor and David&#39;s treachery, and the quiet grace of &ldquo;Jedidiah,&rdquo; are worth sitting with carefully.";
+    }
+
+    document.getElementById('results-title').textContent = title;
+    document.getElementById('results-message').innerHTML = msg;
+
+    const reviewList = document.getElementById('review-list');
+    reviewList.innerHTML = '';
+    for (let i = 1; i <= TOTAL; i++) {
+      const ua = userAnswers[i];
+      const ca = correctAnswers[i];
+      const correct = ua === ca;
+      const div = document.createElement('div');
+      div.className = `review-item ${correct ? 'r-correct' : 'r-wrong'}`;
+      div.innerHTML = `<div class="review-q">Q${i}: ${questionTexts[i]}</div>
+        <div class="review-ans">
+          ${correct
+            ? `<span class="review-correct-lbl">✓ Correct</span> — ${choiceTexts[i][ca]}`
+            : `<span class="review-wrong-lbl">✗ You chose ${ua}:</span> ${choiceTexts[i][ua] || '(unanswered)'} &nbsp;|&nbsp; <span class="review-correct-lbl">Correct (${ca}):</span> ${choiceTexts[i][ca]}`
+          }
+        </div>`;
+      reviewList.appendChild(div);
+    }
+  }
+
+  function resetQuiz() {
+    score = 0;
+    userAnswers = {};
+    currentQ = 1;
+
+    for (let i = 1; i <= TOTAL; i++) {
+      const block = document.getElementById(`q${i}`);
+      block.classList.remove('active');
+      const buttons = block.querySelectorAll('.choice-btn');
+      buttons.forEach(btn => {
+        btn.disabled = false;
+        btn.classList.remove('correct', 'wrong');
+      });
+      const fb = document.getElementById(`fb${i}`);
+      fb.className = 'feedback';
+      fb.innerHTML = '';
+      const nb = document.getElementById(`next${i}`);
+      nb.classList.remove('visible');
+    }
+
+    document.getElementById('results-screen').style.display = 'none';
+    document.getElementById('ring-fill').style.strokeDashoffset = '339.3';
+    document.getElementById('q1').classList.add('active');
+    document.getElementById('prog-bar').style.width = '10%';
+    document.getElementById('prog-label').textContent = 'Question 1 of 10';
+  }
+</script>
+</body>
+</html>
