@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 134 Bible Recap Quiz — Psalms 32, 51, 86, 122</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 18px;
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.15);
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.3s ease forwards;
+  }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+    color: #1a3d1e;
+    display: block;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.1);
+    border: 1px solid #8b1a1a;
+    color: #5a0e0e;
+    display: block;
+  }
+  .feedback-icon { font-weight: 700; margin-right: 6px; }
+  .feedback-ref {
+    font-style: italic;
+    color: #5a4020;
+    font-size: 0.95rem;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.visible { display: inline-block; }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 22px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.15); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1e1208;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: #9a7a3a;
+    letter-spacing: 0.1em;
+  }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1e1208;
+    margin-bottom: 8px;
+  }
+  .results-message {
+    font-size: 1.08rem;
+    color: #3a2510;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #9a7a3a;
+    margin-bottom: 14px;
+    text-align: left;
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    padding-bottom: 8px;
+  }
+  .review-item {
+    text-align: left;
+    margin-bottom: 14px;
+    padding: 12px 14px;
+    border-radius: 4px;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.1);
+    border-left: 3px solid #1a5c2a;
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.08);
+    border-left: 3px solid #8b1a1a;
+  }
+  .review-q { font-weight: 600; color: #1e1208; margin-bottom: 4px; }
+  .review-ans { font-size: 0.93rem; color: #3a2510; }
+  .review-correct-lbl { color: #1a5c2a; font-weight: 600; }
+  .review-wrong-lbl   { color: #8b1a1a; font-weight: 600; }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .take-again-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  @media (max-width: 520px) {
+    .card { padding: 22px 18px; }
+    .quiz-title { font-size: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- Header -->
+  <div class="quiz-header">
+    <div class="quiz-date">
+      <span class="ornament">✦</span>
+      Thursday, May 14, 2026 &middot; Day 134
+      <span class="ornament">✦</span>
+    </div>
+    <div class="quiz-title">The Bible Recap &mdash; Daily Quiz</div>
+    <div class="passage-tags">
+      <span class="passage-tag">Psalm 32</span>
+      <span class="passage-tag">Psalm 51</span>
+      <span class="passage-tag">Psalm 86</span>
+      <span class="passage-tag">Psalm 122</span>
+    </div>
+    <div><span class="difficulty-badge">Challenging</span></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap"><div class="progress-bar" id="prog-bar"></div></div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- Card -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">Psalm 32:3&ndash;4 describes what David experienced when he &ldquo;kept silent&rdquo; and refused to confess his sin. Which answer best captures what he says happened to him?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(1,'A')"><span class="choice-letter">A</span>His heart melted within him and his knees buckled; he was unable to stand in the LORD&#39;s presence day or night</button>
+        <button class="choice-btn" onclick="answer(1,'B')"><span class="choice-letter">B</span>His bones wasted away through his groaning all day long; God&#39;s hand was heavy upon him, and his strength was dried up as by the heat of summer</button>
+        <button class="choice-btn" onclick="answer(1,'C')"><span class="choice-letter">C</span>He was cut off from the congregation and could not eat for many days; his flesh clung to his bones like a moth-eaten garment</button>
+        <button class="choice-btn" onclick="answer(1,'D')"><span class="choice-letter">D</span>His eyes grew dim from weeping and he wandered in the wilderness; darkness covered him and he lost all sense of direction</button>
+      </div>
+      <div class="feedback" id="fb1"></div>
+      <button class="next-btn" id="next1" onclick="next(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">In Psalm 32:9, the psalmist warns the godly not to be like certain animals that must be forced into obedience. What is the exact warning he gives?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(2,'A')"><span class="choice-letter">A</span>Do not be like the ox that goes to slaughter without knowing, or the bird that rushes into the snare with wings spread wide</button>
+        <button class="choice-btn" onclick="answer(2,'B')"><span class="choice-letter">B</span>Be not like a horse or a mule, without understanding, which must be curbed with bit and bridle, or it will not stay near you</button>
+        <button class="choice-btn" onclick="answer(2,'C')"><span class="choice-letter">C</span>Be not like the straying sheep that does not know the shepherd&#39;s voice, or the goat that turns from the path to the mountain&#39;s edge</button>
+        <button class="choice-btn" onclick="answer(2,'D')"><span class="choice-letter">D</span>Do not be like the wild donkey accustomed to the desert, who sniffs the wind and cannot be restrained in the day of her craving</button>
+      </div>
+      <div class="feedback" id="fb2"></div>
+      <button class="next-btn" id="next2" onclick="next(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+      </div>
+      <div class="question-text">The superscription of Psalm 51 identifies a precise historical moment that prompted David to write it. To what event does the superscription link this psalm?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(3,'A')"><span class="choice-letter">A</span>After the defeat at Mount Gilboa, when David mourned the deaths of Saul and Jonathan before the LORD</button>
+        <button class="choice-btn" onclick="answer(3,'B')"><span class="choice-letter">B</span>When Nathan the prophet came to him, after he had gone in to Bathsheba</button>
+        <button class="choice-btn" onclick="answer(3,'C')"><span class="choice-letter">C</span>After the LORD sent pestilence upon Israel as punishment for David&#39;s census of the people</button>
+        <button class="choice-btn" onclick="answer(3,'D')"><span class="choice-letter">D</span>When Doeg the Edomite reported to Saul that David had visited the priest Ahimelech at Nob</button>
+      </div>
+      <div class="feedback" id="fb3"></div>
+      <button class="next-btn" id="next3" onclick="next(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">Psalm 51:4 contains one of the most theologically weighty lines in the Psalter: &ldquo;Against you, you only, have I sinned and done what is evil in your sight.&rdquo; How does David complete that same verse?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(4,'A')"><span class="choice-letter">A</span>&ldquo;&hellip;for you search out every secret, and there is nothing hidden from your sight, O Most High&rdquo;</button>
+        <button class="choice-btn" onclick="answer(4,'B')"><span class="choice-letter">B</span>&ldquo;&hellip;for sins of men against each other may be covered by mercy, but sin against God endures until atonement is made&rdquo;</button>
+        <button class="choice-btn" onclick="answer(4,'C')"><span class="choice-letter">C</span>&ldquo;&hellip;so that you may be justified in your words and blameless in your judgment&rdquo;</button>
+        <button class="choice-btn" onclick="answer(4,'D')"><span class="choice-letter">D</span>&ldquo;&hellip;for you alone have power to forgive what no priest or sacrifice can atone for in the sight of heaven&rdquo;</button>
+      </div>
+      <div class="feedback" id="fb4"></div>
+      <button class="next-btn" id="next4" onclick="next(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+      </div>
+      <div class="question-text">In Psalm 51:5, David traces his sinfulness to its deepest root. What does he declare?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(5,'A')"><span class="choice-letter">A</span>&ldquo;I have gone astray from the womb, speaking lies from the very moment of my birth&rdquo;</button>
+        <button class="choice-btn" onclick="answer(5,'B')"><span class="choice-letter">B</span>&ldquo;Behold, I was brought forth in iniquity, and in sin did my mother conceive me&rdquo;</button>
+        <button class="choice-btn" onclick="answer(5,'C')"><span class="choice-letter">C</span>&ldquo;My iniquity goes deeper than my deeds; it is rooted in my heart, which was evil from my youth&rdquo;</button>
+        <button class="choice-btn" onclick="answer(5,'D')"><span class="choice-letter">D</span>&ldquo;The wickedness of my fathers has been visited upon me, for I have not walked in the ways of Jesse my father&rdquo;</button>
+      </div>
+      <div class="feedback" id="fb5"></div>
+      <button class="next-btn" id="next5" onclick="next(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">Psalm 51:7 uses a specific ritual plant as the image for cleansing from sin. What does David ask, and with what?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(6,'A')"><span class="choice-letter">A</span>&ldquo;Cleanse me with cedar and running water, as the law provides for the one who has touched a dead body&rdquo;</button>
+        <button class="choice-btn" onclick="answer(6,'B')"><span class="choice-letter">B</span>&ldquo;Purge me with hyssop, and I shall be clean; wash me, and I shall be whiter than snow&rdquo;</button>
+        <button class="choice-btn" onclick="answer(6,'C')"><span class="choice-letter">C</span>&ldquo;Sprinkle upon me the blood of the covenant, as Moses sprinkled it upon the people at Sinai&rdquo;</button>
+        <button class="choice-btn" onclick="answer(6,'D')"><span class="choice-letter">D</span>&ldquo;Anoint me again with the holy oil, for the anointing of the Spirit washes away the iniquity of the anointed one&rdquo;</button>
+      </div>
+      <div class="feedback" id="fb6"></div>
+      <button class="next-btn" id="next6" onclick="next(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+      </div>
+      <div class="question-text">Psalm 51:10&ndash;12 contains three distinct requests related to &ldquo;spirit.&rdquo; Which of the following does NOT appear among those three requests?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(7,'A')"><span class="choice-letter">A</span>&ldquo;Renew a right spirit within me&rdquo;</button>
+        <button class="choice-btn" onclick="answer(7,'B')"><span class="choice-letter">B</span>&ldquo;Take not your Holy Spirit from me&rdquo;</button>
+        <button class="choice-btn" onclick="answer(7,'C')"><span class="choice-letter">C</span>&ldquo;Uphold me with a willing spirit&rdquo;</button>
+        <button class="choice-btn" onclick="answer(7,'D')"><span class="choice-letter">D</span>&ldquo;Pour out your Spirit upon me as upon the dry and thirsty ground&rdquo;</button>
+      </div>
+      <div class="feedback" id="fb7"></div>
+      <button class="next-btn" id="next7" onclick="next(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+      </div>
+      <div class="question-text">Psalm 86:5 gives David&#39;s foundational reason for confidence that God will hear his prayer. What two attributes of God does he cite in that verse?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(8,'A')"><span class="choice-letter">A</span>Holy and righteous, keeping covenant with those who love him and keep his commandments to a thousand generations</button>
+        <button class="choice-btn" onclick="answer(8,'B')"><span class="choice-letter">B</span>Good and forgiving, abounding in steadfast love to all who call upon him</button>
+        <button class="choice-btn" onclick="answer(8,'C')"><span class="choice-letter">C</span>Mighty in power and rich in mercy, lifting the lowly from the dust and seating them with princes</button>
+        <button class="choice-btn" onclick="answer(8,'D')"><span class="choice-letter">D</span>Faithful and true, who neither slumbers nor sleeps and who vindicates his servants against their enemies</button>
+      </div>
+      <div class="feedback" id="fb8"></div>
+      <button class="next-btn" id="next8" onclick="next(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">Psalm 86:9 makes a sweeping prophetic declaration about the nations. What does David say will happen?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(9,'A')"><span class="choice-letter">A</span>&ldquo;You will make the nations your inheritance and the ends of the earth your possession, breaking them with a rod of iron&rdquo;</button>
+        <button class="choice-btn" onclick="answer(9,'B')"><span class="choice-letter">B</span>&ldquo;All the nations you have made shall come and worship before you, O Lord, and shall glorify your name&rdquo;</button>
+        <button class="choice-btn" onclick="answer(9,'C')"><span class="choice-letter">C</span>&ldquo;The kings of the nations will bow and lick the dust; from the rising of the sun to its setting, your name alone will be feared&rdquo;</button>
+        <button class="choice-btn" onclick="answer(9,'D')"><span class="choice-letter">D</span>&ldquo;You will pour out your wrath on the nations that do not know you, and all the kingdoms that do not call on your name&rdquo;</button>
+      </div>
+      <div class="feedback" id="fb9"></div>
+      <button class="next-btn" id="next9" onclick="next(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-text">Psalm 122:4&ndash;5 identifies two specific purposes for which the tribes of the LORD go up to Jerusalem. What are those two purposes?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(10,'A')"><span class="choice-letter">A</span>To offer their firstfruits before the ark and to hear the Law read aloud by the priests before the whole assembly</button>
+        <button class="choice-btn" onclick="answer(10,'B')"><span class="choice-letter">B</span>To give thanks to the name of the LORD, and because there the thrones for judgment were set &mdash; the thrones of the house of David</button>
+        <button class="choice-btn" onclick="answer(10,'C')"><span class="choice-letter">C</span>To renew the covenant and to bring the annual tithe to the house of the LORD as Moses commanded Israel</button>
+        <button class="choice-btn" onclick="answer(10,'D')"><span class="choice-letter">D</span>To seek the LORD&#39;s oracle through the Urim and Thummim and to present their vows before the high priest at the altar</button>
+      </div>
+      <div class="feedback" id="fb10"></div>
+      <button class="next-btn" id="next10" onclick="showResults()">See Results &rarr;</button>
+    </div>
+
+    <!-- Results -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 130 130">
+          <circle class="score-ring-bg" cx="65" cy="65" r="54"/>
+          <circle class="score-ring-fill" id="ring-fill" cx="65" cy="65" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <span class="score-num" id="score-num">0</span>
+          <span class="score-denom">/ 10</span>
+        </div>
+      </div>
+      <div class="results-title" id="results-title"></div>
+      <div class="results-message" id="results-message"></div>
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+    </div>
+
+  </div><!-- .card -->
+</div><!-- .outer-wrap -->
+
+<script>
+  const TOTAL = 10;
+  const correctAnswers = {
+    1:'B', 2:'B', 3:'B', 4:'C', 5:'B', 6:'B', 7:'D', 8:'B', 9:'B', 10:'B'
+  };
+  const feedbackData = {
+    1: {
+      correct: "Correct! Psalm 32:3&ndash;4 gives a vivid physical account of unconfessed sin: &ldquo;For when I kept silent, my bones wasted away through my groaning all day long. For day and night your hand was heavy upon me; my strength was dried up as by the heat of summer.&rdquo; The imagery is of a man physically deteriorating under the weight of hidden guilt. Confession, as verse 5 shows, brings instant relief.",
+      wrong: "Psalm 32:3&ndash;4 describes bones wasting away through groaning all day long, God&#39;s hand heavy upon David, and his strength drying up as by the heat of summer. The physical imagery of hidden sin taking a bodily toll underscores the psalmist&#39;s urgent call to confess.",
+      ref: "Psalm 32:3&ndash;4"
+    },
+    2: {
+      correct: "Correct! Psalm 32:9 reads: &ldquo;Be not like a horse or a mule, without understanding, which must be curbed with bit and bridle, or it will not stay near you.&rdquo; The surrounding context makes the point vivid: after describing the blessedness of confessing and being forgiven, the psalmist warns that resisting God&#39;s instruction is as irrational as a beast that cannot respond to its master without mechanical force.",
+      wrong: "Psalm 32:9 uses the horse and the mule as the negative example: creatures without understanding that must be controlled with bit and bridle. Options A and D draw on other biblical passages (Proverbs 7 and Jeremiah 2) but are not what appears here.",
+      ref: "Psalm 32:9"
+    },
+    3: {
+      correct: "Correct! The superscription reads: &ldquo;A Psalm of David, when Nathan the prophet went to him, after he had gone in to Bathsheba.&rdquo; This anchors Psalm 51 in the immediate aftermath of 2 Samuel 12 &mdash; making it the companion piece to what you read yesterday. The psalm is David&#39;s own prayerful response to Nathan&#39;s devastating &lsquo;You are the man.&rsquo;",
+      wrong: "The superscription of Psalm 51 ties it specifically to Nathan&#39;s confrontation after David&#39;s sin with Bathsheba (2 Samuel 12). Option C describes the setting for Psalm 30 and the census narrative; Option D is tied to Psalm 52.",
+      ref: "Psalm 51 superscription; cf. 2 Samuel 12"
+    },
+    4: {
+      correct: "Correct! The full verse reads: &ldquo;Against you, you only, have I sinned and done what is evil in your sight, so that you may be justified in your words and blameless in your judgment.&rdquo; Paul quotes the second half in Romans 3:4 to establish that God&#39;s righteousness is vindicated even when every human being is found a liar. David&#39;s confession becomes a pillar of the doctrine of divine justice.",
+      wrong: "Psalm 51:4 completes the thought with &ldquo;so that you may be justified in your words and blameless in your judgment.&rdquo; Paul draws on this precise phrase in Romans 3:4 when arguing that God&#39;s righteousness stands even if every human being is proved false. The confession is not merely personal &mdash; it is a theological affirmation of God&#39;s right to judge.",
+      ref: "Psalm 51:4; Romans 3:4"
+    },
+    5: {
+      correct: "Correct! Psalm 51:5: &ldquo;Behold, I was brought forth in iniquity, and in sin did my mother conceive me.&rdquo; David is not making a statement about his mother&#39;s morality; he is tracing his own sinfulness to its origin &mdash; the condition of human nature from the very start of life. This is the clearest statement of original sin in the Psalter, and it deepens the urgency of his plea: he is not dealing with an isolated act but with a nature that needs to be remade.",
+      wrong: "Psalm 51:5 reads: &ldquo;Behold, I was brought forth in iniquity, and in sin did my mother conceive me.&rdquo; Option A echoes the language of Psalm 58:3 (&ldquo;The wicked are estranged from the womb; they go astray from birth&rdquo;) but is not what Psalm 51 says. David is declaring the corruption of human nature from its very beginning.",
+      ref: "Psalm 51:5"
+    },
+    6: {
+      correct: "Correct! Psalm 51:7: &ldquo;Purge me with hyssop, and I shall be clean; wash me, and I shall be whiter than snow.&rdquo; Hyssop was used in Israel&#39;s cleansing rituals &mdash; in the Passover (Exodus 12:22), in the purification of skin diseases and contact with the dead (Leviticus 14; Numbers 19), and notably at the cross, where a sponge soaked in sour wine was offered to Jesus on a hyssop branch (John 19:29). David draws on the whole ritual vocabulary of cleanness, and his prayer is that God himself perform a cleansing no ritual could actually achieve.",
+      wrong: "Psalm 51:7 asks God to &ldquo;purge me with hyssop,&rdquo; drawing on Israel&#39;s purification rituals where hyssop was used as a dipping branch (Exodus 12:22; Numbers 19:18). Cedar (option A) appears in the purification of skin diseases (Leviticus 14) alongside hyssop, but the psalm names hyssop alone.",
+      ref: "Psalm 51:7; cf. Numbers 19:18; John 19:29"
+    },
+    7: {
+      correct: "Correct! &ldquo;Pour out your Spirit upon me as upon the dry and thirsty ground&rdquo; is not in Psalm 51. The three spirit-requests in verses 10&ndash;12 are: (1) &ldquo;renew a right [steadfast] spirit within me&rdquo; (v.10); (2) &ldquo;take not your Holy Spirit from me&rdquo; (v.11); and (3) &ldquo;uphold me with a willing spirit&rdquo; (v.12). The image of the Spirit poured out on thirsty ground comes from Isaiah 44:3, not from this psalm.",
+      wrong: "The three requests in Psalm 51:10&ndash;12 are: &ldquo;renew a right spirit within me,&rdquo; &ldquo;take not your Holy Spirit from me,&rdquo; and &ldquo;uphold me with a willing spirit.&rdquo; The pouring of the Spirit on dry ground is the language of Isaiah 44:3, not this psalm. All three of the actual requests are present in the text.",
+      ref: "Psalm 51:10&ndash;12; cf. Isaiah 44:3"
+    },
+    8: {
+      correct: "Correct! Psalm 86:5: &ldquo;For you, O Lord, are good and forgiving, abounding in steadfast love to all who call upon you.&rdquo; These two qualities &mdash; goodness/forgiveness and abounding steadfast love (hesed) &mdash; form the theological ground on which David&#39;s urgent, repeated petition rests. The psalm returns again and again to God&#39;s character as the only reason to expect an answer.",
+      wrong: "Psalm 86:5 names two attributes: God is &ldquo;good and forgiving, abounding in steadfast love to all who call upon him.&rdquo; The language of &ldquo;keeping covenant&rdquo; (option A) echoes Deuteronomy 7:9 and Psalm 103; &ldquo;neither slumbers nor sleeps&rdquo; (option D) is the language of Psalm 121:4. Only option B quotes Psalm 86:5.",
+      ref: "Psalm 86:5"
+    },
+    9: {
+      correct: "Correct! Psalm 86:9: &ldquo;All the nations you have made shall come and worship before you, O Lord, and shall glorify your name.&rdquo; This verse spans the whole of redemptive history. The book of Revelation quotes directly from this expectation in 15:4, where the redeemed from every nation sing: &ldquo;Who will not fear, O Lord, and glorify your name? For you alone are holy. All nations will come and worship you.&rdquo; David&#39;s individual prayer for help is set against a cosmic horizon.",
+      wrong: "Psalm 86:9 declares: &ldquo;All the nations you have made shall come and worship before you, O Lord, and shall glorify your name.&rdquo; Option A echoes Psalm 2:8&ndash;9; option D echoes Jeremiah 10:25. Revelation 15:4 quotes the actual verse from Psalm 86:9 when the redeemed of all nations worship before the Lamb.",
+      ref: "Psalm 86:9; Revelation 15:4"
+    },
+    10: {
+      correct: "Correct! Psalm 122:4&ndash;5: &ldquo;&hellip;to which the tribes go up, the tribes of the LORD, as was decreed for Israel, to give thanks to the name of the LORD. There thrones for judgment were set, the thrones of the house of David.&rdquo; Two purposes: (1) worship and thanksgiving, and (2) justice administered from the Davidic throne. Jerusalem is both sanctuary and court &mdash; the place where God is praised and where his justice is rendered. Both purposes ultimately find their fulfillment in Christ, who is our Great High Priest and our Judge.",
+      wrong: "Psalm 122:4&ndash;5 gives two purposes for the pilgrimage to Jerusalem: to give thanks to the name of the LORD (worship), and because there the thrones for judgment were set, the thrones of the house of David (justice). Options A and C draw on other aspects of Israel&#39;s law and worship but are not what these verses state.",
+      ref: "Psalm 122:4&ndash;5"
+    }
+  };
+
+  const questionTexts = {
+    1: "What did Psalm 32:3–4 say happened to David when he kept silent about his sin?",
+    2: "What animals does Psalm 32:9 use as a warning about resisting God&#39;s instruction?",
+    3: "To what historical event does the superscription of Psalm 51 tie the psalm?",
+    4: "How does Psalm 51:4 complete the phrase “Against you, you only, have I sinned”?",
+    5: "What does David declare about his sinfulness in Psalm 51:5?",
+    6: "What does David ask God to purge him with in Psalm 51:7?",
+    7: "Which phrase does NOT appear among the three spirit-requests of Psalm 51:10–12?",
+    8: "What two attributes of God does Psalm 86:5 cite as the basis for David&#39;s confidence in prayer?",
+    9: "What does Psalm 86:9 declare will happen regarding the nations?",
+    10: "What two purposes does Psalm 122:4–5 give for the tribes going up to Jerusalem?"
+  };
+
+  const choiceTexts = {
+    1: {
+      A: "His heart melted and his knees buckled; he was unable to stand in the LORD&#39;s presence",
+      B: "His bones wasted away through his groaning; his strength dried up as by the heat of summer",
+      C: "He was cut off from the congregation and could not eat; his flesh clung to his bones",
+      D: "His eyes grew dim from weeping and he wandered in the wilderness without direction"
+    },
+    2: {
+      A: "The ox that goes to slaughter unknowing, or the bird that rushes into a snare",
+      B: "The horse or the mule, without understanding, which must be curbed with bit and bridle",
+      C: "The straying sheep that does not know the shepherd&#39;s voice, or the goat at the mountain&#39;s edge",
+      D: "The wild donkey accustomed to the desert who cannot be restrained in the day of her craving"
+    },
+    3: {
+      A: "After the defeat at Mount Gilboa, when David mourned Saul and Jonathan",
+      B: "When Nathan the prophet came to him, after he had gone in to Bathsheba",
+      C: "After the LORD sent pestilence as punishment for David&#39;s census of the people",
+      D: "When Doeg the Edomite reported that David had visited the priest Ahimelech at Nob"
+    },
+    4: {
+      A: "&ldquo;&hellip;for you search out every secret, and nothing is hidden from your sight, O Most High&rdquo;",
+      B: "&ldquo;&hellip;for sins between men may be covered by mercy, but sin against God endures until atonement&rdquo;",
+      C: "&ldquo;&hellip;so that you may be justified in your words and blameless in your judgment&rdquo;",
+      D: "&ldquo;&hellip;for you alone have power to forgive what no priest or sacrifice can atone for&rdquo;"
+    },
+    5: {
+      A: "&ldquo;I have gone astray from the womb, speaking lies from the moment of my birth&rdquo;",
+      B: "&ldquo;Behold, I was brought forth in iniquity, and in sin did my mother conceive me&rdquo;",
+      C: "&ldquo;My iniquity goes deeper than my deeds; it is rooted in my heart, evil from my youth&rdquo;",
+      D: "&ldquo;The wickedness of my fathers has been visited upon me; I have not walked in Jesse&#39;s ways&rdquo;"
+    },
+    6: {
+      A: "&ldquo;Cleanse me with cedar and running water, as the law provides for one who touched a dead body&rdquo;",
+      B: "&ldquo;Purge me with hyssop, and I shall be clean; wash me, and I shall be whiter than snow&rdquo;",
+      C: "&ldquo;Sprinkle upon me the blood of the covenant, as Moses sprinkled it upon the people at Sinai&rdquo;",
+      D: "&ldquo;Anoint me again with holy oil, for the anointing of the Spirit washes away the iniquity of the anointed&rdquo;"
+    },
+    7: {
+      A: "&ldquo;Renew a right spirit within me&rdquo;",
+      B: "&ldquo;Take not your Holy Spirit from me&rdquo;",
+      C: "&ldquo;Uphold me with a willing spirit&rdquo;",
+      D: "&ldquo;Pour out your Spirit upon me as upon the dry and thirsty ground&rdquo;"
+    },
+    8: {
+      A: "Holy and righteous, keeping covenant with those who love him to a thousand generations",
+      B: "Good and forgiving, abounding in steadfast love to all who call upon him",
+      C: "Mighty in power and rich in mercy, lifting the lowly from the dust",
+      D: "Faithful and true, who neither slumbers nor sleeps and vindicates his servants"
+    },
+    9: {
+      A: "&ldquo;You will make the nations your inheritance and the ends of the earth your possession&rdquo;",
+      B: "&ldquo;All the nations you have made shall come and worship before you, O Lord, and shall glorify your name&rdquo;",
+      C: "&ldquo;The kings of the nations will bow and lick the dust; your name alone will be feared&rdquo;",
+      D: "&ldquo;You will pour out your wrath on the nations that do not know you&rdquo;"
+    },
+    10: {
+      A: "To offer firstfruits and to hear the Law read aloud by the priests",
+      B: "To give thanks to the name of the LORD, and because the thrones of David&#39;s house were set there for judgment",
+      C: "To renew the covenant and bring the annual tithe to the house of the LORD",
+      D: "To seek the LORD&#39;s oracle through the Urim and Thummim and present vows before the high priest"
+    }
+  };
+
+  let score = 0;
+  let userAnswers = {};
+  let currentQ = 1;
+
+  function answer(qNum, choice) {
+    const buttons = document.querySelectorAll('#q' + qNum + ' .choice-btn');
+    buttons.forEach(function(btn) { btn.disabled = true; });
+
+    const correct = correctAnswers[qNum];
+    userAnswers[qNum] = choice;
+    const isCorrect = choice === correct;
+    if (isCorrect) score++;
+
+    const choiceLetters = ['A','B','C','D'];
+    buttons.forEach(function(btn, i) {
+      if (choiceLetters[i] === correct) btn.classList.add('correct');
+      else if (choiceLetters[i] === choice && !isCorrect) btn.classList.add('wrong');
+    });
+
+    const fb = document.getElementById('fb' + qNum);
+    const data = feedbackData[qNum];
+    fb.innerHTML = '<span class="feedback-icon">' + (isCorrect ? '&#10003; Correct' : '&#10007; Incorrect') + '</span>' + (isCorrect ? data.correct : data.wrong) + '<span class="feedback-ref">' + data.ref + '</span>';
+    fb.className = 'feedback ' + (isCorrect ? 'correct-fb' : 'wrong-fb');
+
+    const nextBtn = document.getElementById('next' + qNum);
+    nextBtn.classList.add('visible');
+    updateProgress(qNum);
+  }
+
+  function next(qNum) {
+    document.getElementById('q' + qNum).classList.remove('active');
+    const nextQ = qNum + 1;
+    const nextBlock = document.getElementById('q' + nextQ);
+    if (nextBlock) {
+      nextBlock.classList.add('active');
+      currentQ = nextQ;
+      updateProgress(nextQ - 1);
+    }
+  }
+
+  function updateProgress(answered) {
+    const pct = Math.max(10, Math.round((answered / TOTAL) * 100));
+    document.getElementById('prog-bar').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = 'Question ' + Math.min(answered + 1, TOTAL) + ' of ' + TOTAL;
+  }
+
+  function showResults() {
+    document.getElementById('q10').classList.remove('active');
+    const rs = document.getElementById('results-screen');
+    rs.style.display = 'block';
+
+    document.getElementById('prog-bar').style.width = '100%';
+    document.getElementById('prog-label').textContent = 'Quiz Complete';
+
+    document.getElementById('score-num').textContent = score;
+
+    const circumference = 339.3;
+    const offset = circumference - ((score / TOTAL) * circumference);
+    setTimeout(function() {
+      document.getElementById('ring-fill').style.strokeDashoffset = offset;
+    }, 100);
+
+    let title, msg;
+    if (score === 10) {
+      title = "Every Word in Place";
+      msg = "A perfect score across four psalms of confession, prayer, and ascent. You caught the hyssop, the horse and the mule, the thrones of David, and the nations coming to worship. These psalms reward exactly the kind of attention you just gave them.";
+    } else if (score >= 8) {
+      title = "Deep in the Text";
+      msg = "You tracked the language closely. The missed questions likely came from details that reward re-reading &mdash; the way Psalm 51:4 lands in Romans 3, or the double purpose of the Jerusalem pilgrimage in Psalm 122.";
+    } else if (score >= 6) {
+      title = "Solid Footing";
+      msg = "You grasped the major movements of these psalms. Read back through the feedback on what you missed &mdash; the details carry real theological weight, especially in Psalms 32 and 51.";
+    } else if (score >= 4) {
+      title = "Keep Pressing In";
+      msg = "These psalms repay close, slow reading. Sit again with Psalm 51 in particular &mdash; its movement from original sin (v.5) through cleansing (v.7) to renewed Spirit (vv.10&ndash;12) is the whole gospel in miniature.";
+    } else {
+      title = "Read It Again";
+      msg = "These four psalms are among the richest in the Psalter. Read through each one again with the quiz feedback in hand &mdash; you&#39;ll find the details much more memorable the second time.";
+    }
+
+    document.getElementById('results-title').textContent = title;
+    document.getElementById('results-message').innerHTML = msg;
+
+    const reviewList = document.getElementById('review-list');
+    reviewList.innerHTML = '';
+    for (let i = 1; i <= TOTAL; i++) {
+      const ua = userAnswers[i];
+      const ca = correctAnswers[i];
+      const correct = ua === ca;
+      const div = document.createElement('div');
+      div.className = 'review-item ' + (correct ? 'r-correct' : 'r-wrong');
+      div.innerHTML = '<div class="review-q">Q' + i + ': ' + questionTexts[i] + '</div>' +
+        '<div class="review-ans">' +
+        (correct
+          ? '<span class="review-correct-lbl">&#10003; Correct</span> &mdash; ' + choiceTexts[i][ca]
+          : '<span class="review-wrong-lbl">&#10007; You chose ' + ua + ':</span> ' + (choiceTexts[i][ua] || '(unanswered)') + ' &nbsp;|&nbsp; <span class="review-correct-lbl">Correct (' + ca + '):</span> ' + choiceTexts[i][ca]
+        ) + '</div>';
+      reviewList.appendChild(div);
+    }
+  }
+
+  function resetQuiz() {
+    score = 0;
+    userAnswers = {};
+    currentQ = 1;
+
+    for (let i = 1; i <= TOTAL; i++) {
+      const block = document.getElementById('q' + i);
+      block.classList.remove('active');
+      block.querySelectorAll('.choice-btn').forEach(function(btn) {
+        btn.disabled = false;
+        btn.classList.remove('correct', 'wrong');
+      });
+      const fb = document.getElementById('fb' + i);
+      fb.className = 'feedback';
+      fb.innerHTML = '';
+      document.getElementById('next' + i).classList.remove('visible');
+    }
+
+    document.getElementById('results-screen').style.display = 'none';
+    document.getElementById('ring-fill').style.strokeDashoffset = '339.3';
+    document.getElementById('q1').classList.add('active');
+    document.getElementById('prog-bar').style.width = '10%';
+    document.getElementById('prog-label').textContent = 'Question 1 of 10';
+  }
+</script>
+</body>
+</html>
