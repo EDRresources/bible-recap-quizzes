@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 136 Bible Recap Quiz — Psalms 3, 4, 12, 13, 28, 55</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 18px;
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.15);
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.3s ease forwards;
+  }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+    color: #1a3d1e;
+    display: block;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.1);
+    border: 1px solid #8b1a1a;
+    color: #5a0e0e;
+    display: block;
+  }
+  .feedback-icon { font-weight: 700; margin-right: 6px; }
+  .feedback-ref {
+    font-style: italic;
+    color: #5a4020;
+    font-size: 0.95rem;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.visible { display: inline-block; }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 22px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.15); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1e1208;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: #9a7a3a;
+    letter-spacing: 0.1em;
+  }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1e1208;
+    margin-bottom: 8px;
+  }
+  .results-message {
+    font-size: 1.08rem;
+    color: #3a2510;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #9a7a3a;
+    margin-bottom: 14px;
+    text-align: left;
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    padding-bottom: 8px;
+  }
+  .review-item {
+    text-align: left;
+    margin-bottom: 14px;
+    padding: 12px 14px;
+    border-radius: 4px;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.1);
+    border-left: 3px solid #1a5c2a;
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.08);
+    border-left: 3px solid #8b1a1a;
+  }
+  .review-q { font-weight: 600; color: #1e1208; margin-bottom: 4px; }
+  .review-ans { font-size: 0.93rem; color: #3a2510; }
+  .review-correct-lbl { color: #1a5c2a; font-weight: 600; }
+  .review-wrong-lbl   { color: #8b1a1a; font-weight: 600; }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .take-again-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  @media (max-width: 520px) {
+    .card { padding: 22px 18px; }
+    .quiz-title { font-size: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- Header -->
+  <div class="quiz-header">
+    <div class="quiz-date">
+      <span class="ornament">✦</span>
+      Saturday, May 16, 2026 &middot; Day 136
+      <span class="ornament">✦</span>
+    </div>
+    <div class="quiz-title">The Bible Recap &mdash; Daily Quiz</div>
+    <div class="passage-tags">
+      <span class="passage-tag">Psalm 3</span>
+      <span class="passage-tag">Psalm 4</span>
+      <span class="passage-tag">Psalm 12</span>
+      <span class="passage-tag">Psalm 13</span>
+      <span class="passage-tag">Psalm 28</span>
+      <span class="passage-tag">Psalm 55</span>
+    </div>
+    <div><span class="difficulty-badge">Challenging</span></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap"><div class="progress-bar" id="prog-bar"></div></div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- Card -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <div>
+          <div class="question-text">What crisis is described in the superscription of Psalm 3, making it one of only a handful of psalms with a specific historical setting?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">A</span>David&#39;s prayer after the death of the infant son born to Bathsheba</button>
+        <button class="choice-btn" onclick="answer(this,true,'q1')"><span class="choice-letter">B</span>David&#39;s flight from his son Absalom</button>
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">C</span>David&#39;s escape from Saul, when he hid in the cave of Adullam</button>
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">D</span>David&#39;s grief after the death of Jonathan on Mount Gilboa</button>
+      </div>
+      <div class="feedback" id="fb-q1"></div>
+      <button class="next-btn" id="next-q1" onclick="nextQ(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">Psalm 3:5 contains a striking statement of trust in the midst of surrounding enemies. What does David say about his experience of sleep?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">A</span>&ldquo;My eyes shall not sleep until you answer from your holy mountain&rdquo;</button>
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">B</span>&ldquo;In peace I will lie down, for you alone, O Lord, make me dwell in safety&rdquo;</button>
+        <button class="choice-btn" onclick="answer(this,true,'q2')"><span class="choice-letter">C</span>&ldquo;I lie down and sleep; I wake again, because the Lord sustains me&rdquo;</button>
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">D</span>&ldquo;Even in sleep my enemies scheme against me; I wake with a shout to God&rdquo;</button>
+      </div>
+      <div class="feedback" id="fb-q2"></div>
+      <button class="next-btn" id="next-q2" onclick="nextQ(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">Psalm 4:4 contains an instruction the apostle Paul later quoted in Ephesians 4:26. What does this verse say to do &ldquo;on your beds&rdquo;?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">A</span>Lie down in peace and trust that the Lord alone makes you dwell in safety</button>
+        <button class="choice-btn" onclick="answer(this,true,'q3')"><span class="choice-letter">B</span>Search your hearts and be silent</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">C</span>Cry out to the Lord, who answers from his holy mountain</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">D</span>Offer the sacrifices of the righteous and trust in the Lord</button>
+      </div>
+      <div class="feedback" id="fb-q3"></div>
+      <button class="next-btn" id="next-q3" onclick="nextQ(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">Psalm 12 contrasts the corrupt speech of the wicked with the purity of God&#39;s words. How many times does verse 6 say the Lord&#39;s words have been refined, in comparison to silver?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">A</span>Three times, as a symbol of divine wholeness</button>
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">B</span>Five times, as the books of the Law</button>
+        <button class="choice-btn" onclick="answer(this,true,'q4')"><span class="choice-letter">C</span>Seven times</button>
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">D</span>Twelve times, as the twelve tribes of Israel</button>
+      </div>
+      <div class="feedback" id="fb-q4"></div>
+      <button class="next-btn" id="next-q4" onclick="nextQ(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">Psalm 13 is famous for its anguished opening. How many times does the phrase &ldquo;How long&rdquo; appear in verses 1&ndash;2?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">A</span>Two</button>
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">B</span>Three</button>
+        <button class="choice-btn" onclick="answer(this,true,'q5')"><span class="choice-letter">C</span>Four</button>
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">D</span>Six</button>
+      </div>
+      <div class="feedback" id="fb-q5"></div>
+      <button class="next-btn" id="next-q5" onclick="nextQ(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">In Psalm 13:3&ndash;4, David pleads for God to &ldquo;give light to my eyes.&rdquo; What two consequences does he warn will follow if God remains silent?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">A</span>His strength will fail, and he will become a reproach to his neighbors</button>
+        <button class="choice-btn" onclick="answer(this,true,'q6')"><span class="choice-letter">B</span>He will sleep in death, and his enemy will claim to have overcome him</button>
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">C</span>His prayers will go unanswered, and his lament will echo without end</button>
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">D</span>God&#39;s face will remain hidden, and the wicked will triumph on every side</button>
+      </div>
+      <div class="feedback" id="fb-q6"></div>
+      <button class="next-btn" id="next-q6" onclick="nextQ(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">In Psalm 28:2, David describes the physical posture of his prayer. What gesture does he use as he calls to God for mercy?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">A</span>He falls prostrate with his face to the ground before God</button>
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">B</span>He kneels and beats his breast in sorrow</button>
+        <button class="choice-btn" onclick="answer(this,true,'q7')"><span class="choice-letter">C</span>He lifts up his hands toward God&#39;s Most Holy Place</button>
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">D</span>He stretches his arms toward the hill of the Lord and cries aloud</button>
+      </div>
+      <div class="feedback" id="fb-q7"></div>
+      <button class="next-btn" id="next-q7" onclick="nextQ(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+        <div>
+          <div class="question-text">In Psalm 55:12&ndash;14, David identifies who has devastated him most. Which of the following best describes the treacherous person he mourns?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">A</span>A military commander who defected to the enemy&#39;s camp and revealed David&#39;s battle plans</button>
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">B</span>A neighbor who testified falsely against David before the elders of the city</button>
+        <button class="choice-btn" onclick="answer(this,true,'q8')"><span class="choice-letter">C</span>A companion with whom David had enjoyed sweet fellowship and walked to the house of God</button>
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">D</span>A priest who had served faithfully at the ark but then conspired against the king</button>
+      </div>
+      <div class="feedback" id="fb-q8"></div>
+      <button class="next-btn" id="next-q8" onclick="nextQ(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">In Psalm 55:17, David declares his commitment to pray continually. In what specific order does he list the three times of day he cries out to God?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">A</span>Morning, noon, and evening</button>
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">B</span>At dawn, at midday, and at the close of the day</button>
+        <button class="choice-btn" onclick="answer(this,true,'q9')"><span class="choice-letter">C</span>Evening, morning, and noon</button>
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">D</span>Midnight, morning, and noon</button>
+      </div>
+      <div class="feedback" id="fb-q9"></div>
+      <button class="next-btn" id="next-q9" onclick="nextQ(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <div>
+          <div class="question-text">Psalm 55:22 contains one of the Psalter&#39;s most beloved promises. What does God pledge to those who cast their cares on him?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">A</span>&ldquo;He will grant you peace beyond all understanding and protect your hearts&rdquo;</button>
+        <button class="choice-btn" onclick="answer(this,true,'q10')"><span class="choice-letter">B</span>&ldquo;He will sustain you; he will never let the righteous be shaken&rdquo;</button>
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">C</span>&ldquo;He will deliver you from the snare of the fowler and the deadly pestilence&rdquo;</button>
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">D</span>&ldquo;He will repay your enemies and bring justice swiftly to your cause&rdquo;</button>
+      </div>
+      <div class="feedback" id="fb-q10"></div>
+      <button class="next-btn" id="next-q10" onclick="nextQ(10)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Results -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 130 130">
+          <circle class="score-ring-bg" cx="65" cy="65" r="54"/>
+          <circle class="score-ring-fill" id="ring-fill" cx="65" cy="65" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <div class="score-num" id="score-num">0</div>
+          <div class="score-denom">out of 10</div>
+        </div>
+      </div>
+      <div class="results-title">Quiz Complete</div>
+      <div class="results-message" id="results-msg"></div>
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+    </div>
+
+  </div><!-- .card -->
+</div><!-- .outer-wrap -->
+
+<script>
+const QUESTIONS = [
+  {
+    id: 'q1',
+    text: 'What crisis is described in the superscription of Psalm 3, making it one of only a handful of psalms with a specific historical setting?',
+    correct: 1,
+    choices: [
+      "David&#39;s prayer after the death of the infant son born to Bathsheba",
+      "David&#39;s flight from his son Absalom",
+      "David&#39;s escape from Saul, when he hid in the cave of Adullam",
+      "David&#39;s grief after the death of Jonathan on Mount Gilboa"
+    ],
+    feedback_correct: "Correct! The superscription reads: &#39;A psalm of David. When he fled from his son Absalom.&#39; This makes Psalm 3 a rare psalm anchored to a specific, named historical moment — and it opens a cluster of psalms likely connected to the Absalom crisis.",
+    feedback_wrong: "Not quite. The superscription of Psalm 3 reads: &#39;A psalm of David. When he fled from his son Absalom.&#39; The next several psalms (including Psalm 55) are also associated with this painful period in David&#39;s life.",
+    ref: "Psalm 3 (superscription)"
+  },
+  {
+    id: 'q2',
+    text: 'Psalm 3:5 contains a striking statement of trust in the midst of surrounding enemies. What does David say about his experience of sleep?',
+    correct: 2,
+    choices: [
+      '"My eyes shall not sleep until you answer from your holy mountain"',
+      '"In peace I will lie down, for you alone, O Lord, make me dwell in safety"',
+      '"I lie down and sleep; I wake again, because the Lord sustains me"',
+      '"Even in sleep my enemies scheme against me; I wake with a shout to God"'
+    ],
+    feedback_correct: "Correct! Psalm 3:5 reads: &#39;I lie down and sleep; I wake again, because the Lord sustains me.&#39; Note that choice B is actually from Psalm 4:8 — a closely related but distinct promise. The sustaining power of God enables rest even in danger.",
+    feedback_wrong: "Not quite. Psalm 3:5 says: &#39;I lie down and sleep; I wake again, because the Lord sustains me.&#39; Choice B (&#39;In peace I will lie down...&#39;) is the similar but distinct verse from Psalm 4:8 — worth knowing both!",
+    ref: "Psalm 3:5"
+  },
+  {
+    id: 'q3',
+    text: 'Psalm 4:4 contains an instruction the apostle Paul later quoted in Ephesians 4:26. What does this verse say to do "on your beds"?',
+    correct: 1,
+    choices: [
+      "Lie down in peace and trust that the Lord alone makes you dwell in safety",
+      "Search your hearts and be silent",
+      "Cry out to the Lord, who answers from his holy mountain",
+      "Offer the sacrifices of the righteous and trust in the Lord"
+    ],
+    feedback_correct: "Correct! Psalm 4:4 says: &#39;Tremble and do not sin; when you are on your beds, search your hearts and be silent.&#39; Paul quotes the first half in Ephesians 4:26 (&#39;In your anger do not sin&#39;), and the instruction to be still and self-examine remains deeply practical.",
+    feedback_wrong: "Not quite. Psalm 4:4 instructs: &#39;when you are on your beds, search your hearts and be silent.&#39; Note that choice A echoes Psalm 4:8 (the &#39;lie down in peace&#39; verse), and choice D echoes verse 5 — all from this same psalm but distinct commands.",
+    ref: "Psalm 4:4"
+  },
+  {
+    id: 'q4',
+    text: 'Psalm 12 contrasts the corrupt speech of the wicked with the purity of God\'s words. How many times does verse 6 say the Lord\'s words have been refined, in comparison to silver?',
+    correct: 2,
+    choices: [
+      "Three times, as a symbol of divine wholeness",
+      "Five times, as the books of the Law",
+      "Seven times",
+      "Twelve times, as the twelve tribes of Israel"
+    ],
+    feedback_correct: "Correct! Psalm 12:6: &#39;And the words of the Lord are flawless, like silver purified in a crucible, like gold refined seven times.&#39; Against a backdrop of deceitful human speech (vv.1–4), God&#39;s word stands as the purest thing in existence.",
+    feedback_wrong: "Not quite. Psalm 12:6 says God&#39;s words are like silver &#39;refined seven times.&#39; The sevenfold purity underscores the absolute contrast with the lying tongues described at the psalm&#39;s opening.",
+    ref: "Psalm 12:6"
+  },
+  {
+    id: 'q5',
+    text: 'Psalm 13 is famous for its anguished opening. How many times does the phrase "How long" appear in verses 1–2?',
+    correct: 2,
+    choices: [
+      "Two",
+      "Three",
+      "Four",
+      "Six"
+    ],
+    feedback_correct: "Correct! The four cries are: &#39;How long, Lord? Will you forget me forever? How long will you hide your face from me? How long must I wrestle with my thoughts and day after day have sorrow in my heart? How long will my enemy triumph over me?&#39; The fourfold repetition gives the lament its suffocating weight.",
+    feedback_wrong: "Not quite. The phrase &#39;How long&#39; appears four times across verses 1–2, pressing against four different aspects of abandonment: God&#39;s forgetfulness, God&#39;s hidden face, David&#39;s inner anguish, and his enemy&#39;s triumph.",
+    ref: "Psalm 13:1–2"
+  },
+  {
+    id: 'q6',
+    text: 'In Psalm 13:3–4, David pleads for God to "give light to my eyes." What two consequences does he warn will follow if God remains silent?',
+    correct: 1,
+    choices: [
+      "His strength will fail, and he will become a reproach to his neighbors",
+      "He will sleep in death, and his enemy will claim to have overcome him",
+      "His prayers will go unanswered, and his lament will echo without end",
+      "God\'s face will remain hidden, and the wicked will triumph on every side"
+    ],
+    feedback_correct: "Correct! Psalm 13:3–4: &#39;Give light to my eyes, or I will sleep in death, and my enemy will say, &ldquo;I have overcome him,&rdquo; and my foes will rejoice when I fall.&#39; Death and the enemy&#39;s gloating are presented as the twin catastrophes that God&#39;s silence invites.",
+    feedback_wrong: "Not quite. Psalm 13:3–4 warns of two consequences: David will &#39;sleep in death,&#39; and his enemy will boast &#39;I have overcome him.&#39; The prayer for light to his eyes is a plea for life itself.",
+    ref: "Psalm 13:3–4"
+  },
+  {
+    id: 'q7',
+    text: 'In Psalm 28:2, David describes the physical posture of his prayer. What gesture does he use as he calls to God for mercy?',
+    correct: 2,
+    choices: [
+      "He falls prostrate with his face to the ground before God",
+      "He kneels and beats his breast in sorrow",
+      "He lifts up his hands toward God\'s Most Holy Place",
+      "He stretches his arms toward the hill of the Lord and cries aloud"
+    ],
+    feedback_correct: "Correct! Psalm 28:2: &#39;Hear my cry for mercy as I call to you for help, as I lift up my hands toward your Most Holy Place.&#39; Lifting hands toward the sanctuary was a recognized posture of prayer in Israel, expressing both supplication and orientation toward God&#39;s dwelling.",
+    feedback_wrong: "Not quite. Psalm 28:2 describes David lifting his hands toward God&#39;s Most Holy Place — the innermost sanctuary where God&#39;s presence dwelt. This gesture of upraised hands is one of Scripture&#39;s classic images of prayer.",
+    ref: "Psalm 28:2"
+  },
+  {
+    id: 'q8',
+    text: 'In Psalm 55:12–14, David identifies who has devastated him most. Which of the following best describes the treacherous person he mourns?',
+    correct: 2,
+    choices: [
+      "A military commander who defected to the enemy&#39;s camp and revealed David&#39;s battle plans",
+      "A neighbor who testified falsely against David before the elders of the city",
+      "A companion with whom David had enjoyed sweet fellowship and walked to the house of God",
+      "A priest who had served faithfully at the ark but then conspired against the king"
+    ],
+    feedback_correct: "Correct! Psalm 55:13–14: &#39;But it is you, a man like myself, my companion, my close friend, with whom I once enjoyed sweet fellowship at the house of God, as we walked about among the worshipers.&#39; Many connect this to Ahithophel, David&#39;s trusted counselor who joined Absalom&#39;s revolt — a foreshadow of Judas&#39; betrayal of Christ.",
+    feedback_wrong: "Not quite. Psalm 55:13–14 describes the betrayer as David&#39;s close companion, someone with whom he had &#39;enjoyed sweet fellowship at the house of God.&#39; The depth of intimacy makes the betrayal all the more devastating — a pattern that finds its ultimate expression in Christ and Judas.",
+    ref: "Psalm 55:13–14"
+  },
+  {
+    id: 'q9',
+    text: 'In Psalm 55:17, David declares his commitment to pray continually. In what specific order does he list the three times of day he cries out to God?',
+    correct: 2,
+    choices: [
+      "Morning, noon, and evening",
+      "At dawn, at midday, and at the close of the day",
+      "Evening, morning, and noon",
+      "Midnight, morning, and noon"
+    ],
+    feedback_correct: "Correct! Psalm 55:17: &#39;Evening, morning and noon I cry out in distress, and he hears my voice.&#39; The order — evening first — reflects the Hebrew reckoning of the day beginning at sundown, as in Genesis 1 (&#39;there was evening, and there was morning&#39;). God hears at all hours.",
+    feedback_wrong: "Not quite. Psalm 55:17 lists the times in the order: &#39;Evening, morning and noon.&#39; The evening-first sequence follows the Hebrew understanding of the day beginning at sundown — a pattern rooted in Genesis 1. The more intuitive order (morning first) is not what the text says.",
+    ref: "Psalm 55:17"
+  },
+  {
+    id: 'q10',
+    text: 'Psalm 55:22 contains one of the Psalter\'s most beloved promises. What does God pledge to those who cast their cares on him?',
+    correct: 1,
+    choices: [
+      '"He will grant you peace beyond all understanding and protect your hearts"',
+      '"He will sustain you; he will never let the righteous be shaken"',
+      '"He will deliver you from the snare of the fowler and the deadly pestilence"',
+      '"He will repay your enemies and bring justice swiftly to your cause"'
+    ],
+    feedback_correct: "Correct! Psalm 55:22: &#39;Cast your cares on the Lord and he will sustain you; he will never let the righteous be shaken.&#39; Note that 1 Peter 5:7 echoes this verse (&#39;Cast all your anxiety on him because he cares for you&#39;). The promise is not the removal of burdens but the sustaining presence of God beneath them.",
+    feedback_wrong: "Not quite. Psalm 55:22 promises: &#39;he will sustain you; he will never let the righteous be shaken.&#39; Choice A echoes Philippians 4:7, choice C echoes Psalm 91 — both wonderful promises, but not this verse. The promise here is sustaining grace, not elimination of the burden.",
+    ref: "Psalm 55:22"
+  }
+];
+
+let current = 0;
+let score = 0;
+let answers = [];
+
+function answer(btn, isCorrect, qId) {
+  const block = document.getElementById(qId);
+  const buttons = block.querySelectorAll('.choice-btn');
+  buttons.forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('fb-' + qId);
+  const qIdx = parseInt(qId.replace('q','')) - 1;
+  const q = QUESTIONS[qIdx];
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+    fb.className = 'feedback correct-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10003;</span>' + q.feedback_correct + '<span class="feedback-ref">' + q.ref + '</span>';
+    score++;
+    answers.push({ correct: true, question: q.text, ref: q.ref });
+  } else {
+    btn.classList.add('wrong');
+    buttons[q.correct].classList.add('correct');
+    fb.className = 'feedback wrong-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10007;</span>' + q.feedback_wrong + '<span class="feedback-ref">' + q.ref + '</span>';
+    answers.push({ correct: false, question: q.text, ref: q.ref });
+  }
+
+  const nextBtn = document.getElementById('next-' + qId);
+  if (nextBtn) nextBtn.classList.add('visible');
+}
+
+function nextQ(num) {
+  document.getElementById('q' + num).classList.remove('active');
+  current = num;
+  if (current < 10) {
+    document.getElementById('q' + (current+1)).classList.add('active');
+    updateProgress(current + 1);
+  } else {
+    showResults();
+  }
+}
+
+function updateProgress(qNum) {
+  const pct = Math.round((qNum / 10) * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = 'Question ' + qNum + ' of 10';
+}
+
+function showResults() {
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-label').textContent = 'Complete';
+  document.getElementById('results-screen').style.display = 'block';
+  document.getElementById('score-num').textContent = score;
+
+  const circumference = 339.3;
+  const offset = circumference - (score / 10) * circumference;
+  setTimeout(() => {
+    document.getElementById('ring-fill').style.strokeDashoffset = offset;
+  }, 100);
+
+  let msg = '';
+  if (score === 10) msg = 'Perfect score! You read every word of these six psalms of lament, trust, and betrayal with exceptional attention.';
+  else if (score >= 8) msg = 'Excellent work! The poetry of David\'s cry and confidence is firmly in your grasp.';
+  else if (score >= 6) msg = 'Good effort! These psalms reward close, careful reading — a second pass will sharpen the details.';
+  else if (score >= 4) msg = 'Keep at it. The laments and promises of Psalms 3, 4, 12, 13, 28, and 55 are rich territory worth revisiting.';
+  else msg = 'These are deeply layered psalms full of precise language and theological weight. Return to the text and try again!';
+  document.getElementById('results-msg').textContent = msg;
+
+  const reviewList = document.getElementById('review-list');
+  answers.forEach((a, i) => {
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (a.correct ? 'r-correct' : 'r-wrong');
+    div.innerHTML = '<div class="review-q">Q' + (i+1) + ': ' + a.question + '</div>' +
+      '<div class="review-ans">' +
+      (a.correct
+        ? '<span class="review-correct-lbl">Correct</span>'
+        : '<span class="review-wrong-lbl">Incorrect</span>') +
+      ' &mdash; ' + a.ref + '</div>';
+    reviewList.appendChild(div);
+  });
+}
+
+function resetQuiz() {
+  current = 0; score = 0; answers = [];
+  document.querySelectorAll('.question-block').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.choice-btn').forEach(b => {
+    b.disabled = false;
+    b.classList.remove('correct','wrong');
+  });
+  document.querySelectorAll('.feedback').forEach(f => { f.className = 'feedback'; f.innerHTML = ''; });
+  document.querySelectorAll('.next-btn').forEach(b => b.classList.remove('visible'));
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('review-list').innerHTML = '';
+  document.getElementById('ring-fill').style.strokeDashoffset = '339.3';
+  document.getElementById('q1').classList.add('active');
+  updateProgress(1);
+}
+
+// initialize progress
+updateProgress(1);
+</script>
+</body>
+</html>
