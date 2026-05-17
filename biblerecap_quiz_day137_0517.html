@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 137 Bible Recap Quiz — 2 Samuel 16–18</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 18px;
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.15);
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.3s ease forwards;
+  }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+    color: #1a3d1e;
+    display: block;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.1);
+    border: 1px solid #8b1a1a;
+    color: #5a0e0e;
+    display: block;
+  }
+  .feedback-icon { font-weight: 700; margin-right: 6px; }
+  .feedback-ref {
+    font-style: italic;
+    color: #5a4020;
+    font-size: 0.95rem;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.visible { display: inline-block; }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 22px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.15); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1e1208;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: #9a7a3a;
+    letter-spacing: 0.1em;
+  }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1e1208;
+    margin-bottom: 8px;
+  }
+  .results-message {
+    font-size: 1.08rem;
+    color: #3a2510;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #9a7a3a;
+    margin-bottom: 14px;
+    text-align: left;
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    padding-bottom: 8px;
+  }
+  .review-item {
+    text-align: left;
+    margin-bottom: 14px;
+    padding: 12px 14px;
+    border-radius: 4px;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.1);
+    border-left: 3px solid #1a5c2a;
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.08);
+    border-left: 3px solid #8b1a1a;
+  }
+  .review-q { font-weight: 600; color: #1e1208; margin-bottom: 4px; }
+  .review-ans { font-size: 0.93rem; color: #3a2510; }
+  .review-correct-lbl { color: #1a5c2a; font-weight: 600; }
+  .review-wrong-lbl   { color: #8b1a1a; font-weight: 600; }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .take-again-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  @media (max-width: 520px) {
+    .card { padding: 22px 18px; }
+    .quiz-title { font-size: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- Header -->
+  <div class="quiz-header">
+    <div class="quiz-date">
+      <span class="ornament">✦</span>
+      Sunday, May 17, 2026 &middot; Day 137
+      <span class="ornament">✦</span>
+    </div>
+    <div class="quiz-title">The Bible Recap &mdash; Daily Quiz</div>
+    <div class="passage-tags">
+      <span class="passage-tag">2 Samuel 16</span>
+      <span class="passage-tag">2 Samuel 17</span>
+      <span class="passage-tag">2 Samuel 18</span>
+    </div>
+    <div><span class="difficulty-badge">Challenging</span></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap"><div class="progress-bar" id="prog-bar"></div></div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- Card -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">When Ziba, the servant of Mephibosheth, met David at the summit of the Mount of Olives, what provisions did he bring on his two donkeys?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,'q1')"><span class="choice-letter">A</span>Two hundred loaves of bread, a hundred clusters of raisins, a hundred of summer fruit, and a skin of wine</button>
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">B</span>Three hundred loaves of bread, fifty clusters of raisins, a jar of oil, and two skins of wine</button>
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">C</span>A hundred loaves of bread, dried figs, a bundle of raisins, cheese, and a skin of wine</button>
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">D</span>Two hundred loaves, jars of honey and curds, roasted grain, and a skin of wine</button>
+      </div>
+      <div class="feedback" id="fb-q1"></div>
+      <button class="next-btn" id="next-q1" onclick="nextQ(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+        <div>
+          <div class="question-text">When Shimei cursed David and pelted him with stones, Abishai urged the king to let him go cut off Shimei&#39;s head. What was the core of David&#39;s response?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">A</span>He agreed Shimei deserved death but ordered him bound and brought along as a prisoner</button>
+        <button class="choice-btn" onclick="answer(this,true,'q2')"><span class="choice-letter">B</span>He rebuked Abishai, saying the LORD may have told Shimei to curse David, and that God might see his misery and repay him with good</button>
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">C</span>He wept openly and prayed aloud that God would silence Shimei and vindicate the king before all Israel</button>
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">D</span>He commanded everyone to ignore Shimei entirely and press forward without breaking stride</button>
+      </div>
+      <div class="feedback" id="fb-q2"></div>
+      <button class="next-btn" id="next-q2" onclick="nextQ(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <div>
+          <div class="question-text">Ahithophel advised Absalom to sleep with his father&#39;s concubines publicly on the roof. What strategic reason did he give for this counsel?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">A</span>To demonstrate to the tribes of Israel that Absalom had officially claimed the throne</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">B</span>To humiliate David before the priests and Levites who still supported him</button>
+        <button class="choice-btn" onclick="answer(this,true,'q3')"><span class="choice-letter">C</span>So that all Israel would hear that Absalom had made himself odious to his father, which would strengthen the resolve of everyone who had joined him</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">D</span>To fulfill a vow Absalom had made at Hebron before the rebellion began</button>
+      </div>
+      <div class="feedback" id="fb-q3"></div>
+      <button class="next-btn" id="next-q3" onclick="nextQ(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">In his battle plan to strike David quickly, Ahithophel asked Absalom to let him choose men and pursue David that very night. How many men did he request?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">A</span>Six thousand</button>
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">B</span>Ten thousand</button>
+        <button class="choice-btn" onclick="answer(this,true,'q4')"><span class="choice-letter">C</span>Twelve thousand</button>
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">D</span>Twenty thousand</button>
+      </div>
+      <div class="feedback" id="fb-q4"></div>
+      <button class="next-btn" id="next-q4" onclick="nextQ(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">In his counter-counsel to Absalom, Hushai argued that David and his men were seasoned fighters who should not be underestimated. To what dangerous animal did he compare them?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">A</span>A lion prowling for prey in the night</button>
+        <button class="choice-btn" onclick="answer(this,true,'q5')"><span class="choice-letter">B</span>A bear robbed of her cubs in the field</button>
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">C</span>A wild ox that cannot be tethered or turned aside</button>
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">D</span>A charging war horse that cannot be stopped in battle</button>
+      </div>
+      <div class="feedback" id="fb-q5"></div>
+      <button class="next-btn" id="next-q5" onclick="nextQ(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <div>
+          <div class="question-text">Hushai relayed intelligence to the priests Zadok and Abiathar so their sons could carry word to David. Where were Jonathan and Ahimaaz waiting to receive this information?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">A</span>At the gate of the city, disguised as merchants</button>
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">B</span>In the house of Barzillai the Gileadite beyond the Jordan</button>
+        <button class="choice-btn" onclick="answer(this,true,'q6')"><span class="choice-letter">C</span>At En-rogel</button>
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">D</span>At the ford of the Jordan near Jericho</button>
+      </div>
+      <div class="feedback" id="fb-q6"></div>
+      <button class="next-btn" id="next-q6" onclick="nextQ(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">A servant boy spotted Jonathan and Ahimaaz and reported them to Absalom, so they fled to a man&#39;s house in Bahurim. How were they hidden from Absalom&#39;s servants when searched for?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">A</span>They were concealed beneath a pile of threshed grain on the roof of the house</button>
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">B</span>They disguised themselves as household servants and answered Absalom&#39;s men directly</button>
+        <button class="choice-btn" onclick="answer(this,true,'q7')"><span class="choice-letter">C</span>They went down into a well in the courtyard, and the man&#39;s wife spread a covering over the well&#39;s mouth and scattered grain on it</button>
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">D</span>They hid in a storage room beneath the floor while the woman told searchers they had crossed the brook</button>
+      </div>
+      <div class="feedback" id="fb-q7"></div>
+      <button class="next-btn" id="next-q7" onclick="nextQ(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+        <div>
+          <div class="question-text">When Absalom and the elders chose Hushai&#39;s counsel over Ahithophel&#39;s, what did Ahithophel do?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">A</span>He fled to Egypt to escape Absalom&#39;s anger at having been overruled</button>
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">B</span>He secretly sent word to David revealing Absalom&#39;s plans and asking forgiveness</button>
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">C</span>He went to Absalom in private and begged him to reconsider, then withdrew from the campaign</button>
+        <button class="choice-btn" onclick="answer(this,true,'q8')"><span class="choice-letter">D</span>He went home to his own city, put his house in order, and hanged himself</button>
+      </div>
+      <div class="feedback" id="fb-q8"></div>
+      <button class="next-btn" id="next-q8" onclick="nextQ(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">Second Samuel 18 mentions that Absalom had erected a pillar for himself in the King&#39;s Valley during his lifetime. What specific reason does the text give for why he built it?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">A</span>He built it as a monument to his military victories over the surrounding nations</button>
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">B</span>He erected it to mark the spot where he had been anointed king over Israel at Hebron</button>
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">C</span>He built it to honor his father David, whose name he said must be remembered forever</button>
+        <button class="choice-btn" onclick="answer(this,true,'q9')"><span class="choice-letter">D</span>He had no son to keep his name in remembrance, so he named the pillar after himself</button>
+      </div>
+      <div class="feedback" id="fb-q9"></div>
+      <button class="next-btn" id="next-q9" onclick="nextQ(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <div>
+          <div class="question-text">When Ahimaaz reached David at the gate ahead of the Cushite, the king asked directly: &ldquo;Is it well with the young man Absalom?&rdquo; How did Ahimaaz answer?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">A</span>He reported truthfully that Absalom had been killed by Joab in the forest of Ephraim</button>
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">B</span>He said Absalom had been taken captive and was being brought to the king under guard</button>
+        <button class="choice-btn" onclick="answer(this,true,'q10')"><span class="choice-letter">C</span>He said he saw a great commotion when Joab sent him but did not know what it was, and stepped aside</button>
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">D</span>He said Absalom had fled across the Jordan and his whereabouts were unknown</button>
+      </div>
+      <div class="feedback" id="fb-q10"></div>
+      <button class="next-btn" id="next-q10" onclick="nextQ(10)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Results -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 130 130">
+          <circle class="score-ring-bg" cx="65" cy="65" r="54"/>
+          <circle class="score-ring-fill" id="ring-fill" cx="65" cy="65" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <div class="score-num" id="score-num">0</div>
+          <div class="score-denom">out of 10</div>
+        </div>
+      </div>
+      <div class="results-title">Quiz Complete</div>
+      <div class="results-message" id="results-msg"></div>
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+    </div>
+
+  </div><!-- .card -->
+</div><!-- .outer-wrap -->
+
+<script>
+const QUESTIONS = [
+  {
+    id: 'q1',
+    text: 'When Ziba, the servant of Mephibosheth, met David at the summit of the Mount of Olives, what provisions did he bring on his two donkeys?',
+    correct: 0,
+    choices: [
+      "Two hundred loaves of bread, a hundred clusters of raisins, a hundred of summer fruit, and a skin of wine",
+      "Three hundred loaves of bread, fifty clusters of raisins, a jar of oil, and two skins of wine",
+      "A hundred loaves of bread, dried figs, a bundle of raisins, cheese, and a skin of wine",
+      "Two hundred loaves, jars of honey and curds, roasted grain, and a skin of wine"
+    ],
+    feedback_correct: "Correct! 2 Samuel 16:1&#8211;2 lists the provisions precisely: two hundred loaves, a hundred clusters of raisins, a hundred of summer fruit, and a skin of wine. Ziba claimed the donkeys were for the king&#39;s household to ride, and the food for those who grew faint in the wilderness. The specificity rewards close reading.",
+    feedback_wrong: "Not quite. The text lists: two hundred loaves of bread, a hundred clusters of raisins, a hundred of summer fruit, and a skin of wine (2 Samuel 16:1&#8211;2). The wrong options shuffle quantities or substitute items that appear elsewhere in the narrative.",
+    ref: "2 Samuel 16:1&#8211;2"
+  },
+  {
+    id: 'q2',
+    text: 'When Shimei cursed David and pelted him with stones, Abishai urged the king to let him go cut off Shimei\'s head. What was the core of David\'s response?',
+    correct: 1,
+    choices: [
+      "He agreed Shimei deserved death but ordered him bound and brought along as a prisoner",
+      "He rebuked Abishai, saying the LORD may have told Shimei to curse David, and that God might see his misery and repay him with good",
+      "He wept openly and prayed aloud that God would silence Shimei and vindicate the king before all Israel",
+      "He commanded everyone to ignore Shimei entirely and press forward without breaking stride"
+    ],
+    feedback_correct: "Correct! David&#39;s response in 2 Samuel 16:10&#8211;12 is remarkable: he refuses to retaliate, acknowledges the possibility that God is behind the cursing, and hopes God may look on his affliction and repay him with good. It is a portrait of humility under sovereignty.",
+    feedback_wrong: "Not quite. David&#39;s response (2 Samuel 16:10&#8211;12) was to rebuke Abishai and suggest the LORD may have commanded Shimei&#39;s curse. Rather than seeking vengeance, David submitted to God&#39;s possible purpose and hoped for divine compassion.",
+    ref: "2 Samuel 16:10&#8211;12"
+  },
+  {
+    id: 'q3',
+    text: 'Ahithophel advised Absalom to sleep with his father\'s concubines publicly on the roof. What strategic reason did he give for this counsel?',
+    correct: 2,
+    choices: [
+      "To demonstrate to the tribes of Israel that Absalom had officially claimed the throne",
+      "To humiliate David before the priests and Levites who still supported him",
+      "So that all Israel would hear that Absalom had made himself odious to his father, which would strengthen the resolve of everyone who had joined him",
+      "To fulfill a vow Absalom had made at Hebron before the rebellion began"
+    ],
+    feedback_correct: "Correct! Ahithophel&#39;s rationale (2 Samuel 16:21) was political: making Absalom&#39;s break with David irreversible would galvanize his followers. The narrator adds that the act fulfilled Nathan&#39;s prophecy in 2 Samuel 12:11&#8211;12 about David&#39;s wives being taken openly. God&#39;s word stands even through evil.",
+    feedback_wrong: "Not quite. Ahithophel&#39;s stated reasoning (2 Samuel 16:21) was that publicly shaming David would make Absalom&#39;s supporters &#39;emboldened&#39; &#8212; burning the bridge of reconciliation would lock them into Absalom&#39;s cause. The act also unwittingly fulfilled Nathan&#39;s earlier prophecy.",
+    ref: "2 Samuel 16:21"
+  },
+  {
+    id: 'q4',
+    text: 'In his battle plan to strike David quickly, Ahithophel asked Absalom to let him choose men and pursue David that very night. How many men did he request?',
+    correct: 2,
+    choices: [
+      "Six thousand",
+      "Ten thousand",
+      "Twelve thousand",
+      "Twenty thousand"
+    ],
+    feedback_correct: "Correct! Ahithophel requested twelve thousand men (2 Samuel 17:1) &#8212; enough for a decisive strike but a number he believed could be mustered swiftly. His plan was sound: catch David that night while he was weary and frightened, kill only the king, and let the people return in peace. Hushai had to argue persuasively to overturn it.",
+    feedback_wrong: "Not quite. Ahithophel specified twelve thousand men (2 Samuel 17:1). His plan was tactically strong &#8212; a swift night raid targeting David alone &#8212; which is why God had to move providentially through Hushai to defeat it.",
+    ref: "2 Samuel 17:1"
+  },
+  {
+    id: 'q5',
+    text: 'In his counter-counsel to Absalom, Hushai argued that David and his men were seasoned fighters who should not be underestimated. To what dangerous animal did he compare them?',
+    correct: 1,
+    choices: [
+      "A lion prowling for prey in the night",
+      "A bear robbed of her cubs in the field",
+      "A wild ox that cannot be tethered or turned aside",
+      "A charging war horse that cannot be stopped in battle"
+    ],
+    feedback_correct: "Correct! Hushai said David&#39;s men were like &#39;a bear robbed of her cubs in the field&#39; (2 Samuel 17:8) &#8212; a creature known for explosive, desperate ferocity. By vividly painting the danger of an ambush, Hushai successfully persuaded Absalom to delay and gather a massive army instead, giving David time to escape.",
+    feedback_wrong: "Not quite. Hushai compared David and his men to a bear robbed of her cubs (2 Samuel 17:8) &#8212; the most fearsome image of provoked maternal fury in the ancient world. The vivid comparison was part of his rhetorical strategy to buy David time.",
+    ref: "2 Samuel 17:8"
+  },
+  {
+    id: 'q6',
+    text: 'Hushai relayed intelligence to the priests Zadok and Abiathar so their sons could carry word to David. Where were Jonathan and Ahimaaz waiting to receive this information?',
+    correct: 2,
+    choices: [
+      "At the gate of the city, disguised as merchants",
+      "In the house of Barzillai the Gileadite beyond the Jordan",
+      "At En-rogel",
+      "At the ford of the Jordan near Jericho"
+    ],
+    feedback_correct: "Correct! Jonathan and Ahimaaz were stationed at En-rogel (2 Samuel 17:17), a spring just outside Jerusalem, so they could receive messages without entering the city. A servant girl was to pass word to them there &#8212; a delicate chain of communication that nearly broke down when a boy spotted them.",
+    feedback_wrong: "Not quite. The text says they were at En-rogel (2 Samuel 17:17), a spring south of Jerusalem. The other locations are plausible from the broader narrative context but are not where the text places them for this mission.",
+    ref: "2 Samuel 17:17"
+  },
+  {
+    id: 'q7',
+    text: 'A servant boy spotted Jonathan and Ahimaaz and reported them to Absalom, so they fled to a man\'s house in Bahurim. How were they hidden from Absalom\'s servants when searched for?',
+    correct: 2,
+    choices: [
+      "They were concealed beneath a pile of threshed grain on the roof of the house",
+      "They disguised themselves as household servants and answered Absalom&#39;s men directly",
+      "They went down into a well in the courtyard, and the man&#39;s wife spread a covering over the well&#39;s mouth and scattered grain on it",
+      "They hid in a storage room beneath the floor while the woman told searchers they had crossed the brook"
+    ],
+    feedback_correct: "Correct! The woman&#39;s quick thinking is vivid (2 Samuel 17:18&#8211;19): she spread a covering over the well&#39;s mouth and scattered grain on top, so searchers saw nothing but a grain mat. When asked, she said the men had &#39;gone over the brook of water&#39; &#8212; a misdirection that worked perfectly.",
+    feedback_wrong: "Not quite. They were hidden in a well, covered by a cloth spread over its mouth with grain scattered on top (2 Samuel 17:18&#8211;19). The woman then told Absalom&#39;s servants the men had crossed the brook &#8212; a deft combination of physical concealment and misdirection.",
+    ref: "2 Samuel 17:18&#8211;19"
+  },
+  {
+    id: 'q8',
+    text: 'When Absalom and the elders chose Hushai\'s counsel over Ahithophel\'s, what did Ahithophel do?',
+    correct: 3,
+    choices: [
+      "He fled to Egypt to escape Absalom&#39;s anger at having been overruled",
+      "He secretly sent word to David revealing Absalom&#39;s plans and asking forgiveness",
+      "He went to Absalom in private and begged him to reconsider, then withdrew from the campaign",
+      "He went home to his own city, put his house in order, and hanged himself"
+    ],
+    feedback_correct: "Correct! Ahithophel&#39;s response is sobering (2 Samuel 17:23): he went to his own city, set his house in order, and hanged himself. The narrator notes he was buried in his father&#39;s tomb. Many see in Ahithophel a type of Judas &#8212; a trusted adviser who betrayed the king and died by his own hand (compare Matthew 27:5).",
+    feedback_wrong: "Not quite. Ahithophel went home, put his house in order, and hanged himself (2 Samuel 17:23). His counsel was considered nearly oracular (2 Samuel 16:23), so its rejection was a complete humiliation. The parallel to Judas &#8212; betrayal of a king, followed by suicide &#8212; is one of Scripture&#39;s striking typological patterns.",
+    ref: "2 Samuel 17:23"
+  },
+  {
+    id: 'q9',
+    text: 'Second Samuel 18 mentions that Absalom had erected a pillar for himself in the King\'s Valley during his lifetime. What specific reason does the text give for why he built it?',
+    correct: 3,
+    choices: [
+      "He built it as a monument to his military victories over the surrounding nations",
+      "He erected it to mark the spot where he had been anointed king over Israel at Hebron",
+      "He built it to honor his father David, whose name he said must be remembered forever",
+      "He had no son to keep his name in remembrance, so he named the pillar after himself"
+    ],
+    feedback_correct: "Correct! The text in 2 Samuel 18:18 is poignant: Absalom had no son to keep his name alive, so he built a pillar and called it by his own name. Ironically, he is buried under a heap of stones in a pit &#8212; the opposite of the monument he sought. The man who craved lasting fame died in disgrace and obscurity.",
+    feedback_wrong: "Not quite. 2 Samuel 18:18 says Absalom had no son to preserve his memory, so he named a pillar after himself. The irony is sharp: he wanted to be remembered, but he died hanging in a tree and was buried under stones in a pit &#8212; an inglorious end to a self-aggrandizing life.",
+    ref: "2 Samuel 18:18"
+  },
+  {
+    id: 'q10',
+    text: 'When Ahimaaz reached David at the gate ahead of the Cushite, the king asked directly: “Is it well with the young man Absalom?” How did Ahimaaz answer?',
+    correct: 2,
+    choices: [
+      "He reported truthfully that Absalom had been killed by Joab in the forest of Ephraim",
+      "He said Absalom had been taken captive and was being brought to the king under guard",
+      "He said he saw a great commotion when Joab sent him but did not know what it was, and stepped aside",
+      "He said Absalom had fled across the Jordan and his whereabouts were unknown"
+    ],
+    feedback_correct: "Correct! Ahimaaz deflected (2 Samuel 18:29): &#39;I saw a great commotion but I did not know what it was.&#39; He had apparently run ahead of the Cushite before knowing the full outcome, or more likely he was unwilling to be the one to deliver the devastating news to the king. The Cushite arrived moments later and confirmed Absalom&#39;s death.",
+    feedback_wrong: "Not quite. When David pressed about Absalom, Ahimaaz said he saw a great tumult but didn&#39;t know what it was (2 Samuel 18:29), and stepped aside. He left the full news to the Cushite, who confirmed Absalom&#39;s death &#8212; triggering David&#39;s famous, heartbroken lament.",
+    ref: "2 Samuel 18:29"
+  }
+];
+
+let current = 0;
+let score = 0;
+let answers = [];
+
+function answer(btn, isCorrect, qId) {
+  const block = document.getElementById(qId);
+  const buttons = block.querySelectorAll('.choice-btn');
+  buttons.forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('fb-' + qId);
+  const qIdx = parseInt(qId.replace('q','')) - 1;
+  const q = QUESTIONS[qIdx];
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+    fb.className = 'feedback correct-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10003;</span>' + q.feedback_correct + '<span class="feedback-ref">' + q.ref + '</span>';
+    score++;
+    answers.push({ correct: true, question: q.text, ref: q.ref });
+  } else {
+    btn.classList.add('wrong');
+    buttons[q.correct].classList.add('correct');
+    fb.className = 'feedback wrong-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10007;</span>' + q.feedback_wrong + '<span class="feedback-ref">' + q.ref + '</span>';
+    answers.push({ correct: false, question: q.text, ref: q.ref });
+  }
+
+  const nextBtn = document.getElementById('next-' + qId);
+  if (nextBtn) nextBtn.classList.add('visible');
+}
+
+function nextQ(num) {
+  document.getElementById('q' + num).classList.remove('active');
+  current = num;
+  if (current < 10) {
+    document.getElementById('q' + (current+1)).classList.add('active');
+    updateProgress(current + 1);
+  } else {
+    showResults();
+  }
+}
+
+function updateProgress(qNum) {
+  const pct = Math.round((qNum / 10) * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = 'Question ' + qNum + ' of 10';
+}
+
+function showResults() {
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-label').textContent = 'Complete';
+  document.getElementById('results-screen').style.display = 'block';
+  document.getElementById('score-num').textContent = score;
+
+  const circumference = 339.3;
+  const offset = circumference - (score / 10) * circumference;
+  setTimeout(() => {
+    document.getElementById('ring-fill').style.strokeDashoffset = offset;
+  }, 100);
+
+  let msg = '';
+  if (score === 10) msg = 'Perfect score! You followed every detail of Absalom\'s rebellion, Ahithophel\'s counsel, and David\'s anguish with exceptional care.';
+  else if (score >= 8) msg = 'Excellent work! The treachery, the flight, and the grief of these three chapters are firmly in your grasp.';
+  else if (score >= 6) msg = 'Good effort! These chapters are dense with named people, specific numbers, and geographical details &#8212; a second pass will sharpen the rest.';
+  else if (score >= 4) msg = 'Keep at it. The story of Absalom\'s rebellion rewards close, repeated reading &#8212; the details carry tremendous weight.';
+  else msg = '2 Samuel 16&#8211;18 is rich and complex narrative. Return to the text and try again &#8212; every detail is worth noticing!';
+  document.getElementById('results-msg').textContent = msg;
+
+  const reviewList = document.getElementById('review-list');
+  answers.forEach((a, i) => {
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (a.correct ? 'r-correct' : 'r-wrong');
+    div.innerHTML = '<div class="review-q">Q' + (i+1) + ': ' + a.question + '</div>' +
+      '<div class="review-ans">' +
+      (a.correct
+        ? '<span class="review-correct-lbl">Correct</span>'
+        : '<span class="review-wrong-lbl">Incorrect</span>') +
+      ' &mdash; ' + a.ref + '</div>';
+    reviewList.appendChild(div);
+  });
+}
+
+function resetQuiz() {
+  current = 0; score = 0; answers = [];
+  document.querySelectorAll('.question-block').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.choice-btn').forEach(b => {
+    b.disabled = false;
+    b.classList.remove('correct','wrong');
+  });
+  document.querySelectorAll('.feedback').forEach(f => { f.className = 'feedback'; f.innerHTML = ''; });
+  document.querySelectorAll('.next-btn').forEach(b => b.classList.remove('visible'));
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('review-list').innerHTML = '';
+  document.getElementById('ring-fill').style.strokeDashoffset = '339.3';
+  document.getElementById('q1').classList.add('active');
+  updateProgress(1);
+}
+
+// initialize progress
+updateProgress(1);
+</script>
+</body>
+</html>
