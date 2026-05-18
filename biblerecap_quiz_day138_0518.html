@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 138 Bible Recap Quiz — Psalms 26, 40, 58, 61, 62, 64</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(2px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.15);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.12);
+    border-color: #8b1a1a;
+  }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #9a7a3a;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.4);
+    border-radius: 2px;
+    padding: 1px 6px;
+    min-width: 22px;
+    text-align: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 18px;
+    font-size: 1.0rem;
+    line-height: 1.55;
+    margin-bottom: 18px;
+    position: relative;
+  }
+  .feedback.correct-fb {
+    display: block;
+    background: rgba(26,92,42,0.1);
+    border: 1px solid rgba(26,92,42,0.4);
+    color: #12361a;
+  }
+  .feedback.wrong-fb {
+    display: block;
+    background: rgba(139,26,26,0.08);
+    border: 1px solid rgba(139,26,26,0.35);
+    color: #4a1010;
+  }
+  .feedback-icon {
+    font-weight: 700;
+    margin-right: 6px;
+  }
+  .feedback-ref {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    margin-top: 8px;
+    opacity: 0.7;
+    text-transform: uppercase;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    background: linear-gradient(135deg, #c9a84c, #b8943e);
+    border: none;
+    border-radius: 3px;
+    color: #1a0e04;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    padding: 10px 22px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+  .next-btn.visible { display: inline-block; }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    padding-top: 8px;
+  }
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 20px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.15); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s ease;
+  }
+  .score-ring-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #c9a84c;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: #9a7a3a;
+    text-transform: uppercase;
+  }
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1e1208;
+    margin-bottom: 10px;
+  }
+  .results-message {
+    font-size: 1.05rem;
+    color: #3a2510;
+    line-height: 1.6;
+    max-width: 540px;
+    margin: 0 auto 28px;
+  }
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(201,168,76,0.3);
+  }
+  .review-item {
+    text-align: left;
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    border: 1px solid transparent;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.08);
+    border-color: rgba(26,92,42,0.25);
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.07);
+    border-color: rgba(139,26,26,0.2);
+  }
+  .review-q {
+    font-size: 0.95rem;
+    color: #1e1208;
+    line-height: 1.4;
+    margin-bottom: 4px;
+  }
+  .review-ans {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .review-correct-lbl { color: #1a5c2a; }
+  .review-wrong-lbl { color: #8b1a1a; }
+  .take-again-btn {
+    margin-top: 24px;
+    background: transparent;
+    border: 1.5px solid #c9a84c;
+    border-radius: 3px;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    padding: 10px 26px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.2s, color 0.2s;
+  }
+  .take-again-btn:hover {
+    background: rgba(201,168,76,0.12);
+    color: #c9a84c;
+  }
+
+  @media (max-width: 520px) {
+    .card { padding: 22px 18px; }
+    .quiz-title { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- HEADER -->
+  <div class="quiz-header">
+    <div class="quiz-date">Monday, May 18, 2026 &middot; Day 138</div>
+    <div class="quiz-title">The Bible Recap &mdash; Daily Quiz</div>
+    <div class="passage-tags">
+      <span class="passage-tag">Psalm 26</span>
+      <span class="passage-tag">Psalm 40</span>
+      <span class="passage-tag">Psalm 58</span>
+      <span class="passage-tag">Psalm 61</span>
+      <span class="passage-tag">Psalm 62</span>
+      <span class="passage-tag">Psalm 64</span>
+    </div>
+    <span class="ornament">&#10022;</span>
+    <span class="difficulty-badge">Challenging</span>
+    <span class="ornament">&#10022;</span>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="prog-bar"></div>
+  </div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- CARD -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <div>
+          <div class="question-text">After God lifted the psalmist out of the miry pit and set his feet on a rock, what did he put in the psalmist&rsquo;s mouth? (Psalm 40)</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">A</span>Words of wisdom to proclaim before the assembly of the upright</button>
+        <button class="choice-btn" onclick="answer(this,true,'q1')"><span class="choice-letter">B</span>A new song, a song of praise to our God</button>
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">C</span>The testimony of his salvation for all the nations to hear</button>
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">D</span>A vow to serve in the house of the LORD all his days</button>
+      </div>
+      <div class="feedback" id="fb-q1"></div>
+      <button class="next-btn" id="next-q1" onclick="nextQ(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">Psalm 26:4 contains a paired declaration of separation. Which pairing correctly identifies both groups the psalmist refuses to sit or consort with in that verse?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">A</span>Men of violence and those who speak smooth words</button>
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">B</span>The proud and those who pursue lying vanities</button>
+        <button class="choice-btn" onclick="answer(this,true,'q2')"><span class="choice-letter">C</span>Men of falsehood and hypocrites</button>
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">D</span>The wicked and those who hate the LORD</button>
+      </div>
+      <div class="feedback" id="fb-q2"></div>
+      <button class="next-btn" id="next-q2" onclick="nextQ(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">Psalm 58 compares the wicked to a venomous serpent. What specific characteristic of this serpent makes it particularly dangerous in verses 4&ndash;5?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">A</span>It strikes without warning and cannot be tracked after it flees into the rocks</button>
+        <button class="choice-btn" onclick="answer(this,true,'q3')"><span class="choice-letter">B</span>It is a deaf adder that stops its ear and will not listen to the voice of charmers</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">C</span>It is a great sea serpent coiled in the deep, beyond any snake-charmer&rsquo;s reach</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">D</span>It poisons the well from which the innocent drink and cannot be driven away</button>
+      </div>
+      <div class="feedback" id="fb-q3"></div>
+      <button class="next-btn" id="next-q3" onclick="nextQ(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">Psalm 40:6 contains a statement the author of Hebrews quotes as Christ&rsquo;s words at his incarnation. Which option correctly captures what God has NOT desired and what he HAS opened or prepared?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">A</span>He has not desired great armies; he has opened the gates of the nations to his servant</button>
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">B</span>He has not desired the wisdom of man; he has prepared a dwelling among his people</button>
+        <button class="choice-btn" onclick="answer(this,true,'q4')"><span class="choice-letter">C</span>He has not desired sacrifice and offering or burnt offering and sin offering; he has opened the psalmist&rsquo;s ears</button>
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">D</span>He has not desired the tribute of gold and silver; he has prepared a heart of flesh in his servant</button>
+      </div>
+      <div class="feedback" id="fb-q4"></div>
+      <button class="next-btn" id="next-q4" onclick="nextQ(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">In Psalm 61:6, the psalmist intercedes for the king. What is the precise content of that petition?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">A</span>That the LORD would grant him victory over all surrounding enemies and give him rest on every side</button>
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">B</span>That he would multiply his days as the stars of the sky and his seed as the sand of the seashore</button>
+        <button class="choice-btn" onclick="answer(this,true,'q5')"><span class="choice-letter">C</span>Add days to the days of the king; may his years endure to all generations</button>
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">D</span>That the king would see his children&rsquo;s children and peace upon Israel to the fourth generation</button>
+      </div>
+      <div class="feedback" id="fb-q5"></div>
+      <button class="next-btn" id="next-q5" onclick="nextQ(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <div>
+          <div class="question-text">In Psalm 62:11&ndash;12, the psalmist declares what he has heard God say once &mdash; a word he has heard twice. What two things does he declare belong to God?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">A</span>Knowledge and wisdom</button>
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">B</span>Holiness and wrath</button>
+        <button class="choice-btn" onclick="answer(this,true,'q6')"><span class="choice-letter">C</span>Power and steadfast love</button>
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">D</span>Justice and faithfulness</button>
+      </div>
+      <div class="feedback" id="fb-q6"></div>
+      <button class="next-btn" id="next-q6" onclick="nextQ(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">In Psalm 26:6&ndash;7, the psalmist describes a liturgical act at the altar. What does he do, and what accompanies it?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">A</span>He offers a burnt offering and prays facing the sanctuary with hands raised toward the holy place</button>
+        <button class="choice-btn" onclick="answer(this,true,'q7')"><span class="choice-letter">B</span>He washes his hands in innocence, goes around the altar, and proclaims thanksgiving and God&rsquo;s wondrous deeds aloud</button>
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">C</span>He brings a freewill offering, bows before the altar, and recites the deeds of the LORD in song</button>
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">D</span>He pours out a drink offering, circles the tabernacle, and cries out with a voice of rejoicing and salvation</button>
+      </div>
+      <div class="feedback" id="fb-q7"></div>
+      <button class="next-btn" id="next-q7" onclick="nextQ(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+        <div>
+          <div class="question-text">The enemies in Psalm 64 scheme in secret and aim bitter words like arrows. The psalm ends with a reversal: God acts against them. What does verse 7 say God will do?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">A</span>He will shatter their tongues and silence their plots before all the nations</button>
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">B</span>He will scatter them to the four winds and put them to open shame</button>
+        <button class="choice-btn" onclick="answer(this,true,'q8')"><span class="choice-letter">C</span>He will shoot his arrow at them, and they are wounded suddenly</button>
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">D</span>He will blunt their swords and break their bows so they fall by the sword</button>
+      </div>
+      <div class="feedback" id="fb-q8"></div>
+      <button class="next-btn" id="next-q8" onclick="nextQ(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">Psalm 58:8 uses two exact similes for the fate of the wicked. Which option correctly identifies both images used in that verse?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">A</span>Like chaff blown by the wind, and like a lamp extinguished before its time</button>
+        <button class="choice-btn" onclick="answer(this,true,'q9')"><span class="choice-letter">B</span>Like a snail that dissolves into slime, and like a stillborn child who never sees the sun</button>
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">C</span>Like a clay pot shattered by an iron rod, and like smoke driven away by the wind</button>
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">D</span>Like water poured on desert sand, and like a shooting star that flares and falls</button>
+      </div>
+      <div class="feedback" id="fb-q9"></div>
+      <button class="next-btn" id="next-q9" onclick="nextQ(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <div>
+          <div class="question-text">Psalm 62:9 makes a pointed statement about human weight when put on the balances. What does the verse say about &ldquo;those of low estate&rdquo; and &ldquo;those of high estate&rdquo; together?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">A</span>Those of high estate are exalted by God, while those of low estate are a mere vapor before him</button>
+        <button class="choice-btn" onclick="answer(this,true,'q10')"><span class="choice-letter">B</span>Those of low estate are but a breath; those of high estate are a delusion; together they are lighter than a breath</button>
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">C</span>All men alike are weighed in the balance and found wanting without God&rsquo;s mercy</button>
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">D</span>Those of high estate tip the scales with their sin; those of low estate are lifted up by grace</button>
+      </div>
+      <div class="feedback" id="fb-q10"></div>
+      <button class="next-btn" id="next-q10" onclick="nextQ(10)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Results -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 130 130">
+          <circle class="score-ring-bg" cx="65" cy="65" r="54"/>
+          <circle class="score-ring-fill" id="ring-fill" cx="65" cy="65" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <div class="score-num" id="score-num">0</div>
+          <div class="score-denom">out of 10</div>
+        </div>
+      </div>
+      <div class="results-title">Quiz Complete</div>
+      <div class="results-message" id="results-msg"></div>
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+    </div>
+
+  </div><!-- .card -->
+</div><!-- .outer-wrap -->
+
+<script>
+const QUESTIONS = [
+  {
+    id: 'q1',
+    text: 'After God lifted the psalmist out of the miry pit and set his feet on a rock, what did he put in the psalmist’s mouth? (Psalm 40)',
+    correct: 1,
+    choices: [
+      'Words of wisdom to proclaim before the assembly of the upright',
+      'A new song, a song of praise to our God',
+      'The testimony of his salvation for all the nations to hear',
+      'A vow to serve in the house of the LORD all his days'
+    ],
+    feedback_correct: 'Correct! Psalm 40:3 says God &ldquo;put a new song in my mouth, a song of praise to our God.&rdquo; The rescue from the &ldquo;pit of destruction, out of the miry bog&rdquo; (v.2) is answered not with private relief but with public praise &mdash; so that many will see and fear and put their trust in the LORD. The author of Hebrews sees this psalm as Christ&rsquo;s own voice at the incarnation, coming to do the Father&rsquo;s will.',
+    feedback_wrong: 'Not quite. Psalm 40:3 records that God put &ldquo;a new song&rdquo; in the psalmist&rsquo;s mouth &mdash; &ldquo;a song of praise to our God&rdquo; &mdash; so that many would see it and put their trust in the LORD. The rescue overflows into communal worship, not private vow or private testimony.',
+    ref: 'Psalm 40:3'
+  },
+  {
+    id: 'q2',
+    text: 'Psalm 26:4 contains a paired declaration of separation. Which pairing correctly identifies both groups the psalmist refuses to sit or consort with in that verse?',
+    correct: 2,
+    choices: [
+      'Men of violence and those who speak smooth words',
+      'The proud and those who pursue lying vanities',
+      'Men of falsehood and hypocrites',
+      'The wicked and those who hate the LORD'
+    ],
+    feedback_correct: 'Correct! Verse 4 reads: &ldquo;I do not sit with men of falsehood, nor do I consort with hypocrites.&rdquo; The two descriptions together paint a portrait of deceptive, double-hearted people. Verse 5 adds the deeper posture: &ldquo;I hate the assembly of evildoers, and I will not sit with the wicked.&rdquo; The psalm presents a life whose inward integrity matches its outward associations &mdash; ultimately fulfilled only in Christ, who was without sin.',
+    feedback_wrong: 'Not quite. Psalm 26:4 specifically names &ldquo;men of falsehood&rdquo; and &ldquo;hypocrites&rdquo; as the two groups. The wrong options mix in language from elsewhere in the psalter. Verse 5 then widens the declaration: the psalmist hates the assembly of evildoers and will not sit with the wicked.',
+    ref: 'Psalm 26:4'
+  },
+  {
+    id: 'q3',
+    text: 'Psalm 58 compares the wicked to a venomous serpent. What specific characteristic of this serpent makes it particularly dangerous in verses 4–5?',
+    correct: 1,
+    choices: [
+      'It strikes without warning and cannot be tracked after it flees into the rocks',
+      'It is a deaf adder that stops its ear and will not listen to the voice of charmers',
+      'It is a great sea serpent coiled in the deep, beyond any snake-charmer’s reach',
+      'It poisons the well from which the innocent drink and cannot be driven away'
+    ],
+    feedback_correct: 'Correct! The wicked are like a deaf adder &mdash; it &ldquo;stops its ear, so that it does not hear the voice of charmers or of the cunning enchanter&rdquo; (Ps 58:4&ndash;5). The image is of someone who has deliberately shut out every corrective influence. The snake-charmer represents wisdom, counsel, and the voice of God: the wicked have made themselves immune to all of it, choosing their corruption with willful finality.',
+    feedback_wrong: 'Not quite. The specific image is the &ldquo;deaf adder&rdquo; that stops its ear against the snake-charmer (Ps 58:4&ndash;5). The wickedness in view is not random violence but deliberate imperviousness to correction &mdash; a chilling portrait of sin hardened beyond appeal.',
+    ref: 'Psalm 58:4–5'
+  },
+  {
+    id: 'q4',
+    text: 'Psalm 40:6 contains a statement the author of Hebrews quotes as Christ’s words at his incarnation. Which option correctly captures what God has NOT desired and what he HAS opened or prepared?',
+    correct: 2,
+    choices: [
+      'He has not desired great armies; he has opened the gates of the nations to his servant',
+      'He has not desired the wisdom of man; he has prepared a dwelling among his people',
+      'He has not desired sacrifice and offering or burnt offering and sin offering; he has opened the psalmist’s ears',
+      'He has not desired the tribute of gold and silver; he has prepared a heart of flesh in his servant'
+    ],
+    feedback_correct: 'Correct! Psalm 40:6: &ldquo;Sacrifice and offering you have not desired, but you have given me an open ear&rdquo; (ESV; or &ldquo;ears you have dug for me&rdquo; &mdash; a vivid idiom for receptive obedience). The author of Hebrews quotes this in Hebrews 10:5&ndash;7, with the Septuagint&rsquo;s rendering &ldquo;a body you have prepared for me,&rdquo; to show Christ coming to do the Father&rsquo;s will in place of the entire sacrificial system. All the offerings pointed to him.',
+    feedback_wrong: 'Not quite. Psalm 40:6 says God has not desired &ldquo;sacrifice and offering&rdquo; or &ldquo;burnt offering and sin offering,&rdquo; but has given the psalmist &ldquo;an open ear&rdquo; (or &ldquo;dug ears&rdquo;) &mdash; a readiness to hear and obey. Hebrews 10:5&ndash;7 reads this as Christ speaking at the incarnation, fulfilling and ending the sacrificial system by his perfect obedience.',
+    ref: 'Psalm 40:6; Hebrews 10:5–7'
+  },
+  {
+    id: 'q5',
+    text: 'In Psalm 61:6, the psalmist intercedes for the king. What is the precise content of that petition?',
+    correct: 2,
+    choices: [
+      'That the LORD would grant him victory over all surrounding enemies and give him rest on every side',
+      'That he would multiply his days as the stars of the sky and his seed as the sand of the seashore',
+      'Add days to the days of the king; may his years endure to all generations',
+      'That the king would see his children’s children and peace upon Israel to the fourth generation'
+    ],
+    feedback_correct: 'Correct! Psalm 61:6 prays: &ldquo;Add days to the days of the king; may his years endure to all generations.&rdquo; The request is not merely for long natural life but for a reign that outlasts any mortal span &mdash; a hyperbolic hope that points beyond every son of David to Christ himself, the king whose years endure to all generations without end.',
+    feedback_wrong: 'Not quite. The petition in Psalm 61:6 is specific: &ldquo;Add days to the days of the king; may his years endure to all generations.&rdquo; It is not a prayer for military victory or biological offspring but for a reign that stretches across generations &mdash; ultimately answered in the eternal kingdom of Christ, the Son of David.',
+    ref: 'Psalm 61:6'
+  },
+  {
+    id: 'q6',
+    text: 'In Psalm 62:11–12, the psalmist declares what he has heard God say — a word heard once, declared twice. What two things does he declare belong to God?',
+    correct: 2,
+    choices: [
+      'Knowledge and wisdom',
+      'Holiness and wrath',
+      'Power and steadfast love',
+      'Justice and faithfulness'
+    ],
+    feedback_correct: 'Correct! Psalm 62:11&ndash;12: &ldquo;Power belongs to God, and that to you, O Lord, belongs steadfast love.&rdquo; These are not abstract theological attributes but the twin pillars of the waiting soul&rsquo;s hope: God has the ability to save (power) and the covenantal commitment to do so (steadfast love). Together they make waiting in silence not passive resignation but confident, expectant trust.',
+    feedback_wrong: 'Not quite. Psalm 62:11&ndash;12 specifically names &ldquo;power&rdquo; and &ldquo;steadfast love&rdquo; as what belongs to God. The pairing is theologically rich: omnipotence without covenant love would be terrifying; covenant love without power would be helpless. Together they guarantee that those who wait on God will never be put to shame.',
+    ref: 'Psalm 62:11–12'
+  },
+  {
+    id: 'q7',
+    text: 'In Psalm 26:6–7, the psalmist describes a liturgical act at the altar. What does he do, and what accompanies it?',
+    correct: 1,
+    choices: [
+      'He offers a burnt offering and prays facing the sanctuary with hands raised toward the holy place',
+      'He washes his hands in innocence, goes around the altar, and proclaims thanksgiving and God’s wondrous deeds aloud',
+      'He brings a freewill offering, bows before the altar, and recites the deeds of the LORD in song',
+      'He pours out a drink offering, circles the tabernacle, and cries out with a voice of rejoicing and salvation'
+    ],
+    feedback_correct: 'Correct! Verses 6&ndash;7: &ldquo;I wash my hands in innocence and go around your altar, O LORD, proclaiming thanksgiving aloud, and telling all your wondrous deeds.&rdquo; The handwashing expresses interior purity; the circuit of the altar is an act of devotion; and the whole action overflows into verbal proclamation of God&rsquo;s works. Outward liturgy and inward integrity are presented as inseparable.',
+    feedback_wrong: 'Not quite. The psalmist washes his hands in innocence, goes around the altar, and proclaims thanksgiving aloud &mdash; &ldquo;telling all your wondrous deeds&rdquo; (Ps 26:6&ndash;7). The action is both a liturgical rite and a public declaration: purity of conscience expressed through bodily action and overflowing into vocal praise.',
+    ref: 'Psalm 26:6–7'
+  },
+  {
+    id: 'q8',
+    text: 'The enemies in Psalm 64 scheme in secret and aim bitter words like arrows. The psalm ends with a divine reversal. What does verse 7 say God will do?',
+    correct: 2,
+    choices: [
+      'He will shatter their tongues and silence their plots before all the nations',
+      'He will scatter them to the four winds and put them to open shame',
+      'He will shoot his arrow at them, and they are wounded suddenly',
+      'He will blunt their swords and break their bows so they fall by the sword'
+    ],
+    feedback_correct: 'Correct! Psalm 64:7 delivers the reversal: &ldquo;But God shoots his arrow at them; they are wounded suddenly.&rdquo; The very imagery the enemies used &mdash; shooting hidden arrows &mdash; is turned against them by God himself. Verse 8 adds that &ldquo;their own tongue is turned against them&rdquo; &mdash; the plotters are caught in their own devices, a pattern Scripture returns to again and again.',
+    feedback_wrong: 'Not quite. Psalm 64:7 says God &ldquo;shoots his arrow at them; they are wounded suddenly.&rdquo; The psalm is structured around irony: the hidden archers find God’s arrow finding them. Their tongue is turned against them (v.8), and all who see it will fear and proclaim God’s work.',
+    ref: 'Psalm 64:7'
+  },
+  {
+    id: 'q9',
+    text: 'Psalm 58:8 uses two precise similes for the fate of the wicked. Which option correctly identifies both images used in that verse?',
+    correct: 1,
+    choices: [
+      'Like chaff blown by the wind, and like a lamp extinguished before its time',
+      'Like a snail that dissolves into slime, and like a stillborn child who never sees the sun',
+      'Like a clay pot shattered by an iron rod, and like smoke driven away by the wind',
+      'Like water poured on desert sand, and like a shooting star that flares and falls'
+    ],
+    feedback_correct: 'Correct! Psalm 58:8: &ldquo;Let them be like the snail that dissolves into slime, like the stillborn child who never sees the sun.&rdquo; Both images convey something that never fully comes into being &mdash; the snail is consumed in its own dissolving, the stillborn child never draws breath. The wicked, for all their noise and power, will leave nothing that truly endures.',
+    feedback_wrong: 'Not quite. Verse 8 uses two stark images: a snail dissolving into slime, and a stillborn child who never sees the sun (Ps 58:8). The point is not merely the wicked’s destruction but their ultimate unreality &mdash; like a snail’s trail in the heat, they make a mark but leave nothing lasting.',
+    ref: 'Psalm 58:8'
+  },
+  {
+    id: 'q10',
+    text: 'Psalm 62:9 makes a sweeping statement about human weight when put on the balances. What does the verse say about “those of low estate” and “those of high estate” together?',
+    correct: 1,
+    choices: [
+      'Those of high estate are exalted by God, while those of low estate are a mere vapor before him',
+      'Those of low estate are but a breath; those of high estate are a delusion; together they are lighter than a breath',
+      'All men alike are weighed in the balance and found wanting without God’s mercy',
+      'Those of high estate tip the scales with their sin; those of low estate are lifted up by grace'
+    ],
+    feedback_correct: 'Correct! Psalm 62:9 is one of Scripture’s most blunt assessments of human weight: &ldquo;Those of low estate are but a breath; those of high estate are a delusion; in the balances they go up; they are together lighter than a breath.&rdquo; No one &mdash; powerful or powerless, rich or poor &mdash; has the substance to bear the weight of ultimate trust. That trust belongs to God alone, which is precisely the psalm’s conclusion: &ldquo;Trust in him at all times, O people&rdquo; (v.8).',
+    feedback_wrong: 'Not quite. Verse 9 is sweeping in its leveling: both those of low estate (a breath) and those of high estate (a delusion) together are &ldquo;lighter than a breath&rdquo; on the balances. The psalm allows no distinction between categories of people as objects of trust &mdash; all human weight evaporates. Only God can bear the weight of the soul.',
+    ref: 'Psalm 62:9'
+  }
+];
+
+let current = 0;
+let score = 0;
+let answers = [];
+
+function answer(btn, isCorrect, qId) {
+  const block = document.getElementById(qId);
+  const buttons = block.querySelectorAll('.choice-btn');
+  buttons.forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('fb-' + qId);
+  const qIdx = parseInt(qId.replace('q','')) - 1;
+  const q = QUESTIONS[qIdx];
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+    fb.className = 'feedback correct-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10003;</span>' + q.feedback_correct + '<span class="feedback-ref">' + q.ref + '</span>';
+    score++;
+    answers.push({ correct: true, question: q.text, ref: q.ref });
+  } else {
+    btn.classList.add('wrong');
+    buttons[q.correct].classList.add('correct');
+    fb.className = 'feedback wrong-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10007;</span>' + q.feedback_wrong + '<span class="feedback-ref">' + q.ref + '</span>';
+    answers.push({ correct: false, question: q.text, ref: q.ref });
+  }
+
+  const nextBtn = document.getElementById('next-' + qId);
+  if (nextBtn) nextBtn.classList.add('visible');
+}
+
+function nextQ(num) {
+  document.getElementById('q' + num).classList.remove('active');
+  current = num;
+  if (current < 10) {
+    document.getElementById('q' + (current + 1)).classList.add('active');
+    updateProgress(current + 1);
+  } else {
+    showResults();
+  }
+}
+
+function updateProgress(qNum) {
+  const pct = Math.round((qNum / 10) * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = 'Question ' + qNum + ' of 10';
+}
+
+function showResults() {
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-label').textContent = 'Complete';
+  document.getElementById('results-screen').style.display = 'block';
+  document.getElementById('score-num').textContent = score;
+
+  const circumference = 339.3;
+  const offset = circumference - (score / 10) * circumference;
+  setTimeout(() => {
+    document.getElementById('ring-fill').style.strokeDashoffset = offset;
+  }, 100);
+
+  let msg = '';
+  if (score === 10) msg = 'Perfect score! Every detail across Psalms 26, 40, 58, 61, 62, and 64 — the deaf adder, the opened ear, the weight on the balances — is firmly in your grasp.';
+  else if (score >= 8) msg = 'Excellent work! The rich imagery and precise vocabulary of these six psalms are well in hand. A few details remain to sharpen on a second pass.';
+  else if (score >= 6) msg = 'Good effort. These psalms reward careful, close reading — especially the specific similes of Psalm 58, the NT echoes of Psalm 40, and the twin attributes of Psalm 62.';
+  else if (score >= 4) msg = 'Keep at it. The details scattered across these six psalms reward repeated attention — each image and verse is worth sitting with carefully.';
+  else msg = 'Psalms 26, 40, 58, 61, 62, and 64 are full of precise imagery and theological depth. Return to the text and try again — every verse repays careful reading.';
+  document.getElementById('results-msg').textContent = msg;
+
+  const reviewList = document.getElementById('review-list');
+  answers.forEach((a, i) => {
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (a.correct ? 'r-correct' : 'r-wrong');
+    div.innerHTML = '<div class="review-q">Q' + (i + 1) + ': ' + a.question + '</div>' +
+      '<div class="review-ans">' +
+      (a.correct
+        ? '<span class="review-correct-lbl">Correct</span>'
+        : '<span class="review-wrong-lbl">Incorrect</span>') +
+      ' &mdash; ' + a.ref + '</div>';
+    reviewList.appendChild(div);
+  });
+}
+
+function resetQuiz() {
+  current = 0; score = 0; answers = [];
+  document.querySelectorAll('.question-block').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.choice-btn').forEach(b => {
+    b.disabled = false;
+    b.classList.remove('correct', 'wrong');
+  });
+  document.querySelectorAll('.feedback').forEach(f => { f.className = 'feedback'; f.innerHTML = ''; });
+  document.querySelectorAll('.next-btn').forEach(b => b.classList.remove('visible'));
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('review-list').innerHTML = '';
+  document.getElementById('ring-fill').style.strokeDashoffset = '339.3';
+  document.getElementById('q1').classList.add('active');
+  updateProgress(1);
+}
+
+updateProgress(1);
+</script>
+</body>
+</html>
