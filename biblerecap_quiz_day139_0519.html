@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 139 Bible Recap Quiz — 2 Samuel 19–21</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(2px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.15);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.12);
+    border-color: #8b1a1a;
+  }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #9a7a3a;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.4);
+    border-radius: 2px;
+    padding: 1px 6px;
+    min-width: 22px;
+    text-align: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 18px;
+    font-size: 1.0rem;
+    line-height: 1.55;
+    margin-bottom: 18px;
+    position: relative;
+  }
+  .feedback.correct-fb {
+    display: block;
+    background: rgba(26,92,42,0.1);
+    border: 1px solid rgba(26,92,42,0.4);
+    color: #12361a;
+  }
+  .feedback.wrong-fb {
+    display: block;
+    background: rgba(139,26,26,0.08);
+    border: 1px solid rgba(139,26,26,0.35);
+    color: #4a1010;
+  }
+  .feedback-icon {
+    font-weight: 700;
+    margin-right: 6px;
+  }
+  .feedback-ref {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    margin-top: 8px;
+    opacity: 0.7;
+    text-transform: uppercase;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    background: linear-gradient(135deg, #c9a84c, #b8943e);
+    border: none;
+    border-radius: 3px;
+    color: #1a0e04;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    padding: 10px 22px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+  .next-btn.visible { display: inline-block; }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    padding-top: 8px;
+  }
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 20px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.15); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s ease;
+  }
+  .score-ring-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #c9a84c;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: #9a7a3a;
+    text-transform: uppercase;
+  }
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1e1208;
+    margin-bottom: 10px;
+  }
+  .results-message {
+    font-size: 1.05rem;
+    color: #3a2510;
+    line-height: 1.6;
+    max-width: 540px;
+    margin: 0 auto 28px;
+  }
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(201,168,76,0.3);
+  }
+  .review-item {
+    text-align: left;
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    border: 1px solid transparent;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.08);
+    border-color: rgba(26,92,42,0.25);
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.07);
+    border-color: rgba(139,26,26,0.2);
+  }
+  .review-q {
+    font-size: 0.95rem;
+    color: #1e1208;
+    line-height: 1.4;
+    margin-bottom: 4px;
+  }
+  .review-ans {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .review-correct-lbl { color: #1a5c2a; }
+  .review-wrong-lbl { color: #8b1a1a; }
+  .take-again-btn {
+    margin-top: 24px;
+    background: transparent;
+    border: 1.5px solid #c9a84c;
+    border-radius: 3px;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    padding: 10px 26px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.2s, color 0.2s;
+  }
+  .take-again-btn:hover {
+    background: rgba(201,168,76,0.12);
+    color: #c9a84c;
+  }
+
+  @media (max-width: 520px) {
+    .card { padding: 22px 18px; }
+    .quiz-title { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- HEADER -->
+  <div class="quiz-header">
+    <div class="quiz-date">Tuesday, May 19, 2026 &middot; Day 139</div>
+    <div class="quiz-title">The Bible Recap &mdash; Daily Quiz</div>
+    <div class="passage-tags">
+      <span class="passage-tag">2 Samuel 19</span>
+      <span class="passage-tag">2 Samuel 20</span>
+      <span class="passage-tag">2 Samuel 21</span>
+    </div>
+    <span class="ornament">&#10022;</span>
+    <span class="difficulty-badge">Challenging</span>
+    <span class="ornament">&#10022;</span>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="prog-bar"></div>
+  </div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- CARD -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <div>
+          <div class="question-text">When Joab rebuked David for grieving over Absalom instead of honoring his army, what specific outcome did Joab swear would happen if David did not go out and speak to his servants?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">A</span>The army would scatter to their own cities and refuse to fight for David again</button>
+        <button class="choice-btn" onclick="answer(this,true,'q1')"><span class="choice-letter">B</span>Not a man would stay with David that night, and this would be worse for him than all the evil that had come upon him from his youth until now</button>
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">C</span>David&rsquo;s enemies would hear of his mourning and be emboldened to attack before he could regroup his forces</button>
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">D</span>The commanders of the army would appoint another king over Israel in David&rsquo;s place by morning</button>
+      </div>
+      <div class="feedback" id="fb-q1"></div>
+      <button class="next-btn" id="next-q1" onclick="nextQ(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">When Mephibosheth came down to meet David returning from exile, which of the following correctly identifies all the signs of mourning he had maintained since the day David left Jerusalem?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">A</span>He wore sackcloth over his garments and had poured ashes on his head throughout the king&rsquo;s absence</button>
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">B</span>He had torn his robe, fasted from bread and water, and refused to leave the house of the LORD</button>
+        <button class="choice-btn" onclick="answer(this,true,'q2')"><span class="choice-letter">C</span>He had neither trimmed his beard, washed his clothes, nor cared for his feet from the day of the king&rsquo;s departure until he came back in safety</button>
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">D</span>He had shaved his head, gone barefoot, and sat in dust for the entire duration of David&rsquo;s absence</button>
+      </div>
+      <div class="feedback" id="fb-q2"></div>
+      <button class="next-btn" id="next-q2" onclick="nextQ(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">Barzillai the Gileadite declined David&rsquo;s invitation to come to Jerusalem, citing his age of eighty. Which option accurately captures all three specific infirmities he named to explain why he would be a burden to the king?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,'q3')"><span class="choice-letter">A</span>He could no longer discern good from bad, could not taste what he ate or drank, and could not hear the voice of singing men and women</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">B</span>He could no longer walk long distances, could not carry his own provisions, and feared he would die before reaching the city</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">C</span>His eyesight had grown dim, his memory was failing, and he could no longer give wise counsel in the king&rsquo;s court</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">D</span>He could no longer ride or be carried in comfort, had lost strength in his hands, and wished only to see his family before he died</button>
+      </div>
+      <div class="feedback" id="fb-q3"></div>
+      <button class="next-btn" id="next-q3" onclick="nextQ(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">How did David resolve the dispute between Mephibosheth and Ziba over the land, and what was Mephibosheth&rsquo;s response to the king&rsquo;s decision?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">A</span>David restored all the land to Mephibosheth and punished Ziba; Mephibosheth bowed low and thanked the king for his justice</button>
+        <button class="choice-btn" onclick="answer(this,true,'q4')"><span class="choice-letter">B</span>David said Mephibosheth and Ziba should divide the land; Mephibosheth replied that Ziba could take it all, since the king had come home safely</button>
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">C</span>David gave all the land to Ziba as a reward for his loyalty; Mephibosheth accepted the decision in silence out of reverence for the king</button>
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">D</span>David referred the matter to the elders of Judah; Mephibosheth refused to contest Ziba&rsquo;s claim, saying he had no right to make demands of the king</button>
+      </div>
+      <div class="feedback" id="fb-q4"></div>
+      <button class="next-btn" id="next-q4" onclick="nextQ(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">At Gibeon, Joab killed Amasa in a treacherous manner. What precisely did Joab do immediately before striking the fatal blow?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">A</span>He pretended to stumble and fell against Amasa, drawing a hidden dagger from under his cloak as he steadied himself</button>
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">B</span>He greeted Amasa with a warm embrace from behind and drove his sword through his back</button>
+        <button class="choice-btn" onclick="answer(this,true,'q5')"><span class="choice-letter">C</span>He took Amasa by the beard with his right hand as if to kiss him, then struck him in the belly with the sword in his other hand</button>
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">D</span>He challenged Amasa to demonstrate a sword technique and struck him when his guard was down</button>
+      </div>
+      <div class="feedback" id="fb-q5"></div>
+      <button class="next-btn" id="next-q5" onclick="nextQ(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <div>
+          <div class="question-text">The wise woman of Abel identified her city with two memorable descriptions in her appeal to Joab. What were they?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">A</span>&ldquo;A city of refuge&rdquo; and &ldquo;a stronghold of those who are faithful to Israel&rdquo;</button>
+        <button class="choice-btn" onclick="answer(this,true,'q6')"><span class="choice-letter">B</span>&ldquo;A mother in Israel&rdquo; and a city where people formerly asked counsel and so settled their disputes</button>
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">C</span>&ldquo;An ancient city of the covenant&rdquo; and &ldquo;a dwelling of peace since the days of our fathers&rdquo;</button>
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">D</span>&ldquo;A city set on a hill&rdquo; and &ldquo;the first and greatest among the cities of the north&rdquo;</button>
+      </div>
+      <div class="feedback" id="fb-q6"></div>
+      <button class="next-btn" id="next-q6" onclick="nextQ(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <div>
+          <div class="question-text">When David sought the LORD about the three-year famine and then asked the Gibeonites what atonement he could make, what did the Gibeonites explicitly say they did NOT want, and what did they ask for instead?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">A</span>They did not want animal sacrifices or burnt offerings; they asked that their territory be restored to them</button>
+        <button class="choice-btn" onclick="answer(this,true,'q7')"><span class="choice-letter">B</span>They did not want silver or gold from Saul or his house; they asked that seven of his sons be given to them to be hanged before the LORD</button>
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">C</span>They did not want a written treaty; they asked that Israel swear an oath never to harm them again and provide military protection</button>
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">D</span>They did not want to be incorporated into Israel; they asked for their own allotment of land east of the Jordan River</button>
+      </div>
+      <div class="feedback" id="fb-q7"></div>
+      <button class="next-btn" id="next-q7" onclick="nextQ(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">Rizpah daughter of Aiah kept an extraordinary vigil over the bodies of the seven executed sons of Saul. What exactly did she do, and what marked the beginning and end of her watch?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">A</span>She prayed over the bodies and covered them with sackcloth from the day of execution until David himself came to bury them</button>
+        <button class="choice-btn" onclick="answer(this,true,'q8')"><span class="choice-letter">B</span>She spread sackcloth on the rock for herself, keeping birds away by day and beasts away by night, from the beginning of harvest until rain fell on them from heaven</button>
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">C</span>She wrapped each body in burial cloths and stood guard until the elders of Israel came to give them an honorable burial in their family tomb</button>
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">D</span>She lit fires to drive away animals, fasted throughout her watch, and remained until the king heard of her faithfulness and sent soldiers to relieve her</button>
+      </div>
+      <div class="feedback" id="fb-q8"></div>
+      <button class="next-btn" id="next-q8" onclick="nextQ(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <div>
+          <div class="question-text">After Abishai rescued David from the Philistine giant Ishbi-benob during one of the battles, David&rsquo;s men swore he should never go out to battle again. What exact reason did they give?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">A</span>That David was too valuable as judge and counselor in Jerusalem to risk his life in the field</button>
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">B</span>That David was growing old and could no longer wield his sword as he once had</button>
+        <button class="choice-btn" onclick="answer(this,true,'q9')"><span class="choice-letter">C</span>Lest David quench the lamp of Israel</button>
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">D</span>Lest the enemies of Israel take courage seeing God&rsquo;s anointed in danger and rally their forces anew</button>
+      </div>
+      <div class="feedback" id="fb-q9"></div>
+      <button class="next-btn" id="next-q9" onclick="nextQ(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <div>
+          <div class="question-text">At the end of 2 Samuel 19, a sharp dispute broke out between the men of Israel and the men of Judah over who had the greater right to bring David back. What was the men of Israel&rsquo;s primary argument, and how did the chapter describe the outcome of the exchange?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">A</span>Israel argued they had shed more blood in the war against Absalom; the men of Judah conceded the point and withdrew their claim</button>
+        <button class="choice-btn" onclick="answer(this,true,'q10')"><span class="choice-letter">B</span>Israel argued they had ten shares in the king and were the first to speak of bringing him back; the words of Judah were fiercer than those of Israel</button>
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">C</span>Israel argued that the king had been born in their territory and owed his throne to their support; the elders of both sides agreed to bring the dispute before Samuel&rsquo;s shrine</button>
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">D</span>Israel argued that Joab, a man of Judah, had dishonored the king by killing Absalom; the men of Judah fell silent and could find no answer</button>
+      </div>
+      <div class="feedback" id="fb-q10"></div>
+      <button class="next-btn" id="next-q10" onclick="nextQ(10)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Results -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 130 130">
+          <circle class="score-ring-bg" cx="65" cy="65" r="54"/>
+          <circle class="score-ring-fill" id="ring-fill" cx="65" cy="65" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <div class="score-num" id="score-num">0</div>
+          <div class="score-denom">out of 10</div>
+        </div>
+      </div>
+      <div class="results-title">Quiz Complete</div>
+      <div class="results-message" id="results-msg"></div>
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+    </div>
+
+  </div><!-- .card -->
+</div><!-- .outer-wrap -->
+
+<script>
+const QUESTIONS = [
+  {
+    id: 'q1',
+    text: 'When Joab rebuked David for grieving over Absalom instead of honoring his army, what specific outcome did Joab swear would happen if David did not go out and speak to his servants?',
+    correct: 1,
+    choices: [
+      'The army would scatter to their own cities and refuse to fight for David again',
+      'Not a man would stay with David that night, and this would be worse for him than all the evil that had come upon him from his youth until now',
+      'David’s enemies would hear of his mourning and be emboldened to attack before he could regroup his forces',
+      'The commanders of the army would appoint another king over Israel in David’s place by morning'
+    ],
+    feedback_correct: 'Correct! Joab’s warning in 2 Samuel 19:7 is stark: &ldquo;I swear by the LORD, if you do not go, not a man will stay with you this night, and this will be worse for you than all the evil that has come upon you from your youth until now.&rdquo; Joab reframes the entire situation: the victory belongs to the people, and the king’s grief has shamed those who risked their lives to save him. David obeys, sits in the gate, and the people gather to him &mdash; a small but decisive act of kingship.',
+    feedback_wrong: 'Not quite. Joab’s specific oath (2 Sam 19:7) was that &ldquo;not a man will stay with you this night&rdquo; and that this outcome would be worse than everything David had suffered from his youth onward. The rebuke is not about military readiness or rival kings but about David’s abandonment of his duty to his own people in the moment of their shared victory.',
+    ref: '2 Samuel 19:7'
+  },
+  {
+    id: 'q2',
+    text: 'When Mephibosheth came down to meet David returning from exile, which of the following correctly identifies all the signs of mourning he had maintained since the day David left Jerusalem?',
+    correct: 2,
+    choices: [
+      'He wore sackcloth over his garments and had poured ashes on his head throughout the king’s absence',
+      'He had torn his robe, fasted from bread and water, and refused to leave the house of the LORD',
+      'He had neither trimmed his beard, washed his clothes, nor cared for his feet from the day of the king’s departure until he came back in safety',
+      'He had shaved his head, gone barefoot, and sat in dust for the entire duration of David’s absence'
+    ],
+    feedback_correct: 'Correct! Second Samuel 19:24 records three specific signs: &ldquo;He had neither taken care of his feet nor trimmed his beard nor washed his clothes, from the day the king departed until the day he came back in safety.&rdquo; These are visible, embodied tokens of grief and loyalty, not mere words &mdash; which is why they provide evidence in Mephibosheth’s favor when he explains that Ziba had slandered him. The condition of his body tells a story his servant tried to suppress.',
+    feedback_wrong: 'Not quite. The three specific signs recorded in 2 Samuel 19:24 are: he had not cared for his feet, had not trimmed his beard, and had not washed his clothes from the day the king left until his safe return. Each detail is visible and verifiable, forming a kind of bodily testimony to his grief and fidelity during the rebellion.',
+    ref: '2 Samuel 19:24'
+  },
+  {
+    id: 'q3',
+    text: 'Barzillai the Gileadite declined David’s invitation to come to Jerusalem, citing his age of eighty. Which option accurately captures all three specific infirmities he named to explain why he would be a burden to the king?',
+    correct: 0,
+    choices: [
+      'He could no longer discern good from bad, could not taste what he ate or drank, and could not hear the voice of singing men and women',
+      'He could no longer walk long distances, could not carry his own provisions, and feared he would die before reaching the city',
+      'His eyesight had grown dim, his memory was failing, and he could no longer give wise counsel in the king’s court',
+      'He could no longer ride or be carried in comfort, had lost strength in his hands, and wished only to see his family before he died'
+    ],
+    feedback_correct: 'Correct! Barzillai’s self-description in 2 Samuel 19:35 is precise: &ldquo;Can I discern what is pleasant and what is not? Can your servant taste what he eats or what he drinks? Can I still listen to the voice of singing men and singing women?&rdquo; All three are losses of pleasure and perception &mdash; not weakness of limb but the dimming of the senses that make court life worthwhile. His modesty is also a form of wisdom: he knows what he is and what he is not, and would rather die near his parents’ tomb than consume the king’s hospitality without giving anything in return.',
+    feedback_wrong: 'Not quite. Barzillai lists three specific losses in 2 Samuel 19:35: the ability to discern good from bad, the ability to taste food and drink, and the ability to hear singing men and women. These are the pleasures of royal life he would be unable to enjoy &mdash; and therefore reasons he would be a mere burden rather than a fitting companion at court. He then offers Chimham in his place as a fitting resolution.',
+    ref: '2 Samuel 19:35'
+  },
+  {
+    id: 'q4',
+    text: 'How did David resolve the dispute between Mephibosheth and Ziba over the land, and what was Mephibosheth’s response to the king’s decision?',
+    correct: 1,
+    choices: [
+      'David restored all the land to Mephibosheth and punished Ziba; Mephibosheth bowed low and thanked the king for his justice',
+      'David said Mephibosheth and Ziba should divide the land; Mephibosheth replied that Ziba could take it all, since the king had come home safely',
+      'David gave all the land to Ziba as a reward for his loyalty; Mephibosheth accepted the decision in silence out of reverence for the king',
+      'David referred the matter to the elders of Judah; Mephibosheth refused to contest Ziba’s claim, saying he had no right to make demands of the king'
+    ],
+    feedback_correct: 'Correct! David’s ruling in 2 Samuel 19:29 is: &ldquo;Why speak any more of your affairs? I have decided: you and Ziba shall divide the land.&rdquo; But Mephibosheth’s response (v.30) reveals where his heart truly lies: &ldquo;Let him take it all, since my lord the king has come home safely.&rdquo; The land matters nothing to him compared to the king’s restoration. Whether David’s ruling is just or rushed, Mephibosheth’s answer transcends the legal question entirely &mdash; a small but striking portrait of loyal love.',
+    feedback_wrong: 'Not quite. David’s ruling was to divide the land between Mephibosheth and Ziba (2 Sam 19:29). But Mephibosheth’s reply (v.30) dismisses the land entirely: &ldquo;Let him take it all, since my lord the king has come home safely.&rdquo; The exchange reveals that the dispute was never really about property for Mephibosheth &mdash; it was about his loyalty to David, and the king’s safe return is all the vindication he needs.',
+    ref: '2 Samuel 19:29–30'
+  },
+  {
+    id: 'q5',
+    text: 'At Gibeon, Joab killed Amasa in a treacherous manner. What precisely did Joab do immediately before striking the fatal blow?',
+    correct: 2,
+    choices: [
+      'He pretended to stumble and fell against Amasa, drawing a hidden dagger from under his cloak as he steadied himself',
+      'He greeted Amasa with a warm embrace from behind and drove his sword through his back',
+      'He took Amasa by the beard with his right hand as if to kiss him, then struck him in the belly with the sword in his other hand',
+      'He challenged Amasa to demonstrate a sword technique and struck him when his guard was down'
+    ],
+    feedback_correct: 'Correct! Second Samuel 20:9–10 records the killing with precise detail: &ldquo;Joab said to Amasa, ‘Is it well with you, my brother?’ And Joab took Amasa by the beard with his right hand to kiss him. But Amasa did not observe the sword that was in Joab’s hand. So Joab struck him with it in the stomach and spilled his entrails on the ground.&rdquo; The intimacy of the gesture &mdash; a kinsman’s kiss &mdash; makes the murder all the more chilling. Joab had done the same to Abner (2 Sam 3:27), and David on his deathbed will name Joab’s bloodguilt specifically (1 Kings 2:5).',
+    feedback_wrong: 'Not quite. The text in 2 Samuel 20:9–10 is precise: Joab &ldquo;took Amasa by the beard with his right hand to kiss him&rdquo; while the sword was in his other hand, unnoticed. He then struck Amasa in the stomach. The gesture of a kinsman’s kiss turned into an instrument of murder is exactly the kind of treachery David later held against Joab when commissioning Solomon’s justice (1 Kings 2:5).',
+    ref: '2 Samuel 20:9–10'
+  },
+  {
+    id: 'q6',
+    text: 'The wise woman of Abel identified her city with two memorable descriptions in her appeal to Joab. What were they?',
+    correct: 1,
+    choices: [
+      '&ldquo;A city of refuge&rdquo; and &ldquo;a stronghold of those who are faithful to Israel&rdquo;',
+      '&ldquo;A mother in Israel&rdquo; and a city where people formerly asked counsel and so settled their disputes',
+      '&ldquo;An ancient city of the covenant&rdquo; and &ldquo;a dwelling of peace since the days of our fathers&rdquo;',
+      '&ldquo;A city set on a hill&rdquo; and &ldquo;the first and greatest among the cities of the north&rdquo;'
+    ],
+    feedback_correct: 'Correct! In 2 Samuel 20:18–19 the woman invokes the city’s ancient reputation: &ldquo;They used to say in former times, ‘Let them but ask counsel at Abel,’ and so they settled a matter.&rdquo; She then calls herself &ldquo;one of those who are peaceable and faithful in Israel,&rdquo; and the city itself &ldquo;a mother in Israel.&rdquo; The argument is a sophisticated appeal to tradition and communal identity: Abel is not a rebel stronghold but a historic center of wisdom, and destroying it would erase something irreplaceable in Israel. Joab responds to the appeal &mdash; and the woman delivers Sheba’s head.',
+    feedback_wrong: 'Not quite. The wise woman of Abel makes two appeals in 2 Samuel 20:18–19: she cites the city’s ancient reputation as a place where counsel was sought and disputes settled, and she calls it &ldquo;a mother in Israel.&rdquo; Both descriptions invoke communal memory and civic identity &mdash; making the case that demolishing the city would be a loss to all Israel, not a surgical strike against a rebel.',
+    ref: '2 Samuel 20:18–19'
+  },
+  {
+    id: 'q7',
+    text: 'When David asked the Gibeonites what he could do to make atonement for Saul’s bloodguilt, what did they explicitly say they did NOT want, and what did they ask for instead?',
+    correct: 1,
+    choices: [
+      'They did not want animal sacrifices or burnt offerings; they asked that their territory be restored to them',
+      'They did not want silver or gold from Saul or his house; they asked that seven of his sons be given to them to be hanged before the LORD',
+      'They did not want a written treaty; they asked that Israel swear a perpetual oath never to harm them and provide armed protection',
+      'They did not want to be incorporated into Israel; they asked for their own land allotment east of the Jordan'
+    ],
+    feedback_correct: 'Correct! The Gibeonites’ answer in 2 Samuel 21:4–6 is explicit: &ldquo;It is not a matter of silver or gold between us and Saul or his house; neither is it for us to put any man to death in Israel.&rdquo; Then they demand: &ldquo;Let seven of his sons be given to us, so that we may hang them before the LORD at Gibeah of Saul.&rdquo; The refusal of money is significant &mdash; this is not a negotiation but a demand for a specific form of justice tied to place (Gibeah, Saul’s own city) and to the LORD’s own vindication. David agrees, sparing only Mephibosheth for Jonathan’s sake.',
+    feedback_wrong: 'Not quite. The Gibeonites specifically disclaim silver or gold (2 Sam 21:4) and ask instead for seven of Saul’s sons to be executed before the LORD at Gibeah. The refusal of financial compensation makes this a matter of blood justice rather than a business transaction &mdash; only the lives of Saul’s house can expiate the bloodguilt Saul’s house incurred.',
+    ref: '2 Samuel 21:4–6'
+  },
+  {
+    id: 'q8',
+    text: 'Rizpah daughter of Aiah kept an extraordinary vigil over the bodies of the seven executed sons of Saul. What exactly did she do, and what marked the beginning and end of her watch?',
+    correct: 1,
+    choices: [
+      'She prayed over the bodies and covered them with sackcloth from the day of execution until David himself came out to bury them',
+      'She spread sackcloth on the rock for herself, keeping birds away by day and beasts away by night, from the beginning of harvest until rain fell on them from heaven',
+      'She wrapped each body in burial cloths and stood guard until the elders of Israel arrived to give them an honorable burial in their family tomb',
+      'She lit fires to drive away animals, fasted throughout her watch, and remained until the king sent soldiers to relieve her'
+    ],
+    feedback_correct: 'Correct! Second Samuel 21:10 records this with quiet precision: &ldquo;Then Rizpah the daughter of Aiah took sackcloth and spread it for herself on the rock, from the beginning of harvest until rain fell upon them from the heavens. And she did not allow the birds of the air to come upon them by day, or the beasts of the field by night.&rdquo; The vigil spans the whole dry season until the autumn rains come &mdash; a silent act of maternal devotion that shames the whole kingdom into action. When David hears of it, he finally retrieves and buries the bones of Saul and Jonathan as well.',
+    feedback_wrong: 'Not quite. Rizpah spread sackcloth on the rock and maintained a solitary guard: birds by day, beasts by night (2 Sam 21:10). The watch began at the start of harvest (late spring) and ended only when rain fell from heaven (autumn) &mdash; months of exposure and vigilance. Her act of devotion moves David to gather and bury all the bones of Saul’s house, and only then does God answer prayer for the land.',
+    ref: '2 Samuel 21:10'
+  },
+  {
+    id: 'q9',
+    text: 'After Abishai rescued David from the Philistine giant Ishbi-benob during battle, David’s men swore he should never go to war with them again. What exact reason did they give?',
+    correct: 2,
+    choices: [
+      'That David was too valuable as judge and counselor in Jerusalem to risk in the field of battle',
+      'That David was growing old and could no longer wield his sword with the strength he once had',
+      'Lest David quench the lamp of Israel',
+      'Lest the enemies of Israel take courage seeing God’s anointed in danger and rally their forces anew'
+    ],
+    feedback_correct: 'Correct! Second Samuel 21:17 records the exact words: &ldquo;You shall no longer go out with us to battle, lest you quench the lamp of Israel.&rdquo; The image of the king as a lamp is theologically dense &mdash; it echoes the promise to David of a perpetual light (cf. 1 Kings 11:36; 15:4) and anticipates the language of the Davidic covenant. The concern is not merely David’s physical safety but the preservation of a covenant light that cannot be extinguished. It is also, finally, an admission that David’s fighting days are over.',
+    feedback_wrong: 'Not quite. The specific words of David’s men in 2 Samuel 21:17 are: &ldquo;You shall no longer go out with us to battle, lest you quench the lamp of Israel.&rdquo; The phrase &ldquo;lamp of Israel&rdquo; is not merely poetic &mdash; it connects to the covenantal promise of a perpetual Davidic line (1 Kings 11:36) and signals that the king’s life is bound up with the nation’s future in a way that goes beyond his personal valor.',
+    ref: '2 Samuel 21:17'
+  },
+  {
+    id: 'q10',
+    text: 'At the end of 2 Samuel 19, a sharp dispute broke out between the men of Israel and the men of Judah over who had the greater right to bring David back. What was Israel’s primary argument, and how did the chapter describe the outcome of the exchange?',
+    correct: 1,
+    choices: [
+      'Israel argued they had shed more blood in the war against Absalom; the men of Judah conceded the point and allowed Israel to lead the procession',
+      'Israel argued they had ten shares in the king and were the first to speak of bringing him back; the words of Judah were fiercer than those of Israel',
+      'Israel argued the king had been born in their territory and owed his throne to their support; the elders agreed to bring the dispute before the priests',
+      'Israel argued that Joab, a man of Judah, had dishonored the king by killing Absalom; the men of Judah fell silent and could find no answer'
+    ],
+    feedback_correct: 'Correct! In 2 Samuel 19:43, Israel makes its case: &ldquo;We have ten shares in the king, and in David also we have more than you. Why then did you despise us? Were we not the first to speak of bringing back our king?&rdquo; The chapter closes with this note: &ldquo;the words of the men of Judah were fiercer than the words of the men of Israel.&rdquo; The bitterness simmering here &mdash; Judah acting unilaterally to restore a king who belongs to all twelve tribes &mdash; plants a seed that will flower into Sheba’s rebellion in the very next chapter, and eventually into the full division of the kingdom.',
+    feedback_wrong: 'Not quite. Israel’s argument in 2 Samuel 19:43 rests on two points: they have ten shares in the king (outnumbering Judah’s one tribe), and they were the first to speak of restoration. Yet despite the stronger numerical argument, &ldquo;the words of the men of Judah were fiercer than the words of the men of Israel&rdquo; &mdash; suggesting that sheer passion overrode logic. The unresolved tension erupts immediately in chapter 20 with Sheba’s rebellion.',
+    ref: '2 Samuel 19:43'
+  }
+];
+
+let current = 0;
+let score = 0;
+let answers = [];
+
+function answer(btn, isCorrect, qId) {
+  const block = document.getElementById(qId);
+  const buttons = block.querySelectorAll('.choice-btn');
+  buttons.forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('fb-' + qId);
+  const qIdx = parseInt(qId.replace('q','')) - 1;
+  const q = QUESTIONS[qIdx];
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+    fb.className = 'feedback correct-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10003;</span>' + q.feedback_correct + '<span class="feedback-ref">' + q.ref + '</span>';
+    score++;
+    answers.push({ correct: true, question: q.text, ref: q.ref });
+  } else {
+    btn.classList.add('wrong');
+    buttons[q.correct].classList.add('correct');
+    fb.className = 'feedback wrong-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10007;</span>' + q.feedback_wrong + '<span class="feedback-ref">' + q.ref + '</span>';
+    answers.push({ correct: false, question: q.text, ref: q.ref });
+  }
+
+  const nextBtn = document.getElementById('next-' + qId);
+  if (nextBtn) nextBtn.classList.add('visible');
+}
+
+function nextQ(num) {
+  document.getElementById('q' + num).classList.remove('active');
+  current = num;
+  if (current < 10) {
+    document.getElementById('q' + (current + 1)).classList.add('active');
+    updateProgress(current + 1);
+  } else {
+    showResults();
+  }
+}
+
+function updateProgress(qNum) {
+  const pct = Math.round((qNum / 10) * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = 'Question ' + qNum + ' of 10';
+}
+
+function showResults() {
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-label').textContent = 'Complete';
+  document.getElementById('results-screen').style.display = 'block';
+  document.getElementById('score-num').textContent = score;
+
+  const circumference = 339.3;
+  const offset = circumference - (score / 10) * circumference;
+  setTimeout(() => {
+    document.getElementById('ring-fill').style.strokeDashoffset = offset;
+  }, 100);
+
+  let msg = '';
+  if (score === 10) msg = 'Perfect score! Every detail across 2 Samuel 19–21 — Joab’s oath, Barzillai’s three infirmities, Rizpah’s vigil, the lamp of Israel — is firmly in your grasp.';
+  else if (score >= 8) msg = 'Excellent work! These three chapters are dense with political intrigue and precise detail. A few specifics remain to sharpen on a second pass.';
+  else if (score >= 6) msg = 'Good effort. The narratives of David’s restoration, Joab’s treachery, and the Gibeonite atonement reward careful, close reading throughout.';
+  else if (score >= 4) msg = 'Keep at it. Second Samuel 19–21 packs court politics, personal loyalties, and covenant themes into every scene — each detail repays a return visit.';
+  else msg = 'These chapters are rich with narrative texture. Return to the text of 2 Samuel 19–21 and try again — every exchange and gesture is worth careful attention.';
+  document.getElementById('results-msg').textContent = msg;
+
+  const reviewList = document.getElementById('review-list');
+  answers.forEach((a, i) => {
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (a.correct ? 'r-correct' : 'r-wrong');
+    div.innerHTML = '<div class="review-q">Q' + (i + 1) + ': ' + a.question + '</div>' +
+      '<div class="review-ans">' +
+      (a.correct
+        ? '<span class="review-correct-lbl">Correct</span>'
+        : '<span class="review-wrong-lbl">Incorrect</span>') +
+      ' &mdash; ' + a.ref + '</div>';
+    reviewList.appendChild(div);
+  });
+}
+
+function resetQuiz() {
+  current = 0; score = 0; answers = [];
+  document.querySelectorAll('.question-block').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.choice-btn').forEach(b => {
+    b.disabled = false;
+    b.classList.remove('correct', 'wrong');
+  });
+  document.querySelectorAll('.feedback').forEach(f => { f.className = 'feedback'; f.innerHTML = ''; });
+  document.querySelectorAll('.next-btn').forEach(b => b.classList.remove('visible'));
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('review-list').innerHTML = '';
+  document.getElementById('ring-fill').style.strokeDashoffset = '339.3';
+  document.getElementById('q1').classList.add('active');
+  updateProgress(1);
+}
+
+updateProgress(1);
+</script>
+</body>
+</html>
