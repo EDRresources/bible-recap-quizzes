@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 141 Bible Recap Quiz — 2 Samuel 22–23 &amp; Psalm 57</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 18px;
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.15);
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.3s ease forwards;
+  }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+    color: #1a3d1e;
+    display: block;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.1);
+    border: 1px solid #8b1a1a;
+    color: #5a0e0e;
+    display: block;
+  }
+  .feedback-icon { font-weight: 700; margin-right: 6px; }
+  .feedback-ref {
+    font-style: italic;
+    color: #5a4020;
+    font-size: 0.95rem;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.visible { display: inline-block; }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 22px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.15); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #c9a84c;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: #9a7a3a;
+    letter-spacing: 0.1em;
+  }
+
+  #results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #f5ead8;
+    margin-bottom: 10px;
+  }
+  #results-message {
+    color: #c9a84c;
+    font-size: 1.08rem;
+    line-height: 1.5;
+    margin-bottom: 26px;
+    font-style: italic;
+  }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+    margin-bottom: 32px;
+  }
+  .take-again-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ── REVIEW ── */
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    text-align: left;
+  }
+  .review-item {
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    text-align: left;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.10);
+    border: 1px solid #8b1a1a;
+  }
+  .review-q {
+    font-weight: 600;
+    color: #1e1208;
+    margin-bottom: 4px;
+  }
+  .review-ans { color: #3a2810; font-size: 0.95rem; }
+  .review-correct-lbl { color: #1a5c2a; font-weight: 700; }
+  .review-wrong-lbl { color: #8b1a1a; font-weight: 700; }
+
+  @media (max-width: 520px) {
+    .card { padding: 22px 18px; }
+    .quiz-title { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- HEADER -->
+  <header class="quiz-header">
+    <div class="quiz-date">Thursday, May 21, 2026 &middot; Day 141</div>
+    <h1 class="quiz-title">The Bible Recap &mdash; Daily Quiz</h1>
+    <div class="passage-tags">
+      <span class="passage-tag">2 Samuel 22</span>
+      <span class="passage-tag">2 Samuel 23</span>
+      <span class="passage-tag">Psalm 57</span>
+    </div>
+    <span class="ornament">&#10022;</span>
+    <span class="difficulty-badge">Challenging</span>
+    <span class="ornament">&#10022;</span>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="prog-bar"></div>
+  </div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- CARD -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <span class="question-text">In 2 Samuel 22:2&#8211;3, David uses a series of images to describe the LORD. Which of the following is NOT among those images?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(1,'A')"><span class="choice-letter">A</span>My shepherd who leads me beside still waters</button>
+        <button class="choice-btn" onclick="answer(1,'B')"><span class="choice-letter">B</span>My rock and my fortress</button>
+        <button class="choice-btn" onclick="answer(1,'C')"><span class="choice-letter">C</span>The horn of my salvation</button>
+        <button class="choice-btn" onclick="answer(1,'D')"><span class="choice-letter">D</span>My stronghold</button>
+      </div>
+      <div class="feedback" id="fb1"></div>
+      <button class="next-btn" id="next1" onclick="advance(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">In the theophanic section of 2 Samuel 22, how does God travel when he descends to rescue David?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(2,'A')"><span class="choice-letter">A</span>He descended in a pillar of cloud and fire, as in the days of the Exodus</button>
+        <button class="choice-btn" onclick="answer(2,'B')"><span class="choice-letter">B</span>He walked upon the crest of the waves of the sea</button>
+        <button class="choice-btn" onclick="answer(2,'C')"><span class="choice-letter">C</span>He rode on a cherub and flew, borne on the wings of the wind</button>
+        <button class="choice-btn" onclick="answer(2,'D')"><span class="choice-letter">D</span>He came in the whirlwind and spoke from the midst of the storm</button>
+      </div>
+      <div class="feedback" id="fb2"></div>
+      <button class="next-btn" id="next2" onclick="advance(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">According to 2 Samuel 22:26&#8211;27, how does God respond to the person who is "crooked" or tortuous?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(3,'A')"><span class="choice-letter">A</span>He turns his face away and delivers them into the hands of their enemies</button>
+        <button class="choice-btn" onclick="answer(3,'B')"><span class="choice-letter">B</span>With the crooked he makes himself seem tortuous</button>
+        <button class="choice-btn" onclick="answer(3,'C')"><span class="choice-letter">C</span>He breaks them suddenly with a rod of iron and dashes them to pieces</button>
+        <button class="choice-btn" onclick="answer(3,'D')"><span class="choice-letter">D</span>He hides his face from them until they repent and return to him</button>
+      </div>
+      <div class="feedback" id="fb3"></div>
+      <button class="next-btn" id="next3" onclick="advance(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">In 2 Samuel 22:29, what image does David use to describe the LORD&#8217;s role in his life?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(4,'A')"><span class="choice-letter">A</span>"You are the sun that rises before me, shining on a cloudless morning"</button>
+        <button class="choice-btn" onclick="answer(4,'B')"><span class="choice-letter">B</span>"You are my lamp, O LORD, and my God lightens my darkness"</button>
+        <button class="choice-btn" onclick="answer(4,'C')"><span class="choice-letter">C</span>"You are the pillar of fire that leads me through darkness to safety"</button>
+        <button class="choice-btn" onclick="answer(4,'D')"><span class="choice-letter">D</span>"You are the shield of glory that covers me by night and by day"</button>
+      </div>
+      <div class="feedback" id="fb4"></div>
+      <button class="next-btn" id="next4" onclick="advance(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+        <span class="question-text">How does the final verse (v. 51) of David&#8217;s song in 2 Samuel 22 conclude?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(5,'A')"><span class="choice-letter">A</span>The nations bow before the king whom the LORD has chosen and anointed</button>
+        <button class="choice-btn" onclick="answer(5,'B')"><span class="choice-letter">B</span>God&#8217;s glory covers the earth as the waters cover the sea</button>
+        <button class="choice-btn" onclick="answer(5,'C')"><span class="choice-letter">C</span>God shows steadfast love to his anointed, to David and his offspring forever</button>
+        <button class="choice-btn" onclick="answer(5,'D')"><span class="choice-letter">D</span>David&#8217;s enemies are silenced and his throne established forevermore</button>
+      </div>
+      <div class="feedback" id="fb5"></div>
+      <button class="next-btn" id="next5" onclick="advance(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <span class="question-text">According to 2 Samuel 23:1, what title does David use of himself in his &#8220;last words&#8221;?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(6,'A')"><span class="choice-letter">A</span>The shepherd of Israel, chosen by God from the sheepfolds</button>
+        <button class="choice-btn" onclick="answer(6,'B')"><span class="choice-letter">B</span>The mighty warrior of Israel, the LORD&#8217;s champion</button>
+        <button class="choice-btn" onclick="answer(6,'C')"><span class="choice-letter">C</span>The sweet psalmist of Israel</button>
+        <button class="choice-btn" onclick="answer(6,'D')"><span class="choice-letter">D</span>The singer of songs in the courts of Zion</button>
+      </div>
+      <div class="feedback" id="fb6"></div>
+      <button class="next-btn" id="next6" onclick="advance(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <span class="question-text">In 2 Samuel 23:3&#8211;4, David describes what a just ruler is like. To what natural phenomenon is such a ruler compared?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(7,'A')"><span class="choice-letter">A</span>A tree planted beside streams of water that brings forth fruit in its season</button>
+        <button class="choice-btn" onclick="answer(7,'B')"><span class="choice-letter">B</span>A full moon that guides travelers safely through the night</button>
+        <button class="choice-btn" onclick="answer(7,'C')"><span class="choice-letter">C</span>The morning light and the sun shining forth on a cloudless morning</button>
+        <button class="choice-btn" onclick="answer(7,'D')"><span class="choice-letter">D</span>A mighty river whose waters bring life to the wilderness</button>
+      </div>
+      <div class="feedback" id="fb7"></div>
+      <button class="next-btn" id="next7" onclick="advance(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">What crop was growing in the field that Shammah son of Agee defended alone against the Philistines (2 Sam 23:11&#8211;12)?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(8,'A')"><span class="choice-letter">A</span>Barley</button>
+        <button class="choice-btn" onclick="answer(8,'B')"><span class="choice-letter">B</span>Wheat</button>
+        <button class="choice-btn" onclick="answer(8,'C')"><span class="choice-letter">C</span>Flax</button>
+        <button class="choice-btn" onclick="answer(8,'D')"><span class="choice-letter">D</span>Lentils</button>
+      </div>
+      <div class="feedback" id="fb8"></div>
+      <button class="next-btn" id="next8" onclick="advance(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <span class="question-text">When three of David&#8217;s mighty men risked their lives to bring him water from the well of Bethlehem, what did David do with it?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(9,'A')"><span class="choice-letter">A</span>He drank it gratefully and blessed the three men for their valor</button>
+        <button class="choice-btn" onclick="answer(9,'B')"><span class="choice-letter">B</span>He poured it out as an offering to the LORD, refusing to drink it</button>
+        <button class="choice-btn" onclick="answer(9,'C')"><span class="choice-letter">C</span>He shared it with his commanders as a sign of fellowship and brotherhood</button>
+        <button class="choice-btn" onclick="answer(9,'D')"><span class="choice-letter">D</span>He set it apart as a sacred offering and poured it out at the door of the tabernacle</button>
+      </div>
+      <div class="feedback" id="fb9"></div>
+      <button class="next-btn" id="next9" onclick="advance(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">The refrain repeated twice in Psalm 57 (verses 5 and 11) reads: &#8220;Be exalted, O God, above the ___!&#8221; What word fills the blank?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(10,'A')"><span class="choice-letter">A</span>Mountains</button>
+        <button class="choice-btn" onclick="answer(10,'B')"><span class="choice-letter">B</span>Nations</button>
+        <button class="choice-btn" onclick="answer(10,'C')"><span class="choice-letter">C</span>Earth</button>
+        <button class="choice-btn" onclick="answer(10,'D')"><span class="choice-letter">D</span>Heavens</button>
+      </div>
+      <div class="feedback" id="fb10"></div>
+      <button class="next-btn" id="next10" onclick="showResults()">See Results &rarr;</button>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 120 120">
+          <circle class="score-ring-bg" cx="60" cy="60" r="54"/>
+          <circle class="score-ring-fill" id="ring-fill" cx="60" cy="60" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <span class="score-num" id="score-num">0</span>
+          <span class="score-denom">/ 10</span>
+        </div>
+      </div>
+      <div id="results-title"></div>
+      <div id="results-message"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">&#8635; Take Again</button>
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+    </div>
+
+  </div><!-- /.card -->
+</div><!-- /.outer-wrap -->
+
+<script>
+  var TOTAL = 10;
+  var score = 0;
+  var currentQ = 1;
+  var userAnswers = {};
+
+  var correctAnswers = {
+    1: 'A',
+    2: 'C',
+    3: 'B',
+    4: 'B',
+    5: 'C',
+    6: 'C',
+    7: 'C',
+    8: 'D',
+    9: 'B',
+    10: 'D'
+  };
+
+  var questionTexts = {
+    1: 'In 2 Samuel 22:2‑3, David uses a series of images to describe the LORD. Which of the following is NOT among those images?',
+    2: 'In the theophanic section of 2 Samuel 22, how does God travel when he descends to rescue David?',
+    3: 'According to 2 Samuel 22:26‑27, how does God respond to the person who is “crooked” or tortuous?',
+    4: 'In 2 Samuel 22:29, what image does David use to describe the LORD’s role in his life?',
+    5: 'How does the final verse (v. 51) of David’s song in 2 Samuel 22 conclude?',
+    6: 'According to 2 Samuel 23:1, what title does David use of himself in his “last words”?',
+    7: 'In 2 Samuel 23:3‑4, David describes what a just ruler is like. To what natural phenomenon is such a ruler compared?',
+    8: 'What crop was growing in the field that Shammah son of Agee defended alone against the Philistines (2 Sam 23:11‑12)?',
+    9: 'When three of David’s mighty men risked their lives to bring him water from the well of Bethlehem, what did David do with it?',
+    10: 'The refrain repeated twice in Psalm 57 (verses 5 and 11) reads: “Be exalted, O God, above the ___!” What word fills the blank?'
+  };
+
+  var choiceTexts = {
+    1: { A: 'My shepherd who leads me beside still waters', B: 'My rock and my fortress', C: 'The horn of my salvation', D: 'My stronghold' },
+    2: { A: 'He descended in a pillar of cloud and fire, as in the days of the Exodus', B: 'He walked upon the crest of the waves of the sea', C: 'He rode on a cherub and flew, borne on the wings of the wind', D: 'He came in the whirlwind and spoke from the midst of the storm' },
+    3: { A: 'He turns his face away and delivers them into the hands of their enemies', B: 'With the crooked he makes himself seem tortuous', C: 'He breaks them suddenly with a rod of iron and dashes them to pieces', D: 'He hides his face from them until they repent and return to him' },
+    4: { A: '"You are the sun that rises before me, shining on a cloudless morning"', B: '"You are my lamp, O LORD, and my God lightens my darkness"', C: '"You are the pillar of fire that leads me through darkness to safety"', D: '"You are the shield of glory that covers me by night and by day"' },
+    5: { A: 'The nations bow before the king whom the LORD has chosen and anointed', B: 'God’s glory covers the earth as the waters cover the sea', C: 'God shows steadfast love to his anointed, to David and his offspring forever', D: 'David’s enemies are silenced and his throne established forevermore' },
+    6: { A: 'The shepherd of Israel, chosen by God from the sheepfolds', B: 'The mighty warrior of Israel, the LORD’s champion', C: 'The sweet psalmist of Israel', D: 'The singer of songs in the courts of Zion' },
+    7: { A: 'A tree planted beside streams of water that brings forth fruit in its season', B: 'A full moon that guides travelers safely through the night', C: 'The morning light and the sun shining forth on a cloudless morning', D: 'A mighty river whose waters bring life to the wilderness' },
+    8: { A: 'Barley', B: 'Wheat', C: 'Flax', D: 'Lentils' },
+    9: { A: 'He drank it gratefully and blessed the three men for their valor', B: 'He poured it out as an offering to the LORD, refusing to drink it', C: 'He shared it with his commanders as a sign of fellowship and brotherhood', D: 'He set it apart as a sacred offering and poured it out at the door of the tabernacle' },
+    10: { A: 'Mountains', B: 'Nations', C: 'Earth', D: 'Heavens' }
+  };
+
+  var feedbackData = {
+    1: {
+      correct: 'Correct! David&#39;s opening litany in 2 Samuel 22:2‑3 includes: rock, fortress, deliverer, rock of refuge, shield, horn of salvation, and stronghold. "Shepherd" — the beloved image from Psalm 23 — is notably absent here. This is a song of war and deliverance, not of pastoral rest.',
+      wrong: 'Not quite. The images in 2 Samuel 22:2‑3 are: "my rock and my fortress and my deliverer, my God, my rock, in whom I take refuge, my shield, and the horn of my salvation, my stronghold and my refuge, my savior." "Shepherd" does not appear — that beloved image belongs to Psalm 23, a very different mood.',
+      ref: '2 Samuel 22:2‑3'
+    },
+    2: {
+      correct: 'Correct! 2 Samuel 22:11 reads: "He rode on a cherub and flew; he was seen on the wings of the wind." This dramatic theophany echoes the ancient imagery of God as divine warrior riding the storm — a picture that later shapes the prophets and Revelation.',
+      wrong: 'Not quite. 2 Samuel 22:11 describes God’s descent: "He rode on a cherub and flew; he was seen on the wings of the wind." The cherub imagery is striking — it recalls the ark of the covenant with its cherubim, suggesting God is enthroned above creation and rides it into battle on David’s behalf.',
+      ref: '2 Samuel 22:11'
+    },
+    3: {
+      correct: 'Correct! 2 Samuel 22:26‑27 states: "With the merciful you show yourself merciful... with the blameless you show yourself blameless... with the crooked you make yourself seem tortuous." This is not softness — it is God’s justice meeting people on their own terms. Those who twist themselves against God find God’s dealings with them equally unyielding.',
+      wrong: 'Not quite. 2 Samuel 22:27 says: "with the crooked you make yourself seem tortuous." The word can also be rendered "shrewd" or "perverse." God does not passively ignore the crooked — he responds to them in kind, a principle of divine justice that is arresting in its directness.',
+      ref: '2 Samuel 22:26‑27'
+    },
+    4: {
+      correct: 'Correct! 2 Samuel 22:29 reads: "For you are my lamp, O LORD, and my God lightens my darkness." The lamp image is intimate and personal — God is not merely a distant deliverer but the one who illuminates David’s path step by step. This verse anticipates John 1:4–5 and 8:12.',
+      wrong: 'Not quite. 2 Samuel 22:29 says: "For you are my lamp, O LORD, and my God lightens my darkness." Not a pillar of fire or a rising sun — but a lamp, an intimate, household image of light in the immediate darkness. God’s nearness is what David celebrates.',
+      ref: '2 Samuel 22:29'
+    },
+    5: {
+      correct: 'Correct! The final verse reads: "Great salvation he brings to his king, and shows steadfast love to his anointed, to David and his offspring forever." The word "anointed" (Hebrew: meshiach) carries messianic weight — this promise extends beyond David to the greater Son of David, Jesus Christ.',
+      wrong: 'Not quite. 2 Samuel 22:51 concludes: "Great salvation he brings to his king, and shows steadfast love to his anointed, to David and his offspring forever." The key word is "anointed" — meshiach in Hebrew — pointing forward to the ultimate fulfillment in Jesus, the Son of David.',
+      ref: '2 Samuel 22:51'
+    },
+    6: {
+      correct: 'Correct! 2 Samuel 23:1 identifies David as "the sweet psalmist of Israel." The Hebrew word (nəʿim) means pleasant, lovely, or beloved. It is a fitting description for the man who composed so much of Israel’s worship — and whose psalms still shape the church’s prayer.',
+      wrong: 'Not quite. 2 Samuel 23:1 calls David "the sweet psalmist of Israel" — not warrior, shepherd, or singer generically. The title emphasizes David’s role as Israel’s supreme poet-musician, the one through whom the Spirit gave Israel her vocabulary for prayer and praise.',
+      ref: '2 Samuel 23:1'
+    },
+    7: {
+      correct: 'Correct! 2 Samuel 23:3‑4 says: "When one rules justly over men, ruling in the fear of God, he dawns on them like the morning light, like the sun shining forth on a cloudless morning, like rain that makes grass sprout from the earth." The comparison is to sunrise after a clear night — life-giving, clarifying, and glorious.',
+      wrong: 'Not quite. 2 Samuel 23:3‑4 describes the just ruler as one who "dawns on them like the morning light, like the sun shining forth on a cloudless morning." Not the moon, a tree, or a river — but the sunrise itself, suggesting that righteous rule brings warmth, visibility, and new life to those under it.',
+      ref: '2 Samuel 23:3‑4'
+    },
+    8: {
+      correct: 'Correct! 2 Samuel 23:11‑12 records: "and there was a plot of ground full of lentils, and the men fled from the Philistines. But he took his stand in the midst of the plot and defended it and struck down the Philistines." Shammah alone held a lentil field — a humble crop, a forgotten battlefield, and a great victory.',
+      wrong: 'Not quite. 2 Samuel 23:11 specifies "a plot of ground full of lentils." It was not a grand battlefield of grain but an ordinary lentil field — which makes Shammah’s lone stand all the more striking. God granted a great victory through one man in the most unglamorous of circumstances.',
+      ref: '2 Samuel 23:11‑12'
+    },
+    9: {
+      correct: 'Correct! 2 Samuel 23:16‑17 records: "But he would not drink of it. He poured it out to the LORD and said, \'Far be it from me, O LORD, that I should do this. Shall I drink the blood of the men who went at the risk of their lives?\'" David treated their devotion as a sacred thing — too costly to consume, worthy only to be offered to God.',
+      wrong: 'Not quite. When the three brought David water from Bethlehem, he poured it out to the LORD (2 Sam 23:16). He refused to drink it, saying it was like the blood of the men who risked their lives. His refusal was an act of worship — honoring both God and his men by not treating their sacrifice as a mere personal benefit.',
+      ref: '2 Samuel 23:15‑17'
+    },
+    10: {
+      correct: 'Correct! Psalm 57:5 and 57:11 both read: "Be exalted, O God, above the heavens! Let your glory be over all the earth!" The refrain frames the psalm — beginning in the lament of the cave (v.1) and rising to a global declaration of praise. From hiding to hallelujah.',
+      wrong: 'Not quite. The refrain in Psalm 57:5 and 57:11 is: "Be exalted, O God, above the heavens! Let your glory be over all the earth!" The word is "heavens" — the highest possible realm — paired with the earth to declare that God’s exaltation encompasses all of creation. It is a doxology that outgrows the cave.',
+      ref: 'Psalm 57:5, 11'
+    }
+  };
+
+  function answer(qNum, choice) {
+    userAnswers[qNum] = choice;
+    var block = document.getElementById('q' + qNum);
+    var btns = block.querySelectorAll('.choice-btn');
+    btns.forEach(function(btn) { btn.disabled = true; });
+
+    var correct = correctAnswers[qNum];
+    var isCorrect = (choice === correct);
+    if (isCorrect) score++;
+
+    btns.forEach(function(btn, idx) {
+      var letters = ['A','B','C','D'];
+      if (letters[idx] === correct) btn.classList.add('correct');
+      else if (letters[idx] === choice && !isCorrect) btn.classList.add('wrong');
+    });
+
+    var fb = document.getElementById('fb' + qNum);
+    var data = feedbackData[qNum];
+    if (isCorrect) {
+      fb.className = 'feedback correct-fb';
+      fb.innerHTML = '<span class="feedback-icon">&#10003;</span>' + data.correct + '<span class="feedback-ref">' + data.ref + '</span>';
+    } else {
+      fb.className = 'feedback wrong-fb';
+      fb.innerHTML = '<span class="feedback-icon">&#10007;</span>' + data.wrong + '<span class="feedback-ref">' + data.ref + '</span>';
+    }
+
+    document.getElementById('next' + qNum).classList.add('visible');
+  }
+
+  function advance(qNum) {
+    document.getElementById('q' + qNum).classList.remove('active');
+    var next = qNum + 1;
+    document.getElementById('q' + next).classList.add('active');
+    currentQ = next;
+    var pct = Math.round((next / TOTAL) * 100);
+    document.getElementById('prog-bar').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = 'Question ' + next + ' of ' + TOTAL;
+  }
+
+  function showResults() {
+    for (var i = 1; i <= TOTAL; i++) {
+      document.getElementById('q' + i).classList.remove('active');
+    }
+    var rs = document.getElementById('results-screen');
+    rs.style.display = 'block';
+
+    document.getElementById('score-num').textContent = score;
+    document.getElementById('prog-bar').style.width = '100%';
+    document.getElementById('prog-label').textContent = 'Complete';
+
+    var pct = score / TOTAL;
+    var offset = 339.3 * (1 - pct);
+    setTimeout(function() {
+      document.getElementById('ring-fill').style.strokeDashoffset = offset;
+    }, 100);
+
+    var title, msg;
+    if (score === 10) {
+      title = 'Perfect Score!';
+      msg = 'Extraordinary. You read these chapters with the attentiveness of a scribe. "My heart is steadfast, O God, my heart is steadfast!" (Ps. 57:7)';
+    } else if (score >= 8) {
+      title = 'Well Done';
+      msg = 'Strong work. A close reading of David’s song and his mighty men served you well. A few details slipped past — worth a second look.';
+    } else if (score >= 6) {
+      title = 'Good Effort';
+      msg = 'A solid pass. Return to 2 Samuel 22–23 and let the details sink in. David’s song rewards careful rereading.';
+    } else if (score >= 4) {
+      title = 'Keep Studying';
+      msg = 'Some passages need a closer look. David’s last words and his mighty men are rich with detail — read again and let them speak.';
+    } else {
+      title = 'Try Again';
+      msg = '"He rode on a cherub and flew" — these passages soar. Read them again and take the quiz once more.';
+    }
+
+    document.getElementById('results-title').textContent = title;
+    document.getElementById('results-message').innerHTML = msg;
+
+    var reviewList = document.getElementById('review-list');
+    reviewList.innerHTML = '';
+    for (var i = 1; i <= TOTAL; i++) {
+      var ua = userAnswers[i];
+      var ca = correctAnswers[i];
+      var correct = ua === ca;
+      var div = document.createElement('div');
+      div.className = 'review-item ' + (correct ? 'r-correct' : 'r-wrong');
+      div.innerHTML = '<div class="review-q">Q' + i + ': ' + questionTexts[i] + '</div>' +
+        '<div class="review-ans">' +
+        (correct
+          ? '<span class="review-correct-lbl">&#10003; Correct</span> &mdash; ' + choiceTexts[i][ca]
+          : '<span class="review-wrong-lbl">&#10007; You chose ' + ua + ':</span> ' + (choiceTexts[i][ua] || '(unanswered)') + ' &nbsp;|&nbsp; <span class="review-correct-lbl">Correct (' + ca + '):</span> ' + choiceTexts[i][ca]
+        ) + '</div>';
+      reviewList.appendChild(div);
+    }
+  }
+
+  function resetQuiz() {
+    score = 0;
+    userAnswers = {};
+    currentQ = 1;
+
+    for (var i = 1; i <= TOTAL; i++) {
+      var block = document.getElementById('q' + i);
+      block.classList.remove('active');
+      block.querySelectorAll('.choice-btn').forEach(function(btn) {
+        btn.disabled = false;
+        btn.classList.remove('correct', 'wrong');
+      });
+      var fb = document.getElementById('fb' + i);
+      fb.className = 'feedback';
+      fb.innerHTML = '';
+      document.getElementById('next' + i).classList.remove('visible');
+    }
+
+    document.getElementById('results-screen').style.display = 'none';
+    document.getElementById('ring-fill').style.strokeDashoffset = '339.3';
+    document.getElementById('q1').classList.add('active');
+    document.getElementById('prog-bar').style.width = '10%';
+    document.getElementById('prog-label').textContent = 'Question 1 of 10';
+  }
+</script>
+</body>
+</html>
