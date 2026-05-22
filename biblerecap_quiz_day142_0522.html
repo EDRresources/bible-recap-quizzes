@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Recap Quiz — Day 142</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a05;
+  }
+
+  .card {
+    background: linear-gradient(160deg, #f5ecd7 0%, #eedfc0 40%, #e8d5ad 70%, #dfc99a 100%);
+    border: 2px solid #c9a84c;
+    border-radius: 6px;
+    max-width: 780px;
+    width: 100%;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #8b6914, #c9a84c, #f0d070, #c9a84c, #8b6914);
+  }
+
+  /* Header */
+  .header {
+    padding: 28px 32px 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(201,168,76,0.4);
+  }
+
+  .header-meta {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #8b6914;
+    margin-bottom: 6px;
+  }
+
+  .header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a0e00;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  .passage-tag {
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    border-radius: 3px;
+    padding: 3px 10px;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    color: #6b4f0a;
+    letter-spacing: 1px;
+  }
+
+  .badges {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 8px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 3px;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    font-weight: 600;
+  }
+
+  .badge-challenging {
+    background: #8b1a1a;
+    color: #f5ecd7;
+  }
+
+  .badge-detail {
+    background: #1a3a5c;
+    color: #d0e4f7;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    padding: 2px 7px;
+  }
+
+  /* Progress */
+  .progress-section {
+    padding: 14px 32px;
+    border-bottom: 1px solid rgba(201,168,76,0.25);
+  }
+
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #8b6914;
+    margin-bottom: 6px;
+  }
+
+  .progress-bar-track {
+    width: 100%;
+    height: 6px;
+    background: rgba(0,0,0,0.12);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #8b6914, #c9a84c);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+
+  /* Question */
+  .question-section {
+    padding: 28px 32px 24px;
+    min-height: 340px;
+  }
+
+  .question-wrap {
+    animation: fadeIn 0.4s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .q-number {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: #8b6914;
+    white-space: nowrap;
+    margin-top: 3px;
+  }
+
+  .question-text {
+    font-size: 19px;
+    line-height: 1.5;
+    color: #1a0e00;
+    flex: 1;
+  }
+
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.4);
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.18s, border-color 0.18s;
+    font-family: 'Crimson Text', serif;
+    font-size: 17px;
+    color: #2a1a05;
+    line-height: 1.4;
+  }
+
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.18);
+    border-color: #c9a84c;
+  }
+
+  .choice-btn:disabled { cursor: default; }
+
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.15);
+    border-color: #1a5c2a;
+    color: #0d3016;
+  }
+
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.12);
+    border-color: #8b1a1a;
+    color: #4a0a0a;
+  }
+
+  .choice-btn.reveal {
+    background: rgba(26,92,42,0.1);
+    border-color: rgba(26,92,42,0.5);
+  }
+
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #8b6914;
+    min-width: 20px;
+    margin-top: 2px;
+  }
+
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* Feedback */
+  .feedback {
+    margin-top: 18px;
+    padding: 14px 16px;
+    border-radius: 4px;
+    border-left: 4px solid;
+    font-size: 16px;
+    line-height: 1.6;
+    display: none;
+    animation: fadeIn 0.35s ease;
+  }
+
+  .feedback.correct {
+    background: rgba(26,92,42,0.1);
+    border-color: #1a5c2a;
+    color: #0d3016;
+    display: block;
+  }
+
+  .feedback.wrong {
+    background: rgba(139,26,26,0.08);
+    border-color: #8b1a1a;
+    color: #4a0a0a;
+    display: block;
+  }
+
+  .feedback strong { font-weight: 600; }
+  .feedback .ref {
+    display: block;
+    margin-top: 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    opacity: 0.75;
+  }
+
+  /* Navigation */
+  .nav-section {
+    padding: 0 32px 28px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .next-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    padding: 11px 28px;
+    background: linear-gradient(135deg, #8b6914, #c9a84c);
+    color: #fff9ee;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    display: none;
+  }
+
+  .next-btn:hover { opacity: 0.88; }
+  .next-btn.visible { display: inline-block; }
+
+  /* Results */
+  .results-section {
+    padding: 36px 32px 40px;
+    text-align: center;
+    display: none;
+    animation: fadeIn 0.5s ease;
+  }
+
+  .results-section.visible { display: block; }
+
+  .score-ring-wrap {
+    display: inline-block;
+    margin-bottom: 24px;
+  }
+
+  .score-ring {
+    transform: rotate(-90deg);
+    display: block;
+    margin: 0 auto;
+  }
+
+  .ring-bg { fill: none; stroke: rgba(0,0,0,0.1); stroke-width: 8; }
+  .ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 283;
+    stroke-dashoffset: 283;
+    transition: stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1);
+  }
+
+  .ring-fill.fail { stroke: #8b1a1a; }
+  .ring-fill.pass { stroke: #1a5c2a; }
+
+  .ring-score-text {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    font-weight: 700;
+    fill: #1a0e00;
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+
+  .ring-label-text {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    fill: #8b6914;
+    text-anchor: middle;
+    letter-spacing: 2px;
+  }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 20px;
+    color: #1a0e00;
+    margin-bottom: 10px;
+  }
+
+  .results-message {
+    font-size: 18px;
+    color: #3a2a10;
+    margin-bottom: 28px;
+    line-height: 1.5;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    padding: 12px 32px;
+    background: linear-gradient(135deg, #8b6914, #c9a84c);
+    color: #fff9ee;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    margin-bottom: 36px;
+  }
+
+  .take-again-btn:hover { opacity: 0.88; }
+
+  /* Review */
+  .review-section {
+    margin-top: 12px;
+    text-align: left;
+  }
+
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: #8b6914;
+    text-align: center;
+    margin-bottom: 18px;
+    border-top: 1px solid rgba(201,168,76,0.35);
+    padding-top: 20px;
+  }
+
+  .review-item {
+    padding: 12px 14px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    border-left: 4px solid;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .review-item.correct {
+    background: rgba(26,92,42,0.08);
+    border-color: #1a5c2a;
+  }
+
+  .review-item.wrong {
+    background: rgba(139,26,26,0.07);
+    border-color: #8b1a1a;
+  }
+
+  .review-item .r-q {
+    font-weight: 600;
+    color: #1a0e00;
+    margin-bottom: 4px;
+  }
+
+  .review-item .r-answer { font-size: 15px; color: #3a2810; }
+  .review-item .r-ref {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: #8b6914;
+    margin-top: 3px;
+  }
+
+  /* Ornament */
+  .ornament {
+    text-align: center;
+    color: #c9a84c;
+    font-size: 22px;
+    letter-spacing: 8px;
+    padding: 10px 0 4px;
+    opacity: 0.6;
+  }
+
+  @media (max-width: 520px) {
+    .card { border-radius: 4px; }
+    .header, .question-section, .nav-section, .results-section { padding-left: 18px; padding-right: 18px; }
+    .progress-section { padding-left: 18px; padding-right: 18px; }
+    .header h1 { font-size: 17px; }
+    .question-text { font-size: 17px; }
+    .choice-btn { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div class="header">
+    <div class="header-meta">FRIDAY, MAY 22, 2026 &middot; DAY 142</div>
+    <h1>The Bible Recap Daily Quiz</h1>
+    <div class="passage-tags">
+      <span class="passage-tag">PSALM 95</span>
+      <span class="passage-tag">PSALM 97</span>
+      <span class="passage-tag">PSALM 98</span>
+      <span class="passage-tag">PSALM 99</span>
+    </div>
+    <div class="badges">
+      <span class="badge badge-challenging">CHALLENGING</span>
+    </div>
+  </div>
+
+  <div class="progress-section">
+    <div class="progress-label" id="progressLabel">QUESTION 1 OF 10</div>
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+  </div>
+
+  <div class="question-section" id="questionSection">
+    <div class="question-wrap" id="questionWrap"></div>
+  </div>
+
+  <div class="nav-section">
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">NEXT &rarr;</button>
+  </div>
+
+  <div class="results-section" id="resultsSection">
+    <div class="score-ring-wrap">
+      <svg class="score-ring" width="120" height="120" viewBox="0 0 100 100">
+        <circle class="ring-bg" cx="50" cy="50" r="45"/>
+        <circle class="ring-fill" id="ringFill" cx="50" cy="50" r="45"/>
+        <text class="ring-score-text" id="ringScoreText" x="50" y="46">0/10</text>
+        <text class="ring-label-text" x="50" y="62">SCORE</text>
+      </svg>
+    </div>
+    <div class="results-title" id="resultsTitle">Quiz Complete</div>
+    <div class="results-message" id="resultsMessage"></div>
+    <button class="take-again-btn" onclick="resetQuiz()">TAKE AGAIN</button>
+    <div class="review-section">
+      <div class="review-title">QUESTION REVIEW</div>
+      <div id="reviewList"></div>
+    </div>
+  </div>
+
+  <div class="ornament">&#10022; &#10022; &#10022;</div>
+</div>
+
+<script>
+const questions = [
+  {
+    psalm: "95",
+    text: "Psalm 95 opens with a call to worship, then shifts in tone. What specific geographical location does the psalmist cite as a warning example of Israel&#39;s disobedience?",
+    detail: true,
+    choices: [
+      "The wilderness of Sinai, where Israel complained about manna",
+      "Meribah and Massah, where Israel tested God in the desert",
+      "Kadesh-barnea, where the spies gave a bad report",
+      "The valley of Achor, where Achan hid stolen goods"
+    ],
+    correct: 1,
+    feedback: "Psalm 95:8 says, &#34;Do not harden your hearts as you did at Meribah, as you did that day at Massah in the wilderness.&#34; These are the places recorded in Exodus 17:1–7 where Israel quarreled and tested God over water.",
+    ref: "Psalm 95:8"
+  },
+  {
+    psalm: "95",
+    text: "In Psalm 95, the psalmist identifies God as the &#34;great King above all gods.&#34; What pair of contrasting images does he use to describe the scope of God&#39;s creative ownership?",
+    detail: false,
+    choices: [
+      "The heights of the mountains and the rivers that run to the sea",
+      "The depths of the earth and the mountain peaks",
+      "The heavens above and the waters below the earth",
+      "The roaring seas and the dry land"
+    ],
+    correct: 1,
+    feedback: "Psalm 95:4 declares, &#34;In his hand are the depths of the earth, and the mountain peaks belong to him.&#34; This vertical contrast — depths below and heights above — encompasses all of creation.",
+    ref: "Psalm 95:4"
+  },
+  {
+    psalm: "95",
+    text: "In Psalm 95, how does God describe the rebellious wilderness generation in his oath of judgment?",
+    detail: true,
+    choices: [
+      "A stiff-necked and rebellious people who despised the covenant",
+      "A people whose hearts were always going astray, who had not known God&#39;s ways",
+      "A faithless generation who provoked him forty years with their grumbling",
+      "A foolish people who rejected his word and turned to idols"
+    ],
+    correct: 1,
+    feedback: "Psalm 95:10 reads, &#34;For forty years I was angry with that generation; I said, &#39;They are a people whose hearts go astray, and they have not known my ways.&#39;&#34; This is the divine diagnosis behind the oath in verse 11.",
+    ref: "Psalm 95:10"
+  },
+  {
+    psalm: "97",
+    text: "Psalm 97 describes God&#39;s theophanic approach with fire and natural upheaval. According to the psalm, how do the mountains respond to the presence of the LORD?",
+    detail: true,
+    choices: [
+      "They bow down and are leveled before his feet",
+      "They melt like wax before him",
+      "They tremble and are thrown into the sea",
+      "They are covered in clouds and thick darkness"
+    ],
+    correct: 1,
+    feedback: "Psalm 97:5 says, &#34;The mountains melt like wax before the LORD, before the Lord of all the earth.&#34; This vivid image of melting mountains emphasizes the incomparable power of God&#39;s presence.",
+    ref: "Psalm 97:5"
+  },
+  {
+    psalm: "97",
+    text: "Psalm 97 contrasts the fate of those who worship idols with the joy of Zion. What does the psalm say will happen to &#34;all who worship images&#34; and boast in their idols?",
+    detail: false,
+    choices: [
+      "They will be handed over to their enemies as slaves",
+      "They will be put to shame and all who boast in idols will worship before the LORD",
+      "They will perish like chaff driven by the wind",
+      "They will be cut off and their memory blotted out"
+    ],
+    correct: 1,
+    feedback: "Psalm 97:7 reads, &#34;All who worship images are put to shame, those who boast in idols — worship him, all you gods!&#34; The shaming of idol-worshipers is paired with a summons for all heavenly beings to bow before the true King.",
+    ref: "Psalm 97:7"
+  },
+  {
+    psalm: "97",
+    text: "Psalm 97 identifies two qualities of God that are the foundation of his throne. What are they?",
+    detail: true,
+    choices: [
+      "Power and majesty",
+      "Righteousness and justice",
+      "Holiness and wrath",
+      "Love and faithfulness"
+    ],
+    correct: 1,
+    feedback: "Psalm 97:2b states, &#34;Righteousness and justice are the foundation of his throne.&#34; This phrase appears in nearly identical form in Psalm 89:14, anchoring God&#39;s sovereign rule in moral integrity rather than raw power.",
+    ref: "Psalm 97:2"
+  },
+  {
+    psalm: "98",
+    text: "Psalm 98 calls for a &#34;new song&#34; because of specific saving acts God has performed. Which of the following best captures what the psalmist says God&#39;s right hand and holy arm have accomplished?",
+    detail: false,
+    choices: [
+      "Destroyed the nations that rose against Israel at the Red Sea",
+      "Worked salvation and revealed his righteousness to the nations",
+      "Delivered Israel from Egypt with signs and wonders",
+      "Established the throne of David forever in Jerusalem"
+    ],
+    correct: 1,
+    feedback: "Psalm 98:1–2 says God&#39;s right hand and holy arm have &#34;worked salvation&#34; and he &#34;has revealed his righteousness to the nations.&#34; The psalm celebrates both the act of rescue and its worldwide disclosure.",
+    ref: "Psalm 98:1–2"
+  },
+  {
+    psalm: "98",
+    text: "Psalm 98 describes an elaborate symphonic call to praise. Which specific combination of instruments does the psalmist command to accompany singing to the LORD?",
+    detail: true,
+    choices: [
+      "Trumpets, cymbals, and lyres",
+      "The harp, the harp with singing, and trumpets and rams&#39; horns",
+      "Lutes, harps, and tambourines",
+      "Flutes, trumpets, and the sound of the shofar"
+    ],
+    correct: 1,
+    feedback: "Psalm 98:5–6 specifies: &#34;Sing to the LORD with the harp, with the harp and the sound of singing, with trumpets and the blast of the ram&#39;s horn — shout for joy before the LORD, the King.&#34; The layering of these instruments builds to a crescendo of universal praise.",
+    ref: "Psalm 98:5–6"
+  },
+  {
+    psalm: "99",
+    text: "Psalm 99 is marked by a triple refrain about the holiness of God. Three men of Israel&#39;s past are named as those who &#34;called on&#34; God and he answered them. Who are the three figures?",
+    detail: true,
+    choices: [
+      "Abraham, Moses, and Elijah",
+      "Moses, Aaron, and Samuel",
+      "Moses, Joshua, and David",
+      "Aaron, Phinehas, and Samuel"
+    ],
+    correct: 1,
+    feedback: "Psalm 99:6 names &#34;Moses and Aaron among his priests, Samuel among those who called on his name; they called on the LORD and he answered them.&#34; All three are paradigmatic intercessors in Israel&#39;s history.",
+    ref: "Psalm 99:6"
+  },
+  {
+    psalm: "99",
+    text: "Psalm 99 says God spoke to the named intercessors &#34;from the pillar of cloud&#34; and they kept his statutes. But the psalm also acknowledges something about Israel&#39;s sin in relation to God&#39;s response. What does verse 8 say about how God dealt with their wrongdoings?",
+    detail: true,
+    choices: [
+      "He blotted out their transgressions and remembered their sin no more",
+      "He was an avenger of their wrongdoings yet also forgave them",
+      "He overlooked their sins because of the intercessions of Moses and Aaron",
+      "He punished them in this life but preserved them for eternal life"
+    ],
+    correct: 1,
+    feedback: "Psalm 99:8 states, &#34;LORD our God, you answered them; you were to Israel a forgiving God, though you punished their misdeeds.&#34; The psalm holds together both God&#39;s forgiveness and his just consequences — a tension resolved fully only in Christ.",
+    ref: "Psalm 99:8"
+  }
+];
+
+let current = 0;
+let score = 0;
+let answered = [];
+
+function renderQuestion() {
+  const q = questions[current];
+  const wrap = document.getElementById('questionWrap');
+
+  let detailBadge = q.detail
+    ? '<span class="badge badge-detail" style="display:inline-block;margin-left:10px;vertical-align:middle;">DETAIL</span>'
+    : '';
+
+  let choicesHTML = q.choices.map((c, i) => {
+    const letters = ['A', 'B', 'C', 'D'];
+    return `<button class="choice-btn" id="choice-${i}" onclick="selectAnswer(${i})">
+      <span class="choice-letter">${letters[i]}</span>
+      <span>${c}</span>
+    </button>`;
+  }).join('');
+
+  wrap.innerHTML = `
+    <div class="question-header">
+      <span class="q-number">Q${current + 1}.</span>
+      <span class="question-text">${q.text}${detailBadge}</span>
+    </div>
+    <div class="choices">${choicesHTML}</div>
+    <div class="feedback" id="feedback"></div>
+  `;
+
+  // Update progress
+  const pct = ((current) / 10) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `QUESTION ${current + 1} OF 10`;
+
+  // Hide next button
+  const nb = document.getElementById('nextBtn');
+  nb.classList.remove('visible');
+
+  // Animate in
+  wrap.style.animation = 'none';
+  requestAnimationFrame(() => { wrap.style.animation = ''; });
+}
+
+function selectAnswer(idx) {
+  const q = questions[current];
+  const feedbackEl = document.getElementById('feedback');
+  const buttons = document.querySelectorAll('.choice-btn');
+
+  // Disable all
+  buttons.forEach(b => b.disabled = true);
+
+  const isCorrect = idx === q.correct;
+
+  // Style chosen
+  buttons[idx].classList.add(isCorrect ? 'correct' : 'wrong');
+
+  // Reveal correct if wrong
+  if (!isCorrect) {
+    buttons[q.correct].classList.add('reveal');
+  }
+
+  // Feedback
+  feedbackEl.className = 'feedback ' + (isCorrect ? 'correct' : 'wrong');
+  const icon = isCorrect ? '✓ Correct. ' : '✗ Not quite. ';
+  feedbackEl.innerHTML = `<strong>${icon}</strong>${q.feedback}<span class="ref">${q.ref}</span>`;
+
+  // Score
+  if (isCorrect) score++;
+
+  // Record for review
+  const letters = ['A', 'B', 'C', 'D'];
+  answered.push({
+    question: q.text.replace(/<[^>]+>/g, ''),
+    correct: isCorrect,
+    yourAnswer: letters[idx] + '. ' + q.choices[idx],
+    rightAnswer: letters[q.correct] + '. ' + q.choices[q.correct],
+    ref: q.ref
+  });
+
+  // Show next button
+  const nb = document.getElementById('nextBtn');
+  nb.classList.add('visible');
+  nb.textContent = current < 9 ? 'NEXT →' : 'SEE RESULTS →';
+}
+
+function nextQuestion() {
+  current++;
+  if (current < 10) {
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('questionSection').style.display = 'none';
+  document.getElementById('progressSection') && (document.getElementById('progressSection').style.display = 'none');
+  document.querySelector('.progress-section').style.display = 'none';
+  document.querySelector('.nav-section').style.display = 'none';
+  document.getElementById('progressLabel').textContent = 'COMPLETE';
+
+  const rs = document.getElementById('resultsSection');
+  rs.classList.add('visible');
+
+  // Score ring
+  const circumference = 283;
+  const pct = score / 10;
+  const offset = circumference - (pct * circumference);
+  const ring = document.getElementById('ringFill');
+  setTimeout(() => { ring.style.strokeDashoffset = offset; }, 100);
+  if (pct >= 0.8) ring.classList.add('pass');
+  else if (pct < 0.5) ring.classList.add('fail');
+
+  document.getElementById('ringScoreText').textContent = score + '/10';
+
+  // Title & message
+  let title, msg;
+  if (score === 10) {
+    title = 'Perfect Score!';
+    msg = 'Outstanding! You read these royal psalms with great attention. &#34;The LORD reigns, let the earth be glad&#34; — and so should you!';
+  } else if (score >= 8) {
+    title = 'Excellent Work!';
+    msg = 'You know these psalms well. Keep meditating on the holiness and kingship of God celebrated across Psalms 95, 97, 98, and 99.';
+  } else if (score >= 6) {
+    title = 'Good Effort!';
+    msg = 'Solid engagement with today&#39;s royal psalms. Review the details of God&#39;s theophany in Psalm 97 and the threefold &#34;holy&#34; in Psalm 99.';
+  } else if (score >= 4) {
+    title = 'Keep Digging!';
+    msg = 'These enthronement psalms are rich with detail. Re-read them slowly — notice how each builds the picture of God&#39;s universal kingship.';
+  } else {
+    title = 'Try Again!';
+    msg = 'These psalms reward careful reading. Read them again, paying attention to the specific details — the locations, the names, the instruments, the warnings.';
+  }
+
+  document.getElementById('resultsTitle').textContent = title;
+  document.getElementById('resultsMessage').innerHTML = msg;
+
+  // Review list
+  const rl = document.getElementById('reviewList');
+  rl.innerHTML = answered.map((a, i) => `
+    <div class="review-item ${a.correct ? 'correct' : 'wrong'}">
+      <div class="r-q">Q${i + 1}. ${a.question}</div>
+      <div class="r-answer">
+        ${a.correct
+          ? '✓ ' + a.rightAnswer
+          : '✗ You answered: ' + a.yourAnswer + '<br>✓ Correct: ' + a.rightAnswer}
+      </div>
+      <div class="r-ref">${a.ref}</div>
+    </div>
+  `).join('');
+}
+
+function resetQuiz() {
+  current = 0;
+  score = 0;
+  answered = [];
+
+  document.getElementById('questionSection').style.display = '';
+  document.querySelector('.progress-section').style.display = '';
+  document.querySelector('.nav-section').style.display = '';
+  document.getElementById('resultsSection').classList.remove('visible');
+
+  document.getElementById('progressBar').style.width = '10%';
+
+  renderQuestion();
+}
+
+// Init
+renderQuestion();
+</script>
+</body>
+</html>
