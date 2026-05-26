@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 146 Bible Recap Quiz — Psalms 131, 138–139, 143–145</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 18px;
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.15);
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.3s ease forwards;
+  }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+    color: #1a3d1e;
+    display: block;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.1);
+    border: 1px solid #8b1a1a;
+    color: #5a0e0e;
+    display: block;
+  }
+  .feedback-icon { font-weight: 700; margin-right: 6px; }
+  .feedback-ref {
+    font-style: italic;
+    color: #5a4020;
+    font-size: 0.95rem;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.visible { display: inline-block; }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 22px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.15); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #c9a84c;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: #9a7a3a;
+    letter-spacing: 0.1em;
+  }
+
+  #results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #f5ead8;
+    margin-bottom: 10px;
+  }
+  #results-message {
+    color: #c9a84c;
+    font-size: 1.08rem;
+    line-height: 1.5;
+    margin-bottom: 26px;
+    font-style: italic;
+  }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+    margin-bottom: 32px;
+  }
+  .take-again-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ── REVIEW ── */
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    text-align: left;
+  }
+  .review-item {
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    text-align: left;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.10);
+    border: 1px solid #8b1a1a;
+  }
+  .review-q {
+    font-weight: 600;
+    color: #1e1208;
+    margin-bottom: 4px;
+  }
+  .review-ans { color: #3a2810; font-size: 0.95rem; }
+  .review-correct-lbl { color: #1a5c2a; font-weight: 700; }
+  .review-wrong-lbl { color: #8b1a1a; font-weight: 700; }
+
+  @media (max-width: 520px) {
+    .card { padding: 22px 18px; }
+    .quiz-title { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- HEADER -->
+  <header class="quiz-header">
+    <div class="quiz-date">Tuesday, May 26, 2026 &middot; Day 146</div>
+    <h1 class="quiz-title">The Bible Recap &mdash; Daily Quiz</h1>
+    <div class="passage-tags">
+      <span class="passage-tag">Psalm 131</span>
+      <span class="passage-tag">Psalm 138</span>
+      <span class="passage-tag">Psalm 139</span>
+      <span class="passage-tag">Psalm 143</span>
+      <span class="passage-tag">Psalm 144</span>
+      <span class="passage-tag">Psalm 145</span>
+    </div>
+    <span class="ornament">&#10022;</span>
+    <span class="difficulty-badge">Challenging</span>
+    <span class="ornament">&#10022;</span>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="prog-bar"></div>
+  </div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- CARD -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">Psalm 131:1 lists three things David says his heart and eyes have <em>not</em> done. Which of the following correctly captures two of those three disavowals?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(1,'A')"><span class="choice-letter">A</span>&#8220;My heart is not lifted up, and I do not pursue the honor due to kings&#8221;</button>
+        <button class="choice-btn" onclick="answer(1,'B')"><span class="choice-letter">B</span>&#8220;My eyes are not raised too high, nor do I occupy myself with things too great&#8221;</button>
+        <button class="choice-btn" onclick="answer(1,'C')"><span class="choice-letter">C</span>&#8220;My heart is not hardened, and I do not walk in the counsel of the proud&#8221;</button>
+        <button class="choice-btn" onclick="answer(1,'D')"><span class="choice-letter">D</span>&#8220;My eyes are not fixed on vanity, nor do I pursue my own glory&#8221;</button>
+      </div>
+      <div class="feedback" id="fb1"></div>
+      <button class="next-btn" id="next1" onclick="advance(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">Psalm 131:2 describes David&#39;s calmed soul as &#8220;like a weaned child with its mother.&#8221; Why is the word <em>weaned</em> theologically significant rather than simply &#8220;nursing&#8221; or &#8220;young&#8221;?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(2,'A')"><span class="choice-letter">A</span>A weaned child is old enough to carry responsibilities, showing David&#39;s maturity in faith</button>
+        <button class="choice-btn" onclick="answer(2,'B')"><span class="choice-letter">B</span>A weaned child no longer demands milk — it rests in its mother&#39;s presence without grasping; David&#39;s soul is content without demanding anything from God</button>
+        <button class="choice-btn" onclick="answer(2,'C')"><span class="choice-letter">C</span>A weaned child was considered ritually pure under Mosaic law, symbolizing David&#39;s cleanliness before God</button>
+        <button class="choice-btn" onclick="answer(2,'D')"><span class="choice-letter">D</span>A weaned child is the strongest stage of infancy, indicating David&#39;s spiritual vigor and readiness for battle</button>
+      </div>
+      <div class="feedback" id="fb2"></div>
+      <button class="next-btn" id="next2" onclick="advance(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">Psalm 138:2 contains a bold declaration about what God has exalted &#8220;above all things.&#8221; What does the verse say it is?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(3,'A')"><span class="choice-letter">A</span>His glory and his power</button>
+        <button class="choice-btn" onclick="answer(3,'B')"><span class="choice-letter">B</span>His throne and his kingship</button>
+        <button class="choice-btn" onclick="answer(3,'C')"><span class="choice-letter">C</span>His name and his word</button>
+        <button class="choice-btn" onclick="answer(3,'D')"><span class="choice-letter">D</span>His steadfast love and his holiness</button>
+      </div>
+      <div class="feedback" id="fb3"></div>
+      <button class="next-btn" id="next3" onclick="advance(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <span class="question-text">According to Psalm 138:6, what distinguishes how the LORD relates to the lowly versus the haughty?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(4,'A')"><span class="choice-letter">A</span>He saves the lowly but ignores the haughty entirely</button>
+        <button class="choice-btn" onclick="answer(4,'B')"><span class="choice-letter">B</span>He blesses the lowly and sends judgment upon the haughty</button>
+        <button class="choice-btn" onclick="answer(4,'C')"><span class="choice-letter">C</span>He regards the lowly, but the haughty he knows only from afar</button>
+        <button class="choice-btn" onclick="answer(4,'D')"><span class="choice-letter">D</span>He tests the lowly to strengthen them, and destroys the haughty without mercy</button>
+      </div>
+      <div class="feedback" id="fb4"></div>
+      <button class="next-btn" id="next4" onclick="advance(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">After declaring that God knows everything about him, David says in Psalm 139:5 that God has &#8220;hemmed him in behind and before.&#8221; What else does that verse say God has done to him?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(5,'A')"><span class="choice-letter">A</span>Surrounded him with songs of deliverance</button>
+        <button class="choice-btn" onclick="answer(5,'B')"><span class="choice-letter">B</span>Laid his hand upon him</button>
+        <button class="choice-btn" onclick="answer(5,'C')"><span class="choice-letter">C</span>Set his feet upon a rock and made his steps secure</button>
+        <button class="choice-btn" onclick="answer(5,'D')"><span class="choice-letter">D</span>Written his name in the book of life</button>
+      </div>
+      <div class="feedback" id="fb5"></div>
+      <button class="next-btn" id="next5" onclick="advance(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <span class="question-text">In Psalm 139:11, David entertains the thought that darkness might hide him from God. What conclusion does Psalm 139:12 immediately give?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(6,'A')"><span class="choice-letter">A</span>In the deepest night, even God waits for dawn to see clearly</button>
+        <button class="choice-btn" onclick="answer(6,'B')"><span class="choice-letter">B</span>Darkness falls like a covering over the wicked, hiding their deeds from God&#39;s sight</button>
+        <button class="choice-btn" onclick="answer(6,'C')"><span class="choice-letter">C</span>Even the darkness is not dark to God; the night is bright as day, for darkness is as light with him</button>
+        <button class="choice-btn" onclick="answer(6,'D')"><span class="choice-letter">D</span>God&#39;s glory pierces darkness like lightning, revealing all things in an instant</button>
+      </div>
+      <div class="feedback" id="fb6"></div>
+      <button class="next-btn" id="next6" onclick="advance(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <span class="question-text">Psalm 143:2 grounds David&#39;s appeal entirely in God&#39;s mercy rather than his own righteousness. What is the precise reason he gives for asking God not to enter into judgment with him?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(7,'A')"><span class="choice-letter">A</span>&#8220;My righteousness cannot stand before your holiness; only your mercy can cover my sin&#8221;</button>
+        <button class="choice-btn" onclick="answer(7,'B')"><span class="choice-letter">B</span>&#8220;I have sinned against heaven and before you; I am no longer worthy to be called your servant&#8221;</button>
+        <button class="choice-btn" onclick="answer(7,'C')"><span class="choice-letter">C</span>&#8220;No one living is righteous before you&#8221;</button>
+        <button class="choice-btn" onclick="answer(7,'D')"><span class="choice-letter">D</span>&#8220;Who can stand before your wrath? Not even the righteous, unless you be their shield&#8221;</button>
+      </div>
+      <div class="feedback" id="fb7"></div>
+      <button class="next-btn" id="next7" onclick="advance(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+        <span class="question-text">In Psalm 143:4-5, David&#39;s spirit faints within him. What two things does verse 5 say he does in response?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(8,'A')"><span class="choice-letter">A</span>He fasts and goes up to the temple to seek God&#39;s face</button>
+        <button class="choice-btn" onclick="answer(8,'B')"><span class="choice-letter">B</span>He cries out to God and reads aloud the words of Moses</button>
+        <button class="choice-btn" onclick="answer(8,'C')"><span class="choice-letter">C</span>He meditates on all that God has done and ponders the works of his hands</button>
+        <button class="choice-btn" onclick="answer(8,'D')"><span class="choice-letter">D</span>He confesses his sins before the congregation and recites the law of the LORD</button>
+      </div>
+      <div class="feedback" id="fb8"></div>
+      <button class="next-btn" id="next8" onclick="advance(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">In Psalm 144:12, David prays that the daughters of Israel&#39;s blessed generation would be like what?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(9,'A')"><span class="choice-letter">A</span>Like vines bearing fruit on the sides of the house</button>
+        <button class="choice-btn" onclick="answer(9,'B')"><span class="choice-letter">B</span>Like corner pillars cut for the structure of a palace</button>
+        <button class="choice-btn" onclick="answer(9,'C')"><span class="choice-letter">C</span>Like stars of the morning, bright and uncountable</button>
+        <button class="choice-btn" onclick="answer(9,'D')"><span class="choice-letter">D</span>Like rivers overflowing with living water</button>
+      </div>
+      <div class="feedback" id="fb9"></div>
+      <button class="next-btn" id="next9" onclick="advance(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <span class="question-text">Psalm 145:18 declares that &#8220;the LORD is near to all who call on him.&#8221; What qualifying phrase does the verse immediately add to this promise?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(10,'A')"><span class="choice-letter">A</span>To all who call on him in their distress</button>
+        <button class="choice-btn" onclick="answer(10,'B')"><span class="choice-letter">B</span>To all who call on him in truth</button>
+        <button class="choice-btn" onclick="answer(10,'C')"><span class="choice-letter">C</span>To all who call on him with a humble heart</button>
+        <button class="choice-btn" onclick="answer(10,'D')"><span class="choice-letter">D</span>To all who call on him according to his will</button>
+      </div>
+      <div class="feedback" id="fb10"></div>
+      <button class="next-btn" id="next10" onclick="advance(10)">Show Results &rarr;</button>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 120 120">
+          <circle class="score-ring-bg" cx="60" cy="60" r="54"/>
+          <circle class="score-ring-fill" id="score-ring" cx="60" cy="60" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <span class="score-num" id="score-num">0</span>
+          <span class="score-denom">/ 10</span>
+        </div>
+      </div>
+      <div id="results-title"></div>
+      <div id="results-message"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+      <div class="review-title">&#10022; Question Review &#10022;</div>
+      <div id="review-list"></div>
+    </div>
+
+  </div><!-- /card -->
+</div><!-- /outer-wrap -->
+
+<script>
+const QUESTIONS = 10;
+const CORRECT = {
+  1: 'B', 2: 'B', 3: 'C', 4: 'C', 5: 'B',
+  6: 'C', 7: 'C', 8: 'C', 9: 'B', 10: 'B'
+};
+
+const FEEDBACK = {
+  1: {
+    correct: "Correct! Psalm 131:1 lists three things: 'My heart is not lifted up; my eyes are not raised too high; I do not occupy myself with things too great and too marvelous for me.' Option B captures two of these precisely. The three together describe the posture of humility — neither in attitude, in sight, nor in ambition does David overreach what belongs to him or to God.",
+    wrong: "Not quite. Psalm 131:1 says: 'My heart is not lifted up; my eyes are not raised too high; I do not occupy myself with things too great and too marvelous for me.' Option B accurately represents two of the three. The other options import language from Psalm 1, Psalm 19, or other passages entirely.",
+    ref: "Psalm 131:1"
+  },
+  2: {
+    correct: "Correct! The word 'weaned' is the key to the image. A nursing child cries for milk — it demands nourishment from its mother. A weaned child no longer reaches for the breast; it rests simply in its mother's presence. David's soul has moved from anxious grasping to quiet rest. This is not passivity but mature, hard-won trust — contentment in God's presence without requiring anything from him.",
+    wrong: "Not quite. The significance of 'weaned' is precisely that a weaned child no longer demands milk — it is content simply to be with its mother. David's soul has settled from restless grasping into quiet rest in God's presence. The contrast with a nursing child, who cries out for feeding, is what gives this image its profound depth.",
+    ref: "Psalm 131:2"
+  },
+  3: {
+    correct: "Correct! Psalm 138:2 states: 'you have exalted above all things your name and your word.' The pairing of God's name and his word — above even his works, his glory, or his power — gives Scripture extraordinary weight. God's word shares in the majesty of God's own name. This is one of the Psalter's strongest affirmations of the authority of divine speech.",
+    wrong: "Not quite. Psalm 138:2 says God has 'exalted above all things your name and your word.' It is not his glory, his throne, his steadfast love, or his holiness in isolation — the text specifically joins 'name' and 'word' as the thing God has lifted highest. This is a remarkable claim about the authority of God's self-revelation.",
+    ref: "Psalm 138:2"
+  },
+  4: {
+    correct: "Correct! Psalm 138:6 draws a sharp contrast: 'though the LORD is high, he regards the lowly, but the haughty he knows from afar.' God does not draw near to the proud — he 'knows' them, but from a distance. He actively regards and attends to the humble. The same principle echoes throughout Scripture: 'God opposes the proud but gives grace to the humble' (James 4:6; 1 Peter 5:5).",
+    wrong: "Not quite. Psalm 138:6 says the LORD 'regards the lowly, but the haughty he knows from afar.' The contrast is not destruction versus salvation, nor testing versus ignoring — it is relational nearness versus distance. God draws close to the humble and remains far from the proud. This mirrors James 4:6 and 1 Peter 5:5.",
+    ref: "Psalm 138:6"
+  },
+  5: {
+    correct: "Correct! Psalm 139:5 says: 'You hem me in, behind and before, and lay your hand upon me.' After the sweeping description of God's total knowledge of his life, the psalm becomes intimate — God's hand is literally resting on David. The hemming-in is not threatening confinement; it is protective enclosure, the personal touch of a God who knows his servant completely.",
+    wrong: "Not quite. Psalm 139:5 reads: 'You hem me in, behind and before, and lay your hand upon me.' After cataloguing God's omniscience in verses 1-4, the psalmist lands on this personal image: God's hand upon him. 'Surrounded with songs' is from Psalm 32:7; 'set my feet on a rock' is from Psalm 40:2.",
+    ref: "Psalm 139:5"
+  },
+  6: {
+    correct: "Correct! Psalm 139:12 answers the hypothetical of verse 11 directly: 'even the darkness is not dark to you; the night is bright as the day, for darkness is as light with you.' God does not see by reflected light the way humans do — his perception is not sensory but the omniscient knowing of the Creator. No physical concealment can hide anyone from him.",
+    wrong: "Not quite. Psalm 139:12 states: 'even the darkness is not dark to you; the night is bright as the day, for darkness is as light with you.' David had entertained the thought that perhaps darkness could hide him (v.11). The answer is immediate: darkness and light are alike to God. He is not limited by the absence of photons.",
+    ref: "Psalm 139:11-12"
+  },
+  7: {
+    correct: "Correct! Psalm 143:2 is a direct quotation from the text: 'Enter not into judgment with your servant, for no one living is righteous before you.' David does not plead his innocence — he disavows it entirely. His ground for approaching God is not merit but mercy. Paul echoes this in Romans 3:20, citing the universal verdict against human self-justification before God.",
+    wrong: "Not quite. Psalm 143:2 gives this as the precise reason: 'no one living is righteous before you.' The other options are drawn from Luke 15:18-19 (the prodigal son) and language invented for the distractors. David's appeal is radical: he does not claim to be less guilty than his enemies — he simply acknowledges that no human being can stand before God on the basis of their own righteousness.",
+    ref: "Psalm 143:2"
+  },
+  8: {
+    correct: "Correct! Psalm 143:5 reads: 'I remember the days of old; I meditate on all that you have done; I ponder the works of your hands.' When his spirit fails (v.4), David does not turn inward or reach for techniques — he turns his mind deliberately to what God has already done in history. Remembrance is the foundation of hope throughout the Psalms: what God has done before, he can do again.",
+    wrong: "Not quite. Psalm 143:5 describes David's response to his failing spirit: 'I remember the days of old; I meditate on all that you have done; I ponder the works of your hands.' The practice is intentional recollection of God's past works — not ritual, not public confession, not Scripture reading per se, but directed memory of God's mighty acts.",
+    ref: "Psalm 143:5"
+  },
+  9: {
+    correct: "Correct! Psalm 144:12 says: 'our daughters like corner pillars cut for the structure of a palace.' The image is architecturally striking — daughters as structural load-bearers, essential to the strength and beauty of the whole. Sons are compared to 'plants full grown' in the same verse, but daughters receive the more impressive image: the carved corner pillar that holds the palace together.",
+    wrong: "Not quite. Psalm 144:12 describes the blessed nation's daughters as 'like corner pillars cut for the structure of a palace.' The vine-bearing-fruit image (choice A) comes from Psalm 128:3, not Psalm 144. David&#39;s image here is architectural and powerful: daughters as the load-bearing pillars of a royal structure.",
+    ref: "Psalm 144:12"
+  },
+  10: {
+    correct: "Correct! Psalm 145:18 reads in full: 'The LORD is near to all who call on him, to all who call on him in truth.' The qualifier 'in truth' is significant — it distinguishes genuine, faith-filled prayer from hollow or ritualistic calling on God's name. Jesus echoes this when he says the Father seeks worshipers who will worship 'in spirit and in truth' (John 4:24).",
+    wrong: "Not quite. Psalm 145:18 says: 'The LORD is near to all who call on him, to all who call on him in truth.' The qualifier is not humility, not distress, not conformity to God's will — it is 'in truth.' This marks the difference between sincere prayer rooted in genuine faith and the mere invocation of God's name without substance.",
+    ref: "Psalm 145:18"
+  }
+};
+
+const SHORT_Q = [
+  "Which pair of disavowals appears in Psalm 131:1? (Ps 131:1)",
+  "Why is a &#39;weaned child&#39; the right image for David&#39;s calm soul? (Ps 131:2)",
+  "What does Psalm 138:2 say God has exalted above all things? (Ps 138:2)",
+  "How does the LORD relate differently to the lowly versus the haughty? (Ps 138:6)",
+  "What else does Psalm 139:5 say God has done, beyond hemming David in? (Ps 139:5)",
+  "What conclusion does Psalm 139:12 reach about darkness hiding David from God? (Ps 139:12)",
+  "What precise reason does Psalm 143:2 give for not asking God to judge David? (Ps 143:2)",
+  "What two things does David do in Psalm 143:5 when his spirit fails? (Ps 143:5)",
+  "To what are the daughters of the blessed nation compared in Psalm 144:12? (Ps 144:12)",
+  "What qualifier does Psalm 145:18 add to &#39;The LORD is near to all who call on him&#39;? (Ps 145:18)"
+];
+
+let score = 0;
+let answers = {};
+
+function answer(qNum, chosen) {
+  if (answers[qNum]) return;
+  answers[qNum] = chosen;
+
+  const correct = CORRECT[qNum];
+  const isRight = chosen === correct;
+  if (isRight) score++;
+
+  const block = document.getElementById('q' + qNum);
+  const btns = block.querySelectorAll('.choice-btn');
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    const letter = ['A','B','C','D'][i];
+    if (letter === correct) btn.classList.add('correct');
+    else if (letter === chosen && !isRight) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('fb' + qNum);
+  const info = FEEDBACK[qNum];
+  if (isRight) {
+    fb.className = 'feedback correct-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10003;</span>' + info.correct +
+      '<span class="feedback-ref">' + info.ref + '</span>';
+  } else {
+    fb.className = 'feedback wrong-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10007;</span>' + info.wrong +
+      '<span class="feedback-ref">' + info.ref + '</span>';
+  }
+
+  document.getElementById('next' + qNum).classList.add('visible');
+}
+
+function advance(qNum) {
+  if (qNum < QUESTIONS) {
+    document.getElementById('q' + qNum).classList.remove('active');
+    document.getElementById('q' + (qNum + 1)).classList.add('active');
+    const pct = Math.round(((qNum) / QUESTIONS) * 100);
+    document.getElementById('prog-bar').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = 'Question ' + (qNum + 1) + ' of ' + QUESTIONS;
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('q10').style.display = 'none';
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-label').textContent = 'Complete';
+
+  const rs = document.getElementById('results-screen');
+  rs.style.display = 'block';
+
+  document.getElementById('score-num').textContent = score;
+
+  const pct = score / QUESTIONS;
+  const circumference = 339.3;
+  const offset = circumference - (pct * circumference);
+  setTimeout(() => {
+    document.getElementById('score-ring').style.strokeDashoffset = offset;
+  }, 100);
+
+  let title, msg;
+  if (score === 10) {
+    title = 'Perfect Score!';
+    msg = '"Search me, O God, and know my heart! Try me and know my thoughts!" You read these psalms with the same transparent devotion David brought to God. Every verse — found. — Psalm 139:23';
+  } else if (score >= 8) {
+    title = 'Excellent Work!';
+    msg = 'From the quiet three verses of Psalm 131 to the soaring doxology of Psalm 145 — you moved through all six psalms with a careful reader\'s eye. Well done.';
+  } else if (score >= 6) {
+    title = 'Well Done!';
+    msg = '"The LORD is near to all who call on him, to all who call on him in truth." Return especially to Psalm 139 and Psalm 143 — those reward the closest reading of all. — Psalm 145:18';
+  } else if (score >= 4) {
+    title = 'Good Effort';
+    msg = 'David opens Psalm 131 with a posture worth practicing: "I do not occupy myself with things too great and too marvelous for me." Let these psalms of trust draw you back to the text.';
+  } else {
+    title = 'Keep Studying!';
+    msg = '"I have calmed and quieted my soul, like a weaned child with its mother." Read Psalms 131, 138–139, 143–145 again slowly — David\'s words will reward patient attention. — Psalm 131:2';
+  }
+  document.getElementById('results-title').textContent = title;
+  document.getElementById('results-message').textContent = msg;
+
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  for (let i = 1; i <= QUESTIONS; i++) {
+    const chosen = answers[i];
+    const correct = CORRECT[i];
+    const isRight = chosen === correct;
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (isRight ? 'r-correct' : 'r-wrong');
+    div.innerHTML = '<div class="review-q">Q' + i + '. ' + SHORT_Q[i-1] + '</div>' +
+      '<div class="review-ans">' +
+      (isRight
+        ? '<span class="review-correct-lbl">&#10003; Correct</span> &mdash; ' + correct
+        : '<span class="review-wrong-lbl">&#10007; Your answer: ' + chosen + '</span> &nbsp;|&nbsp; Correct: ' + correct) +
+      '</div>';
+    reviewList.appendChild(div);
+  }
+}
+
+function resetQuiz() {
+  score = 0;
+  answers = {};
+  for (let i = 1; i <= QUESTIONS; i++) {
+    const block = document.getElementById('q' + i);
+    block.classList.remove('active');
+    const btns = block.querySelectorAll('.choice-btn');
+    btns.forEach(b => { b.disabled = false; b.className = 'choice-btn'; });
+    const fb = document.getElementById('fb' + i);
+    fb.className = 'feedback';
+    fb.innerHTML = '';
+    document.getElementById('next' + i).classList.remove('visible');
+    block.style.display = '';
+  }
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('q1').classList.add('active');
+  document.getElementById('prog-bar').style.width = '10%';
+  document.getElementById('prog-label').textContent = 'Question 1 of 10';
+  document.getElementById('score-ring').style.strokeDashoffset = '339.3';
+}
+</script>
+</body>
+</html>
