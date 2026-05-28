@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 148 Bible Recap Quiz — Psalms 111–118</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+    color: #1a5c2a;
+    font-weight: 600;
+  }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.12);
+    border-color: #8b1a1a;
+    color: #8b1a1a;
+  }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #9a7a3a;
+    min-width: 18px;
+    padding-top: 2px;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 18px;
+    font-size: 1.0rem;
+    line-height: 1.55;
+    margin-bottom: 18px;
+  }
+  .feedback.show { display: block; animation: fadeInUp 0.3s ease forwards; }
+  .feedback.fb-correct {
+    background: rgba(26,92,42,0.1);
+    border-left: 3px solid #1a5c2a;
+    color: #1a3a20;
+  }
+  .feedback.fb-wrong {
+    background: rgba(139,26,26,0.09);
+    border-left: 3px solid #8b1a1a;
+    color: #4a1010;
+  }
+  .feedback-verdict {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    background: linear-gradient(135deg, #c9a84c, #b8922e);
+    color: #1a0e02;
+    border: none;
+    border-radius: 4px;
+    padding: 11px 28px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    font-weight: 700;
+    transition: opacity 0.2s, transform 0.15s;
+    text-transform: uppercase;
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.show { display: inline-block; animation: fadeInUp 0.3s ease forwards; }
+
+  /* ── RESULTS ── */
+  #results-screen { display: none; text-align: center; }
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 20px;
+  }
+  .score-ring-svg { transform: rotate(-90deg); }
+  .score-ring-bg {
+    fill: none;
+    stroke: rgba(201,168,76,0.18);
+    stroke-width: 10;
+  }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s ease;
+  }
+  .score-ring-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #c9a84c;
+    display: block;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    color: #9a7a3a;
+    letter-spacing: 0.1em;
+  }
+  #results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1e1208;
+    margin-bottom: 10px;
+  }
+  #results-message {
+    font-size: 1.1rem;
+    color: #3a2510;
+    line-height: 1.55;
+    margin-bottom: 24px;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .take-again-btn {
+    background: transparent;
+    border: 1.5px solid #c9a84c;
+    color: #9a7a3a;
+    border-radius: 4px;
+    padding: 10px 26px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .take-again-btn:hover {
+    background: rgba(201,168,76,0.15);
+    color: #c9a84c;
+  }
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    text-transform: uppercase;
+    border-top: 1px solid rgba(201,168,76,0.3);
+    padding-top: 22px;
+    margin-bottom: 16px;
+  }
+  .review-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    text-align: left;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+    font-size: 0.97rem;
+    line-height: 1.45;
+    color: #2a1a08;
+  }
+  .review-icon {
+    font-size: 1.0rem;
+    min-width: 20px;
+    margin-top: 1px;
+  }
+  .review-icon.ok { color: #1a5c2a; }
+  .review-icon.no { color: #8b1a1a; }
+  .review-q { font-weight: 600; color: #1e1208; }
+  .review-answer { font-size: 0.92rem; color: #6a4a20; margin-top: 2px; }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- HEADER -->
+  <header class="quiz-header">
+    <div class="quiz-date">Thursday, May 28, 2026 &middot; Day 148</div>
+    <div class="quiz-title">Daily Bible Recap Quiz</div>
+    <div class="passage-tags">
+      <span class="passage-tag">Psalm 111</span>
+      <span class="passage-tag">Psalm 112</span>
+      <span class="passage-tag">Psalm 113</span>
+      <span class="passage-tag">Psalm 114</span>
+      <span class="passage-tag">Psalm 115</span>
+      <span class="passage-tag">Psalm 116</span>
+      <span class="passage-tag">Psalm 117</span>
+      <span class="passage-tag">Psalm 118</span>
+    </div>
+    <span class="difficulty-badge">Challenging</span>
+    <span class="ornament">&#10022;</span>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="prog-bar"></div>
+  </div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- CARD -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <span class="question-text">The phrase "his righteousness endures forever" appears verbatim in both Psalm 111 and Psalm 112. In Psalm 111 it refers to God. In Psalm 112, whose righteousness is described with this same phrase?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(1,'A')"><span class="choice-letter">A</span>The man who fears the LORD and delights in his commandments</button>
+        <button class="choice-btn" onclick="answer(1,'B')"><span class="choice-letter">B</span>The house of Aaron who ministers before the LORD</button>
+        <button class="choice-btn" onclick="answer(1,'C')"><span class="choice-letter">C</span>All who trust in the LORD and keep his covenant</button>
+        <button class="choice-btn" onclick="answer(1,'D')"><span class="choice-letter">D</span>The sons of the righteous man who inherit the earth after him</button>
+      </div>
+      <div class="feedback" id="fb1"></div>
+      <button class="next-btn" id="next1" onclick="advance(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">According to Psalm 112:4, light rises in the darkness for the upright. How does that same verse describe the upright person for whom this light appears?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(2,'A')"><span class="choice-letter">A</span>Mighty in the land and blessed with honor and wealth</button>
+        <button class="choice-btn" onclick="answer(2,'B')"><span class="choice-letter">B</span>Pure in heart and faithful in all their ways before the LORD</button>
+        <button class="choice-btn" onclick="answer(2,'C')"><span class="choice-letter">C</span>Gracious, merciful, and righteous</button>
+        <button class="choice-btn" onclick="answer(2,'D')"><span class="choice-letter">D</span>Steadfast in love and abounding in faithfulness toward others</button>
+      </div>
+      <div class="feedback" id="fb2"></div>
+      <button class="next-btn" id="next2" onclick="advance(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <span class="question-text">In Psalm 113, the psalmist highlights God&#39;s incomparability with a rhetorical question. Which of the following best captures what the psalm actually asks?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(3,'A')"><span class="choice-letter">A</span>"Who has measured the waters in the hollow of his hand, or stretched out the heavens with a span?"</button>
+        <button class="choice-btn" onclick="answer(3,'B')"><span class="choice-letter">B</span>"Who is like the LORD our God, who is seated on high, who looks far down on the heavens and the earth?"</button>
+        <button class="choice-btn" onclick="answer(3,'C')"><span class="choice-letter">C</span>"Who can proclaim his mighty acts, or declare all the praise due to his name?"</button>
+        <button class="choice-btn" onclick="answer(3,'D')"><span class="choice-letter">D</span>"Who has ascended to heaven and come down, or gathered the wind in his fists?"</button>
+      </div>
+      <div class="feedback" id="fb3"></div>
+      <button class="next-btn" id="next3" onclick="advance(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">Psalm 114 depicts creation responding dramatically to God&#39;s presence at the Exodus. What two natural features does the psalm say "skipped like rams" and "like lambs"?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(4,'A')"><span class="choice-letter">A</span>The waves of the sea and the rushing current of the Jordan River</button>
+        <button class="choice-btn" onclick="answer(4,'B')"><span class="choice-letter">B</span>The clouds of heaven and the flashes of lightning upon the mountains</button>
+        <button class="choice-btn" onclick="answer(4,'C')"><span class="choice-letter">C</span>The mountains and the hills</button>
+        <button class="choice-btn" onclick="answer(4,'D')"><span class="choice-letter">D</span>The feet of Israel and the hooves of their livestock at the sea</button>
+      </div>
+      <div class="feedback" id="fb4"></div>
+      <button class="next-btn" id="next4" onclick="advance(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+        <span class="question-text">Psalm 115:8 makes a pointed theological statement about idol-makers. What does it say will happen to those who make idols and all who trust in them?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(5,'A')"><span class="choice-letter">A</span>They will be consumed like chaff before the wind in the day of God&#39;s anger</button>
+        <button class="choice-btn" onclick="answer(5,'B')"><span class="choice-letter">B</span>They will be put to shame and cut off from the assembly of God&#39;s people</button>
+        <button class="choice-btn" onclick="answer(5,'C')"><span class="choice-letter">C</span>They will be handed over to the nations that they trusted instead of the LORD</button>
+        <button class="choice-btn" onclick="answer(5,'D')"><span class="choice-letter">D</span>Those who make them become like them; so do all who trust in them</button>
+      </div>
+      <div class="feedback" id="fb5"></div>
+      <button class="next-btn" id="next5" onclick="advance(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <span class="question-text">In Psalm 116, the psalmist describes the distress that drove him to call on the LORD. How does he specifically describe his experience of mortal danger?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(6,'A')"><span class="choice-letter">A</span>The snares of death encompassed him; the pangs of Sheol laid hold on him</button>
+        <button class="choice-btn" onclick="answer(6,'B')"><span class="choice-letter">B</span>His enemies surrounded him on every side and sought to take his life</button>
+        <button class="choice-btn" onclick="answer(6,'C')"><span class="choice-letter">C</span>He wandered like a lost sheep in the wilderness without a shepherd to guide him</button>
+        <button class="choice-btn" onclick="answer(6,'D')"><span class="choice-letter">D</span>His strength dried up like a potsherd and his tongue cleaved to the roof of his mouth</button>
+      </div>
+      <div class="feedback" id="fb6"></div>
+      <button class="next-btn" id="next6" onclick="advance(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">Psalm 116:15 contains a verse frequently quoted at funerals and memorial services. Which of the following is that verse?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(7,'A')"><span class="choice-letter">A</span>"The LORD redeems the soul of his servants; none of those who take refuge in him will be condemned"</button>
+        <button class="choice-btn" onclick="answer(7,'B')"><span class="choice-letter">B</span>"Precious in the sight of the LORD is the death of his saints"</button>
+        <button class="choice-btn" onclick="answer(7,'C')"><span class="choice-letter">C</span>"The LORD is near to the brokenhearted and saves the crushed in spirit"</button>
+        <button class="choice-btn" onclick="answer(7,'D')"><span class="choice-letter">D</span>"The LORD will not abandon his people; he will never forsake his inheritance"</button>
+      </div>
+      <div class="feedback" id="fb7"></div>
+      <button class="next-btn" id="next7" onclick="advance(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+        <span class="question-text">Psalm 117 — the shortest chapter in the entire Bible — calls all nations to praise the LORD. What specific reason does it give for why even the Gentile nations should praise him?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(8,'A')"><span class="choice-letter">A</span>Great is his steadfast love toward us, and the faithfulness of the LORD endures forever</button>
+        <button class="choice-btn" onclick="answer(8,'B')"><span class="choice-letter">B</span>He alone is God; there is no other god among all the peoples of the earth</button>
+        <button class="choice-btn" onclick="answer(8,'C')"><span class="choice-letter">C</span>He has made the nations and established their times and boundaries from the foundations of the world</button>
+        <button class="choice-btn" onclick="answer(8,'D')"><span class="choice-letter">D</span>His name is great among all the nations, from the rising of the sun to its setting</button>
+      </div>
+      <div class="feedback" id="fb8"></div>
+      <button class="next-btn" id="next8" onclick="advance(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <span class="question-text">Psalm 118 both opens and closes with the same refrain. Which of the following is that repeated refrain?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(9,'A')"><span class="choice-letter">A</span>"I will exalt you, LORD, for you have lifted me out of the depths and have not let my enemies gloat over me"</button>
+        <button class="choice-btn" onclick="answer(9,'B')"><span class="choice-letter">B</span>"Praise the LORD, for the LORD is good; sing to his name, for it is pleasant and worthy of all praise"</button>
+        <button class="choice-btn" onclick="answer(9,'C')"><span class="choice-letter">C</span>"Bless the LORD, O my soul; let all that is within me bless his holy and exalted name"</button>
+        <button class="choice-btn" onclick="answer(9,'D')"><span class="choice-letter">D</span>"Give thanks to the LORD, for he is good; for his steadfast love endures forever"</button>
+      </div>
+      <div class="feedback" id="fb9"></div>
+      <button class="next-btn" id="next9" onclick="advance(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">Psalm 118:22 introduces the rejected cornerstone — a verse Jesus applied directly to himself. What does verse 23, the very next verse, say about this remarkable reversal?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(10,'A')"><span class="choice-letter">A</span>"The LORD will make the rejected stone the head of all nations and peoples of the earth"</button>
+        <button class="choice-btn" onclick="answer(10,'B')"><span class="choice-letter">B</span>"This is the LORD&#39;s doing; it is marvelous in our eyes"</button>
+        <button class="choice-btn" onclick="answer(10,'C')"><span class="choice-letter">C</span>"Blessed is he who comes in the name of the LORD; we bless you from the house of the LORD"</button>
+        <button class="choice-btn" onclick="answer(10,'D')"><span class="choice-letter">D</span>"Open to me the gates of righteousness, that I may enter through them and give thanks to the LORD"</button>
+      </div>
+      <div class="feedback" id="fb10"></div>
+      <button class="next-btn" id="next10" onclick="showResults()">See Results &rarr;</button>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 120 120">
+          <circle class="score-ring-bg" cx="60" cy="60" r="54"/>
+          <circle class="score-ring-fill" id="ring-fill" cx="60" cy="60" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <span class="score-num" id="score-num">0</span>
+          <span class="score-denom">/ 10</span>
+        </div>
+      </div>
+      <div id="results-title"></div>
+      <div id="results-message"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">&#8635; Take Again</button>
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+    </div>
+
+  </div><!-- /.card -->
+</div><!-- /.outer-wrap -->
+
+<script>
+  var TOTAL = 10;
+  var score = 0;
+  var currentQ = 1;
+  var userAnswers = {};
+
+  var correctAnswers = {
+    1: 'A',
+    2: 'C',
+    3: 'B',
+    4: 'C',
+    5: 'D',
+    6: 'A',
+    7: 'B',
+    8: 'A',
+    9: 'D',
+    10: 'B'
+  };
+
+  var questionTexts = {
+    1: 'The phrase "his righteousness endures forever" appears in both Psalms 111 and 112. In Psalm 112, whose righteousness is described this way?',
+    2: 'According to Psalm 112:4, how does that verse describe the upright person for whom light rises in darkness?',
+    3: 'Which rhetorical question from Psalm 113 best captures the psalmist\'s assertion of God\'s incomparability?',
+    4: 'Psalm 114 says two natural features "skipped like rams" and "like lambs." What were they?',
+    5: 'Psalm 115:8 makes a pointed statement about idol-makers. What does it say will happen to those who make idols and trust in them?',
+    6: 'In Psalm 116, how does the psalmist describe the mortal danger that drove him to call on the LORD?',
+    7: 'Which verse is Psalm 116:15, the verse frequently quoted at funerals and memorial services?',
+    8: 'What specific reason does Psalm 117 give for why all nations should praise the LORD?',
+    9: 'Psalm 118 opens and closes with the same refrain. Which of the following is that repeated refrain?',
+    10: 'After the rejected-cornerstone verse (Psalm 118:22), what does verse 23 say about this reversal?'
+  };
+
+  var feedbackTexts = {
+    1: {
+      correct: '<span class="feedback-verdict">&#10003; Correct!</span> Psalm 112:3 and 112:9 both declare that "his righteousness endures forever" — referring to the man who fears the LORD and gives freely to the poor. Interestingly, this same phrase in Psalm 111:3 describes God himself, making Psalms 111 and 112 perfect companion portraits of divine and human righteousness.',
+      wrong: '<span class="feedback-verdict">&#10007; Incorrect.</span> In Psalm 112:3 and 112:9, "his righteousness endures forever" refers to the man who fears the LORD. The twin psalms (111 and 112) mirror each other: what is said of God in Psalm 111 is said of the God-fearing man in Psalm 112.'
+    },
+    2: {
+      correct: '<span class="feedback-verdict">&#10003; Correct!</span> Psalm 112:4 says light rises in darkness for the upright, describing them as "gracious, merciful, and righteous." These three attributes reflect the very character of God himself — the upright person is one who images God\'s own nature in their dealings with others.',
+      wrong: '<span class="feedback-verdict">&#10007; Incorrect.</span> Psalm 112:4 describes the upright as "gracious, merciful, and righteous" — three terms that elsewhere in the Psalter describe God himself (e.g., Psalm 116:5). The man who fears the LORD takes on the character of the God he fears.'
+    },
+    3: {
+      correct: '<span class="feedback-verdict">&#10003; Correct!</span> Psalm 113:5-6 asks: "Who is like the LORD our God, who is seated on high, who looks far down on the heavens and the earth?" This double movement — enthroned above yet looking down even below the heavens — captures the paradox of God\'s transcendence and condescension that the rest of the psalm illustrates.',
+      wrong: '<span class="feedback-verdict">&#10007; Incorrect.</span> Psalm 113:5-6 asks: "Who is like the LORD our God, who is seated on high, who looks far down on the heavens and the earth?" The other options echo Isaiah 40:12 and Proverbs 30:4, but they are not from this psalm.'
+    },
+    4: {
+      correct: '<span class="feedback-verdict">&#10003; Correct!</span> Psalm 114:4 and 6 both describe the mountains skipping like rams and the hills like lambs at the presence of God during the Exodus. This vivid, almost comic image of massive geological features leaping playfully underscores that even the most immovable things in creation cannot help but dance before the LORD.',
+      wrong: '<span class="feedback-verdict">&#10007; Incorrect.</span> Psalm 114:4, 6 depicts the mountains skipping like rams and the hills like lambs. The sea and Jordan are also mentioned in the psalm (v.3, 5) — they "fled" and "turned back" — but the skipping imagery is reserved for the mountains and hills.'
+    },
+    5: {
+      correct: '<span class="feedback-verdict">&#10003; Correct!</span> Psalm 115:8 warns: "Those who make them become like them; so do all who trust in them." This is one of Scripture\'s most searching critiques of idolatry — it is not merely that idols are worthless, but that idol worship is spiritually transforming, and not in a good direction. We become what we worship.',
+      wrong: '<span class="feedback-verdict">&#10007; Incorrect.</span> Psalm 115:8 states: "Those who make them become like them; so do all who trust in them." The psalm\'s critique of idols goes beyond mocking their powerlessness — it warns that idol worshipers are gradually conformed to the image of their dead, mute, unseeing gods.'
+    },
+    6: {
+      correct: '<span class="feedback-verdict">&#10003; Correct!</span> Psalm 116:3 describes the crisis: "The snares of death encompassed me; the pangs of Sheol laid hold on me; I suffered distress and anguish." This is the darkness from which the psalmist calls out — and his testimony is that the LORD heard, which becomes the fuel for his lifelong devotion described in the rest of the psalm.',
+      wrong: '<span class="feedback-verdict">&#10007; Incorrect.</span> Psalm 116:3 records the specific distress: "The snares of death encompassed me; the pangs of Sheol laid hold on me; I suffered distress and anguish." The other options echo language from other psalms (22, 31, 119) but are not what Psalm 116 says.'
+    },
+    7: {
+      correct: '<span class="feedback-verdict">&#10003; Correct!</span> Psalm 116:15 reads: "Precious in the sight of the LORD is the death of his saints." This verse reframes death not as God\'s neglect or absence but as something he regards with great weight and care. The deaths of his people cost him something — a profound comfort to those who mourn.',
+      wrong: '<span class="feedback-verdict">&#10007; Incorrect.</span> Psalm 116:15 says: "Precious in the sight of the LORD is the death of his saints." Option A echoes Psalm 34:22, option C echoes Psalm 34:18, and option D echoes Psalm 94:14 — all are Scripture, but none is Psalm 116:15.'
+    },
+    8: {
+      correct: '<span class="feedback-verdict">&#10003; Correct!</span> Psalm 117:2 gives the reason all nations should praise: "For great is his steadfast love toward us, and the faithfulness of the LORD endures forever." Paul quotes this very psalm in Romans 15:11 as proof that the inclusion of Gentiles in God\'s praise was always the plan — not a Plan B after Israel\'s failure.',
+      wrong: '<span class="feedback-verdict">&#10007; Incorrect.</span> Psalm 117:2 states: "For great is his steadfast love toward us, and the faithfulness of the LORD endures forever." Interestingly, the reasons given are rooted in what God has done for Israel ("toward us") — yet the call goes out to all nations, suggesting they are invited to celebrate what God has done in his covenant people.'
+    },
+    9: {
+      correct: '<span class="feedback-verdict">&#10003; Correct!</span> Psalm 118 opens (v.1) and closes (v.29) with the identical refrain: "Give thanks to the LORD, for he is good; for his steadfast love endures forever." This liturgical bracket frames the entire psalm — including its suffering, its deliverance, and its messianic prophecy — as a song of thanksgiving rooted in God\'s unshakeable covenant love.',
+      wrong: '<span class="feedback-verdict">&#10007; Incorrect.</span> Psalm 118:1 and 118:29 both read: "Give thanks to the LORD, for he is good; for his steadfast love endures forever." This refrain also opens each of the four sections of Psalm 136. Option A echoes Psalm 30:1, option B echoes Psalm 135:3, and option C echoes Psalm 103:1.'
+    },
+    10: {
+      correct: '<span class="feedback-verdict">&#10003; Correct!</span> Psalm 118:23 declares: "This is the LORD\'s doing; it is marvelous in our eyes." Immediately after the shocking image of the rejected stone becoming the cornerstone, the psalmist attributes the reversal entirely to God. Jesus quotes verse 22 in Matthew 21:42, Mark 12:10, and Luke 20:17 — and the "marvelous in our eyes" language points forward to the resurrection, the ultimate reversal no one saw coming.',
+      wrong: '<span class="feedback-verdict">&#10007; Incorrect.</span> Psalm 118:23 says: "This is the LORD\'s doing; it is marvelous in our eyes." Option C (v.26) is the Palm Sunday verse — "Blessed is he who comes in the name of the LORD" — quoted by the crowds at Jesus\' triumphal entry. Option D is verse 19. But verse 23 responds directly to the cornerstone image of verse 22 by attributing the reversal to God alone.'
+    }
+  };
+
+  function updateProgress() {
+    var pct = Math.round(((currentQ - 1) / TOTAL) * 100);
+    document.getElementById('prog-bar').style.width = Math.max(pct, 5) + '%';
+    document.getElementById('prog-label').textContent = 'Question ' + currentQ + ' of ' + TOTAL;
+  }
+
+  function answer(qNum, chosen) {
+    var correct = correctAnswers[qNum];
+    userAnswers[qNum] = chosen;
+    var btns = document.querySelectorAll('#q' + qNum + ' .choice-btn');
+    var letters = ['A','B','C','D'];
+    btns.forEach(function(btn, i) {
+      btn.disabled = true;
+      if (letters[i] === correct) btn.classList.add('correct');
+      else if (letters[i] === chosen) btn.classList.add('wrong');
+    });
+    var fb = document.getElementById('fb' + qNum);
+    if (chosen === correct) {
+      score++;
+      fb.innerHTML = feedbackTexts[qNum].correct;
+      fb.className = 'feedback show fb-correct';
+    } else {
+      fb.innerHTML = feedbackTexts[qNum].wrong;
+      fb.className = 'feedback show fb-wrong';
+    }
+    var nxt = document.getElementById('next' + qNum);
+    nxt.classList.add('show');
+  }
+
+  function advance(qNum) {
+    document.getElementById('q' + qNum).classList.remove('active');
+    currentQ = qNum + 1;
+    if (currentQ <= TOTAL) {
+      var nextBlock = document.getElementById('q' + currentQ);
+      nextBlock.style.display = 'none';
+      nextBlock.classList.add('active');
+      nextBlock.style.display = '';
+      updateProgress();
+    }
+  }
+
+  function showResults() {
+    document.getElementById('q10').classList.remove('active');
+    document.getElementById('prog-bar').style.width = '100%';
+    document.getElementById('prog-label').textContent = 'Complete!';
+    var rs = document.getElementById('results-screen');
+    rs.style.display = 'block';
+    document.getElementById('score-num').textContent = score;
+    var circumference = 339.3;
+    var offset = circumference - (score / TOTAL) * circumference;
+    setTimeout(function() {
+      document.getElementById('ring-fill').style.strokeDashoffset = offset;
+    }, 100);
+    var titles = ['', 'Keep Pressing On', 'Keep Pressing On', 'Keep Pressing On', 'Keep Pressing On',
+                  'Well Done!', 'Well Done!', 'Well Done!', 'Excellent Work!', 'Excellent Work!', 'Perfect Score!'];
+    var messages = [
+      '',
+      'These Hallel psalms reward slow, careful reading. Return to Psalms 111-118 and let their praise sink deeper.',
+      'Keep pressing in. The Egyptian Hallel was sung at Passover — the same songs Jesus and the disciples sang the night he was betrayed.',
+      'Good effort! Psalms 111-118 span acrostics, the Exodus, idol polemic, and Messianic prophecy. Keep reading closely.',
+      'Solid work. These psalms are rich with liturgy, theology, and Gospel foreshadowing. There is always more to find.',
+      'Well done! You are engaging these psalms as they deserve — as intricate, carefully crafted praise that points to Christ.',
+      'Strong work! From the idols of Psalm 115 to the cornerstone of Psalm 118, you are reading the whole sweep of praise.',
+      'Impressive! These psalms shaped Israel\'s worship for centuries and were on Jesus\' lips on the night he was betrayed.',
+      'Excellent! You clearly read these eight psalms carefully. The Egyptian Hallel is richer than it first appears.',
+      'Outstanding! From "his righteousness endures forever" to the marvelous cornerstone — you caught the deep connections.',
+      'Perfect score! You know these psalms well. The stone the builders rejected has become the cornerstone — and his steadfast love endures forever.'
+    ];
+    document.getElementById('results-title').textContent = titles[score];
+    document.getElementById('results-message').textContent = messages[score];
+
+    // Build review list
+    var rl = document.getElementById('review-list');
+    rl.innerHTML = '';
+    for (var i = 1; i <= TOTAL; i++) {
+      var ua = userAnswers[i];
+      var ca = correctAnswers[i];
+      var ok = ua === ca;
+      var div = document.createElement('div');
+      div.className = 'review-item';
+      div.innerHTML =
+        '<span class="review-icon ' + (ok ? 'ok' : 'no') + '">' + (ok ? '&#10003;' : '&#10007;') + '</span>' +
+        '<div><div class="review-q">Q' + i + ': ' + questionTexts[i] + '</div>' +
+        '<div class="review-answer">' +
+        (ok ? 'Your answer: ' + ua + ' &#10003;' : 'Your answer: ' + ua + ' &nbsp;|&nbsp; Correct: ' + ca) +
+        '</div></div>';
+      rl.appendChild(div);
+    }
+  }
+
+  function resetQuiz() {
+    score = 0;
+    currentQ = 1;
+    userAnswers = {};
+    document.getElementById('results-screen').style.display = 'none';
+    document.getElementById('ring-fill').style.strokeDashoffset = 339.3;
+    for (var i = 1; i <= TOTAL; i++) {
+      var block = document.getElementById('q' + i);
+      block.classList.remove('active');
+      var btns = block.querySelectorAll('.choice-btn');
+      btns.forEach(function(b) {
+        b.disabled = false;
+        b.classList.remove('correct', 'wrong');
+      });
+      var fb = document.getElementById('fb' + i);
+      fb.className = 'feedback';
+      fb.innerHTML = '';
+      var nxt = document.getElementById('next' + i);
+      nxt.classList.remove('show');
+    }
+    document.getElementById('q1').classList.add('active');
+    document.getElementById('prog-bar').style.width = '5%';
+    document.getElementById('prog-label').textContent = 'Question 1 of 10';
+  }
+
+  updateProgress();
+</script>
+</body>
+</html>
