@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 149 Bible Recap Quiz — 1 Kings 1–2 &amp; Psalms 37, 71, 94</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+    color: #1a5c2a;
+    font-weight: 600;
+  }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.12);
+    border-color: #8b1a1a;
+    color: #8b1a1a;
+  }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #9a7a3a;
+    min-width: 18px;
+    padding-top: 2px;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 18px;
+    font-size: 1.0rem;
+    line-height: 1.55;
+    margin-bottom: 18px;
+  }
+  .feedback.show { display: block; animation: fadeInUp 0.3s ease forwards; }
+  .feedback.fb-correct {
+    background: rgba(26,92,42,0.1);
+    border-left: 3px solid #1a5c2a;
+    color: #1a3a20;
+  }
+  .feedback.fb-wrong {
+    background: rgba(139,26,26,0.09);
+    border-left: 3px solid #8b1a1a;
+    color: #4a1010;
+  }
+  .feedback-verdict {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    background: linear-gradient(135deg, #c9a84c, #b8922e);
+    color: #1a0e02;
+    border: none;
+    border-radius: 4px;
+    padding: 11px 28px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    font-weight: 700;
+    transition: opacity 0.2s, transform 0.15s;
+    text-transform: uppercase;
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.show { display: inline-block; animation: fadeInUp 0.3s ease forwards; }
+
+  /* ── RESULTS ── */
+  #results-screen { display: none; text-align: center; }
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 20px;
+  }
+  .score-ring-svg { transform: rotate(-90deg); }
+  .score-ring-bg {
+    fill: none;
+    stroke: rgba(201,168,76,0.18);
+    stroke-width: 10;
+  }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s ease;
+  }
+  .score-ring-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #c9a84c;
+    display: block;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    color: #9a7a3a;
+    letter-spacing: 0.1em;
+  }
+  #results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1e1208;
+    margin-bottom: 10px;
+  }
+  #results-message {
+    font-size: 1.1rem;
+    color: #3a2510;
+    line-height: 1.55;
+    margin-bottom: 24px;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .take-again-btn {
+    background: transparent;
+    border: 1.5px solid #c9a84c;
+    color: #9a7a3a;
+    border-radius: 4px;
+    padding: 10px 26px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .take-again-btn:hover {
+    background: rgba(201,168,76,0.15);
+    color: #c9a84c;
+  }
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    text-transform: uppercase;
+    border-top: 1px solid rgba(201,168,76,0.3);
+    padding-top: 22px;
+    margin-bottom: 16px;
+  }
+  .review-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    text-align: left;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+    font-size: 0.97rem;
+    line-height: 1.45;
+    color: #2a1a08;
+  }
+  .review-icon {
+    font-size: 1.0rem;
+    min-width: 20px;
+    margin-top: 1px;
+  }
+  .review-icon.ok { color: #1a5c2a; }
+  .review-icon.no { color: #8b1a1a; }
+  .review-q { font-weight: 600; color: #1e1208; }
+  .review-answer { font-size: 0.92rem; color: #6a4a20; margin-top: 2px; }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- HEADER -->
+  <header class="quiz-header">
+    <div class="quiz-date">Friday, May 29, 2026 &middot; Day 149</div>
+    <div class="quiz-title">Daily Bible Recap Quiz</div>
+    <div class="passage-tags">
+      <span class="passage-tag">1 Kings 1</span>
+      <span class="passage-tag">1 Kings 2</span>
+      <span class="passage-tag">Psalm 37</span>
+      <span class="passage-tag">Psalm 71</span>
+      <span class="passage-tag">Psalm 94</span>
+    </div>
+    <div><span class="ornament">&#10022;</span><span class="difficulty-badge">Challenging</span><span class="ornament">&#10022;</span></div>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap"><div class="progress-bar" id="prog-bar"></div></div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- QUIZ CARD -->
+  <div class="card" id="quiz-card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <span class="detail-badge">Detail</span>
+        <span class="question-text">What was the name of the young woman brought from Shunem to care for the aging King David and keep him warm?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,'q1',false)"><span class="choice-letter">A</span>Abigail of Carmel</button>
+        <button class="choice-btn" onclick="answer(this,'q1',true)"><span class="choice-letter">B</span>Abishag the Shunammite</button>
+        <button class="choice-btn" onclick="answer(this,'q1',false)"><span class="choice-letter">C</span>Rizpah the Arathite</button>
+        <button class="choice-btn" onclick="answer(this,'q1',false)"><span class="choice-letter">D</span>Naamah the Ammonite</button>
+      </div>
+      <div class="feedback" id="fb-q1"></div>
+      <button class="next-btn" id="next-q1" onclick="nextQ(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+        <span class="question-text">When Adonijah proclaimed himself king, he held a feast and invited his supporters. Which of the following was explicitly NOT invited to Adonijah's feast?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,'q2',false)"><span class="choice-letter">A</span>Joab, the commander of Israel's army</button>
+        <button class="choice-btn" onclick="answer(this,'q2',false)"><span class="choice-letter">B</span>Abiathar the priest</button>
+        <button class="choice-btn" onclick="answer(this,'q2',true)"><span class="choice-letter">C</span>Nathan the prophet and Benaiah son of Jehoiada</button>
+        <button class="choice-btn" onclick="answer(this,'q2',false)"><span class="choice-letter">D</span>Adonijah&#39;s brothers, the king&#39;s sons</button>
+      </div>
+      <div class="feedback" id="fb-q2"></div>
+      <button class="next-btn" id="next-q2" onclick="nextQ(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <span class="detail-badge">Detail</span>
+        <span class="question-text">At which location was Solomon anointed king by Zadok the priest and Nathan the prophet, fulfilling David&#39;s command?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,'q3',false)"><span class="choice-letter">A</span>The stone of Zoheleth near En Rogel</button>
+        <button class="choice-btn" onclick="answer(this,'q3',false)"><span class="choice-letter">B</span>The threshing floor of Araunah the Jebusite</button>
+        <button class="choice-btn" onclick="answer(this,'q3',true)"><span class="choice-letter">C</span>The spring of Gihon</button>
+        <button class="choice-btn" onclick="answer(this,'q3',false)"><span class="choice-letter">D</span>The altar at Gibeon</button>
+      </div>
+      <div class="feedback" id="fb-q3"></div>
+      <button class="next-btn" id="next-q3" onclick="nextQ(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <span class="question-text">When Adonijah fled and grabbed the horns of the altar in fear, what condition did Solomon set before granting him his life?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,'q4',false)"><span class="choice-letter">A</span>That he leave Jerusalem and go into permanent exile</button>
+        <button class="choice-btn" onclick="answer(this,'q4',false)"><span class="choice-letter">B</span>That he publicly bow before Solomon and acknowledge him as king</button>
+        <button class="choice-btn" onclick="answer(this,'q4',true)"><span class="choice-letter">C</span>That he show himself to be a worthy man — if wickedness is found in him he will die</button>
+        <button class="choice-btn" onclick="answer(this,'q4',false)"><span class="choice-letter">D</span>That he swear an oath never to seek the throne again under penalty of death</button>
+      </div>
+      <div class="feedback" id="fb-q4"></div>
+      <button class="next-btn" id="next-q4" onclick="nextQ(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+        <span class="detail-badge">Detail</span>
+        <span class="question-text">After David&#39;s death, Adonijah came to Bathsheba with a request he asked her to bring before Solomon. What did Adonijah ask for?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,'q5',false)"><span class="choice-letter">A</span>A position of honor in Solomon&#39;s royal court</button>
+        <button class="choice-btn" onclick="answer(this,'q5',true)"><span class="choice-letter">B</span>That Abishag the Shunammite be given to him as a wife</button>
+        <button class="choice-btn" onclick="answer(this,'q5',false)"><span class="choice-letter">C</span>Permission to leave Jerusalem and settle in his own territory</button>
+        <button class="choice-btn" onclick="answer(this,'q5',false)"><span class="choice-letter">D</span>Restoration of Abiathar the priest to his office</button>
+      </div>
+      <div class="feedback" id="fb-q5"></div>
+      <button class="next-btn" id="next-q5" onclick="nextQ(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <span class="question-text">Solomon commanded that Joab be executed. Which two murders did Solomon specifically cite as the bloodguilt Joab carried?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,'q6',false)"><span class="choice-letter">A</span>Uriah the Hittite and Absalom son of David</button>
+        <button class="choice-btn" onclick="answer(this,'q6',true)"><span class="choice-letter">B</span>Abner son of Ner and Amasa son of Jether</button>
+        <button class="choice-btn" onclick="answer(this,'q6',false)"><span class="choice-letter">C</span>Absalom son of David and Amasa son of Jether</button>
+        <button class="choice-btn" onclick="answer(this,'q6',false)"><span class="choice-letter">D</span>Ishbosheth son of Saul and Abner son of Ner</button>
+      </div>
+      <div class="feedback" id="fb-q6"></div>
+      <button class="next-btn" id="next-q6" onclick="nextQ(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <span class="detail-badge">Detail</span>
+        <span class="question-text">Solomon placed Shimei under a form of house arrest in Jerusalem. What precise boundary was Shimei forbidden to cross, under penalty of death?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,'q7',false)"><span class="choice-letter">A</span>The walls of the city of David</button>
+        <button class="choice-btn" onclick="answer(this,'q7',true)"><span class="choice-letter">B</span>The brook Kidron</button>
+        <button class="choice-btn" onclick="answer(this,'q7',false)"><span class="choice-letter">C</span>The road to Bahurim, his hometown</button>
+        <button class="choice-btn" onclick="answer(this,'q7',false)"><span class="choice-letter">D</span>The gates of Jerusalem</button>
+      </div>
+      <div class="feedback" id="fb-q7"></div>
+      <button class="next-btn" id="next-q7" onclick="nextQ(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+        <span class="question-text">Psalm 37 opens with a command not to fret over evildoers. According to the psalm, how does the LORD respond when the wicked plots against the righteous and gnashes his teeth at him?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,'q8',false)"><span class="choice-letter">A</span>The LORD arises in wrath to execute swift punishment</button>
+        <button class="choice-btn" onclick="answer(this,'q8',false)"><span class="choice-letter">B</span>The LORD turns the wicked&#39;s schemes back upon their own heads</button>
+        <button class="choice-btn" onclick="answer(this,'q8',true)"><span class="choice-letter">C</span>The LORD laughs at the wicked, for he sees that his day is coming</button>
+        <button class="choice-btn" onclick="answer(this,'q8',false)"><span class="choice-letter">D</span>The LORD vindicates the righteous before all their enemies</button>
+      </div>
+      <div class="feedback" id="fb-q8"></div>
+      <button class="next-btn" id="next-q8" onclick="nextQ(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <span class="question-text">Psalm 71 is a prayer from a person in old age. What does the psalmist specifically plead that God not do as his strength fails?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,'q9',false)"><span class="choice-letter">A</span>Do not let his enemies see his disgrace and boast over him</button>
+        <button class="choice-btn" onclick="answer(this,'q9',false)"><span class="choice-letter">B</span>Do not remember the sins of his youth against him</button>
+        <button class="choice-btn" onclick="answer(this,'q9',true)"><span class="choice-letter">C</span>Do not cast him off or forsake him in his old age</button>
+        <button class="choice-btn" onclick="answer(this,'q9',false)"><span class="choice-letter">D</span>Do not withhold his steadfast love from him in the time of trouble</button>
+      </div>
+      <div class="feedback" id="fb-q9"></div>
+      <button class="next-btn" id="next-q9" onclick="nextQ(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <span class="detail-badge">Detail</span>
+        <span class="question-text">Psalm 94 calls God the "God of vengeance." According to verses 12–13, what twofold blessing does the man receive whom the LORD disciplines and teaches from his law?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,'q10',false)"><span class="choice-letter">A</span>He will be exalted over his enemies and his descendants will inherit the land</button>
+        <button class="choice-btn" onclick="answer(this,'q10',true)"><span class="choice-letter">B</span>He will be given rest from days of trouble while a pit is dug for the wicked</button>
+        <button class="choice-btn" onclick="answer(this,'q10',false)"><span class="choice-letter">C</span>His ways will be made straight and his enemies will be put to shame</button>
+        <button class="choice-btn" onclick="answer(this,'q10',false)"><span class="choice-letter">D</span>He will be vindicated before the assembly and his prayer will be heard</button>
+      </div>
+      <div class="feedback" id="fb-q10"></div>
+      <button class="next-btn" id="next-q10" onclick="nextQ(10)">See Results &rarr;</button>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" width="130" height="130" viewBox="0 0 130 130">
+          <circle class="score-ring-bg" cx="65" cy="65" r="54"/>
+          <circle class="score-ring-fill" id="score-ring" cx="65" cy="65" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <span class="score-num" id="score-num">0</span>
+          <span class="score-denom">/ 10</span>
+        </div>
+      </div>
+      <div id="results-title"></div>
+      <div id="results-message"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">&#8635; Take Again</button>
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+    </div>
+
+  </div><!-- /card -->
+</div><!-- /outer-wrap -->
+
+<script>
+const TOTAL = 10;
+let score = 0;
+let userAnswers = [];
+
+const feedbacks = {
+  q1: {
+    correct: "Correct! Abishag the Shunammite was brought to serve David in his final days (1 Kings 1:3). She would later become the center of a politically charged request by Adonijah.",
+    wrong: "The text identifies her as <strong>Abishag the Shunammite</strong> (1 Kings 1:3). She is a key figure in 1 Kings 2, when Adonijah&#39;s request for her costs him his life."
+  },
+  q2: {
+    correct: "Correct! 1 Kings 1:10 lists those Adonijah did <em>not</em> invite: Nathan the prophet, Benaiah, the mighty men, and Solomon himself — precisely those loyal to David and Solomon.",
+    wrong: "1 Kings 1:10 explicitly states that Adonijah did <em>not</em> invite <strong>Nathan the prophet, Benaiah, the mighty men, or Solomon</strong>. Joab and Abiathar were among Adonijah&#39;s supporters (v.7)."
+  },
+  q3: {
+    correct: "Correct! David commanded Zadok, Nathan, and Benaiah to take Solomon to the <strong>spring of Gihon</strong> and anoint him king there (1 Kings 1:33–34). The shouts of the people were heard as far as Adonijah&#39;s feast.",
+    wrong: "David&#39;s command was to take Solomon to the <strong>spring of Gihon</strong> for his anointing (1 Kings 1:33–34). The stone of Zoheleth near En Rogel was where Adonijah held his rival feast."
+  },
+  q4: {
+    correct: "Correct! Solomon said, &#39;If he proves to be a worthy man, not one of his hairs shall fall to the earth, but if wickedness is found in him, he shall die&#39; (1 Kings 1:52). Adonijah&#39;s later request would seal his fate.",
+    wrong: "Solomon&#39;s condition was conditional mercy: <strong>&#39;if he proves worthy he shall live; if wickedness is found in him, he shall die&#39;</strong> (1 Kings 1:52). He sent Adonijah home — for now."
+  },
+  q5: {
+    correct: "Correct! Adonijah asked Bathsheba to request <strong>Abishag the Shunammite</strong> as his wife (1 Kings 2:17). Solomon recognized this as a veiled claim to the throne — taking the king&#39;s concubine implied royal succession — and had Adonijah executed.",
+    wrong: "Adonijah requested <strong>Abishag the Shunammite</strong> as a wife (1 Kings 2:17). Solomon interpreted this as tantamount to seeking the kingdom, since Abishag had served David. The request cost Adonijah his life."
+  },
+  q6: {
+    correct: "Correct! Solomon cited the murders of <strong>Abner son of Ner</strong> (commander of Israel&#39;s army, killed by Joab in 2 Sam 3) and <strong>Amasa son of Jether</strong> (David&#39;s general, killed by Joab in 2 Sam 20) as the bloodguilt requiring Joab&#39;s death (1 Kings 2:5, 32).",
+    wrong: "The two murders Solomon named were those of <strong>Abner son of Ner</strong> and <strong>Amasa son of Jether</strong> (1 Kings 2:5, 32) — both commanders Joab killed treacherously, shedding their innocent blood in peacetime."
+  },
+  q7: {
+    correct: "Correct! Solomon warned Shimei: &#39;On the day you go out and cross the brook Kidron, know for certain that you shall die&#39; (1 Kings 2:37). Three years later Shimei crossed it to retrieve runaway servants — and was executed.",
+    wrong: "The forbidden boundary was the <strong>brook Kidron</strong> (1 Kings 2:37). Shimei agreed to the terms but three years later crossed it to retrieve runaway slaves from Gath — and Solomon had him executed."
+  },
+  q8: {
+    correct: "Correct! Psalm 37:13 says, &#39;but the Lord laughs at the wicked, for he sees that his day is coming.&#39; This divine laughter is not mockery for sport but serene sovereignty — God is not threatened by the wicked&#39;s schemes.",
+    wrong: "Psalm 37:13 says <strong>&#39;the Lord laughs at the wicked, for he sees that his day is coming.&#39;</strong> The same divine laughter appears in Psalm 2:4 — the LORD enthroned in heaven holds the wicked&#39;s plots in sovereign contempt."
+  },
+  q9: {
+    correct: "Correct! Psalm 71:9 pleads: &#39;Do not cast me off in the time of old age; forsake me not when my strength is spent.&#39; The psalmist&#39;s lifelong dependence on God — from birth (v.6) to old age — forms the spine of this prayer.",
+    wrong: "Psalm 71:9 says, <strong>&#39;Do not cast me off in the time of old age; forsake me not when my strength is spent.&#39;</strong> The elderly psalmist fears abandonment as strength fades, but clings to the God who has been his refuge from youth (v.5)."
+  },
+  q10: {
+    correct: "Correct! Psalm 94:12–13 says the blessed man is disciplined and taught from God&#39;s law &#39;to give him rest from days of trouble, until a pit is dug for the wicked.&#39; The discipline brings both wisdom and relief — a reprieve while God&#39;s justice runs its course.",
+    wrong: "Psalm 94:12–13 promises that God disciplines and teaches the blessed man in order <strong>&#39;to give him rest from days of trouble, until a pit is dug for the wicked.&#39;</strong> The suffering is not permanent — God&#39;s instruction leads to relief."
+  }
+};
+
+const questions = [
+  "What was the name of the young woman brought from Shunem to care for the aging King David?",
+  "Which of the following was explicitly NOT invited to Adonijah&#39;s feast?",
+  "At which location was Solomon anointed king by Zadok the priest and Nathan the prophet?",
+  "What condition did Solomon set before granting Adonijah his life after the coup failed?",
+  "After David&#39;s death, what did Adonijah ask Bathsheba to request from Solomon on his behalf?",
+  "Which two murders did Solomon cite as the bloodguilt requiring Joab&#39;s execution?",
+  "What precise boundary was Shimei forbidden to cross under penalty of death?",
+  "How does the LORD respond when the wicked plots against the righteous (Psalm 37)?",
+  "What does the psalmist of Psalm 71 specifically plead that God not do in his old age?",
+  "According to Psalm 94:12–13, what twofold blessing does the disciplined man receive?"
+];
+
+const correctAnswers = {
+  q1: "B — Abishag the Shunammite",
+  q2: "C — Nathan the prophet and Benaiah son of Jehoiada",
+  q3: "C — The spring of Gihon",
+  q4: "C — That he show himself worthy; if wickedness is found in him, he dies",
+  q5: "B — That Abishag the Shunammite be given to him as a wife",
+  q6: "B — Abner son of Ner and Amasa son of Jether",
+  q7: "B — The brook Kidron",
+  q8: "C — The LORD laughs at the wicked, for he sees his day is coming",
+  q9: "C — Do not cast him off or forsake him in his old age",
+  q10: "B — Rest from days of trouble while a pit is dug for the wicked"
+};
+
+function answer(btn, qId, isCorrect) {
+  const block = document.getElementById(qId);
+  const btns = block.querySelectorAll('.choice-btn');
+  btns.forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('fb-' + qId);
+  const nextBtn = document.getElementById('next-' + qId);
+  const qNum = parseInt(qId.replace('q',''));
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+    fb.className = 'feedback fb-correct show';
+    fb.innerHTML = '<span class="feedback-verdict">&#10003; Correct</span>' + feedbacks[qId].correct;
+    score++;
+    userAnswers[qNum] = { correct: true, text: questions[qNum-1], answer: btn.querySelector(':not(.choice-letter)') ? btn.textContent.trim() : '' };
+  } else {
+    btn.classList.add('wrong');
+    // highlight correct
+    btns.forEach(b => { if (!b.classList.contains('wrong') && b.getAttribute('onclick').includes('true')) b.classList.add('correct'); });
+    fb.className = 'feedback fb-wrong show';
+    fb.innerHTML = '<span class="feedback-verdict">&#10007; Incorrect</span>' + feedbacks[qId].wrong;
+    userAnswers[qNum] = { correct: false, text: questions[qNum-1], answer: correctAnswers[qId] };
+  }
+
+  nextBtn.classList.add('show');
+  updateProgress(qNum);
+}
+
+function nextQ(n) {
+  document.getElementById('q'+n).classList.remove('active');
+  if (n < TOTAL) {
+    document.getElementById('q'+(n+1)).classList.add('active');
+    updateProgress(n);
+  } else {
+    showResults();
+  }
+}
+
+function updateProgress(n) {
+  const pct = Math.round((n / TOTAL) * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = n < TOTAL ? 'Question ' + (n+1) + ' of ' + TOTAL : 'Complete';
+}
+
+function showResults() {
+  document.querySelectorAll('.question-block').forEach(b => b.style.display = 'none');
+  const rs = document.getElementById('results-screen');
+  rs.style.display = 'block';
+
+  document.getElementById('score-num').textContent = score;
+
+  const ring = document.getElementById('score-ring');
+  const circumference = 339.3;
+  setTimeout(() => {
+    ring.style.strokeDashoffset = circumference - (score / TOTAL) * circumference;
+  }, 100);
+
+  const pct = score / TOTAL;
+  let title, msg;
+  if (pct === 1) {
+    title = "Perfect Score!";
+    msg = "A flawless reading of today&#39;s passages — from Solomon&#39;s anointing at Gihon to the psalmist&#39;s cry in old age. Well done!";
+  } else if (pct >= 0.8) {
+    title = "Excellent Work";
+    msg = "Strong command of today&#39;s reading. These chapters mark the end of David&#39;s reign and the firm establishment of Solomon&#39;s kingdom — rich ground to revisit.";
+  } else if (pct >= 0.6) {
+    title = "Good Effort";
+    msg = "Solid foundation. 1 Kings 1–2 moves quickly and the detail questions are demanding. Read again with an eye on the names and places.";
+  } else {
+    title = "Keep Studying";
+    msg = "Today&#39;s passages are dense with court intrigue and poetic depth. A second read of 1 Kings 1–2 and Psalms 37, 71, and 94 will sharpen the details considerably.";
+  }
+
+  document.getElementById('results-title').textContent = title;
+  document.getElementById('results-message').innerHTML = msg;
+
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  for (let i = 1; i <= TOTAL; i++) {
+    const ua = userAnswers[i];
+    if (!ua) continue;
+    const div = document.createElement('div');
+    div.className = 'review-item';
+    div.innerHTML = `<span class="review-icon ${ua.correct ? 'ok' : 'no'}">${ua.correct ? '&#10003;' : '&#10007;'}</span>
+      <div><div class="review-q">Q${i}: ${ua.text}</div>${!ua.correct ? '<div class="review-answer">Correct: ' + ua.answer + '</div>' : ''}</div>`;
+    reviewList.appendChild(div);
+  }
+
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-label').textContent = 'Complete';
+}
+
+function resetQuiz() {
+  score = 0;
+  userAnswers = [];
+  document.querySelectorAll('.question-block').forEach(b => {
+    b.style.display = '';
+    b.classList.remove('active');
+    b.querySelectorAll('.choice-btn').forEach(btn => {
+      btn.disabled = false;
+      btn.classList.remove('correct','wrong');
+    });
+    b.querySelectorAll('.feedback').forEach(f => f.className = 'feedback');
+    b.querySelectorAll('.next-btn').forEach(n => n.classList.remove('show'));
+  });
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('score-ring').style.strokeDashoffset = '339.3';
+  document.getElementById('q1').classList.add('active');
+  document.getElementById('prog-bar').style.width = '10%';
+  document.getElementById('prog-label').textContent = 'Question 1 of 10';
+}
+</script>
+</body>
+</html>
