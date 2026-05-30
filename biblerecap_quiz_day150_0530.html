@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Recap Quiz — Day 150 · Psalm 119</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2rem 1rem 4rem;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2c1a0a;
+  }
+
+  .scroll-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d8b4 100%);
+    border: 2px solid #c9a84c;
+    border-radius: 4px;
+    box-shadow: 0 0 40px rgba(201,168,76,0.18), 0 8px 32px rgba(0,0,0,0.6);
+    padding: 2.5rem 2.5rem 2rem;
+    position: relative;
+  }
+
+  .card::before, .card::after {
+    content: '✦';
+    position: absolute;
+    color: #c9a84c;
+    font-size: 1.1rem;
+    opacity: 0.6;
+  }
+  .card::before { top: 0.6rem; left: 0.8rem; }
+  .card::after  { top: 0.6rem; right: 0.8rem; }
+
+  /* Header */
+  .quiz-header { text-align: center; margin-bottom: 1.8rem; }
+
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #8a6a2a;
+    margin-bottom: 0.4rem;
+  }
+
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #1a0e02;
+    line-height: 1.2;
+    margin-bottom: 0.55rem;
+  }
+
+  .badges {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 0.7rem;
+  }
+
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    padding: 0.22rem 0.65rem;
+    border-radius: 2px;
+  }
+
+  .badge-challenging {
+    background: #2c1a0a;
+    color: #c9a84c;
+    border: 1px solid #c9a84c;
+  }
+
+  .passage-tags {
+    display: flex;
+    gap: 0.45rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .passage-tag {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    color: #5a3a10;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.5);
+    padding: 0.2rem 0.6rem;
+    border-radius: 2px;
+  }
+
+  .ornament {
+    text-align: center;
+    color: #c9a84c;
+    font-size: 1rem;
+    letter-spacing: 0.5em;
+    margin: 1rem 0;
+    opacity: 0.7;
+  }
+
+  /* Progress bar */
+  .progress-wrap {
+    margin-bottom: 1.6rem;
+  }
+
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: #8a6a2a;
+    margin-bottom: 0.35rem;
+  }
+
+  .progress-track {
+    height: 5px;
+    background: rgba(201,168,76,0.2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  /* Question */
+  .question-block {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .question-block.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-number-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .q-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #8a6a2a;
+  }
+
+  .detail-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    padding: 0.15rem 0.5rem;
+    background: rgba(139,26,26,0.12);
+    color: #8b1a1a;
+    border: 1px solid rgba(139,26,26,0.35);
+    border-radius: 2px;
+  }
+
+  .q-text {
+    font-size: 1.18rem;
+    line-height: 1.55;
+    color: #1a0e02;
+    margin-bottom: 1.1rem;
+    font-weight: 600;
+  }
+
+  .choices { display: flex; flex-direction: column; gap: 0.55rem; }
+
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background: rgba(255,255,255,0.45);
+    border: 1.5px solid rgba(201,168,76,0.4);
+    border-radius: 3px;
+    padding: 0.7rem 0.9rem;
+    cursor: pointer;
+    transition: background 0.18s, border-color 0.18s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2c1a0a;
+    line-height: 1.45;
+    width: 100%;
+  }
+
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+  }
+
+  .choice-btn:disabled { cursor: default; }
+
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #8a6a2a;
+    min-width: 1.1rem;
+    margin-top: 0.1rem;
+  }
+
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.12);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.1);
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* Feedback */
+  .feedback {
+    display: none;
+    margin-top: 1rem;
+    padding: 0.8rem 1rem;
+    border-radius: 3px;
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  .feedback.show { display: block; animation: fadeIn 0.3s ease; }
+
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.1);
+    border-left: 3px solid #1a5c2a;
+    color: #0e3318;
+  }
+
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.08);
+    border-left: 3px solid #8b1a1a;
+    color: #4a0e0e;
+  }
+
+  .feedback-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  .feedback.correct-fb .feedback-label { color: #1a5c2a; }
+  .feedback.wrong-fb .feedback-label   { color: #8b1a1a; }
+
+  .scripture-ref {
+    font-style: italic;
+    color: #8a6a2a;
+    font-size: 0.92rem;
+  }
+
+  /* Next button */
+  .next-btn {
+    display: none;
+    margin-top: 1.2rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    padding: 0.55rem 1.4rem;
+    background: #2c1a0a;
+    color: #c9a84c;
+    border: 1.5px solid #c9a84c;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.18s;
+    float: right;
+  }
+
+  .next-btn:hover { background: #1a0e02; }
+  .next-btn.show { display: inline-block; }
+
+  .clearfix::after { content: ''; display: table; clear: both; }
+
+  /* Results */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+  }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1a0e02;
+    margin-bottom: 0.4rem;
+  }
+
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 1.2rem auto;
+  }
+
+  .score-ring-wrap svg { transform: rotate(-90deg); }
+
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.2); stroke-width: 10; }
+  .score-ring-fg { fill: none; stroke: #c9a84c; stroke-width: 10; stroke-linecap: round;
+                   stroke-dasharray: 345; stroke-dashoffset: 345; transition: stroke-dashoffset 1.2s ease; }
+
+  .score-label {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1a0e02;
+  }
+
+  .results-msg {
+    font-size: 1.12rem;
+    color: #3a2010;
+    margin: 0.6rem 0 1rem;
+    font-style: italic;
+  }
+
+  /* Review */
+  .review-section { margin-top: 1.2rem; text-align: left; }
+
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    color: #8a6a2a;
+    margin-bottom: 0.8rem;
+    text-align: center;
+  }
+
+  .review-item {
+    border-bottom: 1px solid rgba(201,168,76,0.25);
+    padding: 0.65rem 0;
+  }
+
+  .review-item:last-child { border-bottom: none; }
+
+  .review-q {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1a0e02;
+    margin-bottom: 0.25rem;
+  }
+
+  .review-answer {
+    font-size: 0.92rem;
+    color: #5a3a10;
+  }
+
+  .review-answer span { font-weight: 600; }
+
+  .review-answer .rv-correct { color: #1a5c2a; }
+  .review-answer .rv-wrong   { color: #8b1a1a; }
+
+  .take-again-btn {
+    margin-top: 1.4rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    padding: 0.6rem 1.6rem;
+    background: transparent;
+    color: #c9a84c;
+    border: 1.5px solid #c9a84c;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.18s;
+  }
+
+  .take-again-btn:hover { background: rgba(201,168,76,0.12); }
+</style>
+</head>
+<body>
+<div class="scroll-wrap">
+<div class="card">
+
+  <div class="quiz-header">
+    <div class="date-line">SATURDAY, MAY 30, 2026 &middot; DAY 150</div>
+    <div class="quiz-title">The Bible Recap Daily Quiz</div>
+    <div class="badges">
+      <span class="badge badge-challenging">CHALLENGING</span>
+    </div>
+    <div class="passage-tags">
+      <span class="passage-tag">Psalm 119</span>
+    </div>
+  </div>
+
+  <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+
+  <!-- Progress -->
+  <div class="progress-wrap" id="progress-wrap">
+    <div class="progress-meta">
+      <span id="q-counter">Question 1 of 10</span>
+      <span id="q-pct">0%</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+
+  <!-- Quiz questions -->
+  <div id="quiz-area">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 1</span>
+      </div>
+      <div class="q-text">According to Psalm 119:9, how can a young man keep his way pure?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,1,false)"><span class="choice-letter">A</span>By walking in the counsel of the godly</button>
+        <button class="choice-btn" onclick="answer(this,1,true)"><span class="choice-letter">B</span>By guarding it according to God's word</button>
+        <button class="choice-btn" onclick="answer(this,1,false)"><span class="choice-letter">C</span>By meditating on it day and night</button>
+        <button class="choice-btn" onclick="answer(this,1,false)"><span class="choice-letter">D</span>By offering sacrifices with an upright heart</button>
+      </div>
+      <div class="feedback" id="fb1">
+        <span class="feedback-label"></span>
+        <span class="feedback-body"></span>
+        <span class="scripture-ref"></span>
+      </div>
+      <div class="clearfix">
+        <button class="next-btn" id="next1" onclick="nextQ(2)">NEXT &rsaquo;</button>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 2</span>
+        <span class="detail-badge">DETAIL</span>
+      </div>
+      <div class="q-text">In Psalm 119:11, the psalmist says he has stored up something in his heart "that I might not sin against you." What has he stored there?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,2,false)"><span class="choice-letter">A</span>God's testimonies</button>
+        <button class="choice-btn" onclick="answer(this,2,false)"><span class="choice-letter">B</span>God's precepts</button>
+        <button class="choice-btn" onclick="answer(this,2,true)"><span class="choice-letter">C</span>God's word (imrah)</button>
+        <button class="choice-btn" onclick="answer(this,2,false)"><span class="choice-letter">D</span>God's commandments</button>
+      </div>
+      <div class="feedback" id="fb2">
+        <span class="feedback-label"></span>
+        <span class="feedback-body"></span>
+        <span class="scripture-ref"></span>
+      </div>
+      <div class="clearfix">
+        <button class="next-btn" id="next2" onclick="nextQ(3)">NEXT &rsaquo;</button>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 3</span>
+        <span class="detail-badge">DETAIL</span>
+      </div>
+      <div class="q-text">In the stanza beginning "Kaph" (vv. 81–88), the psalmist compares himself to what object?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,3,false)"><span class="choice-letter">A</span>A broken vessel</button>
+        <button class="choice-btn" onclick="answer(this,3,true)"><span class="choice-letter">B</span>A wineskin in the smoke</button>
+        <button class="choice-btn" onclick="answer(this,3,false)"><span class="choice-letter">C</span>A clay pot in the furnace</button>
+        <button class="choice-btn" onclick="answer(this,3,false)"><span class="choice-letter">D</span>A withered plant cut off from water</button>
+      </div>
+      <div class="feedback" id="fb3">
+        <span class="feedback-label"></span>
+        <span class="feedback-body"></span>
+        <span class="scripture-ref"></span>
+      </div>
+      <div class="clearfix">
+        <button class="next-btn" id="next3" onclick="nextQ(4)">NEXT &rsaquo;</button>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 4</span>
+      </div>
+      <div class="q-text">Psalm 119:96 declares, "I have seen a limit to all perfection, but your commandment is ___________."</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,4,false)"><span class="choice-letter">A</span>holy and just and good</button>
+        <button class="choice-btn" onclick="answer(this,4,false)"><span class="choice-letter">B</span>pure, reviving the soul</button>
+        <button class="choice-btn" onclick="answer(this,4,true)"><span class="choice-letter">C</span>exceedingly broad</button>
+        <button class="choice-btn" onclick="answer(this,4,false)"><span class="choice-letter">D</span>a lamp to my feet and a light to my path</button>
+      </div>
+      <div class="feedback" id="fb4">
+        <span class="feedback-label"></span>
+        <span class="feedback-body"></span>
+        <span class="scripture-ref"></span>
+      </div>
+      <div class="clearfix">
+        <button class="next-btn" id="next4" onclick="nextQ(5)">NEXT &rsaquo;</button>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 5</span>
+        <span class="detail-badge">DETAIL</span>
+      </div>
+      <div class="q-text">Psalm 119:57 begins with a specific claim about God. What does the psalmist declare the LORD to be?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,5,false)"><span class="choice-letter">A</span>My rock and my redeemer</button>
+        <button class="choice-btn" onclick="answer(this,5,false)"><span class="choice-letter">B</span>My hiding place and my shield</button>
+        <button class="choice-btn" onclick="answer(this,5,true)"><span class="choice-letter">C</span>My portion</button>
+        <button class="choice-btn" onclick="answer(this,5,false)"><span class="choice-letter">D</span>My stronghold</button>
+      </div>
+      <div class="feedback" id="fb5">
+        <span class="feedback-label"></span>
+        <span class="feedback-body"></span>
+        <span class="scripture-ref"></span>
+      </div>
+      <div class="clearfix">
+        <button class="next-btn" id="next5" onclick="nextQ(6)">NEXT &rsaquo;</button>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 6</span>
+      </div>
+      <div class="q-text">Psalm 119:130 says, "The unfolding of your words gives light; it imparts understanding to ___________."</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,6,false)"><span class="choice-letter">A</span>those who fear you</button>
+        <button class="choice-btn" onclick="answer(this,6,false)"><span class="choice-letter">B</span>the wise in heart</button>
+        <button class="choice-btn" onclick="answer(this,6,true)"><span class="choice-letter">C</span>the simple</button>
+        <button class="choice-btn" onclick="answer(this,6,false)"><span class="choice-letter">D</span>all who seek you</button>
+      </div>
+      <div class="feedback" id="fb6">
+        <span class="feedback-label"></span>
+        <span class="feedback-body"></span>
+        <span class="scripture-ref"></span>
+      </div>
+      <div class="clearfix">
+        <button class="next-btn" id="next6" onclick="nextQ(7)">NEXT &rsaquo;</button>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 7</span>
+        <span class="detail-badge">DETAIL</span>
+      </div>
+      <div class="q-text">According to Psalm 119:136, what causes the psalmist to shed "streams of tears"?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,7,false)"><span class="choice-letter">A</span>His own many sins and transgressions</button>
+        <button class="choice-btn" onclick="answer(this,7,false)"><span class="choice-letter">B</span>The affliction his enemies have brought upon him</button>
+        <button class="choice-btn" onclick="answer(this,7,false)"><span class="choice-letter">C</span>God's apparent silence in his time of need</button>
+        <button class="choice-btn" onclick="answer(this,7,true)"><span class="choice-letter">D</span>People not keeping God's law</button>
+      </div>
+      <div class="feedback" id="fb7">
+        <span class="feedback-label"></span>
+        <span class="feedback-body"></span>
+        <span class="scripture-ref"></span>
+      </div>
+      <div class="clearfix">
+        <button class="next-btn" id="next7" onclick="nextQ(8)">NEXT &rsaquo;</button>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 8</span>
+      </div>
+      <div class="q-text">In Psalm 119:103, the psalmist says God's words are "sweeter than honey to my mouth." In the same immediate context (vv. 97–104), what four groups does the psalmist claim God's commandments make him wiser than?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,8,false)"><span class="choice-letter">A</span>Princes, scribes, the aged, and fools</button>
+        <button class="choice-btn" onclick="answer(this,8,false)"><span class="choice-letter">B</span>Rulers, priests, elders, and the wicked</button>
+        <button class="choice-btn" onclick="answer(this,8,true)"><span class="choice-letter">C</span>Enemies, teachers, elders, and evil path-walkers</button>
+        <button class="choice-btn" onclick="answer(this,8,false)"><span class="choice-letter">D</span>Kings, prophets, sages, and those who hate him</button>
+      </div>
+      <div class="feedback" id="fb8">
+        <span class="feedback-label"></span>
+        <span class="feedback-body"></span>
+        <span class="scripture-ref"></span>
+      </div>
+      <div class="clearfix">
+        <button class="next-btn" id="next8" onclick="nextQ(9)">NEXT &rsaquo;</button>
+      </div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 9</span>
+        <span class="detail-badge">DETAIL</span>
+      </div>
+      <div class="q-text">Psalm 119:164 states that the psalmist praises God a specific number of times each day. How many?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,9,false)"><span class="choice-letter">A</span>Three times a day</button>
+        <button class="choice-btn" onclick="answer(this,9,false)"><span class="choice-letter">B</span>Five times a day</button>
+        <button class="choice-btn" onclick="answer(this,9,true)"><span class="choice-letter">C</span>Seven times a day</button>
+        <button class="choice-btn" onclick="answer(this,9,false)"><span class="choice-letter">D</span>All day long</button>
+      </div>
+      <div class="feedback" id="fb9">
+        <span class="feedback-label"></span>
+        <span class="feedback-body"></span>
+        <span class="scripture-ref"></span>
+      </div>
+      <div class="clearfix">
+        <button class="next-btn" id="next9" onclick="nextQ(10)">NEXT &rsaquo;</button>
+      </div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 10</span>
+      </div>
+      <div class="q-text">Psalm 119 ends (v. 176) with the psalmist acknowledging he has "gone astray like a lost sheep." What does he ask God to do in the same verse?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,10,false)"><span class="choice-letter">A</span>Forgive his transgressions and renew a right spirit within him</button>
+        <button class="choice-btn" onclick="answer(this,10,false)"><span class="choice-letter">B</span>Restore to him the joy of his salvation</button>
+        <button class="choice-btn" onclick="answer(this,10,true)"><span class="choice-letter">C</span>Seek his servant, for he has not forgotten God's commandments</button>
+        <button class="choice-btn" onclick="answer(this,10,false)"><span class="choice-letter">D</span>Remember his affliction and deliver him</button>
+      </div>
+      <div class="feedback" id="fb10">
+        <span class="feedback-label"></span>
+        <span class="feedback-body"></span>
+        <span class="scripture-ref"></span>
+      </div>
+      <div class="clearfix">
+        <button class="next-btn" id="next10" onclick="showResults()">SEE RESULTS &rsaquo;</button>
+      </div>
+    </div>
+
+  </div><!-- /quiz-area -->
+
+  <!-- Results -->
+  <div id="results-screen">
+    <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+    <div class="results-title">Quiz Complete</div>
+    <div class="score-ring-wrap">
+      <svg viewBox="0 0 120 120" width="130" height="130">
+        <circle class="score-ring-bg" cx="60" cy="60" r="55"/>
+        <circle class="score-ring-fg" id="score-ring" cx="60" cy="60" r="55"/>
+      </svg>
+      <div class="score-label" id="score-label">0/10</div>
+    </div>
+    <div class="results-msg" id="results-msg"></div>
+    <button class="take-again-btn" onclick="resetQuiz()">TAKE AGAIN</button>
+
+    <div class="review-section">
+      <div class="review-title">QUESTION REVIEW</div>
+      <div id="review-list"></div>
+    </div>
+  </div>
+
+</div><!-- /card -->
+</div><!-- /scroll-wrap -->
+
+<script>
+const questions = [
+  {
+    q: "According to Psalm 119:9, how can a young man keep his way pure?",
+    correct: 1,
+    choices: [
+      "By walking in the counsel of the godly",
+      "By guarding it according to God's word",
+      "By meditating on it day and night",
+      "By offering sacrifices with an upright heart"
+    ],
+    feedback: {
+      correct: "Correct! The psalmist asks rhetorically, then answers: \"By guarding it according to your word\" — the Word is the instrument of purity, not human effort or ritual.",
+      wrong: "The answer is B. Psalm 119:9 reads: \"How can a young man keep his way pure? By guarding it according to your word.\" The other options echo language from elsewhere in Scripture but are not the answer given here.",
+      ref: "Psalm 119:9"
+    }
+  },
+  {
+    q: "In Psalm 119:11, the psalmist says he has stored up something in his heart \"that I might not sin against you.\" What has he stored there?",
+    correct: 2,
+    choices: [
+      "God's testimonies",
+      "God's precepts",
+      "God's word (imrah)",
+      "God's commandments"
+    ],
+    feedback: {
+      correct: "Correct! The Hebrew is <em>imrah</em> (your word/saying). All four terms — testimonies, precepts, word, commandments — appear throughout Psalm 119, making this a detail question.",
+      wrong: "The answer is C. Verse 11 reads: \"I have stored up your <em>word</em> (imrah) in my heart.\" Testimonies, precepts, and commandments are all synonyms used elsewhere in the psalm, but the specific term in v.11 is \"word.\"",
+      ref: "Psalm 119:11"
+    }
+  },
+  {
+    q: "In the stanza beginning \"Kaph\" (vv. 81–88), the psalmist compares himself to what object?",
+    correct: 1,
+    choices: [
+      "A broken vessel",
+      "A wineskin in the smoke",
+      "A clay pot in the furnace",
+      "A withered plant cut off from water"
+    ],
+    feedback: {
+      correct: "Correct! \"I have become like a wineskin in the smoke\" (v. 83) — yet even in this shrunken, dried-out state, the psalmist insists he has not forgotten God's statutes.",
+      wrong: "The answer is B — \"a wineskin in the smoke\" (v. 83). A wineskin hung in smoky air would become hard and blackened. The image conveys the psalmist's distress and deterioration, yet his faith endures.",
+      ref: "Psalm 119:83"
+    }
+  },
+  {
+    q: "Psalm 119:96 declares, \"I have seen a limit to all perfection, but your commandment is ___________.\"",
+    correct: 2,
+    choices: [
+      "holy and just and good",
+      "pure, reviving the soul",
+      "exceedingly broad",
+      "a lamp to my feet and a light to my path"
+    ],
+    feedback: {
+      correct: "Correct! \"Exceedingly broad\" — everything in creation reaches its limit, but God's law is boundless in scope and depth. This is the capstone of the Lamed stanza.",
+      wrong: "The answer is C — \"exceedingly broad.\" Options A and B echo Romans 7:12 and Psalm 19:7 respectively; option D is the famous verse 105. The actual contrast in v.96 is between finite perfection and the infinite breadth of God's commandment.",
+      ref: "Psalm 119:96"
+    }
+  },
+  {
+    q: "Psalm 119:57 begins with a specific claim about God. What does the psalmist declare the LORD to be?",
+    correct: 2,
+    choices: [
+      "My rock and my redeemer",
+      "My hiding place and my shield",
+      "My portion",
+      "My stronghold"
+    ],
+    feedback: {
+      correct: "Correct! \"The LORD is my portion; I promise to keep your words\" (v. 57). This language echoes the Levites\' inheritance (\"the LORD is their portion\") and the sentiment of Psalm 73:26.",
+      wrong: "The answer is C. \"The LORD is my portion\" (v. 57). \"Hiding place and shield\" appears in v. 114 (the Samech stanza), making it a plausible but incorrect choice here.",
+      ref: "Psalm 119:57"
+    }
+  },
+  {
+    q: "Psalm 119:130 says, \"The unfolding of your words gives light; it imparts understanding to ___________.\"",
+    correct: 2,
+    choices: [
+      "those who fear you",
+      "the wise in heart",
+      "the simple",
+      "all who seek you"
+    ],
+    feedback: {
+      correct: "Correct! \"It imparts understanding to the simple\" — the Word is not reserved for the scholarly elite. God's light penetrates to those least equipped by human wisdom.",
+      wrong: "The answer is C — \"the simple.\" This is a theologically striking contrast: God's word brings understanding specifically to those without natural resources for it, underscoring grace.",
+      ref: "Psalm 119:130"
+    }
+  },
+  {
+    q: "According to Psalm 119:136, what causes the psalmist to shed \"streams of tears\"?",
+    correct: 3,
+    choices: [
+      "His own many sins and transgressions",
+      "The affliction his enemies have brought upon him",
+      "God's apparent silence in his time of need",
+      "People not keeping God's law"
+    ],
+    feedback: {
+      correct: "Correct! \"My eyes shed streams of tears, because people do not keep your law\" (v. 136). The psalmist weeps not for himself but for others' disregard of God's word — a grief that mirrors God's own.",
+      wrong: "The answer is D. The psalmist weeps because \"people do not keep your law\" — a sorrow over others' sin, not primarily his own (though he acknowledges that elsewhere) nor his suffering.",
+      ref: "Psalm 119:136"
+    }
+  },
+  {
+    q: "In Psalm 119:103, the psalmist says God's words are \"sweeter than honey to my mouth.\" In the same immediate context (vv. 97–104), what four groups does the psalmist claim God's commandments make him wiser than?",
+    correct: 2,
+    choices: [
+      "Princes, scribes, the aged, and fools",
+      "Rulers, priests, elders, and the wicked",
+      "Enemies, teachers, elders, and evil path-walkers",
+      "Kings, prophets, sages, and those who hate him"
+    ],
+    feedback: {
+      correct: "Correct! V. 98: wiser than enemies; v. 99: more understanding than all teachers; v. 100: more understanding than the aged/elders; v. 101–102: kept from every evil way.",
+      wrong: "The answer is C. The Mem stanza (vv. 97–104) claims the Word makes the psalmist wiser than his enemies (v.98), gives more insight than all his teachers (v.99), and more understanding than the elders (v.100), while keeping him from every evil way (v.101–102).",
+      ref: "Psalm 119:98–102"
+    }
+  },
+  {
+    q: "Psalm 119:164 states that the psalmist praises God a specific number of times each day. How many?",
+    correct: 2,
+    choices: [
+      "Three times a day",
+      "Five times a day",
+      "Seven times a day",
+      "All day long"
+    ],
+    feedback: {
+      correct: "Correct! \"Seven times a day I praise you for your righteous rules\" (v. 164). Three times a day is the pattern of Daniel 6:10; \"all day long\" appears elsewhere in the psalm but is not the number in v. 164.",
+      wrong: "The answer is C — seven times a day. This number signals completeness and wholehearted devotion. The psalm elsewhere speaks of praising \"all the day\" (v. 97) but the specific count in v. 164 is seven.",
+      ref: "Psalm 119:164"
+    }
+  },
+  {
+    q: "Psalm 119 ends (v. 176) with the psalmist acknowledging he has \"gone astray like a lost sheep.\" What does he ask God to do in the same verse?",
+    correct: 2,
+    choices: [
+      "Forgive his transgressions and renew a right spirit within him",
+      "Restore to him the joy of his salvation",
+      "Seek his servant, for he has not forgotten God's commandments",
+      "Remember his affliction and deliver him"
+    ],
+    feedback: {
+      correct: "Correct! \"Seek your servant, for I have not forgotten your commandments\" (v. 176). The final word of this 176-verse psalm is not self-righteousness but humble dependence — the sheep knows it needs to be sought.",
+      wrong: "The answer is C. Verse 176 reads: \"I have gone astray like a lost sheep; seek your servant, for I do not forget your commandments.\" The other options echo Psalm 51 and Psalm 119:153 but are not the content of v. 176.",
+      ref: "Psalm 119:176"
+    }
+  }
+];
+
+let answers = new Array(10).fill(null);
+let currentQ = 1;
+
+function answer(btn, qNum, isCorrect) {
+  const btns = document.querySelectorAll(`#q${qNum} .choice-btn`);
+  btns.forEach(b => b.disabled = true);
+
+  const fb = document.getElementById(`fb${qNum}`);
+  const q = questions[qNum - 1];
+
+  answers[qNum - 1] = isCorrect;
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+    fb.classList.add('show', 'correct-fb');
+    fb.querySelector('.feedback-label').textContent = '✓ Correct';
+    fb.querySelector('.feedback-body').innerHTML = q.feedback.correct + ' ';
+    fb.querySelector('.scripture-ref').textContent = '— ' + q.feedback.ref;
+  } else {
+    btn.classList.add('wrong');
+    // highlight correct
+    btns.forEach((b, i) => {
+      if (i === q.correct) b.classList.add('correct');
+    });
+    fb.classList.add('show', 'wrong-fb');
+    fb.querySelector('.feedback-label').textContent = '✗ Not quite';
+    fb.querySelector('.feedback-body').innerHTML = q.feedback.wrong + ' ';
+    fb.querySelector('.scripture-ref').textContent = '— ' + q.feedback.ref;
+  }
+
+  document.getElementById(`next${qNum}`).classList.add('show');
+}
+
+function nextQ(num) {
+  document.getElementById(`q${num - 1}`).classList.remove('active');
+  document.getElementById(`q${num}`).classList.add('active');
+  currentQ = num;
+  updateProgress(num);
+}
+
+function updateProgress(num) {
+  const pct = Math.round(((num - 1) / 10) * 100);
+  document.getElementById('q-counter').textContent = `Question ${num} of 10`;
+  document.getElementById('q-pct').textContent = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+function showResults() {
+  document.getElementById('q10').classList.remove('active');
+  document.getElementById('progress-wrap').style.display = 'none';
+  document.getElementById('quiz-area').style.display = 'none';
+
+  const score = answers.filter(Boolean).length;
+  document.getElementById('score-label').textContent = `${score}/10`;
+
+  const msgs = [
+    "Keep reading — each verse reveals more of God's faithfulness.",
+    "Good effort! Return to the passages and let the Word dwell in you richly.",
+    "Solid work! God's law is a lamp; keep walking in its light.",
+    "Well done! You read carefully. The Word is indeed sweeter than honey.",
+    "Excellent! You engaged Psalm 119 with the close attention it deserves."
+  ];
+  const msgIdx = score <= 3 ? 0 : score <= 5 ? 1 : score <= 7 ? 2 : score <= 9 ? 3 : 4;
+  document.getElementById('results-msg').textContent = msgs[msgIdx];
+
+  const circumference = 2 * Math.PI * 55;
+  const offset = circumference - (score / 10) * circumference;
+  setTimeout(() => {
+    document.getElementById('score-ring').style.strokeDashoffset = offset;
+  }, 100);
+
+  // Build review
+  const reviewList = document.getElementById('review-list');
+  questions.forEach((q, i) => {
+    const correct = answers[i];
+    const div = document.createElement('div');
+    div.className = 'review-item';
+    div.innerHTML = `
+      <div class="review-q">${i + 1}. ${q.q}</div>
+      <div class="review-answer">
+        <span class="${correct ? 'rv-correct' : 'rv-wrong'}">${correct ? '✓ Correct' : '✗ Incorrect'}</span>
+        ${!correct ? ` — Correct answer: <span>${q.choices[q.correct]}</span>` : ''}
+      </div>`;
+    reviewList.appendChild(div);
+  });
+
+  document.getElementById('results-screen').style.display = 'block';
+}
+
+function resetQuiz() {
+  answers = new Array(10).fill(null);
+  currentQ = 1;
+
+  for (let i = 1; i <= 10; i++) {
+    const block = document.getElementById(`q${i}`);
+    block.classList.remove('active');
+    const btns = block.querySelectorAll('.choice-btn');
+    btns.forEach(b => { b.disabled = false; b.classList.remove('correct','wrong'); });
+    const fb = document.getElementById(`fb${i}`);
+    fb.classList.remove('show','correct-fb','wrong-fb');
+    fb.querySelector('.feedback-label').textContent = '';
+    fb.querySelector('.feedback-body').innerHTML = '';
+    fb.querySelector('.scripture-ref').textContent = '';
+    document.getElementById(`next${i}`).classList.remove('show');
+  }
+
+  document.getElementById('q1').classList.add('active');
+  document.getElementById('progress-fill').style.width = '0%';
+  document.getElementById('q-counter').textContent = 'Question 1 of 10';
+  document.getElementById('q-pct').textContent = '0%';
+  document.getElementById('progress-wrap').style.display = '';
+  document.getElementById('quiz-area').style.display = '';
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('score-ring').style.strokeDashoffset = 345;
+  document.getElementById('review-list').innerHTML = '';
+}
+</script>
+</body>
+</html>
