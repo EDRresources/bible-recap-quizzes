@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Recap Quiz — Day 151 · 1 Kings 3–4</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2rem 1rem 4rem;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2c1a0a;
+  }
+
+  .scroll-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d8b4 100%);
+    border: 2px solid #c9a84c;
+    border-radius: 4px;
+    box-shadow: 0 0 40px rgba(201,168,76,0.18), 0 8px 32px rgba(0,0,0,0.6);
+    padding: 2.5rem 2.5rem 2rem;
+    position: relative;
+  }
+
+  .card::before, .card::after {
+    content: '✦';
+    position: absolute;
+    color: #c9a84c;
+    font-size: 1.1rem;
+    opacity: 0.6;
+  }
+  .card::before { top: 0.6rem; left: 0.8rem; }
+  .card::after  { top: 0.6rem; right: 0.8rem; }
+
+  .quiz-header { text-align: center; margin-bottom: 1.8rem; }
+
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #8a6a2a;
+    margin-bottom: 0.4rem;
+  }
+
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #1a0e02;
+    line-height: 1.2;
+    margin-bottom: 0.55rem;
+  }
+
+  .badges {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 0.7rem;
+  }
+
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    padding: 0.22rem 0.65rem;
+    border-radius: 2px;
+  }
+
+  .badge-challenging {
+    background: #2c1a0a;
+    color: #c9a84c;
+    border: 1px solid #c9a84c;
+  }
+
+  .passage-tags {
+    display: flex;
+    gap: 0.45rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .passage-tag {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    color: #5a3a10;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.5);
+    padding: 0.2rem 0.6rem;
+    border-radius: 2px;
+  }
+
+  .ornament {
+    text-align: center;
+    color: #c9a84c;
+    font-size: 1rem;
+    letter-spacing: 0.5em;
+    margin: 1rem 0;
+    opacity: 0.7;
+  }
+
+  .progress-wrap { margin-bottom: 1.6rem; }
+
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: #8a6a2a;
+    margin-bottom: 0.35rem;
+  }
+
+  .progress-track {
+    height: 5px;
+    background: rgba(201,168,76,0.2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  .question-block {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .question-block.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-number-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .q-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #8a6a2a;
+  }
+
+  .detail-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    padding: 0.15rem 0.5rem;
+    background: rgba(139,26,26,0.12);
+    color: #8b1a1a;
+    border: 1px solid rgba(139,26,26,0.35);
+    border-radius: 2px;
+  }
+
+  .q-text {
+    font-size: 1.18rem;
+    line-height: 1.55;
+    color: #1a0e02;
+    margin-bottom: 1.1rem;
+    font-weight: 600;
+  }
+
+  .choices { display: flex; flex-direction: column; gap: 0.55rem; }
+
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background: rgba(255,255,255,0.45);
+    border: 1.5px solid rgba(201,168,76,0.4);
+    border-radius: 3px;
+    padding: 0.7rem 0.9rem;
+    cursor: pointer;
+    transition: background 0.18s, border-color 0.18s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2c1a0a;
+    line-height: 1.45;
+    width: 100%;
+  }
+
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+  }
+
+  .choice-btn:disabled { cursor: default; }
+
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #8a6a2a;
+    min-width: 1.1rem;
+    margin-top: 0.1rem;
+  }
+
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.12);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.1);
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  .feedback {
+    display: none;
+    margin-top: 1rem;
+    padding: 0.8rem 1rem;
+    border-radius: 3px;
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  .feedback.show { display: block; animation: fadeIn 0.3s ease; }
+
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.1);
+    border-left: 3px solid #1a5c2a;
+    color: #0e3318;
+  }
+
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.08);
+    border-left: 3px solid #8b1a1a;
+    color: #4a0e0e;
+  }
+
+  .feedback-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  .feedback.correct-fb .feedback-label { color: #1a5c2a; }
+  .feedback.wrong-fb .feedback-label   { color: #8b1a1a; }
+
+  .scripture-ref {
+    font-style: italic;
+    color: #8a6a2a;
+    font-size: 0.92rem;
+  }
+
+  .next-btn {
+    display: none;
+    margin-top: 1.2rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    padding: 0.55rem 1.4rem;
+    background: #2c1a0a;
+    color: #c9a84c;
+    border: 1.5px solid #c9a84c;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.18s;
+    float: right;
+  }
+
+  .next-btn:hover { background: #1a0e02; }
+  .next-btn.show { display: inline-block; }
+
+  .clearfix::after { content: ''; display: table; clear: both; }
+
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+  }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1a0e02;
+    margin-bottom: 0.4rem;
+  }
+
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 1.2rem auto;
+  }
+
+  .score-ring-wrap svg { transform: rotate(-90deg); }
+
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.2); stroke-width: 10; }
+  .score-ring-fg { fill: none; stroke: #c9a84c; stroke-width: 10; stroke-linecap: round;
+                   stroke-dasharray: 345; stroke-dashoffset: 345; transition: stroke-dashoffset 1.2s ease; }
+
+  .score-label {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1a0e02;
+  }
+
+  .results-msg {
+    font-size: 1.12rem;
+    color: #3a2010;
+    margin: 0.6rem 0 1rem;
+    font-style: italic;
+  }
+
+  .review-section { margin-top: 1.2rem; text-align: left; }
+
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    color: #8a6a2a;
+    margin-bottom: 0.8rem;
+    text-align: center;
+  }
+
+  .review-item {
+    border-bottom: 1px solid rgba(201,168,76,0.25);
+    padding: 0.65rem 0;
+  }
+
+  .review-item:last-child { border-bottom: none; }
+
+  .review-q {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1a0e02;
+    margin-bottom: 0.25rem;
+  }
+
+  .review-answer { font-size: 0.92rem; color: #5a3a10; }
+  .review-answer span { font-weight: 600; }
+  .review-answer .rv-correct { color: #1a5c2a; }
+  .review-answer .rv-wrong   { color: #8b1a1a; }
+
+  .take-again-btn {
+    margin-top: 1.4rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    padding: 0.6rem 1.6rem;
+    background: transparent;
+    color: #c9a84c;
+    border: 1.5px solid #c9a84c;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.18s;
+  }
+
+  .take-again-btn:hover { background: rgba(201,168,76,0.12); }
+</style>
+</head>
+<body>
+<div class="scroll-wrap">
+<div class="card">
+
+  <div class="quiz-header">
+    <div class="date-line">SUNDAY, MAY 31, 2026 &middot; DAY 151</div>
+    <div class="quiz-title">The Bible Recap Daily Quiz</div>
+    <div class="badges">
+      <span class="badge badge-challenging">CHALLENGING</span>
+    </div>
+    <div class="passage-tags">
+      <span class="passage-tag">1 Kings 3</span>
+      <span class="passage-tag">1 Kings 4</span>
+    </div>
+  </div>
+
+  <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+
+  <!-- Progress -->
+  <div class="progress-wrap" id="progress-wrap">
+    <div class="progress-meta">
+      <span id="q-counter">Question 1 of 10</span>
+      <span id="q-pct">0%</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+
+  <!-- Quiz questions -->
+  <div id="quiz-area">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 1</span>
+      </div>
+      <div class="q-text">When God appeared to Solomon at Gibeon and said "Ask what I shall give you," what was the core of Solomon's request in 1 Kings 3:9?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,1,false)"><span class="choice-letter">A</span>Give me wisdom and knowledge to lead your people rightly</button>
+        <button class="choice-btn" onclick="answer(this,1,true)"><span class="choice-letter">B</span>Give your servant an understanding mind to govern your people, that I may discern between good and evil</button>
+        <button class="choice-btn" onclick="answer(this,1,false)"><span class="choice-letter">C</span>Grant me a wise heart, for who can judge this great people without your help</button>
+        <button class="choice-btn" onclick="answer(this,1,false)"><span class="choice-letter">D</span>Make me humble before you and just in my rulings over Israel</button>
+      </div>
+      <div class="feedback" id="fb1">
+        <span class="feedback-label"></span>
+        <span class="feedback-body"></span>
+        <span class="scripture-ref"></span>
+      </div>
+      <div class="clearfix">
+        <button class="next-btn" id="next1" onclick="nextQ(2)">NEXT &rsaquo;</button>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 2</span>
+        <span class="detail-badge">DETAIL</span>
+      </div>
+      <div class="q-text">How many burnt offerings did Solomon present at the great high place of Gibeon before God appeared to him in a dream?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,2,false)"><span class="choice-letter">A</span>100</button>
+        <button class="choice-btn" onclick="answer(this,2,false)"><span class="choice-letter">B</span>500</button>
+        <button class="choice-btn" onclick="answer(this,2,true)"><span class="choice-letter">C</span>1,000</button>
+        <button class="choice-btn" onclick="answer(this,2,false)"><span class="choice-letter">D</span>7,000</button>
+      </div>
+      <div class="feedback" id="fb2">
+        <span class="feedback-label"></span>
+        <span class="feedback-body"></span>
+        <span class="scripture-ref"></span>
+      </div>
+      <div class="clearfix">
+        <button class="next-btn" id="next2" onclick="nextQ(3)">NEXT &rsaquo;</button>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 3</span>
+      </div>
+      <div class="q-text">In 1 Kings 3:11, God commends Solomon because he did not ask for three things. What were they?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,3,false)"><span class="choice-letter">A</span>Long life, victory over his enemies, and understanding of justice</button>
+        <button class="choice-btn" onclick="answer(this,3,true)"><span class="choice-letter">B</span>Long life, riches, and the life of his enemies</button>
+        <button class="choice-btn" onclick="answer(this,3,false)"><span class="choice-letter">C</span>Military power, great honor, and the death of his enemies</button>
+        <button class="choice-btn" onclick="answer(this,3,false)"><span class="choice-letter">D</span>A long reign, wisdom beyond David's, and wealth surpassing Egypt's</button>
+      </div>
+      <div class="feedback" id="fb3">
+        <span class="feedback-label"></span>
+        <span class="feedback-body"></span>
+        <span class="scripture-ref"></span>
+      </div>
+      <div class="clearfix">
+        <button class="next-btn" id="next3" onclick="nextQ(4)">NEXT &rsaquo;</button>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 4</span>
+        <span class="detail-badge">DETAIL</span>
+      </div>
+      <div class="q-text">After waking from the dream at Gibeon, what did Solomon do immediately upon returning to Jerusalem (1 Kings 3:15)?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,4,false)"><span class="choice-letter">A</span>He assembled the elders of Israel and told them of his dream</button>
+        <button class="choice-btn" onclick="answer(this,4,false)"><span class="choice-letter">B</span>He tore down the high place at Gibeon and built an altar in Jerusalem</button>
+        <button class="choice-btn" onclick="answer(this,4,true)"><span class="choice-letter">C</span>He stood before the ark of the covenant, offered burnt offerings and peace offerings, and made a feast for his servants</button>
+        <button class="choice-btn" onclick="answer(this,4,false)"><span class="choice-letter">D</span>He went to the tent of meeting and offered the required daily sacrifices</button>
+      </div>
+      <div class="feedback" id="fb4">
+        <span class="feedback-label"></span>
+        <span class="feedback-body"></span>
+        <span class="scripture-ref"></span>
+      </div>
+      <div class="clearfix">
+        <button class="next-btn" id="next4" onclick="nextQ(5)">NEXT &rsaquo;</button>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 5</span>
+        <span class="detail-badge">DETAIL</span>
+      </div>
+      <div class="q-text">In the dispute of the two women over the living child (1 Kings 3:16–28), how did the second woman's baby die?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,5,false)"><span class="choice-letter">A</span>The child died of sudden illness in the night</button>
+        <button class="choice-btn" onclick="answer(this,5,false)"><span class="choice-letter">B</span>The first woman accidentally struck the baby while sleeping</button>
+        <button class="choice-btn" onclick="answer(this,5,true)"><span class="choice-letter">C</span>The second woman lay on the child during the night</button>
+        <button class="choice-btn" onclick="answer(this,5,false)"><span class="choice-letter">D</span>The text does not specify the cause of the baby's death</button>
+      </div>
+      <div class="feedback" id="fb5">
+        <span class="feedback-label"></span>
+        <span class="feedback-body"></span>
+        <span class="scripture-ref"></span>
+      </div>
+      <div class="clearfix">
+        <button class="next-btn" id="next5" onclick="nextQ(6)">NEXT &rsaquo;</button>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 6</span>
+      </div>
+      <div class="q-text">When Solomon ordered the living child divided with a sword, how did the two women respond — and what did that response reveal?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,6,false)"><span class="choice-letter">A</span>Both women agreed to divide the child; Solomon identified the true mother by her tears</button>
+        <button class="choice-btn" onclick="answer(this,6,false)"><span class="choice-letter">B</span>The true mother agreed to divide the child rather than lose him; the other woman relented</button>
+        <button class="choice-btn" onclick="answer(this,6,true)"><span class="choice-letter">C</span>The true mother said to give the child to the other woman alive; the other woman said to divide him</button>
+        <button class="choice-btn" onclick="answer(this,6,false)"><span class="choice-letter">D</span>Both women wept; Solomon gave the child to whichever woman could name his father</button>
+      </div>
+      <div class="feedback" id="fb6">
+        <span class="feedback-label"></span>
+        <span class="feedback-body"></span>
+        <span class="scripture-ref"></span>
+      </div>
+      <div class="clearfix">
+        <button class="next-btn" id="next6" onclick="nextQ(7)">NEXT &rsaquo;</button>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 7</span>
+        <span class="detail-badge">DETAIL</span>
+      </div>
+      <div class="q-text">According to 1 Kings 4:22, what was the daily provision of fine flour for Solomon's household?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,7,false)"><span class="choice-letter">A</span>20 cors</button>
+        <button class="choice-btn" onclick="answer(this,7,true)"><span class="choice-letter">B</span>30 cors</button>
+        <button class="choice-btn" onclick="answer(this,7,false)"><span class="choice-letter">C</span>40 cors</button>
+        <button class="choice-btn" onclick="answer(this,7,false)"><span class="choice-letter">D</span>60 cors</button>
+      </div>
+      <div class="feedback" id="fb7">
+        <span class="feedback-label"></span>
+        <span class="feedback-body"></span>
+        <span class="scripture-ref"></span>
+      </div>
+      <div class="clearfix">
+        <button class="next-btn" id="next7" onclick="nextQ(8)">NEXT &rsaquo;</button>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 8</span>
+        <span class="detail-badge">DETAIL</span>
+      </div>
+      <div class="q-text">According to 1 Kings 4:32, how many proverbs did Solomon speak, and how many songs did he compose?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,8,false)"><span class="choice-letter">A</span>1,000 proverbs and 500 songs</button>
+        <button class="choice-btn" onclick="answer(this,8,false)"><span class="choice-letter">B</span>2,000 proverbs and 1,000 songs</button>
+        <button class="choice-btn" onclick="answer(this,8,true)"><span class="choice-letter">C</span>3,000 proverbs and 1,005 songs</button>
+        <button class="choice-btn" onclick="answer(this,8,false)"><span class="choice-letter">D</span>3,005 proverbs and 1,000 songs</button>
+      </div>
+      <div class="feedback" id="fb8">
+        <span class="feedback-label"></span>
+        <span class="feedback-body"></span>
+        <span class="scripture-ref"></span>
+      </div>
+      <div class="clearfix">
+        <button class="next-btn" id="next8" onclick="nextQ(9)">NEXT &rsaquo;</button>
+      </div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 9</span>
+      </div>
+      <div class="q-text">God granted Solomon wisdom surpassing two groups mentioned in 1 Kings 4:30. Which two?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,9,false)"><span class="choice-letter">A</span>The Babylonians and the Assyrians</button>
+        <button class="choice-btn" onclick="answer(this,9,true)"><span class="choice-letter">B</span>All the people of the east and all the wisdom of Egypt</button>
+        <button class="choice-btn" onclick="answer(this,9,false)"><span class="choice-letter">C</span>The Phoenicians and the Philistines</button>
+        <button class="choice-btn" onclick="answer(this,9,false)"><span class="choice-letter">D</span>All nations from the Euphrates to the Great Sea</button>
+      </div>
+      <div class="feedback" id="fb9">
+        <span class="feedback-label"></span>
+        <span class="feedback-body"></span>
+        <span class="scripture-ref"></span>
+      </div>
+      <div class="clearfix">
+        <button class="next-btn" id="next9" onclick="nextQ(10)">NEXT &rsaquo;</button>
+      </div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 10</span>
+      </div>
+      <div class="q-text">Who was the commander of Solomon's army, according to 1 Kings 4:4?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,10,false)"><span class="choice-letter">A</span>Joab son of Zeruiah</button>
+        <button class="choice-btn" onclick="answer(this,10,true)"><span class="choice-letter">B</span>Benaiah son of Jehoiada</button>
+        <button class="choice-btn" onclick="answer(this,10,false)"><span class="choice-letter">C</span>Adoniram son of Abda</button>
+        <button class="choice-btn" onclick="answer(this,10,false)"><span class="choice-letter">D</span>Ahishar the palace administrator</button>
+      </div>
+      <div class="feedback" id="fb10">
+        <span class="feedback-label"></span>
+        <span class="feedback-body"></span>
+        <span class="scripture-ref"></span>
+      </div>
+      <div class="clearfix">
+        <button class="next-btn" id="next10" onclick="showResults()">SEE RESULTS &rsaquo;</button>
+      </div>
+    </div>
+
+  </div><!-- /quiz-area -->
+
+  <!-- Results -->
+  <div id="results-screen">
+    <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+    <div class="results-title">Quiz Complete</div>
+    <div class="score-ring-wrap">
+      <svg viewBox="0 0 120 120" width="130" height="130">
+        <circle class="score-ring-bg" cx="60" cy="60" r="55"/>
+        <circle class="score-ring-fg" id="score-ring" cx="60" cy="60" r="55"/>
+      </svg>
+      <div class="score-label" id="score-label">0/10</div>
+    </div>
+    <div class="results-msg" id="results-msg"></div>
+    <button class="take-again-btn" onclick="resetQuiz()">TAKE AGAIN</button>
+
+    <div class="review-section">
+      <div class="review-title">QUESTION REVIEW</div>
+      <div id="review-list"></div>
+    </div>
+  </div>
+
+</div><!-- /card -->
+</div><!-- /scroll-wrap -->
+
+<script>
+const questions = [
+  {
+    q: "When God appeared to Solomon at Gibeon and said \"Ask what I shall give you,\" what was the core of Solomon's request in 1 Kings 3:9?",
+    correct: 1,
+    choices: [
+      "Give me wisdom and knowledge to lead your people rightly",
+      "Give your servant an understanding mind to govern your people, that I may discern between good and evil",
+      "Grant me a wise heart, for who can judge this great people without your help",
+      "Make me humble before you and just in my rulings over Israel"
+    ],
+    feedback: {
+      correct: "Correct! The Hebrew phrase is <em>leb shomea</em> — a hearing or listening heart. Solomon&#39;s request is simultaneously humble (acknowledging his inability) and God-directed (asking for the right tool for governing, not personal gain).",
+      wrong: "The answer is B. Solomon asks for \"an understanding mind\" (<em>leb shomea</em>) to govern and discern between good and evil. Options A and C capture the spirit but miss the specific wording; option D has no basis in the text.",
+      ref: "1 Kings 3:9"
+    }
+  },
+  {
+    q: "How many burnt offerings did Solomon present at the great high place of Gibeon before God appeared to him in a dream?",
+    correct: 2,
+    choices: [
+      "100",
+      "500",
+      "1,000",
+      "7,000"
+    ],
+    feedback: {
+      correct: "Correct! \"Solomon used to offer a thousand burnt offerings on that altar\" (3:4). The staggering number underscores Solomon&#39;s devotion — and perhaps his awareness that he was approaching the God of his father David.",
+      wrong: "The answer is C — 1,000 burnt offerings (3:4). This was the great high place, and Solomon&#39;s offering was proportionally massive. The dream followed that extraordinary act of worship.",
+      ref: "1 Kings 3:4"
+    }
+  },
+  {
+    q: "In 1 Kings 3:11, God commends Solomon because he did not ask for three things. What were they?",
+    correct: 1,
+    choices: [
+      "Long life, victory over his enemies, and understanding of justice",
+      "Long life, riches, and the life of his enemies",
+      "Military power, great honor, and the death of his enemies",
+      "A long reign, wisdom beyond David&#39;s, and wealth surpassing Egypt&#39;s"
+    ],
+    feedback: {
+      correct: "Correct! God says Solomon did not ask for long life, riches, or the life of his enemies. Instead Solomon asked for understanding — and God rewards that selfless request by granting riches and honor as well.",
+      wrong: "The answer is B. First Kings 3:11 lists exactly: long life, riches, and the life of his enemies. Because Solomon sought wisdom to serve rather than power for himself, God added what he did not ask for.",
+      ref: "1 Kings 3:11"
+    }
+  },
+  {
+    q: "After waking from the dream at Gibeon, what did Solomon do immediately upon returning to Jerusalem (1 Kings 3:15)?",
+    correct: 2,
+    choices: [
+      "He assembled the elders of Israel and told them of his dream",
+      "He tore down the high place at Gibeon and built an altar in Jerusalem",
+      "He stood before the ark of the covenant, offered burnt offerings and peace offerings, and made a feast for his servants",
+      "He went to the tent of meeting and offered the required daily sacrifices"
+    ],
+    feedback: {
+      correct: "Correct! Solomon&#39;s response to the dream is worship: he comes to Jerusalem, stands before the ark, and offers both burnt offerings and peace offerings — then celebrates with his court. His first act after receiving wisdom is to honor the Giver.",
+      wrong: "The answer is C (1 Kings 3:15). The ark was in Jerusalem while the tent of meeting was still at Gibeon, so coming to stand before the ark is a significant theological move. He celebrated with a feast for all his servants.",
+      ref: "1 Kings 3:15"
+    }
+  },
+  {
+    q: "In the dispute of the two women over the living child (1 Kings 3:16–28), how did the second woman&#39;s baby die?",
+    correct: 2,
+    choices: [
+      "The child died of sudden illness in the night",
+      "The first woman accidentally struck the baby while sleeping",
+      "The second woman lay on the child during the night",
+      "The text does not specify the cause of the baby&#39;s death"
+    ],
+    feedback: {
+      correct: "Correct! Verse 19 says the second woman&#39;s son died because \"she lay on him.\" This detail matters because it is her desperate guilt — not malice — that drives her to swap the babies. The first woman woke to nurse her son and found the dead child in her arms.",
+      wrong: "The answer is C. First Kings 3:19 specifies that the second woman&#39;s son died because she overlaid him (lay on him) in the night. The text is explicit on this point, making D incorrect.",
+      ref: "1 Kings 3:19"
+    }
+  },
+  {
+    q: "When Solomon ordered the living child divided with a sword, how did the two women respond — and what did that response reveal?",
+    correct: 2,
+    choices: [
+      "Both women agreed to divide the child; Solomon identified the true mother by her tears",
+      "The true mother agreed to divide the child rather than lose him; the other woman relented",
+      "The true mother said to give the child to the other woman alive; the other woman said to divide him",
+      "Both women wept; Solomon gave the child to whichever woman could name his father"
+    ],
+    feedback: {
+      correct: "Correct! The true mother&#39;s compassion flared — she would rather lose the child to her rival than see him killed. The other woman, caring nothing for the child&#39;s life, agreed to divide him. Solomon read this as proof of true motherhood and awarded the child to the first woman.",
+      wrong: "The answer is C (1 Kings 3:26–27). The real mother said, \"Give her the living child, and by no means put him to death.\" The impostor said, \"He shall be neither mine nor yours; divide him.\" The willingness to relinquish was the proof Solomon needed.",
+      ref: "1 Kings 3:26–27"
+    }
+  },
+  {
+    q: "According to 1 Kings 4:22, what was the daily provision of fine flour for Solomon&#39;s household?",
+    correct: 1,
+    choices: [
+      "20 cors",
+      "30 cors",
+      "40 cors",
+      "60 cors"
+    ],
+    feedback: {
+      correct: "Correct! Thirty cors of fine flour daily, plus 60 cors of meal — the scale of Solomon&#39;s court was staggering. A single cor was roughly 6 bushels, meaning the palace consumed about 180 bushels of fine flour every day.",
+      wrong: "The answer is B — 30 cors of fine flour (and 60 cors of meal). The 60-cors figure refers to regular meal (coarser grain), not fine flour. These provisions reveal a kingdom operating at enormous scale.",
+      ref: "1 Kings 4:22"
+    }
+  },
+  {
+    q: "According to 1 Kings 4:32, how many proverbs did Solomon speak, and how many songs did he compose?",
+    correct: 2,
+    choices: [
+      "1,000 proverbs and 500 songs",
+      "2,000 proverbs and 1,000 songs",
+      "3,000 proverbs and 1,005 songs",
+      "3,005 proverbs and 1,000 songs"
+    ],
+    feedback: {
+      correct: "Correct! Three thousand proverbs and 1,005 songs. The oddly precise number of songs (not a round 1,000) suggests the author had an actual tally, lending credibility to this astonishing literary output.",
+      wrong: "The answer is C — 3,000 proverbs and 1,005 songs (1 Kings 4:32). The specificity of 1,005 songs rather than a round number signals a historical count. Many of Solomon&#39;s proverbs are preserved in the book of Proverbs.",
+      ref: "1 Kings 4:32"
+    }
+  },
+  {
+    q: "God granted Solomon wisdom surpassing two groups mentioned in 1 Kings 4:30. Which two?",
+    correct: 1,
+    choices: [
+      "The Babylonians and the Assyrians",
+      "All the people of the east and all the wisdom of Egypt",
+      "The Phoenicians and the Philistines",
+      "All nations from the Euphrates to the Great Sea"
+    ],
+    feedback: {
+      correct: "Correct! \"All the people of the east\" (Mesopotamia and Arabia were famous for their wisdom traditions) and \"all the wisdom of Egypt\" (Egypt&#39;s scribal and court wisdom was legendary in the ancient world). Solomon surpassed them both.",
+      wrong: "The answer is B (1 Kings 4:30). The ancient Near East&#39;s two great wisdom traditions were eastern (Mesopotamian, Arabian) and Egyptian. Solomon&#39;s wisdom exceeding both is the text&#39;s way of saying he was without peer in the known world.",
+      ref: "1 Kings 4:30"
+    }
+  },
+  {
+    q: "Who was the commander of Solomon&#39;s army, according to 1 Kings 4:4?",
+    correct: 1,
+    choices: [
+      "Joab son of Zeruiah",
+      "Benaiah son of Jehoiada",
+      "Adoniram son of Abda",
+      "Ahishar the palace administrator"
+    ],
+    feedback: {
+      correct: "Correct! Benaiah son of Jehoiada commanded the army. He had previously been the commander of David&#39;s personal guard (the Cherethites and Pelethites) and executed Joab on Solomon&#39;s orders at the start of the reign — then was promoted to Joab&#39;s former post.",
+      wrong: "The answer is B — Benaiah son of Jehoiada (4:4). Joab was David&#39;s commander but was executed by Benaiah at Solomon&#39;s command (1 Kings 2:34). Adoniram oversaw forced labor; Ahishar administered the palace.",
+      ref: "1 Kings 4:4"
+    }
+  }
+];
+
+let answers = new Array(10).fill(null);
+let currentQ = 1;
+
+function answer(btn, qNum, isCorrect) {
+  const btns = document.querySelectorAll(`#q${qNum} .choice-btn`);
+  btns.forEach(b => b.disabled = true);
+
+  const fb = document.getElementById(`fb${qNum}`);
+  const q = questions[qNum - 1];
+
+  answers[qNum - 1] = isCorrect;
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+    fb.classList.add('show', 'correct-fb');
+    fb.querySelector('.feedback-label').textContent = '✓ Correct';
+    fb.querySelector('.feedback-body').innerHTML = q.feedback.correct + ' ';
+    fb.querySelector('.scripture-ref').textContent = '— ' + q.feedback.ref;
+  } else {
+    btn.classList.add('wrong');
+    btns.forEach((b, i) => {
+      if (i === q.correct) b.classList.add('correct');
+    });
+    fb.classList.add('show', 'wrong-fb');
+    fb.querySelector('.feedback-label').textContent = '✗ Not quite';
+    fb.querySelector('.feedback-body').innerHTML = q.feedback.wrong + ' ';
+    fb.querySelector('.scripture-ref').textContent = '— ' + q.feedback.ref;
+  }
+
+  document.getElementById(`next${qNum}`).classList.add('show');
+}
+
+function nextQ(num) {
+  document.getElementById(`q${num - 1}`).classList.remove('active');
+  document.getElementById(`q${num}`).classList.add('active');
+  currentQ = num;
+  updateProgress(num);
+}
+
+function updateProgress(num) {
+  const pct = Math.round(((num - 1) / 10) * 100);
+  document.getElementById('q-counter').textContent = `Question ${num} of 10`;
+  document.getElementById('q-pct').textContent = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+function showResults() {
+  document.getElementById('q10').classList.remove('active');
+  document.getElementById('progress-wrap').style.display = 'none';
+  document.getElementById('quiz-area').style.display = 'none';
+
+  const score = answers.filter(Boolean).length;
+  document.getElementById('score-label').textContent = `${score}/10`;
+
+  const msgs = [
+    "Keep reading — God's wisdom in these chapters rewards careful attention.",
+    "Good effort! Return to 1 Kings 3–4 and let Solomon's prayer for wisdom linger.",
+    "Solid work! The fear of the LORD is the beginning of wisdom.",
+    "Well done! You read 1 Kings 3–4 with the attention it deserves.",
+    "Excellent! You engaged these chapters with Solomon-level attentiveness."
+  ];
+  const msgIdx = score <= 3 ? 0 : score <= 5 ? 1 : score <= 7 ? 2 : score <= 9 ? 3 : 4;
+  document.getElementById('results-msg').textContent = msgs[msgIdx];
+
+  const circumference = 2 * Math.PI * 55;
+  const offset = circumference - (score / 10) * circumference;
+  setTimeout(() => {
+    document.getElementById('score-ring').style.strokeDashoffset = offset;
+  }, 100);
+
+  const reviewList = document.getElementById('review-list');
+  questions.forEach((q, i) => {
+    const correct = answers[i];
+    const div = document.createElement('div');
+    div.className = 'review-item';
+    div.innerHTML = `
+      <div class="review-q">${i + 1}. ${q.q}</div>
+      <div class="review-answer">
+        <span class="${correct ? 'rv-correct' : 'rv-wrong'}">${correct ? '✓ Correct' : '✗ Incorrect'}</span>
+        ${!correct ? ` — Correct answer: <span>${q.choices[q.correct]}</span>` : ''}
+      </div>`;
+    reviewList.appendChild(div);
+  });
+
+  document.getElementById('results-screen').style.display = 'block';
+}
+
+function resetQuiz() {
+  answers = new Array(10).fill(null);
+  currentQ = 1;
+
+  for (let i = 1; i <= 10; i++) {
+    const block = document.getElementById(`q${i}`);
+    block.classList.remove('active');
+    const btns = block.querySelectorAll('.choice-btn');
+    btns.forEach(b => { b.disabled = false; b.classList.remove('correct','wrong'); });
+    const fb = document.getElementById(`fb${i}`);
+    fb.classList.remove('show','correct-fb','wrong-fb');
+    fb.querySelector('.feedback-label').textContent = '';
+    fb.querySelector('.feedback-body').innerHTML = '';
+    fb.querySelector('.scripture-ref').textContent = '';
+    document.getElementById(`next${i}`).classList.remove('show');
+  }
+
+  document.getElementById('q1').classList.add('active');
+  document.getElementById('progress-fill').style.width = '0%';
+  document.getElementById('q-counter').textContent = 'Question 1 of 10';
+  document.getElementById('q-pct').textContent = '0%';
+  document.getElementById('progress-wrap').style.display = '';
+  document.getElementById('quiz-area').style.display = '';
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('score-ring').style.strokeDashoffset = 345;
+  document.getElementById('review-list').innerHTML = '';
+}
+</script>
+</body>
+</html>
