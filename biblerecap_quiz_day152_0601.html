@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Recap Quiz — Day 152 · 2 Chronicles 1 &amp; Psalm 72</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2rem 1rem 4rem;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2c1a0a;
+  }
+
+  .scroll-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d8b4 100%);
+    border: 2px solid #c9a84c;
+    border-radius: 4px;
+    box-shadow: 0 0 40px rgba(201,168,76,0.18), 0 8px 32px rgba(0,0,0,0.6);
+    padding: 2.5rem 2.5rem 2rem;
+    position: relative;
+  }
+
+  .card::before, .card::after {
+    content: '✦';
+    position: absolute;
+    color: #c9a84c;
+    font-size: 1.1rem;
+    opacity: 0.6;
+  }
+  .card::before { top: 0.6rem; left: 0.8rem; }
+  .card::after  { top: 0.6rem; right: 0.8rem; }
+
+  .quiz-header { text-align: center; margin-bottom: 1.8rem; }
+
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #8a6a2a;
+    margin-bottom: 0.4rem;
+  }
+
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #1a0e02;
+    line-height: 1.2;
+    margin-bottom: 0.55rem;
+  }
+
+  .badges {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 0.7rem;
+  }
+
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    padding: 0.22rem 0.65rem;
+    border-radius: 2px;
+  }
+
+  .badge-challenging {
+    background: #2c1a0a;
+    color: #c9a84c;
+    border: 1px solid #c9a84c;
+  }
+
+  .passage-tags {
+    display: flex;
+    gap: 0.45rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .passage-tag {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    color: #5a3a10;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.5);
+    padding: 0.2rem 0.6rem;
+    border-radius: 2px;
+  }
+
+  .ornament {
+    text-align: center;
+    color: #c9a84c;
+    font-size: 1rem;
+    letter-spacing: 0.5em;
+    margin: 1rem 0;
+    opacity: 0.7;
+  }
+
+  .progress-wrap { margin-bottom: 1.6rem; }
+
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: #8a6a2a;
+    margin-bottom: 0.35rem;
+  }
+
+  .progress-track {
+    height: 5px;
+    background: rgba(201,168,76,0.2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  .question-block {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .question-block.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-number-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .q-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #8a6a2a;
+  }
+
+  .detail-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    padding: 0.15rem 0.5rem;
+    background: rgba(139,26,26,0.12);
+    color: #8b1a1a;
+    border: 1px solid rgba(139,26,26,0.35);
+    border-radius: 2px;
+  }
+
+  .q-text {
+    font-size: 1.18rem;
+    line-height: 1.55;
+    color: #1a0e02;
+    margin-bottom: 1.1rem;
+    font-weight: 600;
+  }
+
+  .choices { display: flex; flex-direction: column; gap: 0.55rem; }
+
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background: rgba(255,255,255,0.45);
+    border: 1.5px solid rgba(201,168,76,0.4);
+    border-radius: 3px;
+    padding: 0.7rem 0.9rem;
+    cursor: pointer;
+    transition: background 0.18s, border-color 0.18s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2c1a0a;
+    width: 100%;
+  }
+
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+  }
+
+  .choice-btn:disabled { cursor: default; }
+
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.12);
+    border-color: #1a5c2a;
+    color: #1a5c2a;
+  }
+
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.1);
+    border-color: #8b1a1a;
+    color: #8b1a1a;
+  }
+
+  .choice-btn.missed {
+    background: rgba(26,92,42,0.06);
+    border-color: rgba(26,92,42,0.5);
+    color: #1a5c2a;
+    opacity: 0.8;
+  }
+
+  .choice-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    min-width: 1.1rem;
+    padding-top: 0.15rem;
+    letter-spacing: 0.05em;
+  }
+
+  .feedback {
+    display: none;
+    margin-top: 1rem;
+    padding: 0.85rem 1rem;
+    border-radius: 3px;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .feedback.correct {
+    background: rgba(26,92,42,0.1);
+    border: 1px solid rgba(26,92,42,0.35);
+    color: #1a4020;
+  }
+
+  .feedback.wrong {
+    background: rgba(139,26,26,0.08);
+    border: 1px solid rgba(139,26,26,0.3);
+    color: #5a1010;
+  }
+
+  .feedback-verdict {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+
+  .feedback-ref {
+    font-style: italic;
+    color: #8a6a2a;
+    font-size: 0.92rem;
+  }
+
+  .next-btn {
+    display: none;
+    margin-top: 1.2rem;
+    width: 100%;
+    padding: 0.75rem;
+    background: #2c1a0a;
+    color: #c9a84c;
+    border: 1px solid #c9a84c;
+    border-radius: 3px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: background 0.18s;
+  }
+
+  .next-btn:hover { background: #3d2510; }
+
+  /* Results */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+  }
+
+  .score-ring-wrap {
+    margin: 1rem auto 1.5rem;
+    width: 140px;
+    height: 140px;
+    position: relative;
+  }
+
+  .score-ring-wrap svg {
+    transform: rotate(-90deg);
+  }
+
+  .score-ring-bg {
+    fill: none;
+    stroke: rgba(201,168,76,0.2);
+    stroke-width: 10;
+  }
+
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 351.86;
+    stroke-dashoffset: 351.86;
+    transition: stroke-dashoffset 1.2s ease;
+  }
+
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .score-big {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a0e02;
+    line-height: 1;
+  }
+
+  .score-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: #8a6a2a;
+    margin-top: 0.15rem;
+  }
+
+  .results-message {
+    font-size: 1.15rem;
+    line-height: 1.55;
+    color: #2c1a0a;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  .review-list { text-align: left; margin-bottom: 1.5rem; }
+
+  .review-item {
+    display: flex;
+    gap: 0.7rem;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    font-size: 1rem;
+    line-height: 1.4;
+    align-items: flex-start;
+  }
+
+  .review-icon { font-size: 0.9rem; min-width: 1.2rem; padding-top: 0.1rem; }
+
+  .review-q { color: #2c1a0a; }
+  .review-a { color: #8a6a2a; font-size: 0.92rem; font-style: italic; }
+
+  .take-again-btn {
+    padding: 0.75rem 2.5rem;
+    background: #2c1a0a;
+    color: #c9a84c;
+    border: 1px solid #c9a84c;
+    border-radius: 3px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: background 0.18s;
+  }
+
+  .take-again-btn:hover { background: #3d2510; }
+</style>
+</head>
+<body>
+<div class="scroll-wrap">
+<div class="card">
+
+  <div class="quiz-header">
+    <div class="date-line">MONDAY, JUNE 1, 2026 &middot; DAY 152</div>
+    <div class="quiz-title">The Bible Recap</div>
+    <div class="badges">
+      <span class="badge badge-challenging">CHALLENGING</span>
+    </div>
+    <div class="passage-tags">
+      <span class="passage-tag">2 Chronicles 1</span>
+      <span class="passage-tag">Psalm 72</span>
+    </div>
+  </div>
+
+  <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+
+  <div id="quiz-area">
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span id="prog-label">QUESTION 1 OF 10</span>
+        <span id="prog-pct">0%</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
+    </div>
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 1</span>
+      </div>
+      <div class="q-text">To which location did Solomon go to offer sacrifices before God appeared to him, and why was that site considered significant?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,1,'A')"><span class="choice-label">A</span>Jerusalem, because the ark of the covenant was kept there in the tent David had pitched</button>
+        <button class="choice-btn" onclick="answer(this,1,'B')"><span class="choice-label">B</span>Gibeon, because the tabernacle of meeting that Moses had made was there</button>
+        <button class="choice-btn" onclick="answer(this,1,'C')"><span class="choice-label">C</span>Shiloh, because that had been the ancient resting place of the ark</button>
+        <button class="choice-btn" onclick="answer(this,1,'D')"><span class="choice-label">D</span>Bethel, because the patriarchs had worshiped God there</button>
+      </div>
+      <div class="feedback" id="fb1"></div>
+      <button class="next-btn" id="next1" onclick="nextQ(2)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 2</span>
+        <span class="detail-badge">DETAIL</span>
+      </div>
+      <div class="q-text">The bronze altar at Gibeon is specifically attributed to which craftsman in 2 Chronicles 1?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,2,'A')"><span class="choice-label">A</span>Hiram of Tyre, the master craftsman Solomon later employed</button>
+        <button class="choice-btn" onclick="answer(this,2,'B')"><span class="choice-label">B</span>Oholiab son of Ahisamach, who assisted in the original tabernacle</button>
+        <button class="choice-btn" onclick="answer(this,2,'C')"><span class="choice-label">C</span>Bezalel son of Uri, the son of Hur</button>
+        <button class="choice-btn" onclick="answer(this,2,'D')"><span class="choice-label">D</span>Aaron the high priest, who cast it at Sinai</button>
+      </div>
+      <div class="feedback" id="fb2"></div>
+      <button class="next-btn" id="next2" onclick="nextQ(3)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 3</span>
+        <span class="detail-badge">DETAIL</span>
+      </div>
+      <div class="q-text">How many burnt offerings did Solomon sacrifice on the bronze altar at Gibeon?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,3,'A')"><span class="choice-label">A</span>100</button>
+        <button class="choice-btn" onclick="answer(this,3,'B')"><span class="choice-label">B</span>500</button>
+        <button class="choice-btn" onclick="answer(this,3,'C')"><span class="choice-label">C</span>1,000</button>
+        <button class="choice-btn" onclick="answer(this,3,'D')"><span class="choice-label">D</span>7,000</button>
+      </div>
+      <div class="feedback" id="fb3"></div>
+      <button class="next-btn" id="next3" onclick="nextQ(4)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 4</span>
+      </div>
+      <div class="q-text">In his prayer at Gibeon, Solomon invokes a prior promise of God. Whose name does he cite when asking God to fulfill that promise?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,4,'A')"><span class="choice-label">A</span>Abraham</button>
+        <button class="choice-btn" onclick="answer(this,4,'B')"><span class="choice-label">B</span>Moses</button>
+        <button class="choice-btn" onclick="answer(this,4,'C')"><span class="choice-label">C</span>David his father</button>
+        <button class="choice-btn" onclick="answer(this,4,'D')"><span class="choice-label">D</span>Joshua</button>
+      </div>
+      <div class="feedback" id="fb4"></div>
+      <button class="next-btn" id="next4" onclick="nextQ(5)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 5</span>
+      </div>
+      <div class="q-text">When God told Solomon to ask for whatever he wanted, which of the following did God specifically say Solomon had NOT requested?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,5,'A')"><span class="choice-label">A</span>Victory over his enemies in battle</button>
+        <button class="choice-btn" onclick="answer(this,5,'B')"><span class="choice-label">B</span>Riches and wealth</button>
+        <button class="choice-btn" onclick="answer(this,5,'C')"><span class="choice-label">C</span>Honor</button>
+        <button class="choice-btn" onclick="answer(this,5,'D')"><span class="choice-label">D</span>Long life</button>
+      </div>
+      <div class="feedback" id="fb5"></div>
+      <button class="next-btn" id="next5" onclick="nextQ(6)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 6</span>
+        <span class="detail-badge">DETAIL</span>
+      </div>
+      <div class="q-text">According to 2 Chronicles 1, what were silver and gold compared to in Jerusalem during Solomon&#39;s reign, due to their abundance?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,6,'A')"><span class="choice-label">A</span>Sand on the seashore</button>
+        <button class="choice-btn" onclick="answer(this,6,'B')"><span class="choice-label">B</span>Stones</button>
+        <button class="choice-btn" onclick="answer(this,6,'C')"><span class="choice-label">C</span>Dust of the earth</button>
+        <button class="choice-btn" onclick="answer(this,6,'D')"><span class="choice-label">D</span>Leaves of the forest</button>
+      </div>
+      <div class="feedback" id="fb6"></div>
+      <button class="next-btn" id="next6" onclick="nextQ(7)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 7</span>
+        <span class="detail-badge">DETAIL</span>
+      </div>
+      <div class="q-text">According to 2 Chronicles 1, what was the price Solomon&#39;s traders paid for a horse imported from Egypt or Kue?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,7,'A')"><span class="choice-label">A</span>100 shekels of silver</button>
+        <button class="choice-btn" onclick="answer(this,7,'B')"><span class="choice-label">B</span>150 shekels of silver</button>
+        <button class="choice-btn" onclick="answer(this,7,'C')"><span class="choice-label">C</span>300 shekels of silver</button>
+        <button class="choice-btn" onclick="answer(this,7,'D')"><span class="choice-label">D</span>600 shekels of silver</button>
+      </div>
+      <div class="feedback" id="fb7"></div>
+      <button class="next-btn" id="next7" onclick="nextQ(8)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 8</span>
+      </div>
+      <div class="q-text">Psalm 72 describes the scope of the king&#39;s dominion with a specific geographical phrase. Which phrase correctly describes that extent?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,8,'A')"><span class="choice-label">A</span>From the Nile to the Euphrates and from the mountains to the sea</button>
+        <button class="choice-btn" onclick="answer(this,8,'B')"><span class="choice-label">B</span>From Dan to Beersheba and from the Jordan to the Great Sea</button>
+        <button class="choice-btn" onclick="answer(this,8,'C')"><span class="choice-label">C</span>From sea to sea and from the River to the ends of the earth</button>
+        <button class="choice-btn" onclick="answer(this,8,'D')"><span class="choice-label">D</span>From the rising of the sun to its setting, over all the nations</button>
+      </div>
+      <div class="feedback" id="fb8"></div>
+      <button class="next-btn" id="next8" onclick="nextQ(9)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 9</span>
+      </div>
+      <div class="q-text">What do the king&#39;s enemies do in response to his rule, according to Psalm 72:9?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,9,'A')"><span class="choice-label">A</span>They flee to the mountains and are scattered</button>
+        <button class="choice-btn" onclick="answer(this,9,'B')"><span class="choice-label">B</span>They lick the dust</button>
+        <button class="choice-btn" onclick="answer(this,9,'C')"><span class="choice-label">C</span>They bring tribute and bow before his throne</button>
+        <button class="choice-btn" onclick="answer(this,9,'D')"><span class="choice-label">D</span>They are consumed like chaff before the wind</button>
+      </div>
+      <div class="feedback" id="fb9"></div>
+      <button class="next-btn" id="next9" onclick="nextQ(10)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="q-number-row">
+        <span class="q-num">QUESTION 10</span>
+        <span class="detail-badge">DETAIL</span>
+      </div>
+      <div class="q-text">The final verse of Psalm 72 (v. 20) contains a colophon — a closing note. What does it say?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,10,'A')"><span class="choice-label">A</span>"Blessed be the LORD God, the God of Israel, who alone does wondrous things."</button>
+        <button class="choice-btn" onclick="answer(this,10,'B')"><span class="choice-label">B</span>"Let all the earth be filled with His glory. Amen and Amen."</button>
+        <button class="choice-btn" onclick="answer(this,10,'C')"><span class="choice-label">C</span>"The prayers of David the son of Jesse are ended."</button>
+        <button class="choice-btn" onclick="answer(this,10,'D')"><span class="choice-label">D</span>"His name shall endure forever; his name shall continue as long as the sun."</button>
+      </div>
+      <div class="feedback" id="fb10"></div>
+      <button class="next-btn" id="next10" onclick="showResults()">SEE RESULTS &rarr;</button>
+    </div>
+
+  </div><!-- end quiz-area -->
+
+  <!-- Results -->
+  <div id="results-screen">
+    <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+    <div class="score-ring-wrap">
+      <svg viewBox="0 0 120 120" width="140" height="140">
+        <circle class="score-ring-bg" cx="60" cy="60" r="56"/>
+        <circle class="score-ring-fill" id="score-ring" cx="60" cy="60" r="56"/>
+      </svg>
+      <div class="score-ring-text">
+        <span class="score-big" id="score-display">0/10</span>
+        <span class="score-label">SCORE</span>
+      </div>
+    </div>
+    <p class="results-message" id="results-msg"></p>
+    <div class="review-list" id="review-list"></div>
+    <button class="take-again-btn" onclick="resetQuiz()">TAKE AGAIN</button>
+  </div>
+
+</div><!-- .card -->
+</div><!-- .scroll-wrap -->
+
+<script>
+const questions = [
+  {
+    correct: 'B',
+    feedback: {
+      correct: 'Correct! Gibeon was the site of the great high place because the tabernacle of meeting — the tent God had commissioned Moses to build in the wilderness — remained there.',
+      wrong:   'Not quite. Solomon went to Gibeon, where the original tabernacle of meeting (made by Moses) was housed. The ark was in Jerusalem, but the tabernacle and its bronze altar were at Gibeon.'
+    },
+    ref: '2 Chronicles 1:3–5'
+  },
+  {
+    correct: 'C',
+    feedback: {
+      correct: 'Correct! The text names "the bronze altar that Bezalel the son of Uri, the son of Hur, had made" as standing before the tabernacle at Gibeon.',
+      wrong:   'Not quite. The bronze altar is specifically attributed to Bezalel son of Uri, son of Hur — the master craftsman God filled with His Spirit to build the original tabernacle.'
+    },
+    ref: '2 Chronicles 1:5'
+  },
+  {
+    correct: 'C',
+    feedback: {
+      correct: 'Correct! Solomon offered 1,000 burnt offerings on the bronze altar — a massive act of consecration before God appeared to him that night.',
+      wrong:   'Not quite. The text specifies 1,000 burnt offerings on the bronze altar at Gibeon.'
+    },
+    ref: '2 Chronicles 1:6'
+  },
+  {
+    correct: 'C',
+    feedback: {
+      correct: 'Correct! Solomon asks God to let His "promise to David my father be established," grounding his request in the Davidic covenant.',
+      wrong:   'Not quite. Solomon specifically invokes the promise made to "David my father," rooting his petition in the Davidic covenant.'
+    },
+    ref: '2 Chronicles 1:9'
+  },
+  {
+    correct: 'A',
+    feedback: {
+      correct: 'Correct! God lists riches, wealth, honor, long life, and the lives of enemies as things Solomon did not ask for — but victory in battle is not on that list.',
+      wrong:   'Not quite. God explicitly says Solomon did not ask for riches, wealth, honor, or long life. "Victory in battle" is not among the things God mentions Solomon could have requested but did not.'
+    },
+    ref: '2 Chronicles 1:11'
+  },
+  {
+    correct: 'B',
+    feedback: {
+      correct: 'Correct! The text says "the king made silver and gold as common in Jerusalem as stones" — a striking image of Solomon\'s extraordinary wealth.',
+      wrong:   'Not quite. 2 Chronicles 1:15 says silver and gold were made "as common in Jerusalem as stones."'
+    },
+    ref: '2 Chronicles 1:15'
+  },
+  {
+    correct: 'B',
+    feedback: {
+      correct: 'Correct! A horse from Egypt or Kue cost 150 shekels of silver. A full chariot cost 600 shekels — four times as much.',
+      wrong:   'Not quite. The price was 150 shekels for a horse and 600 shekels for a chariot (2 Chr 1:17).'
+    },
+    ref: '2 Chronicles 1:17'
+  },
+  {
+    correct: 'C',
+    feedback: {
+      correct: 'Correct! Psalm 72:8 declares the king\'s dominion extends "from sea to sea and from the River to the ends of the earth" — a Messianic phrase pointing beyond Solomon to Christ\'s universal reign.',
+      wrong:   'Not quite. Psalm 72:8 uses the exact phrase "from sea to sea and from the River to the ends of the earth."'
+    },
+    ref: 'Psalm 72:8'
+  },
+  {
+    correct: 'B',
+    feedback: {
+      correct: 'Correct! "Those who dwell in the wilderness will bow before him, and his enemies will lick the dust" (Ps 72:9) — a vivid image of utter submission.',
+      wrong:   'Not quite. Psalm 72:9 says his enemies will "lick the dust," a powerful image of complete defeat and humiliation.'
+    },
+    ref: 'Psalm 72:9'
+  },
+  {
+    correct: 'C',
+    feedback: {
+      correct: 'Correct! Verse 20 is a colophon marking the close of the second book of Psalms: "The prayers of David the son of Jesse are ended." — even though later psalms also carry David\'s name.',
+      wrong:   'Not quite. Verse 20 is a formal closing note: "The prayers of David the son of Jesse are ended." This marks the end of Book II of the Psalter. The other options quote from verses 17–19 of this same psalm.'
+    },
+    ref: 'Psalm 72:20'
+  }
+];
+
+let score = 0;
+let answered = new Array(10).fill(false);
+let userAnswers = new Array(10).fill(null);
+
+function answer(btn, qNum, choice) {
+  if (answered[qNum - 1]) return;
+  answered[qNum - 1] = true;
+  userAnswers[qNum - 1] = choice;
+
+  const q = questions[qNum - 1];
+  const allBtns = btn.closest('.choices').querySelectorAll('.choice-btn');
+  allBtns.forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('fb' + qNum);
+  const isCorrect = choice === q.correct;
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+    score++;
+    fb.className = 'feedback correct';
+    fb.innerHTML = '<div class="feedback-verdict">✓ CORRECT</div>' + q.feedback.correct + ' <span class="feedback-ref">— ' + q.ref + '</span>';
+  } else {
+    btn.classList.add('wrong');
+    fb.className = 'feedback wrong';
+    fb.innerHTML = '<div class="feedback-verdict">✗ INCORRECT</div>' + q.feedback.wrong + ' <span class="feedback-ref">— ' + q.ref + '</span>';
+    // highlight correct
+    allBtns.forEach(b => {
+      const label = b.querySelector('.choice-label').textContent.trim();
+      if (label === q.correct) b.classList.add('missed');
+    });
+  }
+
+  fb.style.display = 'block';
+  document.getElementById('next' + qNum).style.display = 'block';
+
+  // update progress
+  const prog = qNum / 10 * 100;
+  document.getElementById('prog-fill').style.width = prog + '%';
+  document.getElementById('prog-pct').textContent = Math.round(prog) + '%';
+}
+
+function nextQ(num) {
+  document.getElementById('q' + (num - 1)).classList.remove('active');
+  document.getElementById('q' + num).classList.add('active');
+  document.getElementById('prog-label').textContent = 'QUESTION ' + num + ' OF 10';
+}
+
+function showResults() {
+  document.getElementById('quiz-area').style.display = 'none';
+  const rs = document.getElementById('results-screen');
+  rs.style.display = 'block';
+
+  document.getElementById('score-display').textContent = score + '/10';
+
+  const pct = score / 10;
+  const circumference = 351.86;
+  setTimeout(() => {
+    document.getElementById('score-ring').style.strokeDashoffset = circumference - pct * circumference;
+  }, 100);
+
+  let msg = '';
+  if (score === 10) msg = 'Perfect score! You read with the attention of a scribe.';
+  else if (score >= 8) msg = 'Excellent work — you paid close attention to the details of these passages.';
+  else if (score >= 6) msg = 'Good effort. A second reading of the passages will sharpen those details further.';
+  else if (score >= 4) msg = 'Keep reading carefully — these passages reward close attention.';
+  else msg = 'Press "Take Again" after re-reading the passages — much treasure awaits.';
+  document.getElementById('results-msg').textContent = msg;
+
+  const reviewList = document.getElementById('review-list');
+  const labels = ['A','B','C','D'];
+  const qTexts = [
+    'Where did Solomon go to offer sacrifices?',
+    'Who made the bronze altar at Gibeon?',
+    'How many burnt offerings did Solomon offer?',
+    'Whose promise does Solomon invoke in his prayer?',
+    'Which item did God say Solomon did NOT ask for?',
+    'Silver and gold were as common as what in Jerusalem?',
+    'How much did a horse from Egypt cost?',
+    'What phrase describes the king\'s dominion in Psalm 72?',
+    'What do the king\'s enemies do in Psalm 72:9?',
+    'What does the colophon of Psalm 72 say?'
+  ];
+
+  questions.forEach((q, i) => {
+    const div = document.createElement('div');
+    div.className = 'review-item';
+    const correct = userAnswers[i] === q.correct;
+    div.innerHTML = '<span class="review-icon">' + (correct ? '✓' : '✗') + '</span>' +
+      '<div><div class="review-q">' + qTexts[i] + '</div>' +
+      '<div class="review-a">Correct answer: ' + q.correct + ' &nbsp;|&nbsp; ' + q.ref + '</div></div>';
+    reviewList.appendChild(div);
+  });
+}
+
+function resetQuiz() {
+  score = 0;
+  answered = new Array(10).fill(false);
+  userAnswers = new Array(10).fill(null);
+
+  for (let i = 1; i <= 10; i++) {
+    const block = document.getElementById('q' + i);
+    block.classList.remove('active');
+    block.querySelectorAll('.choice-btn').forEach(b => {
+      b.disabled = false;
+      b.classList.remove('correct','wrong','missed');
+    });
+    document.getElementById('fb' + i).style.display = 'none';
+    document.getElementById('next' + i).style.display = 'none';
+  }
+  document.getElementById('q1').classList.add('active');
+  document.getElementById('prog-fill').style.width = '0%';
+  document.getElementById('prog-pct').textContent = '0%';
+  document.getElementById('prog-label').textContent = 'QUESTION 1 OF 10';
+
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('review-list').innerHTML = '';
+  document.getElementById('quiz-area').style.display = 'block';
+
+  document.getElementById('score-ring').style.strokeDashoffset = '351.86';
+}
+</script>
+</body>
+</html>
