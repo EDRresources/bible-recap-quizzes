@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 153 · Song of Solomon 1–8 · Bible Recap Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .scroll-card {
+    background: linear-gradient(160deg, #f5ead6 0%, #ede0c0 40%, #e8d8b0 70%, #dfd0a4 100%);
+    border: 2px solid #c9a84c;
+    border-radius: 6px;
+    max-width: 760px;
+    width: 100%;
+    padding: 40px 44px 48px;
+    box-shadow: 0 6px 40px rgba(0,0,0,0.7), inset 0 0 60px rgba(201,168,76,0.08);
+    position: relative;
+  }
+
+  .scroll-card::before, .scroll-card::after {
+    content: '✦';
+    position: absolute;
+    color: #c9a84c;
+    font-size: 18px;
+    opacity: 0.6;
+  }
+  .scroll-card::before { top: 12px; left: 16px; }
+  .scroll-card::after  { bottom: 12px; right: 16px; }
+
+  /* Header */
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #8a6a2a;
+    text-align: center;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a0e00;
+    text-align: center;
+    line-height: 1.3;
+    margin-bottom: 10px;
+  }
+  .badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 9.5px;
+    letter-spacing: 2px;
+    padding: 3px 10px;
+    border-radius: 2px;
+    border: 1px solid;
+  }
+  .badge-challenging { background: #3a1a00; color: #c9a84c; border-color: #c9a84c; }
+  .badge-passage     { background: rgba(201,168,76,0.15); color: #6b4c10; border-color: #c9a84c; }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #c9a84c;
+    opacity: 0.5;
+    margin: 16px 0 24px;
+  }
+
+  /* Progress */
+  .progress-bar-wrap {
+    background: rgba(0,0,0,0.1);
+    border-radius: 10px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 10px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+
+  /* Questions */
+  .question-block {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  .question-block.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-number {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #8a6a2a;
+    margin-bottom: 8px;
+  }
+  .q-text {
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    color: #1a0e00;
+  }
+  .detail-badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    background: #5a3a00;
+    color: #f0d080;
+    padding: 2px 7px;
+    border-radius: 2px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .choices { list-style: none; }
+  .choices li {
+    margin-bottom: 11px;
+  }
+  .choice-btn {
+    width: 100%;
+    text-align: left;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.4);
+    border-radius: 4px;
+    padding: 11px 16px;
+    font-family: 'Crimson Text', serif;
+    font-size: 17px;
+    color: #2a1a08;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.1s;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.2);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #8a6a2a;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+    color: #0d3016;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.12);
+    border-color: #8b1a1a;
+    color: #5a0a0a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  .feedback-box {
+    display: none;
+    margin-top: 18px;
+    padding: 14px 18px;
+    border-left: 3px solid #c9a84c;
+    background: rgba(201,168,76,0.1);
+    border-radius: 0 4px 4px 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #2a1a08;
+  }
+  .feedback-box.show { display: block; animation: fadeIn 0.3s ease; }
+  .feedback-ref {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #8a6a2a;
+    margin-bottom: 4px;
+  }
+
+  .next-btn {
+    margin-top: 22px;
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    background: #c9a84c;
+    color: #1a0e00;
+    border: none;
+    padding: 11px 28px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .next-btn:hover { background: #e8c96a; transform: translateY(-1px); }
+  .next-btn.show { display: inline-block; }
+
+  /* Results */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+  }
+  #results-screen.show { display: block; }
+
+  .score-ring-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .score-ring {
+    position: relative;
+    width: 130px;
+    height: 130px;
+  }
+  .score-ring svg {
+    transform: rotate(-90deg);
+  }
+  .score-ring circle {
+    fill: none;
+    stroke-width: 10;
+  }
+  .score-ring .ring-bg    { stroke: rgba(0,0,0,0.1); }
+  .score-ring .ring-fill  { stroke: #c9a84c; stroke-linecap: round; transition: stroke-dashoffset 1.2s ease; }
+  .score-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-number {
+    font-family: 'Cinzel', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a0e00;
+    line-height: 1;
+  }
+  .score-label {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: #8a6a2a;
+  }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a0e00;
+    margin-bottom: 6px;
+  }
+  .results-msg {
+    font-size: 18px;
+    color: #4a3010;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .review-list { text-align: left; margin-top: 24px; }
+  .review-item {
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    padding: 14px 0;
+  }
+  .review-q {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a0e00;
+    margin-bottom: 5px;
+  }
+  .review-result {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+  .review-correct { background: rgba(26,92,42,0.15); color: #1a5c2a; }
+  .review-wrong   { background: rgba(139,26,26,0.12); color: #8b1a1a; }
+  .review-answer  { font-size: 14px; color: #4a3010; }
+  .review-answer span { font-weight: 600; color: #1a5c2a; }
+
+  .take-again-btn {
+    margin-top: 28px;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    background: transparent;
+    color: #c9a84c;
+    border: 1.5px solid #c9a84c;
+    padding: 11px 28px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .take-again-btn:hover { background: #c9a84c; color: #1a0e00; }
+
+  @media (max-width: 540px) {
+    .scroll-card { padding: 28px 22px 36px; }
+    .quiz-title  { font-size: 21px; }
+    .q-text      { font-size: 17px; }
+    .choice-btn  { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="scroll-card">
+
+  <!-- Header -->
+  <div class="quiz-date">TUESDAY, JUNE 2, 2026 &middot; DAY 153</div>
+  <div class="quiz-title">The Bible Recap Daily Quiz</div>
+  <div class="badge-row">
+    <span class="badge badge-challenging">CHALLENGING</span>
+    <span class="badge badge-passage">Song of Solomon 1–8</span>
+  </div>
+  <hr class="divider">
+
+  <!-- Progress bar -->
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progress-bar"></div>
+  </div>
+
+  <!-- Questions -->
+  <div id="quiz-area">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="q-number">QUESTION 1 OF 10</div>
+      <div class="q-text">
+        In Song of Solomon 1, the beloved says she has neglected her own vineyard while keeping the vineyards of others. What caused her to tend others' vineyards instead of her own?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,1,'B')"><span class="choice-letter">A</span> Her father commanded her to tend the royal gardens</button></li>
+        <li><button class="choice-btn" onclick="answer(this,1,'B')"><span class="choice-letter">B</span> Her mother's sons were angry with her and made her keep their vineyards</button></li>
+        <li><button class="choice-btn" onclick="answer(this,1,'B')"><span class="choice-letter">C</span> She volunteered to care for her neighbors' fields as an act of service</button></li>
+        <li><button class="choice-btn" onclick="answer(this,1,'B')"><span class="choice-letter">D</span> The king appointed her as keeper of the royal vineyards</button></li>
+      </ul>
+      <div class="feedback-box" id="fb1">
+        <div class="feedback-ref">SONG OF SOLOMON 1:6</div>
+        The beloved explains: "My mother's sons were angry with me and made me keeper of the vineyards, but my own vineyard I have not kept!" The family conflict behind this detail subtly introduces themes of undeserved hardship and longing running throughout the book.
+      </div>
+      <button class="next-btn" id="next1" onclick="nextQ(2)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="q-number">QUESTION 2 OF 10</div>
+      <div class="q-text">
+        In Song of Solomon 2:7, the Shulammite charges the daughters of Jerusalem not to awaken love until it pleases. By what does she charge them?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,2,'C')"><span class="choice-letter">A</span> By the mountains of Jerusalem and the cedars of Lebanon</button></li>
+        <li><button class="choice-btn" onclick="answer(this,2,'C')"><span class="choice-letter">B</span> By the throne of King Solomon and the pillars of his house</button></li>
+        <li><button class="choice-btn" onclick="answer(this,2,'C')"><span class="choice-letter">C</span> By the gazelles and the does of the field</button></li>
+        <li><button class="choice-btn" onclick="answer(this,2,'C')"><span class="choice-letter">D</span> By the love of her father and the oath of her household</button></li>
+      </ul>
+      <div class="feedback-box" id="fb2">
+        <div class="feedback-ref">SONG OF SOLOMON 2:7</div>
+        "I adjure you, O daughters of Jerusalem, by the gazelles or the does of the field, that you not stir up or awaken love until it pleases." This refrain appears three times in the book (2:7; 3:5; 8:4), using images of graceful, unhurried animals to underscore that love has its proper, unhurried time.
+      </div>
+      <button class="next-btn" id="next2" onclick="nextQ(3)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="q-number">QUESTION 3 OF 10</div>
+      <div class="q-text">
+        In Song of Solomon 3, after the Shulammite searches the city and finds her beloved, where does she bring him?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,3,'A')"><span class="choice-letter">A</span> To her mother's house, into the room of the one who conceived her</button></li>
+        <li><button class="choice-btn" onclick="answer(this,3,'A')"><span class="choice-letter">B</span> Before King Solomon's court for a formal betrothal</button></li>
+        <li><button class="choice-btn" onclick="answer(this,3,'A')"><span class="choice-letter">C</span> To the vineyard to celebrate beneath the apple tree</button></li>
+        <li><button class="choice-btn" onclick="answer(this,3,'A')"><span class="choice-letter">D</span> To the watchmen of the city so they could bless the union</button></li>
+      </ul>
+      <div class="feedback-box" id="fb3">
+        <div class="feedback-ref">SONG OF SOLOMON 3:4</div>
+        "Scarcely had I passed them when I found him whom my soul loves. I held him, and would not let him go until I had brought him into my mother's house, and into the chamber of her who conceived me." The detail of the mother's house emphasizes intimacy, belonging, and the covenant context of love.
+      </div>
+      <button class="next-btn" id="next3" onclick="nextQ(4)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="q-number">QUESTION 4 OF 10 <span class="detail-badge">DETAIL</span></div>
+      <div class="q-text">
+        Song of Solomon 4 describes the beloved's garden as an orchard filled with fragrant plants. Which of the following is <em>not</em> listed among the plants and spices in that garden description?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,4,'D')"><span class="choice-letter">A</span> Saffron</button></li>
+        <li><button class="choice-btn" onclick="answer(this,4,'D')"><span class="choice-letter">B</span> Calamus</button></li>
+        <li><button class="choice-btn" onclick="answer(this,4,'D')"><span class="choice-letter">C</span> Frankincense trees</button></li>
+        <li><button class="choice-btn" onclick="answer(this,4,'D')"><span class="choice-letter">D</span> Olive</button></li>
+      </ul>
+      <div class="feedback-box" id="fb4">
+        <div class="feedback-ref">SONG OF SOLOMON 4:13–14</div>
+        The garden includes pomegranates, henna, nard, saffron, calamus, cinnamon, frankincense, myrrh, and aloes — but olive is never mentioned. The lavish spice inventory pictures the beloved's beauty as something richly complex, rare, and costly.
+      </div>
+      <button class="next-btn" id="next4" onclick="nextQ(5)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="q-number">QUESTION 5 OF 10</div>
+      <div class="q-text">
+        In Song of Solomon 5, the beloved delays opening the door for her lover, and by the time she rises he has gone. What physical detail in the text shows that he had actually been at the door?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,5,'B')"><span class="choice-letter">A</span> His cloak was left hanging on her doorpost</button></li>
+        <li><button class="choice-btn" onclick="answer(this,5,'B')"><span class="choice-letter">B</span> Her hands dripped with myrrh, her fingers with liquid myrrh, on the handles of the bolt</button></li>
+        <li><button class="choice-btn" onclick="answer(this,5,'B')"><span class="choice-letter">C</span> His sandals were placed outside her threshold as a sign</button></li>
+        <li><button class="choice-btn" onclick="answer(this,5,'B')"><span class="choice-letter">D</span> A lock of his dark hair was caught in the latch</button></li>
+      </ul>
+      <div class="feedback-box" id="fb5">
+        <div class="feedback-ref">SONG OF SOLOMON 5:4–5</div>
+        "My beloved put his hand through the latch opening; my heart began to pound for him. I arose to open for my beloved, and my hands dripped with myrrh, my fingers with flowing myrrh, on the handles of the bolt." The myrrh he left on the latch is the only physical trace of his presence — and a poignant reminder of her delay.
+      </div>
+      <button class="next-btn" id="next5" onclick="nextQ(6)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="q-number">QUESTION 6 OF 10 <span class="detail-badge">DETAIL</span></div>
+      <div class="q-text">
+        In Song of Solomon 5, the Shulammite describes her beloved to the daughters of Jerusalem. Which of the following correctly pairs a feature with its comparison?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,6,'A')"><span class="choice-letter">A</span> His eyes are like doves beside streams of water, bathed in milk</button></li>
+        <li><button class="choice-btn" onclick="answer(this,6,'A')"><span class="choice-letter">B</span> His cheeks are like towers of alabaster set in bases of gold</button></li>
+        <li><button class="choice-btn" onclick="answer(this,6,'A')"><span class="choice-letter">C</span> His arms are like pillars of marble</button></li>
+        <li><button class="choice-btn" onclick="answer(this,6,'A')"><span class="choice-letter">D</span> His legs are like cedars of Lebanon</button></li>
+      </ul>
+      <div class="feedback-box" id="fb6">
+        <div class="feedback-ref">SONG OF SOLOMON 5:12, 14–15</div>
+        "His eyes are like doves beside streams of water, bathed in milk, mounted like jewels" (v.12). The other options mix up the comparisons: his cheeks are beds of spices (v.13); his arms are rods of gold set with topaz (v.14); his legs are pillars of alabaster set on bases of gold (v.15); his appearance overall is like Lebanon, choice as the cedars.
+      </div>
+      <button class="next-btn" id="next6" onclick="nextQ(7)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="q-number">QUESTION 7 OF 10</div>
+      <div class="q-text">
+        In Song of Solomon 6, the daughters of Jerusalem ask where the beloved has gone. What is the Shulammite's answer?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,7,'C')"><span class="choice-letter">A</span> He has gone to the mountains of spices to gather frankincense and myrrh</button></li>
+        <li><button class="choice-btn" onclick="answer(this,7,'C')"><span class="choice-letter">B</span> He has gone to the house of the king to stand before Solomon's court</button></li>
+        <li><button class="choice-btn" onclick="answer(this,7,'C')"><span class="choice-letter">C</span> He has gone down to his garden, to the beds of spices, to browse among the lilies</button></li>
+        <li><button class="choice-btn" onclick="answer(this,7,'C')"><span class="choice-letter">D</span> He has gone to the walls of Jerusalem to wait at the city gate</button></li>
+      </ul>
+      <div class="feedback-box" id="fb7">
+        <div class="feedback-ref">SONG OF SOLOMON 6:2</div>
+        "My beloved has gone down to his garden, to the beds of spices, to browse in the gardens and to gather lilies." Even in his absence she knows exactly where he belongs — and she declares again, "I am my beloved's and my beloved is mine; he browses among the lilies" (v.3).
+      </div>
+      <button class="next-btn" id="next7" onclick="nextQ(8)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="q-number">QUESTION 8 OF 10 <span class="detail-badge">DETAIL</span></div>
+      <div class="q-text">
+        Song of Solomon 6 lists the number of queens, concubines, and virgins in Solomon's court to contrast them with the unique beloved. How many of each are mentioned?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,8,'B')"><span class="choice-letter">A</span> 40 queens, 60 concubines, and virgins without number</button></li>
+        <li><button class="choice-btn" onclick="answer(this,8,'B')"><span class="choice-letter">B</span> 60 queens, 80 concubines, and virgins without number</button></li>
+        <li><button class="choice-btn" onclick="answer(this,8,'B')"><span class="choice-letter">C</span> 70 queens, 80 concubines, and virgins without number</button></li>
+        <li><button class="choice-btn" onclick="answer(this,8,'B')"><span class="choice-letter">D</span> 80 queens, 60 concubines, and virgins without number</button></li>
+      </ul>
+      <div class="feedback-box" id="fb8">
+        <div class="feedback-ref">SONG OF SOLOMON 6:8–9</div>
+        "There are sixty queens and eighty concubines, and virgins without number. But my dove, my perfect one, is the only one." The point is not the numbers themselves but what they prove: amid a multitude, the beloved stands uniquely apart — a picture of the covenant love that prizes the one.
+      </div>
+      <button class="next-btn" id="next8" onclick="nextQ(9)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="q-number">QUESTION 9 OF 10 <span class="detail-badge">DETAIL</span></div>
+      <div class="q-text">
+        In Song of Solomon 8, the brothers speak of their "little sister" who has not yet matured. What do they say they will do if she is a wall, versus if she is a door?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,9,'D')"><span class="choice-letter">A</span> If a wall, guard her day and night; if a door, keep her locked until she matures</button></li>
+        <li><button class="choice-btn" onclick="answer(this,9,'D')"><span class="choice-letter">B</span> If a wall, crown her with garlands of gold; if a door, adorn her with jewels of silver</button></li>
+        <li><button class="choice-btn" onclick="answer(this,9,'D')"><span class="choice-letter">C</span> If a wall, seek a worthy husband; if a door, require a bride price of cedar</button></li>
+        <li><button class="choice-btn" onclick="answer(this,9,'D')"><span class="choice-letter">D</span> If a wall, build a turret of silver on her; if a door, enclose her with boards of cedar</button></li>
+      </ul>
+      <div class="feedback-box" id="fb9">
+        <div class="feedback-ref">SONG OF SOLOMON 8:9</div>
+        "If she is a wall, we will build on her a battlement of silver, but if she is a door, we will enclose her with boards of cedar." Being a "wall" (chaste, firm) calls for honor; being a "door" (easily opened) calls for protective enclosure. The Shulammite answers that she is indeed a wall (v.10), showing she has guarded her own honor.
+      </div>
+      <button class="next-btn" id="next9" onclick="nextQ(10)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="q-number">QUESTION 10 OF 10</div>
+      <div class="q-text">
+        Song of Solomon 8 declares that love cannot be purchased. According to verse 7, if a man offered all the wealth of his house in exchange for love, what would happen to him?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,10,'A')"><span class="choice-letter">A</span> He would be utterly scorned</button></li>
+        <li><button class="choice-btn" onclick="answer(this,10,'A')"><span class="choice-letter">B</span> He would be pitied, but his offer would still be refused</button></li>
+        <li><button class="choice-btn" onclick="answer(this,10,'A')"><span class="choice-letter">C</span> He would receive love in return, for love transcends wealth</button></li>
+        <li><button class="choice-btn" onclick="answer(this,10,'A')"><span class="choice-letter">D</span> He would be praised for his devotion but turned away in kindness</button></li>
+      </ul>
+      <div class="feedback-box" id="fb10">
+        <div class="feedback-ref">SONG OF SOLOMON 8:7</div>
+        "If a man offered for love all the wealth of his house, he would be utterly scorned." The verse is not a soft refusal — it is contempt. True love is categorically beyond commerce. This is one of Scripture's most direct statements that grace and covenant love cannot be bought, only given and received.
+      </div>
+      <button class="next-btn" id="next10" onclick="showResults()">SEE RESULTS &rarr;</button>
+    </div>
+
+  </div><!-- #quiz-area -->
+
+  <!-- Results -->
+  <div id="results-screen">
+    <div class="quiz-date">RESULTS &middot; DAY 153</div>
+    <div class="results-title">Quiz Complete</div>
+
+    <div class="score-ring-wrap">
+      <div class="score-ring">
+        <svg width="130" height="130" viewBox="0 0 130 130">
+          <circle class="ring-bg" cx="65" cy="65" r="55" />
+          <circle class="ring-fill" id="ring-fill" cx="65" cy="65" r="55"
+            stroke-dasharray="345.4"
+            stroke-dashoffset="345.4" />
+        </svg>
+        <div class="score-text">
+          <div class="score-number" id="score-number">0/10</div>
+          <div class="score-label">SCORE</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="results-msg" id="results-msg"></div>
+
+    <div class="review-list" id="review-list"></div>
+
+    <div style="text-align:center">
+      <button class="take-again-btn" onclick="resetQuiz()">&#8635; TAKE AGAIN</button>
+    </div>
+  </div>
+
+</div><!-- .scroll-card -->
+
+<script>
+  const TOTAL = 10;
+  const CORRECT_ANSWERS = {1:'B', 2:'C', 3:'A', 4:'D', 5:'B', 6:'A', 7:'C', 8:'B', 9:'D', 10:'A'};
+  const CHOICE_LABELS = ['A','B','C','D'];
+
+  let score = 0;
+  let userAnswers = {};
+
+  function answer(btn, qNum, correct) {
+    const block = document.getElementById('q' + qNum);
+    const allBtns = block.querySelectorAll('.choice-btn');
+    const chosen = btn.querySelector('.choice-letter').textContent.trim();
+    const isCorrect = chosen === correct;
+
+    allBtns.forEach(b => {
+      b.disabled = true;
+      const letter = b.querySelector('.choice-letter').textContent.trim();
+      if (letter === correct) b.classList.add('correct');
+      else if (b === btn && !isCorrect) b.classList.add('wrong');
+    });
+
+    if (isCorrect) score++;
+    userAnswers[qNum] = { chosen, correct, isCorrect };
+
+    document.getElementById('fb' + qNum).classList.add('show');
+    document.getElementById('next' + qNum).classList.add('show');
+  }
+
+  function nextQ(n) {
+    document.getElementById('q' + (n-1)).classList.remove('active');
+    document.getElementById('q' + n).classList.add('active');
+    const pct = ((n - 1) / TOTAL * 100) + 10;
+    document.getElementById('progress-bar').style.width = Math.min(pct, 100) + '%';
+  }
+
+  function showResults() {
+    document.getElementById('quiz-area').style.display = 'none';
+    document.getElementById('progress-bar').style.width = '100%';
+
+    const rs = document.getElementById('results-screen');
+    rs.classList.add('show');
+
+    document.getElementById('score-number').textContent = score + '/10';
+
+    // Animate ring
+    const circumference = 345.4;
+    const offset = circumference - (score / TOTAL) * circumference;
+    setTimeout(() => {
+      document.getElementById('ring-fill').style.strokeDashoffset = offset;
+    }, 100);
+
+    // Message
+    const msgs = [
+      [0,3,  "Keep reading — the Song rewards careful attention."],
+      [4,5,  "A solid start — Song of Solomon is rich with detail."],
+      [6,7,  "Well done! You read closely."],
+      [8,9,  "Excellent work — you know this book well."],
+      [10,10,"Perfect score! The Song has no secrets from you."]
+    ];
+    let msg = '';
+    for (const [lo, hi, m] of msgs) { if (score >= lo && score <= hi) { msg = m; break; } }
+    document.getElementById('results-msg').textContent = msg;
+
+    // Review
+    const qTexts = {
+      1: "Why was the beloved keeping others' vineyards?",
+      2: "By what does she charge the daughters of Jerusalem in 2:7?",
+      3: "Where does she bring her beloved after finding him in the city?",
+      4: "Which plant is NOT in the garden description of Song 4?",
+      5: "What physical detail shows her lover had been at the door?",
+      6: "Which description correctly pairs a feature of the beloved?",
+      7: "Where has the beloved gone, according to Song 6?",
+      8: "How many queens, concubines, and virgins are listed in Song 6?",
+      9: "What will the brothers do if their sister is a wall vs. a door?",
+      10:"What happens to a man who offers all his wealth for love?"
+    };
+    const correctTexts = {
+      1: "B — Her mother's sons were angry with her (1:6)",
+      2: "C — By the gazelles and the does of the field (2:7)",
+      3: "A — To her mother's house (3:4)",
+      4: "D — Olive is never mentioned (4:13–14)",
+      5: "B — Her hands dripped with myrrh on the bolt (5:4–5)",
+      6: "A — His eyes are like doves beside streams of water (5:12)",
+      7: "C — Down to his garden, beds of spices, among the lilies (6:2)",
+      8: "B — 60 queens, 80 concubines, virgins without number (6:8)",
+      9: "D — If a wall: turret of silver; if a door: boards of cedar (8:9)",
+      10:"A — He would be utterly scorned (8:7)"
+    };
+
+    let html = '';
+    for (let i = 1; i <= TOTAL; i++) {
+      const ua = userAnswers[i] || { isCorrect: false, chosen: '—' };
+      const badge = ua.isCorrect
+        ? '<span class="review-result review-correct">CORRECT</span>'
+        : '<span class="review-result review-wrong">INCORRECT</span>';
+      html += `<div class="review-item">
+        <div class="review-q">${i}. ${qTexts[i]}</div>
+        ${badge}
+        <div class="review-answer">Correct answer: <span>${correctTexts[i]}</span></div>
+      </div>`;
+    }
+    document.getElementById('review-list').innerHTML = html;
+  }
+
+  function resetQuiz() {
+    score = 0;
+    userAnswers = {};
+
+    for (let i = 1; i <= TOTAL; i++) {
+      const block = document.getElementById('q' + i);
+      block.classList.remove('active');
+      block.querySelectorAll('.choice-btn').forEach(b => {
+        b.disabled = false;
+        b.classList.remove('correct','wrong');
+      });
+      document.getElementById('fb' + i).classList.remove('show');
+      const nxt = document.getElementById('next' + i);
+      if (nxt) nxt.classList.remove('show');
+    }
+
+    document.getElementById('results-screen').classList.remove('show');
+    document.getElementById('quiz-area').style.display = '';
+    document.getElementById('q1').classList.add('active');
+    document.getElementById('progress-bar').style.width = '10%';
+    document.getElementById('ring-fill').style.strokeDashoffset = '345.4';
+  }
+</script>
+</body>
+</html>
