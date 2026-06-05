@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 156 · Proverbs 7–9 · Bible Recap Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .scroll-card {
+    background: linear-gradient(160deg, #f5ead6 0%, #ede0c0 40%, #e8d8b0 70%, #dfd0a4 100%);
+    border: 2px solid #c9a84c;
+    border-radius: 6px;
+    max-width: 760px;
+    width: 100%;
+    padding: 40px 44px 48px;
+    box-shadow: 0 6px 40px rgba(0,0,0,0.7), inset 0 0 60px rgba(201,168,76,0.08);
+    position: relative;
+  }
+
+  .scroll-card::before, .scroll-card::after {
+    content: '✦';
+    position: absolute;
+    color: #c9a84c;
+    font-size: 18px;
+    opacity: 0.6;
+  }
+  .scroll-card::before { top: 12px; left: 16px; }
+  .scroll-card::after  { bottom: 12px; right: 16px; }
+
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #8a6a2a;
+    text-align: center;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a0e00;
+    text-align: center;
+    line-height: 1.3;
+    margin-bottom: 10px;
+  }
+  .badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 9.5px;
+    letter-spacing: 2px;
+    padding: 3px 10px;
+    border-radius: 2px;
+    border: 1px solid;
+  }
+  .badge-challenging { background: #3a1a00; color: #c9a84c; border-color: #c9a84c; }
+  .badge-passage     { background: rgba(201,168,76,0.15); color: #6b4c10; border-color: #c9a84c; }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #c9a84c;
+    opacity: 0.5;
+    margin: 16px 0 24px;
+  }
+
+  .progress-bar-wrap {
+    background: rgba(0,0,0,0.1);
+    border-radius: 10px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 10px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+
+  .question-block {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  .question-block.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-number {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #8a6a2a;
+    margin-bottom: 8px;
+  }
+  .q-text {
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    color: #1a0e00;
+  }
+  .detail-badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    background: #5a3a00;
+    color: #f0d080;
+    padding: 2px 7px;
+    border-radius: 2px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .choices { list-style: none; }
+  .choices li { margin-bottom: 11px; }
+  .choice-btn {
+    width: 100%;
+    text-align: left;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.4);
+    border-radius: 4px;
+    padding: 11px 16px;
+    font-family: 'Crimson Text', serif;
+    font-size: 17px;
+    color: #2a1a08;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.1s;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.2);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #8a6a2a;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+    color: #0d3016;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.12);
+    border-color: #8b1a1a;
+    color: #5a0a0a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  .feedback-box {
+    display: none;
+    margin-top: 18px;
+    padding: 14px 18px;
+    border-left: 3px solid #c9a84c;
+    background: rgba(201,168,76,0.1);
+    border-radius: 0 4px 4px 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #2a1a08;
+  }
+  .feedback-box.show { display: block; animation: fadeIn 0.3s ease; }
+  .feedback-ref {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #8a6a2a;
+    margin-bottom: 4px;
+  }
+
+  .next-btn {
+    margin-top: 22px;
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    background: #c9a84c;
+    color: #1a0e00;
+    border: none;
+    padding: 11px 28px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .next-btn:hover { background: #e8c96a; transform: translateY(-1px); }
+  .next-btn.show { display: inline-block; }
+
+  /* Results */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+  }
+  #results-screen.show { display: block; }
+
+  .score-ring-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .score-ring {
+    position: relative;
+    width: 130px;
+    height: 130px;
+  }
+  .score-ring svg { transform: rotate(-90deg); }
+  .score-ring circle { fill: none; stroke-width: 10; }
+  .score-ring .ring-bg   { stroke: rgba(0,0,0,0.1); }
+  .score-ring .ring-fill { stroke: #c9a84c; stroke-linecap: round; transition: stroke-dashoffset 1.2s ease; }
+  .score-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-number {
+    font-family: 'Cinzel', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a0e00;
+    line-height: 1;
+  }
+  .score-label {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: #8a6a2a;
+  }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a0e00;
+    margin-bottom: 6px;
+  }
+  .results-msg {
+    font-size: 18px;
+    color: #4a3010;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .review-list { text-align: left; margin-top: 24px; }
+  .review-item {
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    padding: 14px 0;
+  }
+  .review-q {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a0e00;
+    margin-bottom: 5px;
+  }
+  .review-result {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+  .review-correct { background: rgba(26,92,42,0.15); color: #1a5c2a; }
+  .review-wrong   { background: rgba(139,26,26,0.12); color: #8b1a1a; }
+  .review-answer  { font-size: 14px; color: #4a3010; }
+  .review-answer span { font-weight: 600; color: #1a5c2a; }
+
+  .take-again-btn {
+    margin-top: 28px;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    background: transparent;
+    color: #c9a84c;
+    border: 1.5px solid #c9a84c;
+    padding: 11px 28px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .take-again-btn:hover { background: #c9a84c; color: #1a0e00; }
+
+  @media (max-width: 540px) {
+    .scroll-card { padding: 28px 22px 36px; }
+    .quiz-title  { font-size: 21px; }
+    .q-text      { font-size: 17px; }
+    .choice-btn  { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="scroll-card">
+
+  <!-- Header -->
+  <div class="quiz-date">FRIDAY, JUNE 5, 2026 &middot; DAY 156</div>
+  <div class="quiz-title">The Bible Recap Daily Quiz</div>
+  <div class="badge-row">
+    <span class="badge badge-challenging">CHALLENGING</span>
+    <span class="badge badge-passage">Proverbs 7</span>
+    <span class="badge badge-passage">Proverbs 8</span>
+    <span class="badge badge-passage">Proverbs 9</span>
+  </div>
+  <hr class="divider">
+
+  <!-- Progress bar -->
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progress-bar"></div>
+  </div>
+
+  <!-- Questions -->
+  <div id="quiz-area">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="q-number">QUESTION 1 OF 10 <span class="detail-badge">DETAIL</span></div>
+      <div class="q-text">
+        At what specific time of day does the narrator of Proverbs 7 observe the foolish young man heading toward the adulteress&#39;s street corner?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,1,'C')"><span class="choice-letter">A</span> At the break of dawn, slipping out before the household stirred</button></li>
+        <li><button class="choice-btn" onclick="answer(this,1,'C')"><span class="choice-letter">B</span> At midday, when the heat drove people indoors and the streets emptied</button></li>
+        <li><button class="choice-btn" onclick="answer(this,1,'C')"><span class="choice-letter">C</span> At twilight, as the evening grew dark and the night set in</button></li>
+        <li><button class="choice-btn" onclick="answer(this,1,'C')"><span class="choice-letter">D</span> In the dead of night, long after silence had settled over the city</button></li>
+      </ul>
+      <div class="feedback-box" id="fb1">
+        <div class="feedback-ref">PROVERBS 7:9</div>
+        "In the twilight, in the evening, at the fall of night and darkness." The three-part description — twilight, evening, fall of night — slows the clock deliberately, making the reader feel the weight of the young man&#39;s choice. He does not stumble into danger; he walks toward it as day gives way to dark. The hour signals the eclipse of wisdom: the light by which the wise walk is fading, and he is choosing that moment to venture out.
+      </div>
+      <button class="next-btn" id="next1" onclick="nextQ(2)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="q-number">QUESTION 2 OF 10</div>
+      <div class="q-text">
+        In Proverbs 7, what specific reason does the adulteress give to convince the young man that they can be together without discovery?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,2,'A')"><span class="choice-letter">A</span> Her husband has gone on a long journey and will not return until the full moon</button></li>
+        <li><button class="choice-btn" onclick="answer(this,2,'A')"><span class="choice-letter">B</span> Her husband has cast her out of the house and gone to live with another woman</button></li>
+        <li><button class="choice-btn" onclick="answer(this,2,'A')"><span class="choice-letter">C</span> Her husband is a merchant who travels for seasons at a time and sends no word</button></li>
+        <li><button class="choice-btn" onclick="answer(this,2,'A')"><span class="choice-letter">D</span> Her husband left that morning in anger and she does not expect him back</button></li>
+      </ul>
+      <div class="feedback-box" id="fb2">
+        <div class="feedback-ref">PROVERBS 7:19–20</div>
+        "For my husband is not at home; he has gone on a long journey. He took his bag of money with him and will not be home till full moon." The detail of the full moon is calculated — she names a specific deadline, manufacturing a window of false safety. Her invitation is not impulsive; it is organized. The young man who accepts it is trusting the word of someone whose entire vocation is deception.
+      </div>
+      <button class="next-btn" id="next2" onclick="nextQ(3)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="q-number">QUESTION 3 OF 10 <span class="detail-badge">DETAIL</span></div>
+      <div class="q-text">
+        The narrator of Proverbs 7 uses three animal images to describe the young man following the adulteress. Which set correctly identifies all three?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,3,'B')"><span class="choice-letter">A</span> A lamb led astray, a fish on a hook, a sparrow tumbling from the sky</button></li>
+        <li><button class="choice-btn" onclick="answer(this,3,'B')"><span class="choice-letter">B</span> An ox going to the slaughter, a deer stepping into a noose, a bird rushing into a snare</button></li>
+        <li><button class="choice-btn" onclick="answer(this,3,'B')"><span class="choice-letter">C</span> A horse charging blindly into battle, a fly caught in a web, a mouse taking the bait</button></li>
+        <li><button class="choice-btn" onclick="answer(this,3,'B')"><span class="choice-letter">D</span> A sheep straying from the flock, a moth drawn to flame, a fish leaping into a net</button></li>
+      </ul>
+      <div class="feedback-box" id="fb3">
+        <div class="feedback-ref">PROVERBS 7:22–23</div>
+        "All at once he followed her like an ox going to the slaughter, like a deer stepping into a noose till an arrow pierces his liver, like a bird darting into a snare, little knowing it will cost him his life." Each image emphasizes oblivious passivity — the animals do not sense the danger until it is too late. The young man&#39;s tragedy is not violent rebellion but the quiet absence of the knowledge that would have saved him.
+      </div>
+      <button class="next-btn" id="next3" onclick="nextQ(4)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="q-number">QUESTION 4 OF 10</div>
+      <div class="q-text">
+        In Proverbs 8, where does personified Wisdom position herself when she calls out to humanity?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,4,'D')"><span class="choice-letter">A</span> In solitary high places and on mountaintops, where only the humble go to seek her</button></li>
+        <li><button class="choice-btn" onclick="answer(this,4,'D')"><span class="choice-letter">B</span> Deep in the forest and lonely wilderness, far from the noise of the city</button></li>
+        <li><button class="choice-btn" onclick="answer(this,4,'D')"><span class="choice-letter">C</span> Inside the homes of the righteous, speaking quietly to those already walking in her ways</button></li>
+        <li><button class="choice-btn" onclick="answer(this,4,'D')"><span class="choice-letter">D</span> On the heights along the way, where paths meet, at the city gates and their entrances</button></li>
+      </ul>
+      <div class="feedback-box" id="fb4">
+        <div class="feedback-ref">PROVERBS 8:2–3</div>
+        "On the heights along the way, where the paths meet, she takes her stand; beside the gates in front of the town, at the entrance of the portals she cries aloud." Wisdom is not hidden or hard to find. She stations herself at the most trafficked intersections of civic life — the gates where commerce is transacted and judgments are rendered. Every person who passes through the city cannot miss her. This makes the fool&#39;s rejection of her all the more culpable.
+      </div>
+      <button class="next-btn" id="next4" onclick="nextQ(5)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="q-number">QUESTION 5 OF 10</div>
+      <div class="q-text">
+        In Proverbs 8, Wisdom makes a direct claim about the value of what she offers compared to precious metals. What does she say?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,5,'A')"><span class="choice-letter">A</span> Her fruit is better than gold, even fine gold, and her yield surpasses choice silver</button></li>
+        <li><button class="choice-btn" onclick="answer(this,5,'A')"><span class="choice-letter">B</span> She gives to those who seek her enough silver and gold to last their entire life</button></li>
+        <li><button class="choice-btn" onclick="answer(this,5,'A')"><span class="choice-letter">C</span> She grants honor and peace of mind, worth more than all the gold of Ophir</button></li>
+        <li><button class="choice-btn" onclick="answer(this,5,'A')"><span class="choice-letter">D</span> She withholds material wealth but repays with enduring favor before God and man</button></li>
+      </ul>
+      <div class="feedback-box" id="fb5">
+        <div class="feedback-ref">PROVERBS 8:19</div>
+        "My fruit is better than fine gold; what I yield surpasses choice silver." The comparison is qualitative, not merely quantitative — Wisdom&#39;s yield exceeds not just ordinary gold but the finest grade. The harvest imagery ("fruit," "yield") suggests abundance and ongoing production, not a one-time gift. Wisdom does not compete with wealth by offering a spiritual consolation prize; she surpasses it on its own terms.
+      </div>
+      <button class="next-btn" id="next5" onclick="nextQ(6)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="q-number">QUESTION 6 OF 10 <span class="detail-badge">DETAIL</span></div>
+      <div class="q-text">
+        In Proverbs 8:13, personified Wisdom describes what the fear of the LORD leads her to hate. Which answer correctly names the things she lists?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,6,'C')"><span class="choice-letter">A</span> Laziness, gluttony, and contempt for the poor</button></li>
+        <li><button class="choice-btn" onclick="answer(this,6,'C')"><span class="choice-letter">B</span> False prophecy, corrupt judgment, and devouring widows&#39; houses</button></li>
+        <li><button class="choice-btn" onclick="answer(this,6,'C')"><span class="choice-letter">C</span> Pride, arrogance, the evil way, and the perverted mouth</button></li>
+        <li><button class="choice-btn" onclick="answer(this,6,'C')"><span class="choice-letter">D</span> Adultery, theft, and bearing false witness against a neighbor</button></li>
+      </ul>
+      <div class="feedback-box" id="fb6">
+        <div class="feedback-ref">PROVERBS 8:13</div>
+        "To fear the LORD is to hate evil; I hate pride and arrogance, evil behavior and perverse speech." What Wisdom hates flows directly from what she is — the fear of the LORD expressed as active revulsion toward its opposites. Pride and arrogance head the list, which is consistent with Proverbs&#39; consistent diagnosis that pride is the root disposition from which other evil grows. The "perverted mouth" at the end closes the list by condemning the instrument through which wickedness most commonly operates.
+      </div>
+      <button class="next-btn" id="next6" onclick="nextQ(7)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="q-number">QUESTION 7 OF 10</div>
+      <div class="q-text">
+        At the close of Proverbs 8, Wisdom states the consequence of finding her and the consequence of missing her. What does she say?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,7,'B')"><span class="choice-letter">A</span> Finding her brings long life and fruitful descendants; missing her leads to a name forgotten among the people</button></li>
+        <li><button class="choice-btn" onclick="answer(this,7,'B')"><span class="choice-letter">B</span> Whoever finds her finds life and receives favor from the LORD; but those who miss her harm themselves and love death</button></li>
+        <li><button class="choice-btn" onclick="answer(this,7,'B')"><span class="choice-letter">C</span> Finding her brings wealth and protection; missing her leads to poverty and ruin at the hands of enemies</button></li>
+        <li><button class="choice-btn" onclick="answer(this,7,'B')"><span class="choice-letter">D</span> Those who find her are honored by kings; those who fail to find her are despised in the assembly</button></li>
+      </ul>
+      <div class="feedback-box" id="fb7">
+        <div class="feedback-ref">PROVERBS 8:35–36</div>
+        "For those who find me find life and receive favor from the LORD. But those who fail to find me harm themselves; all who hate me love death." The logic is reversible and complete: to find Wisdom is to find life; to miss her is self-harm; to hate her is to love death. That last phrase is a withering diagnosis — those who reject Wisdom do not merely choose foolishness, they are actively choosing their own destruction, even if they cannot see it.
+      </div>
+      <button class="next-btn" id="next7" onclick="nextQ(8)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="q-number">QUESTION 8 OF 10 <span class="detail-badge">DETAIL</span></div>
+      <div class="q-text">
+        Proverbs 9 opens with Wisdom having built her house. How many pillars has she hewn for it?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,8,'D')"><span class="choice-letter">A</span> Three, representing the three patriarchs of Israel</button></li>
+        <li><button class="choice-btn" onclick="answer(this,8,'D')"><span class="choice-letter">B</span> Five, representing the five books of the Law</button></li>
+        <li><button class="choice-btn" onclick="answer(this,8,'D')"><span class="choice-letter">C</span> Ten, representing the Ten Commandments given at Sinai</button></li>
+        <li><button class="choice-btn" onclick="answer(this,8,'D')"><span class="choice-letter">D</span> Seven</button></li>
+      </ul>
+      <div class="feedback-box" id="fb8">
+        <div class="feedback-ref">PROVERBS 9:1</div>
+        "Wisdom has built her house; she has set up its seven pillars." Seven is the number of completion in Hebrew thought — Wisdom&#39;s dwelling is fully and perfectly constructed. The image also contrasts sharply with Folly later in the same chapter: Wisdom has built and furnished and prepared a feast; Folly has built nothing, only calling from a doorstep to invite passers-by into a house where the dead already dwell.
+      </div>
+      <button class="next-btn" id="next8" onclick="nextQ(9)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="q-number">QUESTION 9 OF 10</div>
+      <div class="q-text">
+        In Proverbs 9, what is Folly&#39;s actual sales pitch to those who pass by her door, and what makes it spiritually dangerous?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,9,'A')"><span class="choice-letter">A</span> "Stolen water is sweet; bread eaten in secret is pleasant" — she presents transgression itself as the attraction, while concealing that her guests are in the realm of the dead</button></li>
+        <li><button class="choice-btn" onclick="answer(this,9,'A')"><span class="choice-letter">B</span> "Come, take freely what I offer; all that I have belongs to those who find me" — a counterfeit of grace that offers pleasure without cost or consequence</button></li>
+        <li><button class="choice-btn" onclick="answer(this,9,'A')"><span class="choice-letter">C</span> "I have prepared a fine feast and all is ready" — she mimics Wisdom&#39;s invitation word for word but her banquet table is set with death</button></li>
+        <li><button class="choice-btn" onclick="answer(this,9,'A')"><span class="choice-letter">D</span> "Follow me and you will lack for nothing" — she promises provision to those who have grown impatient with the harder road of wisdom</button></li>
+      </ul>
+      <div class="feedback-box" id="fb9">
+        <div class="feedback-ref">PROVERBS 9:17–18</div>
+        "Stolen water is sweet; food eaten in secret is pleasant. But little do they know that the dead are there, that her guests are deep in the realm of the dead." Folly does not describe what she offers as good or nourishing — she describes it as stolen and secret. The appeal is to transgression itself. The danger is not that she lies about the pleasure; the pleasure is real enough. The danger is what she withholds: verse 18 supplies it plainly, but those entering her door do not know it.
+      </div>
+      <button class="next-btn" id="next9" onclick="nextQ(10)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="q-number">QUESTION 10 OF 10</div>
+      <div class="q-text">
+        Proverbs 9:7–9 contrasts what happens when you correct a mocker versus when you rebuke a wise person. What contrast does the text draw?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,10,'C')"><span class="choice-letter">A</span> The mocker pretends to accept the rebuke but later repays the corrector with slander</button></li>
+        <li><button class="choice-btn" onclick="answer(this,10,'C')"><span class="choice-letter">B</span> The mocker grows silent in shame; the wise person asks for more instruction</button></li>
+        <li><button class="choice-btn" onclick="answer(this,10,'C')"><span class="choice-letter">C</span> Rebuking a mocker brings insult and abuse on the corrector; rebuking a wise person makes them love you</button></li>
+        <li><button class="choice-btn" onclick="answer(this,10,'C')"><span class="choice-letter">D</span> Mockers can still be reached through patient gentleness; the wise respond only to direct rebuke</button></li>
+      </ul>
+      <div class="feedback-box" id="fb10">
+        <div class="feedback-ref">PROVERBS 9:7–8</div>
+        "Whoever corrects a mocker invites insults; whoever rebukes the wicked incurs abuse. Do not rebuke mockers or they will hate you; rebuke the wise and they will love you." This is one of Proverbs&#39; most searching diagnostic tests: the response to correction reveals whether wisdom is present. The mocker does not merely fail to improve — he turns on the corrector. The wise person does the opposite: they receive rebuke as a gift and respond with love. The same action (rebuke) produces opposite results in opposite hearts.
+      </div>
+      <button class="next-btn" id="next10" onclick="showResults()">SEE RESULTS &rarr;</button>
+    </div>
+
+  </div><!-- end quiz-area -->
+
+  <!-- Results Screen -->
+  <div id="results-screen">
+    <div class="results-title">Quiz Complete</div>
+    <div class="score-ring-wrap">
+      <div class="score-ring">
+        <svg viewBox="0 0 130 130" width="130" height="130">
+          <circle class="ring-bg" cx="65" cy="65" r="55"/>
+          <circle class="ring-fill" id="ring-fill" cx="65" cy="65" r="55"
+                  stroke-dasharray="345.4"
+                  stroke-dashoffset="345.4"/>
+        </svg>
+        <div class="score-text">
+          <div class="score-number" id="score-number">0/10</div>
+          <div class="score-label">SCORE</div>
+        </div>
+      </div>
+    </div>
+    <div class="results-msg" id="results-msg"></div>
+    <button class="take-again-btn" onclick="resetQuiz()">TAKE AGAIN</button>
+    <div class="review-list" id="review-list"></div>
+  </div>
+
+</div><!-- end scroll-card -->
+
+<script>
+const TOTAL = 10;
+const correctAnswers = { 1:'C', 2:'A', 3:'B', 4:'D', 5:'A', 6:'C', 7:'B', 8:'D', 9:'A', 10:'C' };
+const userAnswers = {};
+let score = 0;
+
+function answer(btn, qNum, correct) {
+  const block = document.getElementById('q' + qNum);
+  const allBtns = block.querySelectorAll('.choice-btn');
+  const chosen = btn.querySelector('.choice-letter').textContent.trim();
+
+  allBtns.forEach(b => {
+    b.disabled = true;
+    const letter = b.querySelector('.choice-letter').textContent.trim();
+    if (letter === correct) b.classList.add('correct');
+  });
+
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    score++;
+    userAnswers[qNum] = { chosen, correct, isCorrect: true };
+  } else {
+    btn.classList.add('wrong');
+    userAnswers[qNum] = { chosen, correct, isCorrect: false };
+  }
+
+  document.getElementById('fb' + qNum).classList.add('show');
+  document.getElementById('next' + qNum).classList.add('show');
+}
+
+function nextQ(n) {
+  document.querySelector('.question-block.active').classList.remove('active');
+  document.getElementById('q' + n).classList.add('active');
+  const pct = Math.round((n - 1) / TOTAL * 100);
+  document.getElementById('progress-bar').style.width = Math.max(pct, 5) + '%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showResults() {
+  document.getElementById('progress-bar').style.width = '100%';
+  document.getElementById('quiz-area').style.display = 'none';
+  const rs = document.getElementById('results-screen');
+  rs.classList.add('show');
+
+  document.getElementById('score-number').textContent = score + '/10';
+
+  const msgs = [
+    { min: 9, text: "Masterful — you walked through these chapters like a scribe who knew every word." },
+    { min: 7, text: "Strong work. Wisdom&#39;s voice rang clear to you today." },
+    { min: 5, text: "A solid effort. Return to these proverbs and let them shape your mind." },
+    { min: 0, text: "Keep going. Wisdom rewards those who refuse to give up on her." }
+  ];
+  document.getElementById('results-msg').textContent = msgs.find(m => score >= m.min).text;
+
+  const circumference = 345.4;
+  setTimeout(() => {
+    const offset = circumference - (score / TOTAL) * circumference;
+    document.getElementById('ring-fill').style.strokeDashoffset = offset;
+  }, 100);
+
+  const questions = [
+    "Proverbs 7 — the time of day the young man approaches",
+    "Proverbs 7 — the adulteress&#39;s reason she can be with the young man",
+    "Proverbs 7 — three animal images for the young man&#39;s approach",
+    "Proverbs 8 — where Wisdom takes her stand to call out",
+    "Proverbs 8 — Wisdom&#39;s fruit compared to gold and silver",
+    "Proverbs 8:13 — what Wisdom hates",
+    "Proverbs 8:35–36 — what finding (or missing) Wisdom brings",
+    "Proverbs 9:1 — the number of pillars in Wisdom&#39;s house",
+    "Proverbs 9 — Folly&#39;s invitation and its concealed danger",
+    "Proverbs 9:7–9 — correcting a mocker vs. rebuking the wise"
+  ];
+
+  const reviewEl = document.getElementById('review-list');
+  reviewEl.innerHTML = '<hr style="border:none;border-top:1px solid rgba(201,168,76,0.3);margin-bottom:8px">';
+  for (let i = 1; i <= TOTAL; i++) {
+    const a = userAnswers[i] || { chosen: '—', correct: correctAnswers[i], isCorrect: false };
+    reviewEl.innerHTML += `
+      <div class="review-item">
+        <div class="review-q">${i}. ${questions[i-1]}</div>
+        <span class="review-result ${a.isCorrect ? 'review-correct' : 'review-wrong'}">${a.isCorrect ? 'CORRECT' : 'INCORRECT'}</span>
+        <div class="review-answer">Correct answer: <span>${a.correct}</span></div>
+      </div>`;
+  }
+}
+
+function resetQuiz() {
+  score = 0;
+  for (let k in userAnswers) delete userAnswers[k];
+
+  document.querySelectorAll('.question-block').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.choice-btn').forEach(b => {
+    b.disabled = false;
+    b.classList.remove('correct','wrong');
+  });
+  document.querySelectorAll('.feedback-box').forEach(b => b.classList.remove('show'));
+  document.querySelectorAll('.next-btn').forEach(b => b.classList.remove('show'));
+
+  document.getElementById('progress-bar').style.width = '10%';
+  document.getElementById('quiz-area').style.display = 'block';
+  document.getElementById('results-screen').classList.remove('show');
+  document.getElementById('ring-fill').style.strokeDashoffset = '345.4';
+  document.getElementById('q1').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
