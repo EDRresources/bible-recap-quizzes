@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 157 · Proverbs 10–12 · Bible Recap Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .scroll-card {
+    background: linear-gradient(160deg, #f5ead6 0%, #ede0c0 40%, #e8d8b0 70%, #dfd0a4 100%);
+    border: 2px solid #c9a84c;
+    border-radius: 6px;
+    max-width: 760px;
+    width: 100%;
+    padding: 40px 44px 48px;
+    box-shadow: 0 6px 40px rgba(0,0,0,0.7), inset 0 0 60px rgba(201,168,76,0.08);
+    position: relative;
+  }
+
+  .scroll-card::before, .scroll-card::after {
+    content: '✦';
+    position: absolute;
+    color: #c9a84c;
+    font-size: 18px;
+    opacity: 0.6;
+  }
+  .scroll-card::before { top: 12px; left: 16px; }
+  .scroll-card::after  { bottom: 12px; right: 16px; }
+
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #8a6a2a;
+    text-align: center;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a0e00;
+    text-align: center;
+    line-height: 1.3;
+    margin-bottom: 10px;
+  }
+  .badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 9.5px;
+    letter-spacing: 2px;
+    padding: 3px 10px;
+    border-radius: 2px;
+    border: 1px solid;
+  }
+  .badge-challenging { background: #3a1a00; color: #c9a84c; border-color: #c9a84c; }
+  .badge-passage     { background: rgba(201,168,76,0.15); color: #6b4c10; border-color: #c9a84c; }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #c9a84c;
+    opacity: 0.5;
+    margin: 16px 0 24px;
+  }
+
+  .progress-bar-wrap {
+    background: rgba(0,0,0,0.1);
+    border-radius: 10px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 10px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+
+  .question-block {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  .question-block.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-number {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #8a6a2a;
+    margin-bottom: 8px;
+  }
+  .q-text {
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    color: #1a0e00;
+  }
+  .detail-badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    background: #5a3a00;
+    color: #f0d080;
+    padding: 2px 7px;
+    border-radius: 2px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .choices { list-style: none; }
+  .choices li { margin-bottom: 11px; }
+  .choice-btn {
+    width: 100%;
+    text-align: left;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.4);
+    border-radius: 4px;
+    padding: 11px 16px;
+    font-family: 'Crimson Text', serif;
+    font-size: 17px;
+    color: #2a1a08;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.1s;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.2);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #8a6a2a;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+    color: #0d3016;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.12);
+    border-color: #8b1a1a;
+    color: #5a0a0a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  .feedback-box {
+    display: none;
+    margin-top: 18px;
+    padding: 14px 18px;
+    border-left: 3px solid #c9a84c;
+    background: rgba(201,168,76,0.1);
+    border-radius: 0 4px 4px 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #2a1a08;
+  }
+  .feedback-box.show { display: block; animation: fadeIn 0.3s ease; }
+  .feedback-ref {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #8a6a2a;
+    margin-bottom: 4px;
+  }
+
+  .next-btn {
+    margin-top: 22px;
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    background: #c9a84c;
+    color: #1a0e00;
+    border: none;
+    padding: 11px 28px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .next-btn:hover { background: #e8c96a; transform: translateY(-1px); }
+  .next-btn.show { display: inline-block; }
+
+  /* Results */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+  }
+  #results-screen.show { display: block; }
+
+  .score-ring-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .score-ring {
+    position: relative;
+    width: 130px;
+    height: 130px;
+  }
+  .score-ring svg { transform: rotate(-90deg); }
+  .score-ring circle { fill: none; stroke-width: 10; }
+  .score-ring .ring-bg   { stroke: rgba(0,0,0,0.1); }
+  .score-ring .ring-fill { stroke: #c9a84c; stroke-linecap: round; transition: stroke-dashoffset 1.2s ease; }
+  .score-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-number {
+    font-family: 'Cinzel', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a0e00;
+    line-height: 1;
+  }
+  .score-label {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: #8a6a2a;
+  }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a0e00;
+    margin-bottom: 6px;
+  }
+  .results-msg {
+    font-size: 18px;
+    color: #4a3010;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .review-list { text-align: left; margin-top: 24px; }
+  .review-item {
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    padding: 14px 0;
+  }
+  .review-q {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a0e00;
+    margin-bottom: 5px;
+  }
+  .review-result {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+  .review-correct { background: rgba(26,92,42,0.15); color: #1a5c2a; }
+  .review-wrong   { background: rgba(139,26,26,0.12); color: #8b1a1a; }
+  .review-answer  { font-size: 14px; color: #4a3010; }
+  .review-answer span { font-weight: 600; color: #1a5c2a; }
+
+  .take-again-btn {
+    margin-top: 28px;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    background: transparent;
+    color: #c9a84c;
+    border: 1.5px solid #c9a84c;
+    padding: 11px 28px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .take-again-btn:hover { background: #c9a84c; color: #1a0e00; }
+
+  @media (max-width: 540px) {
+    .scroll-card { padding: 28px 22px 36px; }
+    .quiz-title  { font-size: 21px; }
+    .q-text      { font-size: 17px; }
+    .choice-btn  { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="scroll-card">
+
+  <!-- Header -->
+  <div class="quiz-date">SATURDAY, JUNE 6, 2026 &middot; DAY 157</div>
+  <div class="quiz-title">The Bible Recap Daily Quiz</div>
+  <div class="badge-row">
+    <span class="badge badge-challenging">CHALLENGING</span>
+    <span class="badge badge-passage">Proverbs 10</span>
+    <span class="badge badge-passage">Proverbs 11</span>
+    <span class="badge badge-passage">Proverbs 12</span>
+  </div>
+  <hr class="divider">
+
+  <!-- Progress bar -->
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progress-bar"></div>
+  </div>
+
+  <!-- Questions -->
+  <div id="quiz-area">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="q-number">QUESTION 1 OF 10</div>
+      <div class="q-text">
+        What does Proverbs 10:12 say love does, in contrast to hatred which stirs up strife?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,1,'B')"><span class="choice-letter">A</span> It multiplies blessings on the head of the righteous</button></li>
+        <li><button class="choice-btn" onclick="answer(this,1,'B')"><span class="choice-letter">B</span> It covers all offenses</button></li>
+        <li><button class="choice-btn" onclick="answer(this,1,'B')"><span class="choice-letter">C</span> It turns the wicked from their path</button></li>
+        <li><button class="choice-btn" onclick="answer(this,1,'B')"><span class="choice-letter">D</span> It builds a strong city for those who dwell within it</button></li>
+      </ul>
+      <div class="feedback-box" id="fb1">
+        <div class="feedback-ref">PROVERBS 10:12</div>
+        "Hatred stirs up strife, but love covers all offenses." The verb &#39;covers&#39; does real theological work here. Love does not erase the offense or pretend it did not happen; it absorbs it so that it cannot metastasize into ongoing conflict. The apostle Peter cites this proverb directly (1 Pet. 4:8), applying it to Christian community: those who know their own sins covered by Christ&#39;s atoning love have the resource to cover the offenses of others.
+      </div>
+      <button class="next-btn" id="next1" onclick="nextQ(2)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="q-number">QUESTION 2 OF 10 <span class="detail-badge">DETAIL</span></div>
+      <div class="q-text">
+        According to Proverbs 10:26, what two things is a sluggard compared to when sent on an errand?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,2,'D')"><span class="choice-letter">A</span> A broken wheel and a dry cistern</button></li>
+        <li><button class="choice-btn" onclick="answer(this,2,'D')"><span class="choice-letter">B</span> A withered vine and a crumbling wall</button></li>
+        <li><button class="choice-btn" onclick="answer(this,2,'D')"><span class="choice-letter">C</span> A blunt sword and a leaking wineskin</button></li>
+        <li><button class="choice-btn" onclick="answer(this,2,'D')"><span class="choice-letter">D</span> Vinegar to the teeth and smoke to the eyes</button></li>
+      </ul>
+      <div class="feedback-box" id="fb2">
+        <div class="feedback-ref">PROVERBS 10:26</div>
+        "Like vinegar to the teeth and smoke to the eyes, so is a sluggard to those who send him." Both images describe involuntary, physical irritation — the kind that cannot be willed away. The sluggard&#39;s failure is not merely disappointing; it is experienced as a kind of pain by those who depended on him. The proverb lets the imagery do the work without moralizing: place the sluggard in front of your imagination and the point is felt before it is argued.
+      </div>
+      <button class="next-btn" id="next2" onclick="nextQ(3)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="q-number">QUESTION 3 OF 10</div>
+      <div class="q-text">
+        How does Proverbs 11:1 describe a false balance in the LORD&#39;s sight?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,3,'A')"><span class="choice-letter">A</span> An abomination</button></li>
+        <li><button class="choice-btn" onclick="answer(this,3,'A')"><span class="choice-letter">B</span> A provocation</button></li>
+        <li><button class="choice-btn" onclick="answer(this,3,'A')"><span class="choice-letter">C</span> A transgression</button></li>
+        <li><button class="choice-btn" onclick="answer(this,3,'A')"><span class="choice-letter">D</span> A defilement</button></li>
+      </ul>
+      <div class="feedback-box" id="fb3">
+        <div class="feedback-ref">PROVERBS 11:1</div>
+        "A false balance is an abomination to the LORD, but a just weight is his delight." The word &#39;abomination&#39; (Hebrew: to&#39;evah) is the same term used to describe idolatry — the strongest available expression of divine revulsion. In the ancient market, merchants routinely carried two sets of weights: one for buying (heavier), one for selling (lighter). The LORD&#39;s naming of this practice an abomination signals that economic dishonesty is not a minor social failing but an offense against his own character as the God of truth and justice.
+      </div>
+      <button class="next-btn" id="next3" onclick="nextQ(4)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="q-number">QUESTION 4 OF 10 <span class="detail-badge">DETAIL</span></div>
+      <div class="q-text">
+        Proverbs 11:22 uses a striking image to describe a beautiful woman who lacks discretion. What is it?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,4,'C')"><span class="choice-letter">A</span> A diamond set in a bed of clay</button></li>
+        <li><button class="choice-btn" onclick="answer(this,4,'C')"><span class="choice-letter">B</span> A silver vessel filled with poison</button></li>
+        <li><button class="choice-btn" onclick="answer(this,4,'C')"><span class="choice-letter">C</span> A gold ring in a pig&#39;s snout</button></li>
+        <li><button class="choice-btn" onclick="answer(this,4,'C')"><span class="choice-letter">D</span> A ruby pendant on a fool&#39;s neck</button></li>
+      </ul>
+      <div class="feedback-box" id="fb4">
+        <div class="feedback-ref">PROVERBS 11:22</div>
+        "Like a gold ring in a pig&#39;s snout is a beautiful woman who shows no discretion." The image is deliberately jarring: a gold ring is genuinely precious, but it has been placed where it will be defiled rather than honored. The point is not contempt for beauty but a statement about the relationship between beauty and character. Discretion (Hebrew: ta&#39;am — taste, judgment, sensibility) provides beauty its proper setting; without it, outward loveliness is actively misplaced.
+      </div>
+      <button class="next-btn" id="next4" onclick="nextQ(5)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="q-number">QUESTION 5 OF 10</div>
+      <div class="q-text">
+        According to Proverbs 11:24, what happens to the one who gives freely?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,5,'B')"><span class="choice-letter">A</span> He earns the praise of rulers and the blessing of the poor</button></li>
+        <li><button class="choice-btn" onclick="answer(this,5,'B')"><span class="choice-letter">B</span> He grows all the richer</button></li>
+        <li><button class="choice-btn" onclick="answer(this,5,'B')"><span class="choice-letter">C</span> His household prospers for many generations</button></li>
+        <li><button class="choice-btn" onclick="answer(this,5,'B')"><span class="choice-letter">D</span> He is never found lacking in wisdom when trouble comes</button></li>
+      </ul>
+      <div class="feedback-box" id="fb5">
+        <div class="feedback-ref">PROVERBS 11:24–25</div>
+        "One person gives freely, yet gains even more; another withholds unduly, but comes to poverty." The paradox inverts the logic of conservation: the hoarder loses, the giver gains. This is not a mechanical prosperity promise but a description of how the LORD&#39;s moral economy operates. Generosity participates in a flow of blessing; stinginess cuts the giver off from it. Verse 25 confirms: "A generous person will prosper; whoever refreshes others will be refreshed."
+      </div>
+      <button class="next-btn" id="next5" onclick="nextQ(6)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="q-number">QUESTION 6 OF 10</div>
+      <div class="q-text">
+        Proverbs 12:1 calls the person who hates correction by a particular word. What is it?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,6,'D')"><span class="choice-letter">A</span> Wicked</button></li>
+        <li><button class="choice-btn" onclick="answer(this,6,'D')"><span class="choice-letter">B</span> Perverse</button></li>
+        <li><button class="choice-btn" onclick="answer(this,6,'D')"><span class="choice-letter">C</span> Foolish</button></li>
+        <li><button class="choice-btn" onclick="answer(this,6,'D')"><span class="choice-letter">D</span> Stupid</button></li>
+      </ul>
+      <div class="feedback-box" id="fb6">
+        <div class="feedback-ref">PROVERBS 12:1</div>
+        "Whoever loves discipline loves knowledge, but whoever hates correction is stupid." The word translated &#39;stupid&#39; (Hebrew: ba&#39;ar — brutish, beast-like) is blunter than the usual vocabulary for folly; it is the word applied to unreasoning animals. The proverb is not describing someone who lacks intelligence but someone who has refused the corrective process by which intelligence grows into wisdom. Two postures toward the self are on display — one that accepts being shaped, one that refuses it — and only the second earns this particular label.
+      </div>
+      <button class="next-btn" id="next6" onclick="nextQ(7)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="q-number">QUESTION 7 OF 10</div>
+      <div class="q-text">
+        According to Proverbs 11:14, what is the source of safety for a people or nation?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,7,'A')"><span class="choice-letter">A</span> An abundance of counselors</button></li>
+        <li><button class="choice-btn" onclick="answer(this,7,'A')"><span class="choice-letter">B</span> A righteous and God-fearing king</button></li>
+        <li><button class="choice-btn" onclick="answer(this,7,'A')"><span class="choice-letter">C</span> The fear of the LORD among the elders</button></li>
+        <li><button class="choice-btn" onclick="answer(this,7,'A')"><span class="choice-letter">D</span> Just laws upheld by the whole assembly</button></li>
+      </ul>
+      <div class="feedback-box" id="fb7">
+        <div class="feedback-ref">PROVERBS 11:14</div>
+        "For lack of guidance a nation falls, but victory is won through many advisers." The proverb is about structure, not individual brilliance. A single voice — however gifted — carries blind spots that a council can correct. &#39;Many advisers&#39; is not a prescription for paralysis but a structural check on the idolatry of personal certainty. The warning applies equally to any leader, elder, or decision-maker who surrounds himself only with voices that agree with him.
+      </div>
+      <button class="next-btn" id="next7" onclick="nextQ(8)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="q-number">QUESTION 8 OF 10 <span class="detail-badge">DETAIL</span></div>
+      <div class="q-text">
+        Proverbs 12:4 says that a wife who brings shame is like what to her husband?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,8,'C')"><span class="choice-letter">A</span> A thorn driven deep into his side</button></li>
+        <li><button class="choice-btn" onclick="answer(this,8,'C')"><span class="choice-letter">B</span> A heavy chain fastened to his feet</button></li>
+        <li><button class="choice-btn" onclick="answer(this,8,'C')"><span class="choice-letter">C</span> Rottenness in his bones</button></li>
+        <li><button class="choice-btn" onclick="answer(this,8,'C')"><span class="choice-letter">D</span> A yoke that bows his neck to the ground</button></li>
+      </ul>
+      <div class="feedback-box" id="fb8">
+        <div class="feedback-ref">PROVERBS 12:4</div>
+        "A wife of noble character is her husband&#39;s crown, but a disgraceful wife is like decay in his bones." The contrast is structural: a crown sits on the exterior, conferring visible honor; decay operates unseen from within, slowly destroying what it inhabits. The Hebrew word for &#39;decay&#39; (raqab — rottenness) describes a corruption that cannot be easily reversed. The proverb does not assess blame; it traces two trajectories. One marriage crowns; the other hollows out from the inside.
+      </div>
+      <button class="next-btn" id="next8" onclick="nextQ(9)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="q-number">QUESTION 9 OF 10</div>
+      <div class="q-text">
+        Proverbs 10:22 says the blessing of the LORD makes rich and adds what alongside it?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,9,'B')"><span class="choice-letter">A</span> Wisdom to manage it faithfully</button></li>
+        <li><button class="choice-btn" onclick="answer(this,9,'B')"><span class="choice-letter">B</span> No sorrow</button></li>
+        <li><button class="choice-btn" onclick="answer(this,9,'B')"><span class="choice-letter">C</span> Responsibility toward those who lack</button></li>
+        <li><button class="choice-btn" onclick="answer(this,9,'B')"><span class="choice-letter">D</span> Honor from one&#39;s household and neighbors</button></li>
+      </ul>
+      <div class="feedback-box" id="fb9">
+        <div class="feedback-ref">PROVERBS 10:22</div>
+        "The blessing of the LORD brings wealth, without painful toil for it." The proverb distinguishes not between wealth and poverty but between two pathways wealth may travel. Human striving can produce riches that carry hidden costs — anxiety, moral compromise, the exhaustion of relentless grasping. The LORD&#39;s blessing produces the same material outcome without that hidden freight. This is a theological claim about the nature of God&#39;s gifts: they arrive whole, not wrapped in the sorrow that self-secured wealth cannot shake.
+      </div>
+      <button class="next-btn" id="next9" onclick="nextQ(10)">NEXT QUESTION &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="q-number">QUESTION 10 OF 10 <span class="detail-badge">DETAIL</span></div>
+      <div class="q-text">
+        According to Proverbs 12:27, what does the slothful person specifically fail to do?
+      </div>
+      <ul class="choices">
+        <li><button class="choice-btn" onclick="answer(this,10,'D')"><span class="choice-letter">A</span> Harvest his fields before winter comes</button></li>
+        <li><button class="choice-btn" onclick="answer(this,10,'D')"><span class="choice-letter">B</span> Carry his load through to completion</button></li>
+        <li><button class="choice-btn" onclick="answer(this,10,'D')"><span class="choice-letter">C</span> Keep his word to those who trust him</button></li>
+        <li><button class="choice-btn" onclick="answer(this,10,'D')"><span class="choice-letter">D</span> Roast his game</button></li>
+      </ul>
+      <div class="feedback-box" id="fb10">
+        <div class="feedback-ref">PROVERBS 12:27</div>
+        "The lazy do not roast any game, but the diligent feed on the riches of the hunt." The proverb catches the sluggard at a revealing moment: he has actually obtained game — the hard part, one might think — but he will not follow through to cook it. His failure is not at the start but at the finish. This is a portrait of the sluggard who can begin but cannot complete, who gets close but lets the payoff slip. The diligent person carries the effort all the way through, and that is precisely where the meal lives.
+      </div>
+      <button class="next-btn" id="next10" onclick="showResults()">SEE RESULTS &rarr;</button>
+    </div>
+
+  </div><!-- end quiz-area -->
+
+  <!-- Results Screen -->
+  <div id="results-screen">
+    <div class="results-title">Quiz Complete</div>
+    <div class="score-ring-wrap">
+      <div class="score-ring">
+        <svg viewBox="0 0 130 130" width="130" height="130">
+          <circle class="ring-bg" cx="65" cy="65" r="55"/>
+          <circle class="ring-fill" id="ring-fill" cx="65" cy="65" r="55"
+                  stroke-dasharray="345.4"
+                  stroke-dashoffset="345.4"/>
+        </svg>
+        <div class="score-text">
+          <div class="score-number" id="score-number">0/10</div>
+          <div class="score-label">SCORE</div>
+        </div>
+      </div>
+    </div>
+    <div class="results-msg" id="results-msg"></div>
+    <button class="take-again-btn" onclick="resetQuiz()">TAKE AGAIN</button>
+    <div class="review-list" id="review-list"></div>
+  </div>
+
+</div><!-- end scroll-card -->
+
+<script>
+const TOTAL = 10;
+const correctAnswers = { 1:'B', 2:'D', 3:'A', 4:'C', 5:'B', 6:'D', 7:'A', 8:'C', 9:'B', 10:'D' };
+const userAnswers = {};
+let score = 0;
+
+function answer(btn, qNum, correct) {
+  const block = document.getElementById('q' + qNum);
+  const allBtns = block.querySelectorAll('.choice-btn');
+  const chosen = btn.querySelector('.choice-letter').textContent.trim();
+
+  allBtns.forEach(b => {
+    b.disabled = true;
+    const letter = b.querySelector('.choice-letter').textContent.trim();
+    if (letter === correct) b.classList.add('correct');
+  });
+
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    score++;
+    userAnswers[qNum] = { chosen, correct, isCorrect: true };
+  } else {
+    btn.classList.add('wrong');
+    userAnswers[qNum] = { chosen, correct, isCorrect: false };
+  }
+
+  document.getElementById('fb' + qNum).classList.add('show');
+  document.getElementById('next' + qNum).classList.add('show');
+}
+
+function nextQ(n) {
+  document.querySelector('.question-block.active').classList.remove('active');
+  document.getElementById('q' + n).classList.add('active');
+  const pct = Math.round((n - 1) / TOTAL * 100);
+  document.getElementById('progress-bar').style.width = Math.max(pct, 5) + '%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showResults() {
+  document.getElementById('progress-bar').style.width = '100%';
+  document.getElementById('quiz-area').style.display = 'none';
+  const rs = document.getElementById('results-screen');
+  rs.classList.add('show');
+
+  document.getElementById('score-number').textContent = score + '/10';
+
+  const msgs = [
+    { min: 9, text: "Excellent — you walked these proverbs with the ear of a scribe who has read them many times." },
+    { min: 7, text: "Strong work. The words of Solomon rewarded your close attention today." },
+    { min: 5, text: "A solid effort. These proverbs were written to be returned to — go back and let them settle deeper." },
+    { min: 0, text: "Keep going. Wisdom is patient with those who refuse to quit seeking her." }
+  ];
+  document.getElementById('results-msg').textContent = msgs.find(m => score >= m.min).text;
+
+  const circumference = 345.4;
+  setTimeout(() => {
+    const offset = circumference - (score / TOTAL) * circumference;
+    document.getElementById('ring-fill').style.strokeDashoffset = offset;
+  }, 100);
+
+  const questions = [
+    "Proverbs 10:12 — what love does in contrast to hatred",
+    "Proverbs 10:26 — what a sluggard is compared to when sent on an errand",
+    "Proverbs 11:1 — how a false balance is described before the LORD",
+    "Proverbs 11:22 — image for a beautiful woman without discretion",
+    "Proverbs 11:24 — what happens to the one who gives freely",
+    "Proverbs 12:1 — the word for the person who hates correction",
+    "Proverbs 11:14 — the source of safety for a people",
+    "Proverbs 12:4 — a shameful wife compared to what",
+    "Proverbs 10:22 — what the blessing of the LORD adds alongside wealth",
+    "Proverbs 12:27 — what the slothful person fails to do"
+  ];
+
+  const reviewEl = document.getElementById('review-list');
+  reviewEl.innerHTML = '<hr style="border:none;border-top:1px solid rgba(201,168,76,0.3);margin-bottom:8px">';
+  for (let i = 1; i <= TOTAL; i++) {
+    const a = userAnswers[i] || { chosen: '&#8212;', correct: correctAnswers[i], isCorrect: false };
+    reviewEl.innerHTML += `
+      <div class="review-item">
+        <div class="review-q">${i}. ${questions[i-1]}</div>
+        <span class="review-result ${a.isCorrect ? 'review-correct' : 'review-wrong'}">${a.isCorrect ? 'CORRECT' : 'INCORRECT'}</span>
+        <div class="review-answer">Correct answer: <span>${a.correct}</span></div>
+      </div>`;
+  }
+}
+
+function resetQuiz() {
+  score = 0;
+  for (let k in userAnswers) delete userAnswers[k];
+
+  document.querySelectorAll('.question-block').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.choice-btn').forEach(b => {
+    b.disabled = false;
+    b.classList.remove('correct','wrong');
+  });
+  document.querySelectorAll('.feedback-box').forEach(b => b.classList.remove('show'));
+  document.querySelectorAll('.next-btn').forEach(b => b.classList.remove('show'));
+
+  document.getElementById('progress-bar').style.width = '10%';
+  document.getElementById('quiz-area').style.display = 'block';
+  document.getElementById('results-screen').classList.remove('show');
+  document.getElementById('ring-fill').style.strokeDashoffset = '345.4';
+  document.getElementById('q1').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
