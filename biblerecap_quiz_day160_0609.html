@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 160 Bible Recap Quiz — Proverbs 19–21</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 18px;
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.15);
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.3s ease forwards;
+  }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+    color: #1a3d1e;
+    display: block;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.1);
+    border: 1px solid #8b1a1a;
+    color: #5a0e0e;
+    display: block;
+  }
+  .feedback-icon { font-weight: 700; margin-right: 6px; }
+  .feedback-ref {
+    font-style: italic;
+    color: #5a4020;
+    font-size: 0.95rem;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.visible { display: inline-block; }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 22px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.15); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1e1208;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: #9a7a3a;
+    letter-spacing: 0.1em;
+  }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1e1208;
+    margin-bottom: 8px;
+  }
+  .results-message {
+    font-size: 1.08rem;
+    color: #3a2510;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #9a7a3a;
+    margin-bottom: 14px;
+    text-align: left;
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    padding-bottom: 8px;
+  }
+  .review-item {
+    text-align: left;
+    margin-bottom: 14px;
+    padding: 12px 14px;
+    border-radius: 4px;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.1);
+    border-left: 3px solid #1a5c2a;
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.08);
+    border-left: 3px solid #8b1a1a;
+  }
+  .review-q { font-weight: 600; color: #1e1208; margin-bottom: 4px; }
+  .review-ans { font-size: 0.93rem; color: #3a2510; }
+  .review-correct-lbl { color: #1a5c2a; font-weight: 600; }
+  .review-wrong-lbl   { color: #8b1a1a; font-weight: 600; }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .take-again-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  @media (max-width: 520px) {
+    .card { padding: 22px 18px; }
+    .quiz-title { font-size: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- Header -->
+  <div class="quiz-header">
+    <div class="quiz-date">
+      <span class="ornament">✦</span>
+      Tuesday, June 9, 2026 &middot; Day 160
+      <span class="ornament">✦</span>
+    </div>
+    <div class="quiz-title">The Bible Recap &mdash; Daily Quiz</div>
+    <div class="passage-tags">
+      <span class="passage-tag">Proverbs 19</span>
+      <span class="passage-tag">Proverbs 20</span>
+      <span class="passage-tag">Proverbs 21</span>
+    </div>
+    <div><span class="difficulty-badge">Challenging</span></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap"><div class="progress-bar" id="prog-bar"></div></div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- Card -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">Proverbs 19:24 offers one of Scripture&#39;s most vivid portraits of laziness. What exactly does the sluggard do in this verse?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,'q1')"><span class="choice-letter">A</span>Buries his hand in the dish and will not even bring it back to his mouth</button>
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">B</span>Falls asleep in the field before the harvest and wakes to find nothing</button>
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">C</span>Digs a pit in the ground but is too weary to plant anything in it</button>
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">D</span>Refuses to rise when summoned, claiming he will be devoured by a lion in the street</button>
+      </div>
+      <div class="feedback" id="fb-q1"></div>
+      <button class="next-btn" id="next-q1" onclick="nextQ(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+        <div>
+          <div class="question-text">According to Proverbs 20:26, what does a wise king do to the wicked?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">A</span>Exiles them to distant lands beyond his borders</button>
+        <button class="choice-btn" onclick="answer(this,true,'q2')"><span class="choice-letter">B</span>Winnows them out and drives the threshing wheel over them</button>
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">C</span>Assigns them to the lowest seats at his table as an open rebuke</button>
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">D</span>Delivers them to their accusers so justice may be publicly done</button>
+      </div>
+      <div class="feedback" id="fb-q2"></div>
+      <button class="next-btn" id="next-q2" onclick="nextQ(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <div>
+          <div class="question-text">Proverbs 20:25 warns that a certain rash act is a trap. What is that act?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">A</span>Boasting about tomorrow&#39;s plans when you do not know what a day may bring</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">B</span>Accepting a bribe and concealing it in your cloak to pacify another&#39;s wrath</button>
+        <button class="choice-btn" onclick="answer(this,true,'q3')"><span class="choice-letter">C</span>Declaring something holy rashly, and only afterward considering what you have vowed</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">D</span>Seeking counsel from strangers on matters that belong within the family</button>
+      </div>
+      <div class="feedback" id="fb-q3"></div>
+      <button class="next-btn" id="next-q3" onclick="nextQ(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <div>
+          <div class="question-text">Proverbs 21:1 describes the LORD&#39;s sovereignty over earthly rulers with a single image. What does the text compare the king&#39;s heart in the LORD&#39;s hand to?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">A</span>A lamp in a dark room that the LORD can dim or make to blaze</button>
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">B</span>Clay in a potter&#39;s hands, pressed and shaped according to his purpose</button>
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">C</span>A drawn sword whose edge is directed wherever the LORD wills</button>
+        <button class="choice-btn" onclick="answer(this,true,'q4')"><span class="choice-letter">D</span>A stream of water that the LORD channels toward all who please him</button>
+      </div>
+      <div class="feedback" id="fb-q4"></div>
+      <button class="next-btn" id="next-q4" onclick="nextQ(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+        <div>
+          <div class="question-text">Proverbs 19:11 teaches that a person&#39;s wisdom yields patience. What does the text specifically say it is to one&#39;s glory to do?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,'q5')"><span class="choice-letter">A</span>Overlook an offense</button>
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">B</span>Speak truth to those who hold power over you</button>
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">C</span>Wait upon the LORD rather than act in haste</button>
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">D</span>Seek counsel from the aged before reaching a verdict</button>
+      </div>
+      <div class="feedback" id="fb-q5"></div>
+      <button class="next-btn" id="next-q5" onclick="nextQ(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">Proverbs 20:14 sketches a character study in two lines. What does the buyer do, as the text describes him?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">A</span>Flatters the seller with great praise, then drives him to ruin through deceit</button>
+        <button class="choice-btn" onclick="answer(this,true,'q6')"><span class="choice-letter">B</span>Says &#34;It&#39;s no good, it&#39;s no good!&#34; while buying, then goes off and boasts about the purchase</button>
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">C</span>Claims poverty while concealing riches in order to secure a lower price</button>
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">D</span>Promises payment with a cheerful face but delays until the seller&#39;s hope is exhausted</button>
+      </div>
+      <div class="feedback" id="fb-q6"></div>
+      <button class="next-btn" id="next-q6" onclick="nextQ(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <div>
+          <div class="question-text">According to Proverbs 21:9, what living situation is declared preferable to sharing a house with a quarrelsome wife?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">A</span>A hut at the edge of the wilderness</button>
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">B</span>A foreign land among people one does not know</button>
+        <button class="choice-btn" onclick="answer(this,true,'q7')"><span class="choice-letter">C</span>A corner of the roof</button>
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">D</span>A cave in the rocky hills</button>
+      </div>
+      <div class="feedback" id="fb-q7"></div>
+      <button class="next-btn" id="next-q7" onclick="nextQ(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+        <div>
+          <div class="question-text">Proverbs 20 twice names something the LORD detests — first in verse 10 and again in verse 23. What is it?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">A</span>Haughty eyes and a proud heart</button>
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">B</span>A lying tongue and violent hands raised against one&#39;s neighbor</button>
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">C</span>A false witness and one who sows discord among brothers</button>
+        <button class="choice-btn" onclick="answer(this,true,'q8')"><span class="choice-letter">D</span>Differing weights and dishonest scales</button>
+      </div>
+      <div class="feedback" id="fb-q8"></div>
+      <button class="next-btn" id="next-q8" onclick="nextQ(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <div>
+          <div class="question-text">Proverbs 21:20 contrasts the wise and foolish in how they handle their provisions. What is the contrast as the text states it?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,'q9')"><span class="choice-letter">A</span>The wise store up choice food and olive oil, but fools gulp theirs down</button>
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">B</span>The wise share their provisions with the poor, while fools hoard every last measure</button>
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">C</span>The wise acquire provisions through diligent work, while fools seek them through cunning</button>
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">D</span>The wise are content with little, while fools spend everything chasing more</button>
+      </div>
+      <div class="feedback" id="fb-q9"></div>
+      <button class="next-btn" id="next-q9" onclick="nextQ(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <div>
+          <div class="question-text">Proverbs 20:5 uses a natural image to describe understanding another person&#39;s hidden intentions. What is the image, and who does the verse say can draw them out?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">A</span>Hidden treasure that only the LORD can bring to light</button>
+        <button class="choice-btn" onclick="answer(this,true,'q10')"><span class="choice-letter">B</span>Deep waters, drawn out by one who has insight</button>
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">C</span>A sealed scroll that only the discerning can read</button>
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">D</span>Roots buried deep in the earth, brought to the surface by driving rains</button>
+      </div>
+      <div class="feedback" id="fb-q10"></div>
+      <button class="next-btn" id="next-q10" onclick="nextQ(10)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Results -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 130 130">
+          <circle class="score-ring-bg" cx="65" cy="65" r="54"/>
+          <circle class="score-ring-fill" id="ring-fill" cx="65" cy="65" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <div class="score-num" id="score-num">0</div>
+          <div class="score-denom">out of 10</div>
+        </div>
+      </div>
+      <div class="results-title">Quiz Complete</div>
+      <div class="results-message" id="results-msg"></div>
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+    </div>
+
+  </div><!-- .card -->
+</div><!-- .outer-wrap -->
+
+<script>
+const QUESTIONS = [
+  {
+    id: 'q1',
+    text: 'Proverbs 19:24 offers one of Scripture&#39;s most vivid portraits of laziness. What exactly does the sluggard do in this verse?',
+    correct: 0,
+    choices: [
+      'Buries his hand in the dish and will not even bring it back to his mouth',
+      'Falls asleep in the field before the harvest and wakes to find nothing',
+      'Digs a pit in the ground but is too weary to plant anything in it',
+      'Refuses to rise when summoned, claiming he will be devoured by a lion in the street'
+    ],
+    feedback_correct: 'Correct! &#39;A sluggard buries his hand in the dish; he will not even bring it back to his mouth.&#39; (19:24). The exaggeration is deliberate — the sluggard cannot finish the most effortless motion of self-preservation. Note that the lion-in-the-street excuse appears in 26:13, making D a plausible but wrong cross-reference.',
+    feedback_wrong: 'Not quite. Proverbs 19:24 says the sluggard &#39;buries his hand in the dish&#39; and cannot even complete the motion of bringing it to his mouth — an image of paralysis at the threshold of the smallest effort.',
+    ref: 'Proverbs 19:24'
+  },
+  {
+    id: 'q2',
+    text: 'According to Proverbs 20:26, what does a wise king do to the wicked?',
+    correct: 1,
+    choices: [
+      'Exiles them to distant lands beyond his borders',
+      'Winnows them out and drives the threshing wheel over them',
+      'Assigns them to the lowest seats at his table as an open rebuke',
+      'Delivers them to their accusers so justice may be publicly done'
+    ],
+    feedback_correct: 'Correct! &#39;A wise king winnows out the wicked; he drives the threshing wheel over them.&#39; (20:26). The agricultural images — winnowing and threshing — convey systematic, thorough judgment: the wicked are scattered and crushed just as grain is processed.',
+    feedback_wrong: 'Not quite. Proverbs 20:26 says a wise king &#39;winnows out the wicked&#39; and &#39;drives the threshing wheel over them&#39; — two agricultural images of systematic, thorough judgment.',
+    ref: 'Proverbs 20:26'
+  },
+  {
+    id: 'q3',
+    text: 'Proverbs 20:25 warns that a certain rash act is a trap. What is that act?',
+    correct: 2,
+    choices: [
+      'Boasting about tomorrow&#39;s plans when you do not know what a day may bring',
+      'Accepting a bribe and concealing it in your cloak to pacify another&#39;s wrath',
+      'Declaring something holy rashly, and only afterward considering what you have vowed',
+      'Seeking counsel from strangers on matters that belong within the family'
+    ],
+    feedback_correct: 'Correct! &#39;It is a trap to dedicate something rashly and only later to consider one&#39;s vows.&#39; (20:25). The trap lies in the sequence: the declaration comes first, the reflection comes too late. Rash consecration binds a person to obligations they never thought through.',
+    feedback_wrong: 'Not quite. Proverbs 20:25 identifies the trap as dedicating something holy rashly — making a sacred vow before thinking through what it requires. The other choices echo themes from Proverbs but not this specific verse.',
+    ref: 'Proverbs 20:25'
+  },
+  {
+    id: 'q4',
+    text: 'Proverbs 21:1 describes the LORD&#39;s sovereignty over earthly rulers with a single image. What does the text compare the king&#39;s heart in the LORD&#39;s hand to?',
+    correct: 3,
+    choices: [
+      'A lamp in a dark room that the LORD can dim or make to blaze',
+      'Clay in a potter&#39;s hands, pressed and shaped according to his purpose',
+      'A drawn sword whose edge is directed wherever the LORD wills',
+      'A stream of water that the LORD channels toward all who please him'
+    ],
+    feedback_correct: 'Correct! &#39;In the LORD&#39;s hand the king&#39;s heart is a stream of water that he channels toward all who please him.&#39; (21:1). The image of irrigation — redirecting flowing water — suggests effortless, total governance. The most powerful human on earth is moved as easily as a farmer diverts a channel.',
+    feedback_wrong: 'Not quite. Proverbs 21:1 uses irrigation as its image: the king&#39;s heart is &#39;a stream of water&#39; that the LORD channels wherever he pleases. The potter/clay image comes from Jeremiah; the lamp image appears in Proverbs 20:27 but refers to the human spirit, not a king&#39;s heart.',
+    ref: 'Proverbs 21:1'
+  },
+  {
+    id: 'q5',
+    text: 'Proverbs 19:11 teaches that a person&#39;s wisdom yields patience. What does the text specifically say it is to one&#39;s glory to do?',
+    correct: 0,
+    choices: [
+      'Overlook an offense',
+      'Speak truth to those who hold power over you',
+      'Wait upon the LORD rather than act in haste',
+      'Seek counsel from the aged before reaching a verdict'
+    ],
+    feedback_correct: 'Correct! &#39;A person&#39;s wisdom yields patience; it is to one&#39;s glory to overlook an offense.&#39; (19:11). Proverbs consistently reframes what counts as strength: not retaliation, not quick judgment, but the patience that absorbs an injury without striking back.',
+    feedback_wrong: 'Not quite. Proverbs 19:11 ties wisdom directly to a specific action: &#39;it is to one&#39;s glory to overlook an offense.&#39; The other options may be wise, but this verse singles out the forbearance that does not demand satisfaction.',
+    ref: 'Proverbs 19:11'
+  },
+  {
+    id: 'q6',
+    text: 'Proverbs 20:14 sketches a character study in two lines. What does the buyer do, as the text describes him?',
+    correct: 1,
+    choices: [
+      'Flatters the seller with great praise, then drives him to ruin through deceit',
+      'Says &#34;It&#39;s no good, it&#39;s no good!&#34; while buying, then goes off and boasts about the purchase',
+      'Claims poverty while concealing riches in order to secure a lower price',
+      'Promises payment with a cheerful face but delays until the seller&#39;s hope is exhausted'
+    ],
+    feedback_correct: 'Correct! &#39;"It&#39;s no good, it&#39;s no good!" says the buyer — then goes off and boasts about the purchase.&#39; (20:14). The verse captures something universal: tactical denigration during negotiation, followed by private pride of acquisition. Ancient bazaar or modern marketplace — the behavior is the same.',
+    feedback_wrong: 'Not quite. Proverbs 20:14 describes a buyer who disparages the goods during the sale — &#39;It&#39;s no good!&#39; — then boasts afterward. The hypocrisy lies in the gap between public complaint and private satisfaction.',
+    ref: 'Proverbs 20:14'
+  },
+  {
+    id: 'q7',
+    text: 'According to Proverbs 21:9, what living situation is declared preferable to sharing a house with a quarrelsome wife?',
+    correct: 2,
+    choices: [
+      'A hut at the edge of the wilderness',
+      'A foreign land among people one does not know',
+      'A corner of the roof',
+      'A cave in the rocky hills'
+    ],
+    feedback_correct: 'Correct! &#39;Better to live on a corner of the roof than share a house with a quarrelsome wife.&#39; (21:9). The image is deliberately absurd — sleeping exposed on a rooftop in the elements — to underscore that domestic strife is worse than physical discomfort. The saying recurs in 25:24, and a desert variant appears in 21:19.',
+    feedback_wrong: 'Not quite. Proverbs 21:9 names &#39;a corner of the roof&#39; as the preferable alternative — exposed to weather but free from conflict. A desert variant appears in 21:19, which may have prompted confusion with the wilderness option.',
+    ref: 'Proverbs 21:9'
+  },
+  {
+    id: 'q8',
+    text: 'Proverbs 20 twice names something the LORD detests — first in verse 10 and again in verse 23. What is it?',
+    correct: 3,
+    choices: [
+      'Haughty eyes and a proud heart',
+      'A lying tongue and violent hands raised against one&#39;s neighbor',
+      'A false witness and one who sows discord among brothers',
+      'Differing weights and dishonest scales'
+    ],
+    feedback_correct: 'Correct! Verse 10: &#39;Differing weights and differing measures — the LORD detests them both.&#39; Verse 23: &#39;The LORD detests differing weights, and dishonest scales do not please him.&#39; The deliberate repetition signals how seriously God views economic fraud — cheating in the marketplace is not a minor transgression but an abomination.',
+    feedback_wrong: 'Not quite. Proverbs 20:10 and 20:23 both target dishonest commerce: differing weights and dishonest scales. The other choices appear in Proverbs&#39; famous lists of what the LORD hates (6:16–19), but not in these two specific verses.',
+    ref: 'Proverbs 20:10, 20:23'
+  },
+  {
+    id: 'q9',
+    text: 'Proverbs 21:20 contrasts the wise and foolish in how they handle their provisions. What is the contrast as the text states it?',
+    correct: 0,
+    choices: [
+      'The wise store up choice food and olive oil, but fools gulp theirs down',
+      'The wise share their provisions with the poor, while fools hoard every last measure',
+      'The wise acquire provisions through diligent work, while fools seek them through cunning',
+      'The wise are content with little, while fools spend everything chasing more'
+    ],
+    feedback_correct: 'Correct! &#39;The wise store up choice food and olive oil, but fools gulp theirs down.&#39; (21:20). The contrast is self-discipline vs. self-indulgence — not generosity vs. greed, but the patient accumulation of the wise set against the immediate consumption of the fool.',
+    feedback_wrong: 'Not quite. Proverbs 21:20 focuses on consumption patterns: the wise store choice food and olive oil, while fools &#39;gulp theirs down.&#39; The verse is about self-restraint, not generosity or acquisition methods.',
+    ref: 'Proverbs 21:20'
+  },
+  {
+    id: 'q10',
+    text: 'Proverbs 20:5 uses a natural image to describe understanding another person&#39;s hidden intentions. What is the image, and who does the verse say can draw them out?',
+    correct: 1,
+    choices: [
+      'Hidden treasure that only the LORD can bring to light',
+      'Deep waters, drawn out by one who has insight',
+      'A sealed scroll that only the discerning can read',
+      'Roots buried deep in the earth, brought to the surface by driving rains'
+    ],
+    feedback_correct: 'Correct! &#39;The purposes of a person&#39;s heart are deep waters, but one who has insight draws them out.&#39; (20:5). The image is a well or cistern — the kind of depth that requires effort and skill to access. Insight here is not supernatural revelation but the cultivated human capacity to read what others conceal.',
+    feedback_wrong: 'Not quite. Proverbs 20:5 uses the image of deep waters for the hidden purposes of the heart, and identifies &#39;one who has insight&#39; as the one capable of drawing them out — not the LORD specifically, and not a supernatural act.',
+    ref: 'Proverbs 20:5'
+  }
+];
+
+let current = 0;
+let score = 0;
+let answers = [];
+
+function answer(btn, isCorrect, qId) {
+  const block = document.getElementById(qId);
+  const buttons = block.querySelectorAll('.choice-btn');
+  buttons.forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('fb-' + qId);
+  const qIdx = parseInt(qId.replace('q','')) - 1;
+  const q = QUESTIONS[qIdx];
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+    fb.className = 'feedback correct-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10003;</span>' + q.feedback_correct + '<span class="feedback-ref">' + q.ref + '</span>';
+    score++;
+    answers.push({ correct: true, question: q.text, ref: q.ref });
+  } else {
+    btn.classList.add('wrong');
+    buttons[q.correct].classList.add('correct');
+    fb.className = 'feedback wrong-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10007;</span>' + q.feedback_wrong + '<span class="feedback-ref">' + q.ref + '</span>';
+    answers.push({ correct: false, question: q.text, ref: q.ref });
+  }
+
+  const nextBtn = document.getElementById('next-' + qId);
+  if (nextBtn) nextBtn.classList.add('visible');
+}
+
+function nextQ(num) {
+  document.getElementById('q' + num).classList.remove('active');
+  current = num;
+  if (current < 10) {
+    document.getElementById('q' + (current+1)).classList.add('active');
+    updateProgress(current + 1);
+  } else {
+    showResults();
+  }
+}
+
+function updateProgress(qNum) {
+  const pct = Math.round((qNum / 10) * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = 'Question ' + qNum + ' of 10';
+}
+
+function showResults() {
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-label').textContent = 'Complete';
+  document.getElementById('results-screen').style.display = 'block';
+  document.getElementById('score-num').textContent = score;
+
+  const circumference = 339.3;
+  const offset = circumference - (score / 10) * circumference;
+  setTimeout(() => {
+    document.getElementById('ring-fill').style.strokeDashoffset = offset;
+  }, 100);
+
+  let msg = '';
+  if (score === 10) msg = 'Perfect score! You read every verse in Proverbs 19–21 with uncommon precision.';
+  else if (score >= 8) msg = 'Excellent work! The wisdom of Proverbs 19–21 is firmly planted in your reading.';
+  else if (score >= 6) msg = 'Good effort. These chapters reward slow, careful reading — the exact words carry the meaning.';
+  else if (score >= 4) msg = 'Keep at it. Proverbs is dense with precise phrasing; a second pass through chapters 19–21 will sharpen your recall.';
+  else msg = 'These chapters are packed with wisdom in compact form. Return to the text and let the proverbs sink in — then try again.';
+  document.getElementById('results-msg').textContent = msg;
+
+  const reviewList = document.getElementById('review-list');
+  answers.forEach((a, i) => {
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (a.correct ? 'r-correct' : 'r-wrong');
+    div.innerHTML = '<div class="review-q">Q' + (i+1) + ': ' + a.question + '</div>' +
+      '<div class="review-ans">' +
+      (a.correct
+        ? '<span class="review-correct-lbl">Correct</span>'
+        : '<span class="review-wrong-lbl">Incorrect</span>') +
+      ' &mdash; ' + a.ref + '</div>';
+    reviewList.appendChild(div);
+  });
+}
+
+function resetQuiz() {
+  current = 0; score = 0; answers = [];
+  document.querySelectorAll('.question-block').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.choice-btn').forEach(b => {
+    b.disabled = false;
+    b.classList.remove('correct','wrong');
+  });
+  document.querySelectorAll('.feedback').forEach(f => { f.className = 'feedback'; f.innerHTML = ''; });
+  document.querySelectorAll('.next-btn').forEach(b => b.classList.remove('visible'));
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('review-list').innerHTML = '';
+  document.getElementById('ring-fill').style.strokeDashoffset = '339.3';
+  document.getElementById('q1').classList.add('active');
+  updateProgress(1);
+}
+
+// initialize progress
+updateProgress(1);
+</script>
+</body>
+</html>
