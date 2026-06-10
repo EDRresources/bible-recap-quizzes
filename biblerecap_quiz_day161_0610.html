@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 161 Bible Recap Quiz — Proverbs 22–24</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 18px;
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.15);
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.3s ease forwards;
+  }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+    color: #1a3d1e;
+    display: block;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.1);
+    border: 1px solid #8b1a1a;
+    color: #5a0e0e;
+    display: block;
+  }
+  .feedback-icon { font-weight: 700; margin-right: 6px; }
+  .feedback-ref {
+    font-style: italic;
+    color: #5a4020;
+    font-size: 0.95rem;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.visible { display: inline-block; }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 22px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.15); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1e1208;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: #9a7a3a;
+    letter-spacing: 0.1em;
+  }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1e1208;
+    margin-bottom: 8px;
+  }
+  .results-message {
+    font-size: 1.08rem;
+    color: #3a2510;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #9a7a3a;
+    margin-bottom: 14px;
+    text-align: left;
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    padding-bottom: 8px;
+  }
+  .review-item {
+    text-align: left;
+    margin-bottom: 14px;
+    padding: 12px 14px;
+    border-radius: 4px;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.1);
+    border-left: 3px solid #1a5c2a;
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.08);
+    border-left: 3px solid #8b1a1a;
+  }
+  .review-q { font-weight: 600; color: #1e1208; margin-bottom: 4px; }
+  .review-ans { font-size: 0.93rem; color: #3a2510; }
+  .review-correct-lbl { color: #1a5c2a; font-weight: 600; }
+  .review-wrong-lbl   { color: #8b1a1a; font-weight: 600; }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .take-again-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  @media (max-width: 520px) {
+    .card { padding: 22px 18px; }
+    .quiz-title { font-size: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- Header -->
+  <div class="quiz-header">
+    <div class="quiz-date">
+      <span class="ornament">✦</span>
+      Wednesday, June 10, 2026 &middot; Day 161
+      <span class="ornament">✦</span>
+    </div>
+    <div class="quiz-title">The Bible Recap &mdash; Daily Quiz</div>
+    <div class="passage-tags">
+      <span class="passage-tag">Proverbs 22</span>
+      <span class="passage-tag">Proverbs 23</span>
+      <span class="passage-tag">Proverbs 24</span>
+    </div>
+    <div><span class="difficulty-badge">Challenging</span></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap"><div class="progress-bar" id="prog-bar"></div></div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- Card -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <div>
+          <div class="question-text">Proverbs 22:1 draws a precise comparison between two kinds of value. What does the verse say is more desirable than great riches and better than silver or gold?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">A</span>A righteous life lived blamelessly before God and neighbor</button>
+        <button class="choice-btn" onclick="answer(this,true,'q1')"><span class="choice-letter">B</span>A good name, and to be esteemed rather than to possess silver or gold</button>
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">C</span>The fear of the LORD and a heart inclined toward humility</button>
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">D</span>Wisdom gained through patient seeking over many years</button>
+      </div>
+      <div class="feedback" id="fb-q1"></div>
+      <button class="next-btn" id="next-q1" onclick="nextQ(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+        <div>
+          <div class="question-text">Proverbs 23:29-35 offers an extended and almost clinical portrait of the drunkard. What specific image in verse 34 captures his disorienting condition?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">A</span>Like a blind man groping along the wall at midday, unable to find the door</button>
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">B</span>Like a dreamer who wakes at dawn but cannot tell what is real from what is not</button>
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">C</span>Like a bird that stumbles into a snare it saw too late to avoid</button>
+        <button class="choice-btn" onclick="answer(this,true,'q2')"><span class="choice-letter">D</span>Like one sleeping on the high seas, lying on top of the rigging</button>
+      </div>
+      <div class="feedback" id="fb-q2"></div>
+      <button class="next-btn" id="next-q2" onclick="nextQ(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <div>
+          <div class="question-text">Proverbs 24:11-12 issues a command about people facing mortal danger. Whom does the text specifically charge the reader to rescue?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,'q3')"><span class="choice-letter">A</span>Those being led away to death and those staggering toward slaughter</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">B</span>The poor who are crushed by corrupt judges sitting in the gate</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">C</span>The orphan and widow who have no kinsman-redeemer to plead their cause</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">D</span>The innocent man falsely accused by a lying witness before the assembly</button>
+      </div>
+      <div class="feedback" id="fb-q3"></div>
+      <button class="next-btn" id="next-q3" onclick="nextQ(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">Proverbs 22:26-27 warns against pledging security for another&#39;s debts. What specific consequence does verse 27 state for the person who cannot pay?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">A</span>Your fields will be seized and reassigned to those who lend without folly</button>
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">B</span>Your name will be cried out in the gate as one who failed to honor his pledge</button>
+        <button class="choice-btn" onclick="answer(this,true,'q4')"><span class="choice-letter">C</span>Your very bed will be snatched from under you</button>
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">D</span>You will be bound to labor until the full debt is repaid to the last measure</button>
+      </div>
+      <div class="feedback" id="fb-q4"></div>
+      <button class="next-btn" id="next-q4" onclick="nextQ(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+        <div>
+          <div class="question-text">The sluggard of Proverbs 22:13 gives an excuse for not going out. What is his stated reason?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">A</span>He claims the roads are flooded and the paths through the field impassable</button>
+        <button class="choice-btn" onclick="answer(this,true,'q5')"><span class="choice-letter">B</span>There is a lion outside; he will be killed in the public square</button>
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">C</span>He says the harvest is far off and the heat of the day is still ahead</button>
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">D</span>He pleads illness, saying his limbs have grown too heavy to carry him</button>
+      </div>
+      <div class="feedback" id="fb-q5"></div>
+      <button class="next-btn" id="next-q5" onclick="nextQ(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <div>
+          <div class="question-text">Proverbs 23:4-5 counsels restraint in the pursuit of riches and uses a striking natural image for how wealth vanishes. What does the text say riches do?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">A</span>They sink into the earth like rain that falls but cannot be gathered again</button>
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">B</span>They scatter like chaff before a wind no one can follow or predict</button>
+        <button class="choice-btn" onclick="answer(this,true,'q6')"><span class="choice-letter">C</span>They sprout wings and fly off to the sky like an eagle</button>
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">D</span>They fade like morning mist before a sun that shows no mercy</button>
+      </div>
+      <div class="feedback" id="fb-q6"></div>
+      <button class="next-btn" id="next-q6" onclick="nextQ(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <div>
+          <div class="question-text">Proverbs 22:28 repeats a prohibition that also appears in the law of Moses. What does it forbid?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">A</span>Taking the millstone as a pledge, since it is a neighbor&#39;s livelihood</button>
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">B</span>Charging interest to a fellow Israelite who has fallen into poverty</button>
+        <button class="choice-btn" onclick="answer(this,true,'q7')"><span class="choice-letter">C</span>Moving an ancient boundary stone set by your forefathers</button>
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">D</span>Plowing with an ox and a donkey yoked together in the same furrow</button>
+      </div>
+      <div class="feedback" id="fb-q7"></div>
+      <button class="next-btn" id="next-q7" onclick="nextQ(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">Proverbs 24:3-4 describes what a house built by wisdom and established by understanding contains. What does the text say fills its rooms?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">A</span>Laughter and the voices of children, which are the crown of their parents</button>
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">B</span>Rest and a contentment that surpasses all the wealth of the field</button>
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">C</span>Integrity and uprightness, which guard the thresholds of its doors</button>
+        <button class="choice-btn" onclick="answer(this,true,'q8')"><span class="choice-letter">D</span>Rare and beautiful treasures</button>
+      </div>
+      <div class="feedback" id="fb-q8"></div>
+      <button class="next-btn" id="next-q8" onclick="nextQ(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <div>
+          <div class="question-text">Proverbs 24:27 prescribes a specific sequence for one&#39;s work and life decisions. What order does it give?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">A</span>First establish your household and family, then pursue your livelihood in the open fields</button>
+        <button class="choice-btn" onclick="answer(this,true,'q9')"><span class="choice-letter">B</span>First prepare your outdoor work and get your fields ready; afterward build your house</button>
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">C</span>First plant and tend your vineyard, then repair the walls that protect it from intruders</button>
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">D</span>First tend the flocks entrusted to you by others before you build enclosures for your own</button>
+      </div>
+      <div class="feedback" id="fb-q9"></div>
+      <button class="next-btn" id="next-q9" onclick="nextQ(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">Proverbs 23:1-3 gives careful instruction for dining with a ruler, including a specific warning about the food at his table. What does the text say about that food?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,'q10')"><span class="choice-letter">A</span>That food is deceptive</button>
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">B</span>It will make you sluggish and dull of mind if you eat too freely of it</button>
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">C</span>The one who eats only for honor gains nothing in the end but shame</button>
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">D</span>A man who eats at the ruler&#39;s table binds himself to repay it with service</button>
+      </div>
+      <div class="feedback" id="fb-q10"></div>
+      <button class="next-btn" id="next-q10" onclick="nextQ(10)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Results -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 130 130">
+          <circle class="score-ring-bg" cx="65" cy="65" r="54"/>
+          <circle class="score-ring-fill" id="ring-fill" cx="65" cy="65" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <div class="score-num" id="score-num">0</div>
+          <div class="score-denom">out of 10</div>
+        </div>
+      </div>
+      <div class="results-title">Quiz Complete</div>
+      <div class="results-message" id="results-msg"></div>
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+    </div>
+
+  </div><!-- .card -->
+</div><!-- .outer-wrap -->
+
+<script>
+const QUESTIONS = [
+  {
+    id: 'q1',
+    text: 'Proverbs 22:1 draws a precise comparison between two kinds of value. What does the verse say is more desirable than great riches and better than silver or gold?',
+    correct: 1,
+    choices: [
+      'A righteous life lived blamelessly before God and neighbor',
+      'A good name, and to be esteemed rather than to possess silver or gold',
+      'The fear of the LORD and a heart inclined toward humility',
+      'Wisdom gained through patient seeking over many years'
+    ],
+    feedback_correct: 'Correct! &#39;A good name is more desirable than great riches; to be esteemed is better than silver or gold.&#39; (22:1). The verse makes a double comparison that reorders conventional priorities: reputation over wealth, esteem over material assets. Both halves reinforce the same point — character visible to others matters more than what you can accumulate.',
+    feedback_wrong: 'Not quite. Proverbs 22:1 says &#39;a good name is more desirable than great riches; to be esteemed is better than silver or gold.&#39; The verse is specifically about reputation and how one is regarded by others — not about righteousness in general, fear of the LORD, or wisdom as qualities of the inner life.',
+    ref: 'Proverbs 22:1'
+  },
+  {
+    id: 'q2',
+    text: 'Proverbs 23:29-35 offers an extended and almost clinical portrait of the drunkard. What specific image in verse 34 captures his disorienting condition?',
+    correct: 3,
+    choices: [
+      'Like a blind man groping along the wall at midday, unable to find the door',
+      'Like a dreamer who wakes at dawn but cannot tell what is real from what is not',
+      'Like a bird that stumbles into a snare it saw too late to avoid',
+      'Like one sleeping on the high seas, lying on top of the rigging'
+    ],
+    feedback_correct: 'Correct! &#39;You will be like one sleeping on the high seas, lying on top of the rigging.&#39; (23:34). The image is brilliantly chosen — a sailor unconscious at the top of the mast, swaying over deep water, entirely unaware of the danger. Drunkenness here is not simply pleasure gone wrong; it is oblivion in the place of greatest peril.',
+    feedback_wrong: 'Not quite. Proverbs 23:34 gives the image of someone &#39;sleeping on the high seas, lying on top of the rigging&#39; — unconscious at the highest and most dangerous point of a ship. The other images fit the tone of Proverbs but do not appear in this verse.',
+    ref: 'Proverbs 23:34'
+  },
+  {
+    id: 'q3',
+    text: 'Proverbs 24:11-12 issues a command about people facing mortal danger. Whom does the text specifically charge the reader to rescue?',
+    correct: 0,
+    choices: [
+      'Those being led away to death and those staggering toward slaughter',
+      'The poor who are crushed by corrupt judges sitting in the gate',
+      'The orphan and widow who have no kinsman-redeemer to plead their cause',
+      'The innocent man falsely accused by a lying witness before the assembly'
+    ],
+    feedback_correct: 'Correct! &#39;Rescue those being led away to death; hold back those staggering toward slaughter.&#39; (24:11). The command is urgent and specific — not to the quietly needy, but to those in immediate, visible mortal danger. Verse 12 then closes off every excuse: &#39;If you say, "But we knew nothing about this," does not he who weighs the heart perceive it?&#39;',
+    feedback_wrong: 'Not quite. Proverbs 24:11 describes a specific, urgent situation: people &#39;being led away to death&#39; and &#39;staggering toward slaughter.&#39; The other categories — oppressed poor, orphans, the falsely accused — appear throughout Proverbs and the prophets, but this verse singles out those in immediate mortal peril.',
+    ref: 'Proverbs 24:11'
+  },
+  {
+    id: 'q4',
+    text: 'Proverbs 22:26-27 warns against pledging security for another&#39;s debts. What specific consequence does verse 27 state for the person who cannot pay?',
+    correct: 2,
+    choices: [
+      'Your fields will be seized and reassigned to those who lend without folly',
+      'Your name will be cried out in the gate as one who failed to honor his pledge',
+      'Your very bed will be snatched from under you',
+      'You will be bound to labor until the full debt is repaid to the last measure'
+    ],
+    feedback_correct: 'Correct! &#39;If you lack the means to pay, your very bed will be snatched from under you.&#39; (22:27). The image is deliberately domestic and intimate — not your fields, not your livestock, but the surface you sleep on. The creditor reaches into the most private space of the household. The warning makes the recklessness of co-signing vivid by naming the worst-case with precision.',
+    feedback_wrong: 'Not quite. Proverbs 22:27 names the consequence in strikingly personal terms: &#39;your very bed will be snatched from under you.&#39; The image reaches into the most intimate space of the household — not land or livestock, but the place of rest itself.',
+    ref: 'Proverbs 22:26-27'
+  },
+  {
+    id: 'q5',
+    text: 'The sluggard of Proverbs 22:13 gives an excuse for not going out. What is his stated reason?',
+    correct: 1,
+    choices: [
+      'He claims the roads are flooded and the paths through the field impassable',
+      'There is a lion outside; he will be killed in the public square',
+      'He says the harvest is far off and the heat of the day is still ahead',
+      'He pleads illness, saying his limbs have grown too heavy to carry him'
+    ],
+    feedback_correct: 'Correct! &#39;The sluggard says, "There is a lion outside! I will be killed in the public square!"&#39; (22:13). The excuse is absurd on its face — lions do not prowl city squares — which is exactly the point. The text mocks the sluggard&#39;s creativity in disaster-imagining as a cover for simple unwillingness to work. The same excuse recurs in 26:13.',
+    feedback_wrong: 'Not quite. Proverbs 22:13 gives the sluggard&#39;s precise excuse: a lion in the street and certain death in the public square. The claim is ridiculous enough to be funny — which is the text&#39;s intent. The lion-excuse recurs in 26:13, suggesting it was a well-known proverb about laziness&#39;s inventiveness.',
+    ref: 'Proverbs 22:13'
+  },
+  {
+    id: 'q6',
+    text: 'Proverbs 23:4-5 counsels restraint in the pursuit of riches and uses a striking natural image for how wealth vanishes. What does the text say riches do?',
+    correct: 2,
+    choices: [
+      'They sink into the earth like rain that falls but cannot be gathered again',
+      'They scatter like chaff before a wind no one can follow or predict',
+      'They sprout wings and fly off to the sky like an eagle',
+      'They fade like morning mist before a sun that shows no mercy'
+    ],
+    feedback_correct: 'Correct! &#39;Cast but a glance at riches, and they are gone, for they will surely sprout wings and fly off to the sky like an eagle.&#39; (23:5). The image is vivid and almost comic — wealth does not slowly erode but suddenly takes flight. The eagle chosen here is a bird of sudden, decisive movement. The point is not that wealth is evil but that it is inherently unstable; exhausting yourself to capture it is a fool&#39;s errand.',
+    feedback_wrong: 'Not quite. Proverbs 23:5 says riches &#39;sprout wings and fly off to the sky like an eagle.&#39; The image is sudden and almost comic — not a slow fading or scattering, but a decisive, self-willed departure. The verse instructs the reader not to wear himself out chasing what will not stay.',
+    ref: 'Proverbs 23:4-5'
+  },
+  {
+    id: 'q7',
+    text: 'Proverbs 22:28 repeats a prohibition that also appears in the law of Moses. What does it forbid?',
+    correct: 2,
+    choices: [
+      'Taking the millstone as a pledge, since it is a neighbor&#39;s livelihood',
+      'Charging interest to a fellow Israelite who has fallen into poverty',
+      'Moving an ancient boundary stone set by your forefathers',
+      'Plowing with an ox and a donkey yoked together in the same furrow'
+    ],
+    feedback_correct: 'Correct! &#39;Do not move an ancient boundary stone set up by your ancestors.&#39; (22:28). The prohibition appears also in Deuteronomy 19:14 and 27:17. Boundary stones were the title deeds of the ancient world — to move one was to steal land, an act targeting the most vulnerable landowners who might have no witnesses. Proverbs places this practical prohibition in the context of wisdom and fear of the LORD.',
+    feedback_wrong: 'Not quite. Proverbs 22:28 says &#39;Do not move an ancient boundary stone set up by your ancestors.&#39; The prohibition recurs in Deuteronomy. Boundary markers functioned as permanent property records — moving one was a quiet, hard-to-detect form of theft. The other prohibitions in the choices appear in the Mosaic law but are not the subject of this verse.',
+    ref: 'Proverbs 22:28'
+  },
+  {
+    id: 'q8',
+    text: 'Proverbs 24:3-4 describes what a house built by wisdom and established by understanding contains. What does the text say fills its rooms?',
+    correct: 3,
+    choices: [
+      'Laughter and the voices of children, which are the crown of their parents',
+      'Rest and a contentment that surpasses all the wealth of the field',
+      'Integrity and uprightness, which guard the thresholds of its doors',
+      'Rare and beautiful treasures'
+    ],
+    feedback_correct: 'Correct! &#39;By wisdom a house is built, and through understanding it is established; through knowledge its rooms are filled with rare and beautiful treasures.&#39; (24:3-4). The sequence is deliberate: wisdom builds, understanding establishes, knowledge furnishes. The point is not that wise people get rich but that wisdom produces a kind of abundance — the wrong-headed shortcut of strength alone (v.5) skips over the foundation.',
+    feedback_wrong: 'Not quite. Proverbs 24:3-4 says &#39;through knowledge its rooms are filled with rare and beautiful treasures.&#39; The verse traces the progression from wisdom (building) to understanding (establishing) to knowledge (filling with treasure). The other options capture the spirit of Proverbs but not the specific content of these verses.',
+    ref: 'Proverbs 24:3-4'
+  },
+  {
+    id: 'q9',
+    text: 'Proverbs 24:27 prescribes a specific sequence for one&#39;s work and life decisions. What order does it give?',
+    correct: 1,
+    choices: [
+      'First establish your household and family, then pursue your livelihood in the open fields',
+      'First prepare your outdoor work and get your fields ready; afterward build your house',
+      'First plant and tend your vineyard, then repair the walls that protect it from intruders',
+      'First tend the flocks entrusted to you by others before you build enclosures for your own'
+    ],
+    feedback_correct: 'Correct! &#39;Put your outdoor work in order and get your fields ready; after that, build your house.&#39; (24:27). The sequence is counterintuitive by romantic instinct — the house feels like the first act of establishing a life. But Proverbs insists on productive capacity before domestic settlement. Income before house payment, in modern terms. Wisdom begins with honest accounting of what one can sustain.',
+    feedback_wrong: 'Not quite. Proverbs 24:27 gives a clear sequence: fields first, house second. &#39;Put your outdoor work in order and get your fields ready; after that, build your house.&#39; The verse counsels against reversing the order — establishing domestic life before establishing the means to sustain it.',
+    ref: 'Proverbs 24:27'
+  },
+  {
+    id: 'q10',
+    text: 'Proverbs 23:1-3 gives careful instruction for dining with a ruler, including a specific warning about the food at his table. What does the text say about that food?',
+    correct: 0,
+    choices: [
+      'That food is deceptive',
+      'It will make you sluggish and dull of mind if you eat too freely of it',
+      'The one who eats only for honor gains nothing in the end but shame',
+      'A man who eats at the ruler&#39;s table binds himself to repay it with service'
+    ],
+    feedback_correct: 'Correct! &#39;Do not crave his delicacies, for that food is deceptive.&#39; (23:3). The warning goes beyond table manners. Food given by the powerful is never neutral — it creates obligation, flatters appetite, and distracts from discernment. The person who craves the ruler&#39;s table loses independence of judgment. Proverbs reads hospitality from the powerful with a wary eye.',
+    feedback_wrong: 'Not quite. Proverbs 23:3 gives a pointed, single-phrase warning: &#39;that food is deceptive.&#39; The delicacies on a ruler&#39;s table are not merely rich food — they are instruments of obligation and flattery. The verse warns the reader not to let appetite cloud the judgment needed in a powerful person&#39;s presence.',
+    ref: 'Proverbs 23:1-3'
+  }
+];
+
+let current = 0;
+let score = 0;
+let answers = [];
+
+function answer(btn, isCorrect, qId) {
+  const block = document.getElementById(qId);
+  const buttons = block.querySelectorAll('.choice-btn');
+  buttons.forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('fb-' + qId);
+  const qIdx = parseInt(qId.replace('q','')) - 1;
+  const q = QUESTIONS[qIdx];
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+    fb.className = 'feedback correct-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10003;</span>' + q.feedback_correct + '<span class="feedback-ref">' + q.ref + '</span>';
+    score++;
+    answers.push({ correct: true, question: q.text, ref: q.ref });
+  } else {
+    btn.classList.add('wrong');
+    buttons[q.correct].classList.add('correct');
+    fb.className = 'feedback wrong-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10007;</span>' + q.feedback_wrong + '<span class="feedback-ref">' + q.ref + '</span>';
+    answers.push({ correct: false, question: q.text, ref: q.ref });
+  }
+
+  const nextBtn = document.getElementById('next-' + qId);
+  if (nextBtn) nextBtn.classList.add('visible');
+}
+
+function nextQ(num) {
+  document.getElementById('q' + num).classList.remove('active');
+  current = num;
+  if (current < 10) {
+    document.getElementById('q' + (current+1)).classList.add('active');
+    updateProgress(current + 1);
+  } else {
+    showResults();
+  }
+}
+
+function updateProgress(qNum) {
+  const pct = Math.round((qNum / 10) * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = 'Question ' + qNum + ' of 10';
+}
+
+function showResults() {
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-label').textContent = 'Complete';
+  document.getElementById('results-screen').style.display = 'block';
+  document.getElementById('score-num').textContent = score;
+
+  const circumference = 339.3;
+  const offset = circumference - (score / 10) * circumference;
+  setTimeout(() => {
+    document.getElementById('ring-fill').style.strokeDashoffset = offset;
+  }, 100);
+
+  let msg = '';
+  if (score === 10) msg = 'Perfect score! You read every verse of Proverbs 22–24 with uncommon care and precision.';
+  else if (score >= 8) msg = 'Excellent work! The wisdom packed into these three chapters has clearly taken root in your reading.';
+  else if (score >= 6) msg = 'Good effort. Proverbs rewards slow reading — the exact words carry the meaning. A second pass will sharpen the details.';
+  else if (score >= 4) msg = 'Keep at it. These chapters are dense with precise instruction; return to the text and let the proverbs settle before trying again.';
+  else msg = 'Proverbs 22–24 is packed with compact wisdom that repays careful, verse-by-verse attention. Return to the text and try again.';
+  document.getElementById('results-msg').textContent = msg;
+
+  const reviewList = document.getElementById('review-list');
+  answers.forEach((a, i) => {
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (a.correct ? 'r-correct' : 'r-wrong');
+    div.innerHTML = '<div class="review-q">Q' + (i+1) + ': ' + a.question + '</div>' +
+      '<div class="review-ans">' +
+      (a.correct
+        ? '<span class="review-correct-lbl">Correct</span>'
+        : '<span class="review-wrong-lbl">Incorrect</span>') +
+      ' &mdash; ' + a.ref + '</div>';
+    reviewList.appendChild(div);
+  });
+}
+
+function resetQuiz() {
+  current = 0; score = 0; answers = [];
+  document.querySelectorAll('.question-block').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.choice-btn').forEach(b => {
+    b.disabled = false;
+    b.classList.remove('correct','wrong');
+  });
+  document.querySelectorAll('.feedback').forEach(f => { f.className = 'feedback'; f.innerHTML = ''; });
+  document.querySelectorAll('.next-btn').forEach(b => b.classList.remove('visible'));
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('review-list').innerHTML = '';
+  document.getElementById('ring-fill').style.strokeDashoffset = '339.3';
+  document.getElementById('q1').classList.add('active');
+  updateProgress(1);
+}
+
+// initialize progress
+updateProgress(1);
+</script>
+</body>
+</html>
