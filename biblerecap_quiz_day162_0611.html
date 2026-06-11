@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 162 Bible Recap Quiz — 1 Kings 5–6 &amp; 2 Chronicles 2–3</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 18px;
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.15);
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.3s ease forwards;
+  }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+    color: #1a3d1e;
+    display: block;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.1);
+    border: 1px solid #8b1a1a;
+    color: #5a0e0e;
+    display: block;
+  }
+  .feedback-icon { font-weight: 700; margin-right: 6px; }
+  .feedback-ref {
+    font-style: italic;
+    color: #5a4020;
+    font-size: 0.95rem;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.visible { display: inline-block; }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 22px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.15); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1e1208;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: #9a7a3a;
+    letter-spacing: 0.1em;
+  }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1e1208;
+    margin-bottom: 8px;
+  }
+  .results-message {
+    font-size: 1.08rem;
+    color: #3a2510;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #9a7a3a;
+    margin-bottom: 14px;
+    text-align: left;
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    padding-bottom: 8px;
+  }
+  .review-item {
+    text-align: left;
+    margin-bottom: 14px;
+    padding: 12px 14px;
+    border-radius: 4px;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.1);
+    border-left: 3px solid #1a5c2a;
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.08);
+    border-left: 3px solid #8b1a1a;
+  }
+  .review-q { font-weight: 600; color: #1e1208; margin-bottom: 4px; }
+  .review-ans { font-size: 0.93rem; color: #3a2510; }
+  .review-correct-lbl { color: #1a5c2a; font-weight: 600; }
+  .review-wrong-lbl   { color: #8b1a1a; font-weight: 600; }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .take-again-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  @media (max-width: 520px) {
+    .card { padding: 22px 18px; }
+    .quiz-title { font-size: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- Header -->
+  <div class="quiz-header">
+    <div class="quiz-date">
+      <span class="ornament">&#10022;</span>
+      Thursday, June 11, 2026 &middot; Day 162
+      <span class="ornament">&#10022;</span>
+    </div>
+    <div class="quiz-title">The Bible Recap &mdash; Daily Quiz</div>
+    <div class="passage-tags">
+      <span class="passage-tag">1 Kings 5</span>
+      <span class="passage-tag">1 Kings 6</span>
+      <span class="passage-tag">2 Chronicles 2</span>
+      <span class="passage-tag">2 Chronicles 3</span>
+    </div>
+    <div><span class="difficulty-badge">Challenging</span></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap"><div class="progress-bar" id="prog-bar"></div></div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- Card -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <div>
+          <div class="question-text">In his message to Hiram of Tyre in 1 Kings 5, Solomon explains why his father David was unable to build the temple. What reason does Solomon give?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">A</span>David was a shepherd before he was a king, and God had told him only one born into royal lineage could oversee the sacred building project</button>
+        <button class="choice-btn" onclick="answer(this,true,'q1')"><span class="choice-letter">B</span>Because of the wars waged against David on all sides, he could not build until the LORD put his enemies under his feet</button>
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">C</span>God withheld the plans for the temple from David, revealing the design and measurements only after Solomon ascended the throne</button>
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">D</span>David lacked the skilled craftsmen and foreign trade relationships needed to obtain the required cedar from Lebanon</button>
+      </div>
+      <div class="feedback" id="fb-q1"></div>
+      <button class="next-btn" id="next-q1" onclick="nextQ(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">During the building of the temple, 1 Kings 6:7 notes something unusual about the construction site. What was it?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">A</span>Solomon decreed that no work was to be done on the Sabbath, even for the temple&#39;s construction, so that the building rose slowly over many rest cycles</button>
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">B</span>The workmen were forbidden to enter the inner sanctuary at any stage of the building, working only on the outer courts and side chambers</button>
+        <button class="choice-btn" onclick="answer(this,true,'q2')"><span class="choice-letter">C</span>No hammer, chisel, or any iron tool was heard at the temple site during construction; all the stones were dressed at the quarry before being brought to the site</button>
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">D</span>The workers maintained ritual purity throughout the project, bathing in a designated pool before each day&#39;s labor on the holy precinct</button>
+      </div>
+      <div class="feedback" id="fb-q2"></div>
+      <button class="next-btn" id="next-q2" onclick="nextQ(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <div>
+          <div class="question-text">According to 2 Chronicles 3:1, on what specific site did Solomon begin to build the temple of the LORD in Jerusalem?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,'q3')"><span class="choice-letter">A</span>On Mount Moriah, at the threshing floor of Araunah the Jebusite, where the LORD had appeared to David</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">B</span>On the highest point of the city of David, at the summit of the ridge above the Kidron Valley, where David had pitched a tent for the ark</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">C</span>On the hill where Abraham had built an altar when he first entered the land of Canaan, near the great tree of Moreh</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">D</span>On the site of the altar Gad the seer instructed David to build when the angel of the LORD stood between heaven and earth above Jerusalem</button>
+      </div>
+      <div class="feedback" id="fb-q3"></div>
+      <button class="next-btn" id="next-q3" onclick="nextQ(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <div>
+          <div class="question-text">While Solomon was building the temple, the word of the LORD came to him with a conditional promise (1 Kings 6:11-13). What condition did God place on fulfilling his promise to David and dwelling among Israel?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">A</span>That the temple be completed according to every specification given in the plans David had prepared and handed to Solomon</button>
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">B</span>That Solomon make a solemn sacrifice at every high place in Israel before the ark was brought into the completed sanctuary</button>
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">C</span>That Solomon appoint priests and Levites in their divisions to maintain perpetual worship and keep the sacred fire burning</button>
+        <button class="choice-btn" onclick="answer(this,true,'q4')"><span class="choice-letter">D</span>That Solomon follow God&#39;s decrees, observe his laws, and keep all his commands</button>
+      </div>
+      <div class="feedback" id="fb-q4"></div>
+      <button class="next-btn" id="next-q4" onclick="nextQ(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">In 2 Chronicles 2, Hiram of Tyre agrees to help Solomon and sends a master craftsman called Huram-Abi. What does Hiram say about this craftsman&#39;s parentage?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,'q5')"><span class="choice-letter">A</span>His mother was from Dan and his father was from Tyre</button>
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">B</span>Both his father and mother were from the tribe of Judah, trained in all the crafts used for the tabernacle at Sinai</button>
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">C</span>He was a Sidonite by birth, trained in the crafts of Sidon and later apprenticed to Tyrian metalworkers under Hiram&#39;s father</button>
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">D</span>His lineage could be traced directly to Bezalel, the craftsman God appointed to build the original tabernacle in the wilderness</button>
+      </div>
+      <div class="feedback" id="fb-q5"></div>
+      <button class="next-btn" id="next-q5" onclick="nextQ(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <div>
+          <div class="question-text">In 1 Kings 5:4-5, Solomon explains to Hiram why he is now able to build the temple when his father could not. What two reasons does he give?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">A</span>He has received the architectural plans in a vision from God and has consolidated the kingdom under unified rule with no rival claimants</button>
+        <button class="choice-btn" onclick="answer(this,true,'q6')"><span class="choice-letter">B</span>The LORD has given him rest on every side with no adversary or disaster, and it is time to fulfill what God told David &mdash; that his son would build the temple</button>
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">C</span>He has completed the subjugation of all nations within the promised borders, and the tribute now flowing in provides the resources the project requires</button>
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">D</span>God appeared to him at Gibeon and commanded him directly to begin building, declaring that the years of delay were now ended</button>
+      </div>
+      <div class="feedback" id="fb-q6"></div>
+      <button class="next-btn" id="next-q6" onclick="nextQ(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">According to 2 Chronicles 3:14, what was the curtain that divided the Most Holy Place made of, and what was worked into it?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">A</span>It was made of beaten gold hammered over an olive wood frame, identical in technique to the gold-overlaid doors of the inner sanctuary</button>
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">B</span>It was woven of fine white linen with the twelve tribal emblems of Israel embroidered in crimson along its border</button>
+        <button class="choice-btn" onclick="answer(this,true,'q7')"><span class="choice-letter">C</span>It was made of blue, purple, and crimson yarn and fine linen, with cherubim worked into it</button>
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">D</span>It was a single cedar panel overlaid with gold on which the wings of cherubim were carved in relief across its entire surface</button>
+      </div>
+      <div class="feedback" id="fb-q7"></div>
+      <button class="next-btn" id="next-q7" onclick="nextQ(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+        <div>
+          <div class="question-text">According to 1 Kings 6:27, how were the two cherubim positioned in the Most Holy Place, and what did their outstretched wings do?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">A</span>They faced the entrance of the inner sanctuary with wings spread upward, one on each side of the doorway, to overshadow all who entered</button>
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">B</span>They were mounted on the wall of the inner sanctuary on opposite sides, each facing the center of the room with wings folded</button>
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">C</span>They stood facing each other across the inner sanctuary, each touching only the opposite wall with its outermost wing while their inner wings hung down</button>
+        <button class="choice-btn" onclick="answer(this,true,'q8')"><span class="choice-letter">D</span>They stood side by side, their inner wings touching each other at the center and their outer wings each touching one side wall of the inner sanctuary</button>
+      </div>
+      <div class="feedback" id="fb-q8"></div>
+      <button class="next-btn" id="next-q8" onclick="nextQ(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <div>
+          <div class="question-text">When Hiram of Tyre received Solomon&#39;s message requesting help to build the temple, how did he respond according to 1 Kings 5:7?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,'q9')"><span class="choice-letter">A</span>He was greatly pleased and praised the LORD, saying God had given David a wise son to rule over this great nation</button>
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">B</span>He consulted his own priests and royal counselors to determine whether the alliance was politically advantageous before agreeing to supply timber</button>
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">C</span>He expressed wonder that the God of Israel would accept a fixed house, since the gods of his own people were said to dwell in the open heavens</button>
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">D</span>He replied that he had already heard of Solomon&#39;s wisdom from his own merchants and had been anticipating such an alliance since the days of David</button>
+      </div>
+      <div class="feedback" id="fb-q9"></div>
+      <button class="next-btn" id="next-q9" onclick="nextQ(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <div>
+          <div class="question-text">In 2 Chronicles 2:5-6, Solomon acknowledges a fundamental theological tension at the very outset of the building project. What tension does he name?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">A</span>That the temple must be built by forced labor from the surrounding nations, yet the law commands Israel not to oppress the stranger living among them</button>
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">B</span>That David&#39;s bloodguilt from his wars legally disqualified him from building, yet it was God himself who commanded David to gather the materials and make ready</button>
+        <button class="choice-btn" onclick="answer(this,true,'q10')"><span class="choice-letter">C</span>That the temple will be built to honor a God greater than all gods, yet the heavens &mdash; even the highest heavens &mdash; cannot contain him, so who can truly build him a house?</button>
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">D</span>That Solomon will employ Gentile craftsmen and timber from pagan Tyre, yet the sanctuary must remain holy and set apart from all foreign influence</button>
+      </div>
+      <div class="feedback" id="fb-q10"></div>
+      <button class="next-btn" id="next-q10" onclick="nextQ(10)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Results -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 130 130">
+          <circle class="score-ring-bg" cx="65" cy="65" r="54"/>
+          <circle class="score-ring-fill" id="ring-fill" cx="65" cy="65" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <div class="score-num" id="score-num">0</div>
+          <div class="score-denom">out of 10</div>
+        </div>
+      </div>
+      <div class="results-title">Quiz Complete</div>
+      <div class="results-message" id="results-msg"></div>
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+    </div>
+
+  </div><!-- .card -->
+</div><!-- .outer-wrap -->
+
+<script>
+const QUESTIONS = [
+  {
+    id: 'q1',
+    text: 'In his message to Hiram of Tyre in 1 Kings 5, Solomon explains why his father David was unable to build the temple. What reason does Solomon give?',
+    correct: 1,
+    choices: [
+      'David was a shepherd before he was a king, and God had told him only one born into royal lineage could oversee the sacred building project',
+      'Because of the wars waged against David on all sides, he could not build until the LORD put his enemies under his feet',
+      'God withheld the plans for the temple from David, revealing the design and measurements only after Solomon ascended the throne',
+      'David lacked the skilled craftsmen and foreign trade relationships needed to obtain the required cedar from Lebanon'
+    ],
+    feedback_correct: '&#10003; &ldquo;Because of the wars waged against my father David from all sides, he could not build a temple for the Name of the LORD his God until the LORD put his enemies under his feet.&rdquo; (1 Kings 5:3). Solomon presents this not as a failure of David but as a matter of divinely governed timing. Warfare and temple-building were incompatible; the gift of peace Solomon now possesses is itself the precondition God had been setting in place.',
+    feedback_wrong: 'Not quite. 1 Kings 5:3 gives a specific reason: the wars waged against David on all sides kept him from building until the LORD put his enemies under his feet. The answer has nothing to do with lineage, withheld blueprints, or lack of craftsmen &mdash; Solomon&#39;s message to Hiram is precise about what stood in the way.',
+    ref: '1 Kings 5:3'
+  },
+  {
+    id: 'q2',
+    text: 'During the building of the temple, 1 Kings 6:7 notes something unusual about the construction site. What was it?',
+    correct: 2,
+    choices: [
+      'Solomon decreed that no work was to be done on the Sabbath, even for the temple&#39;s construction, so that the building rose slowly over many rest cycles',
+      'The workmen were forbidden to enter the inner sanctuary at any stage of the building, working only on the outer courts and side chambers',
+      'No hammer, chisel, or any iron tool was heard at the temple site during construction; all the stones were dressed at the quarry before being brought to the site',
+      'The workers maintained ritual purity throughout the project, bathing in a designated pool before each day&#39;s labor on the holy precinct'
+    ],
+    feedback_correct: '&#10003; &ldquo;In building the temple, only blocks dressed at the quarry were used, and no hammer, chisel or any other iron tool was heard at the temple site while it was being built.&rdquo; (1 Kings 6:7). The detail is theologically freighted: the place of God&#39;s presence would not be profaned by the noise of ordinary industry. Every stone arrived already fitted; nothing rough or unfinished came near the sanctuary. The silence of the construction site mirrors the reverence the holy demands.',
+    feedback_wrong: 'Not quite. 1 Kings 6:7 specifies that all the stones were dressed at the quarry so that no hammer, chisel, or iron tool was heard at the temple site during construction. The sanctity of the building site was protected not by ritual requirements for workers or Sabbath suspensions, but by the silence imposed through preparation done entirely elsewhere.',
+    ref: '1 Kings 6:7'
+  },
+  {
+    id: 'q3',
+    text: 'According to 2 Chronicles 3:1, on what specific site did Solomon begin to build the temple of the LORD in Jerusalem?',
+    correct: 0,
+    choices: [
+      'On Mount Moriah, at the threshing floor of Araunah the Jebusite, where the LORD had appeared to David',
+      'On the highest point of the city of David, at the summit of the ridge above the Kidron Valley, where David had pitched a tent for the ark',
+      'On the hill where Abraham had built an altar when he first entered the land of Canaan, near the great tree of Moreh',
+      'On the site of the altar Gad the seer instructed David to build when the angel of the LORD stood between heaven and earth above Jerusalem'
+    ],
+    feedback_correct: '&#10003; &ldquo;Solomon began to build the temple of the LORD in Jerusalem on Mount Moriah, where the LORD had appeared to his father David. It was on the threshing floor of Araunah the Jebusite, the place provided by David.&rdquo; (2 Chronicles 3:1). The name Mount Moriah appears only here and in Genesis 22 &mdash; where Abraham was sent to sacrifice Isaac. The threshing floor grounds it in David&#39;s mercy at the plague&#39;s end. The temple stands at the intersection of substitution, deliverance, and covenant promise.',
+    feedback_wrong: 'Not quite. 2 Chronicles 3:1 is specific: Mount Moriah, on the threshing floor of Araunah the Jebusite. The name Mount Moriah appears only here and in Genesis 22 (the binding of Isaac), giving the site deep typological resonance. Option D describes the event that identified the location, but the verse names the site itself &mdash; the threshing floor &mdash; and identifies it as the place David purchased after the plague.',
+    ref: '2 Chronicles 3:1'
+  },
+  {
+    id: 'q4',
+    text: 'While Solomon was building the temple, the word of the LORD came to him with a conditional promise (1 Kings 6:11-13). What condition did God place on fulfilling his promise to David and dwelling among Israel?',
+    correct: 3,
+    choices: [
+      'That the temple be completed according to every specification given in the plans David had prepared and handed to Solomon',
+      'That Solomon make a solemn sacrifice at every high place in Israel before the ark was brought into the completed sanctuary',
+      'That Solomon appoint priests and Levites in their divisions to maintain perpetual worship and keep the sacred fire burning',
+      'That Solomon follow God&#39;s decrees, observe his laws, and keep all his commands'
+    ],
+    feedback_correct: '&#10003; &ldquo;If you follow my decrees, observe my laws and keep all my commands and obey them, I will fulfill through you the promise I gave to David your father. And I will live among the Israelites and will not abandon my people Israel.&rdquo; (1 Kings 6:12-13). The divine interruption mid-construction is striking &mdash; God speaks while the walls are going up. The condition is personal obedience, not architectural precision. The structure alone guarantees nothing; the covenant relationship does everything. This word will return to haunt Solomon&#39;s later chapters.',
+    feedback_wrong: 'Not quite. In 1 Kings 6:12-13, the LORD spoke to Solomon mid-construction with a condition: if Solomon followed God&#39;s decrees, laws, and commands, then God would fulfill the Davidic promise and dwell among Israel. No architectural completeness, no sacrificial circuit, no Levitical appointments &mdash; the condition is personal obedience to the covenant, and the promise is God&#39;s own presence.',
+    ref: '1 Kings 6:12-13'
+  },
+  {
+    id: 'q5',
+    text: 'In 2 Chronicles 2, Hiram of Tyre agrees to help Solomon and sends a master craftsman called Huram-Abi. What does Hiram say about this craftsman&#39;s parentage?',
+    correct: 0,
+    choices: [
+      'His mother was from Dan and his father was from Tyre',
+      'Both his father and mother were from the tribe of Judah, trained in all the crafts used for the tabernacle at Sinai',
+      'He was a Sidonite by birth, trained in the crafts of Sidon and later apprenticed to Tyrian metalworkers under Hiram&#39;s father',
+      'His lineage could be traced directly to Bezalel, the craftsman God appointed to build the original tabernacle in the wilderness'
+    ],
+    feedback_correct: '&#10003; &ldquo;His mother was from Dan and his father was from Tyre.&rdquo; (2 Chronicles 2:14). Huram-Abi carries both Israelite and Phoenician blood, and his mastery of virtually every craft and material mirrors the description of Bezalel in Exodus 31 &mdash; the craftsman of the tabernacle. The parallel is not accidental: Chronicles signals continuity between the wilderness sanctuary and Solomon&#39;s temple through this craftsman of mixed descent whose gifts are suited for the holy.',
+    feedback_wrong: 'Not quite. According to 2 Chronicles 2:14, Huram-Abi had a mother from Dan and a father from Tyre &mdash; mixed Israelite and Phoenician descent. (First Kings 7:14 notes his mother was from Naphtali, a minor variation between the accounts.) His extraordinary range of skills and dual heritage echo Bezalel, the tabernacle craftsman of Exodus 31, suggesting the same Spirit equips men for the same holy work across generations.',
+    ref: '2 Chronicles 2:14'
+  },
+  {
+    id: 'q6',
+    text: 'In 1 Kings 5:4-5, Solomon explains to Hiram why he is now able to build the temple when his father could not. What two reasons does he give?',
+    correct: 1,
+    choices: [
+      'He has received the architectural plans in a vision from God and has consolidated the kingdom under unified rule with no rival claimants',
+      'The LORD has given him rest on every side with no adversary or disaster, and it is time to fulfill what God told David &mdash; that his son would build the temple',
+      'He has completed the subjugation of all nations within the promised borders, and the tribute now flowing in provides the resources the project requires',
+      'God appeared to him at Gibeon and commanded him directly to begin building, declaring that the years of delay were now ended'
+    ],
+    feedback_correct: '&#10003; &ldquo;But now the LORD my God has given me rest on every side, and there is no adversary or disaster. I intend, therefore, to build a temple for the Name of the LORD my God, as the LORD told my father David, when he said, &#39;Your son whom I will put on the throne in your place will build the temple for my Name.&#39;&rdquo; (1 Kings 5:4-5). Solomon&#39;s explanation does double duty: it names the divinely given peace that makes building possible, and it frames the entire project as fulfillment of God&#39;s word to David. The temple is not Solomon&#39;s ambition &mdash; it is a promise coming due.',
+    feedback_wrong: 'Not quite. In 1 Kings 5:4-5, Solomon gives Hiram two reasons: (1) the LORD has given him rest on every side with no adversary or disaster, and (2) this is the moment to fulfill what God told David &mdash; that his son would build the temple. The other options draw on real events from Solomon&#39;s reign but are not what he says here.',
+    ref: '1 Kings 5:4-5'
+  },
+  {
+    id: 'q7',
+    text: 'According to 2 Chronicles 3:14, what was the curtain that divided the Most Holy Place made of, and what was worked into it?',
+    correct: 2,
+    choices: [
+      'It was made of beaten gold hammered over an olive wood frame, identical in technique to the gold-overlaid doors of the inner sanctuary',
+      'It was woven of fine white linen with the twelve tribal emblems of Israel embroidered in crimson along its border',
+      'It was made of blue, purple, and crimson yarn and fine linen, with cherubim worked into it',
+      'It was a single cedar panel overlaid with gold on which the wings of cherubim were carved in relief across its entire surface'
+    ],
+    feedback_correct: '&#10003; &ldquo;He made the curtain of blue, purple and crimson yarn and fine linen, with cherubim worked into it.&rdquo; (2 Chronicles 3:14). The color combination &mdash; blue, purple, crimson &mdash; echoes the curtains of the tabernacle (Exodus 26:31), and the cherubim woven into the fabric mirror those hovering over the ark. The Most Holy Place was guarded on every side by the imagery of angelic presence. From Eden onward, the cherubim mark the boundary between the holy and the profane.',
+    feedback_wrong: 'Not quite. 2 Chronicles 3:14 describes the curtain as made of blue, purple, and crimson yarn and fine linen, with cherubim worked into it. The same colors and angelic imagery appear in the tabernacle curtain (Exodus 26:31), pointing to continuity between the two sanctuaries. The cherubim are not decoration; they signify the guarded, mediated presence of the holy God.',
+    ref: '2 Chronicles 3:14'
+  },
+  {
+    id: 'q8',
+    text: 'According to 1 Kings 6:27, how were the two cherubim positioned in the Most Holy Place, and what did their outstretched wings do?',
+    correct: 3,
+    choices: [
+      'They faced the entrance of the inner sanctuary with wings spread upward, one on each side of the doorway, to overshadow all who entered',
+      'They were mounted on the wall of the inner sanctuary on opposite sides, each facing the center of the room with wings folded',
+      'They stood facing each other across the inner sanctuary, each touching only the opposite wall with its outermost wing while their inner wings hung down',
+      'They stood side by side, their inner wings touching each other at the center and their outer wings each touching one side wall of the inner sanctuary'
+    ],
+    feedback_correct: '&#10003; &ldquo;He placed the cherubim inside the innermost room of the temple with their wings spread out. The wing of one cherub touched one wall, while the wing of the other touched the other wall, and their wings touched each other in the middle of the room.&rdquo; (1 Kings 6:27). Together the two cherubim spanned the full twenty-cubit width of the Most Holy Place &mdash; a perfect fit, as though the room had been measured around them. Their joined wings formed an unbroken canopy from wall to wall over the ark of the covenant beneath.',
+    feedback_wrong: 'Not quite. 1 Kings 6:27 describes the two cherubim standing side by side, each with one outer wing touching a side wall and their inner wings meeting each other in the center. Together they created a continuous twenty-cubit canopy spanning the full width of the inner sanctuary, covering the ark of the covenant.',
+    ref: '1 Kings 6:27'
+  },
+  {
+    id: 'q9',
+    text: 'When Hiram of Tyre received Solomon&#39;s message requesting help to build the temple, how did he respond according to 1 Kings 5:7?',
+    correct: 0,
+    choices: [
+      'He was greatly pleased and praised the LORD, saying God had given David a wise son to rule over this great nation',
+      'He consulted his own priests and royal counselors to determine whether the alliance was politically advantageous before agreeing to supply timber',
+      'He expressed wonder that the God of Israel would accept a fixed house, since the gods of his own people were said to dwell in the open heavens',
+      'He replied that he had already heard of Solomon&#39;s wisdom from his own merchants and had been anticipating such an alliance since the days of David'
+    ],
+    feedback_correct: '&#10003; &ldquo;When Hiram heard Solomon&#39;s message, he was greatly pleased and said, &#39;Praise be to the LORD today, for he has given David a wise son to rule over this great nation.&#39;&rdquo; (1 Kings 5:7). A Phoenician king spontaneously offering praise to Israel&#39;s God is not a throwaway detail. Hiram&#39;s response echoes earlier Gentile acknowledgments of the LORD &mdash; Rahab, Jethro, Ruth, the queen of Sheba. Solomon&#39;s wisdom is itself a testimony; Hiram receives it and directs his blessing not to Solomon but to the God who gave him.',
+    feedback_wrong: 'Not quite. 1 Kings 5:7 records that Hiram was greatly pleased and said "Praise be to the LORD today, for he has given David a wise son to rule over this great nation." A pagan king&#39;s unsolicited blessing of Israel&#39;s God fits a pattern throughout Scripture: the nations recognize the LORD through his works in Israel, and Solomon&#39;s wisdom is among those works.',
+    ref: '1 Kings 5:7'
+  },
+  {
+    id: 'q10',
+    text: 'In 2 Chronicles 2:5-6, Solomon acknowledges a fundamental theological tension at the very outset of the building project. What tension does he name?',
+    correct: 2,
+    choices: [
+      'That the temple must be built by forced labor from the surrounding nations, yet the law commands Israel not to oppress the stranger living among them',
+      'That David&#39;s bloodguilt from his wars legally disqualified him from building, yet it was God himself who commanded David to gather the materials and make ready',
+      'That the temple will be built to honor a God greater than all gods, yet the heavens &mdash; even the highest heavens &mdash; cannot contain him, so who can truly build him a house?',
+      'That Solomon will employ Gentile craftsmen and timber from pagan Tyre, yet the sanctuary must remain holy and set apart from all foreign influence'
+    ],
+    feedback_correct: '&#10003; &ldquo;The temple I am going to build will be great, because our God is greater than all other gods. But who is able to build a temple for him, since the heavens, even the highest heavens, cannot contain him? Who then am I to build a temple for him, except as a place to burn sacrifices before him?&rdquo; (2 Chronicles 2:5-6). Solomon names the paradox at the outset: the building is both necessary and insufficient. God cannot be housed &mdash; yet he commands a house. The temple is not a container for God but a designated meeting place; not a cage but an altar. Stephen will cite this very tension in Acts 7:47-49.',
+    feedback_wrong: 'Not quite. 2 Chronicles 2:5-6 records Solomon stating that the temple will be great because God is greater than all other gods &mdash; but immediately acknowledging that the heavens cannot contain him, so who is anyone to presume to build him a house? The temple, he says, is really &ldquo;a place to burn sacrifices before him.&rdquo; Solomon opens the project with theological humility that echoes later in the prophets and in Stephen&#39;s speech in Acts 7.',
+    ref: '2 Chronicles 2:5-6'
+  }
+];
+
+let current = 0;
+let score = 0;
+let answers = [];
+
+function answer(btn, isCorrect, qId) {
+  const block = document.getElementById(qId);
+  const buttons = block.querySelectorAll('.choice-btn');
+  buttons.forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('fb-' + qId);
+  const qIdx = parseInt(qId.replace('q','')) - 1;
+  const q = QUESTIONS[qIdx];
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+    fb.className = 'feedback correct-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10003;</span>' + q.feedback_correct + '<span class="feedback-ref">' + q.ref + '</span>';
+    score++;
+    answers.push({ correct: true, question: q.text, ref: q.ref });
+  } else {
+    btn.classList.add('wrong');
+    buttons[q.correct].classList.add('correct');
+    fb.className = 'feedback wrong-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10007;</span>' + q.feedback_wrong + '<span class="feedback-ref">' + q.ref + '</span>';
+    answers.push({ correct: false, question: q.text, ref: q.ref });
+  }
+
+  const nextBtn = document.getElementById('next-' + qId);
+  if (nextBtn) nextBtn.classList.add('visible');
+}
+
+function nextQ(num) {
+  document.getElementById('q' + num).classList.remove('active');
+  current = num;
+  if (current < 10) {
+    document.getElementById('q' + (current+1)).classList.add('active');
+    updateProgress(current + 1);
+  } else {
+    showResults();
+  }
+}
+
+function updateProgress(qNum) {
+  const pct = Math.round((qNum / 10) * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = 'Question ' + qNum + ' of 10';
+}
+
+function showResults() {
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-label').textContent = 'Complete';
+  document.getElementById('results-screen').style.display = 'block';
+  document.getElementById('score-num').textContent = score;
+
+  const msgs = [
+    { min: 0,  max: 3,  msg: 'The foundation is being laid &mdash; return to the text and try again.' },
+    { min: 4,  max: 5,  msg: 'A fair start. The stones are being dressed; keep reading closely.' },
+    { min: 6,  max: 7,  msg: 'The walls are rising. Good reading &mdash; a few details still to master.' },
+    { min: 8,  max: 9,  msg: 'The cedar is fitted and the gold is applied. Well done.' },
+    { min: 10, max: 10, msg: 'No iron tool heard at this site. A perfect and reverent reading.' }
+  ];
+  const m = msgs.find(x => score >= x.min && score <= x.max);
+  document.getElementById('results-msg').textContent = m ? m.msg : '';
+
+  const circumference = 339.3;
+  const offset = circumference - (score / 10) * circumference;
+  setTimeout(() => {
+    document.getElementById('ring-fill').style.strokeDashoffset = offset;
+  }, 100);
+
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  answers.forEach((a, i) => {
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (a.correct ? 'r-correct' : 'r-wrong');
+    div.innerHTML =
+      '<div class="review-q">Q' + (i+1) + ': ' + QUESTIONS[i].text + '</div>' +
+      '<div class="review-ans">' +
+        (a.correct
+          ? '<span class="review-correct-lbl">&#10003; Correct</span>'
+          : '<span class="review-wrong-lbl">&#10007; Incorrect</span>') +
+        ' &mdash; ' + a.ref +
+      '</div>';
+    reviewList.appendChild(div);
+  });
+}
+
+function resetQuiz() {
+  current = 0;
+  score = 0;
+  answers = [];
+
+  document.querySelectorAll('.question-block').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.choice-btn').forEach(b => {
+    b.disabled = false;
+    b.classList.remove('correct','wrong');
+  });
+  document.querySelectorAll('.feedback').forEach(f => {
+    f.className = 'feedback';
+    f.innerHTML = '';
+  });
+  document.querySelectorAll('.next-btn').forEach(b => b.classList.remove('visible'));
+
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('ring-fill').style.strokeDashoffset = 339.3;
+  document.getElementById('q1').classList.add('active');
+  updateProgress(1);
+  document.getElementById('prog-bar').style.width = '10%';
+}
+</script>
+</body>
+</html>
