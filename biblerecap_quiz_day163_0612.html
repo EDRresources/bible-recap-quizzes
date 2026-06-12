@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 163 Bible Recap Quiz — 1 Kings 7 &amp; 2 Chronicles 4</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 18px;
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.15);
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.3s ease forwards;
+  }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+    color: #1a3d1e;
+    display: block;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.1);
+    border: 1px solid #8b1a1a;
+    color: #5a0e0e;
+    display: block;
+  }
+  .feedback-icon { font-weight: 700; margin-right: 6px; }
+  .feedback-ref {
+    font-style: italic;
+    color: #5a4020;
+    font-size: 0.95rem;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.visible { display: inline-block; }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 22px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.15); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1e1208;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: #9a7a3a;
+    letter-spacing: 0.1em;
+  }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1e1208;
+    margin-bottom: 8px;
+  }
+  .results-message {
+    font-size: 1.08rem;
+    color: #3a2510;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #9a7a3a;
+    margin-bottom: 14px;
+    text-align: left;
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    padding-bottom: 8px;
+  }
+  .review-item {
+    text-align: left;
+    margin-bottom: 14px;
+    padding: 12px 14px;
+    border-radius: 4px;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.1);
+    border-left: 3px solid #1a5c2a;
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.08);
+    border-left: 3px solid #8b1a1a;
+  }
+  .review-q { font-weight: 600; color: #1e1208; margin-bottom: 4px; }
+  .review-ans { font-size: 0.93rem; color: #3a2510; }
+  .review-correct-lbl { color: #1a5c2a; font-weight: 600; }
+  .review-wrong-lbl   { color: #8b1a1a; font-weight: 600; }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .take-again-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  @media (max-width: 520px) {
+    .card { padding: 22px 18px; }
+    .quiz-title { font-size: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- Header -->
+  <div class="quiz-header">
+    <div class="quiz-date">
+      <span class="ornament">&#10022;</span>
+      Friday, June 12, 2026 &middot; Day 163
+      <span class="ornament">&#10022;</span>
+    </div>
+    <div class="quiz-title">The Bible Recap &mdash; Daily Quiz</div>
+    <div class="passage-tags">
+      <span class="passage-tag">1 Kings 7</span>
+      <span class="passage-tag">2 Chronicles 4</span>
+    </div>
+    <div><span class="difficulty-badge">Challenging</span></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap"><div class="progress-bar" id="prog-bar"></div></div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- Card -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <div>
+          <div class="question-text">According to 1 Kings 7:7, how was the Hall of Justice &mdash; the throne room where Solomon rendered judgment &mdash; finished on the inside?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">A</span>Its walls were overlaid with hammered gold like the inner sanctuary, and its floors were paved with cypress inlaid with cedar beams</button>
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">B</span>It was open on three sides with cedar pillars, designed so that petitioners could approach from the outer court on every side</button>
+        <button class="choice-btn" onclick="answer(this,true,'q1')"><span class="choice-letter">C</span>It was paneled with cedar from the floor to the rafters &mdash; the same wood used throughout the palace complex</button>
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">D</span>It was lined from floor to rafter with carved olive wood, like the doorposts and doors of the temple&#39;s inner sanctuary</button>
+      </div>
+      <div class="feedback" id="fb-q1"></div>
+      <button class="next-btn" id="next-q1" onclick="nextQ(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+        <div>
+          <div class="question-text">According to 1 Kings 7:1, how long did Solomon spend building his own palace, and why is this detail significant in its context?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">A</span>Seven years &mdash; the same as the temple, suggesting Solomon devoted equal honor to his own house as to the house of God</button>
+        <button class="choice-btn" onclick="answer(this,true,'q2')"><span class="choice-letter">B</span>Thirteen years &mdash; a noticeably longer period than the seven years required for the temple, which had just been completed in 1 Kings 6:38</button>
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">C</span>Twenty years in total &mdash; the text combines the temple and palace as one continuous building program lasting two decades</button>
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">D</span>No specific timeframe is mentioned for the palace; the chapter moves immediately from its mention to the bronze work of Hiram</button>
+      </div>
+      <div class="feedback" id="fb-q2"></div>
+      <button class="next-btn" id="next-q2" onclick="nextQ(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <div>
+          <div class="question-text">According to 1 Kings 7:21, Hiram set up two bronze pillars at the portico of the temple. Which pillar received which name?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,'q3')"><span class="choice-letter">A</span>The right pillar was named Jakin and the left pillar was named Boaz</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">B</span>The right pillar was named Boaz and the left pillar was named Jakin</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">C</span>The nearer pillar was named Jakin and the far pillar was named Boaz; the text does not specify right or left placement</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">D</span>Both pillars bore the same inscription but were dedicated differently &mdash; one for the priests and one for the people entering the courts</button>
+      </div>
+      <div class="feedback" id="fb-q3"></div>
+      <button class="next-btn" id="next-q3" onclick="nextQ(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <div>
+          <div class="question-text">The molten Sea rested on twelve bronze oxen (1 Kings 7:25). How were these animals positioned beneath it?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">A</span>Six facing east and six facing west, forming two parallel rows on which the Sea was balanced above them</button>
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">B</span>All twelve arranged in a single outward-facing ring, their backs pressed together at the center forming the base</button>
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">C</span>Groups of four, each group facing one of the four compass directions, with four oxen per side</button>
+        <button class="choice-btn" onclick="answer(this,true,'q4')"><span class="choice-letter">D</span>Three facing north, three facing west, three facing south, and three facing east &mdash; all with their hindquarters toward the center</button>
+      </div>
+      <div class="feedback" id="fb-q4"></div>
+      <button class="next-btn" id="next-q4" onclick="nextQ(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">1 Kings 7:26 describes the rim of the bronze Sea in unusual detail. How does the text characterize it?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">A</span>Overlaid in hammered gold, a cubit in thickness, and inscribed with words of blessing along the outer surface</button>
+        <button class="choice-btn" onclick="answer(this,true,'q5')"><span class="choice-letter">B</span>A handbreadth in thickness, shaped like the rim of a cup &mdash; like a lily blossom</button>
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">C</span>Broad enough for a man to walk upon, inscribed with the names of the twelve tribes around the outer edge</button>
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">D</span>Formed in the likeness of a bull&#39;s head repeated all around the outer edge, matching the twelve oxen that bore the Sea below</button>
+      </div>
+      <div class="feedback" id="fb-q5"></div>
+      <button class="next-btn" id="next-q5" onclick="nextQ(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <div>
+          <div class="question-text">According to 2 Chronicles 4:6, the bronze Sea and the ten basins served two distinct purposes. What distinction does the text draw?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">A</span>The Sea was for washing the great altar and its utensils; the basins were for the priestly hand-and-foot washing required before each service</button>
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">B</span>The basins served the inner court priests and the Sea served the outer court Levites, each providing water proportionate to their level of access</button>
+        <button class="choice-btn" onclick="answer(this,true,'q6')"><span class="choice-letter">C</span>The ten basins were for washing the things used for the burnt offerings; the Sea was for the priests to wash in</button>
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">D</span>Both the Sea and the basins served identical purposes for priestly cleansing, but the Sea was reserved for the three annual feast days while the basins served the daily rites</button>
+      </div>
+      <div class="feedback" id="fb-q6"></div>
+      <button class="next-btn" id="next-q6" onclick="nextQ(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <div>
+          <div class="question-text">2 Chronicles 4 opens with a furnishing completely absent from the parallel account in 1 Kings 7 &mdash; a large bronze altar. What does Chronicles record about its dimensions?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,'q7')"><span class="choice-letter">A</span>Twenty cubits long, twenty cubits wide, and ten cubits high</button>
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">B</span>Built of hewn stone and overlaid with bronze plates, thirty cubits long and fifteen cubits wide</button>
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">C</span>Chronicles refers to it only as &ldquo;the great altar of burnt offering&rdquo; without specifying any dimensions</button>
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">D</span>Forty cubits long, twenty cubits wide, and fifteen cubits high &mdash; large enough to occupy the entire inner court</button>
+      </div>
+      <div class="feedback" id="fb-q7"></div>
+      <button class="next-btn" id="next-q7" onclick="nextQ(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+        <div>
+          <div class="question-text">According to 1 Kings 7:39, how did Hiram arrange the ten movable bronze stands, and where was the Sea specifically positioned?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">A</span>All ten stands were arranged in a row along the eastern facade of the temple, facing the outer court and the rising sun</button>
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">B</span>Five stands were placed in the inner court and five in the outer court, reflecting the two levels of priestly access to the sanctuary</button>
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">C</span>Eight stands were grouped around the outer walls and two were placed flanking the entrance to the Hall of Pillars</button>
+        <button class="choice-btn" onclick="answer(this,true,'q8')"><span class="choice-letter">D</span>Five stands on the south side and five on the north, with the Sea placed at the southeast corner of the temple</button>
+      </div>
+      <div class="feedback" id="fb-q8"></div>
+      <button class="next-btn" id="next-q8" onclick="nextQ(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <div>
+          <div class="question-text">The first building in Solomon&#39;s palace complex described in 1 Kings 7 is called &ldquo;the House of the Forest of Lebanon.&rdquo; What feature of this building most clearly explains its unusual name?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">A</span>It was constructed beside the royal cedar nursery Solomon maintained in the Kidron Valley as a symbol of his trade covenant with Hiram</button>
+        <button class="choice-btn" onclick="answer(this,true,'q9')"><span class="choice-letter">B</span>The entire hall was supported by four rows of cedar columns with cedar beams above, making it essentially a transplanted forest of Lebanon</button>
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">C</span>All its windows and doors faced northward toward Lebanon so the king could survey the direction from which his timber was shipped</button>
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">D</span>The building was named in honor of the Lebanese laborers who died during the dangerous timber-felling operations in the mountain forests</button>
+      </div>
+      <div class="feedback" id="fb-q9"></div>
+      <button class="next-btn" id="next-q9" onclick="nextQ(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <div>
+          <div class="question-text">According to 1 Kings 7:13-14, Solomon summoned a craftsman named Hiram from Tyre to execute all the bronze work for the temple. What does the text record about his lineage and skill?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">A</span>He was of the household of Bezalel the tabernacle craftsman, trained from his youth in the crafts of gold, silver, and bronze according to the tabernacle tradition</button>
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">B</span>Both his parents were from Tyre &mdash; his father the chief metalworker and his mother the daughter of the Phoenician high priest</button>
+        <button class="choice-btn" onclick="answer(this,true,'q10')"><span class="choice-letter">C</span>His mother was a widow of the tribe of Naphtali and his father was a man of Tyre skilled in bronze; Hiram himself was filled with wisdom, understanding, and skill for all bronze work</button>
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">D</span>He was King Hiram of Tyre&#39;s own son, sent as a royal pledge to seal the trade agreement and ensure Phoenician craftsmanship was represented throughout the temple</button>
+      </div>
+      <div class="feedback" id="fb-q10"></div>
+      <button class="next-btn" id="next-q10" onclick="nextQ(10)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Results -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 130 130">
+          <circle class="score-ring-bg" cx="65" cy="65" r="54"/>
+          <circle class="score-ring-fill" id="ring-fill" cx="65" cy="65" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <div class="score-num" id="score-num">0</div>
+          <div class="score-denom">out of 10</div>
+        </div>
+      </div>
+      <div class="results-title">Quiz Complete</div>
+      <div class="results-message" id="results-msg"></div>
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+    </div>
+
+  </div><!-- .card -->
+</div><!-- .outer-wrap -->
+
+<script>
+const QUESTIONS = [
+  {
+    id: 'q1',
+    text: 'According to 1 Kings 7:7, how was the Hall of Justice — the throne room where Solomon rendered judgment — finished on the inside?',
+    correct: 2,
+    choices: [
+      'Its walls were overlaid with hammered gold like the inner sanctuary, and its floors were paved with cypress inlaid with cedar beams',
+      'It was open on three sides with cedar pillars, designed so that petitioners could approach from the outer court on every side',
+      'It was paneled with cedar from the floor to the rafters — the same wood used throughout the palace complex',
+      'It was lined from floor to rafter with carved olive wood, like the doorposts and doors of the temple&#39;s inner sanctuary'
+    ],
+    feedback_correct: '&#10003; &ldquo;He also made the Hall of Justice, where he was to judge, and he paneled it with cedar from floor to ceiling.&rdquo; (1 Kings 7:7). The cedar paneling of the judgment hall is not a neutral decorating choice. The same precious material used throughout the temple complex now dignifies the seat of royal justice. Solomon&#39;s throne room and God&#39;s sanctuary shared the same wood, suggesting that righteous judgment was meant to be of one piece with worship. A king who judged in a room that looked like a temple was being reminded of whose authority he represented.',
+    feedback_wrong: 'Not quite. 1 Kings 7:7 says the Hall of Justice was paneled with cedar from floor to ceiling. No gold overlay, no open colonnades, no olive wood. The cedar throughout signaled a deliberate echo of the temple itself. The king who sat in judgment there was meant to understand that his court was, in a real sense, an extension of the sanctuary: justice and holiness are not two different things.',
+    ref: '1 Kings 7:7'
+  },
+  {
+    id: 'q2',
+    text: 'According to 1 Kings 7:1, how long did Solomon spend building his own palace, and why is this detail significant in its context?',
+    correct: 1,
+    choices: [
+      'Seven years — the same as the temple, suggesting Solomon devoted equal honor to his own house as to the house of God',
+      'Thirteen years — a noticeably longer period than the seven years required for the temple, which had just been completed in 1 Kings 6:38',
+      'Twenty years in total — the text combines the temple and palace as one continuous building program lasting two decades',
+      'No specific timeframe is mentioned for the palace; the chapter moves immediately from its mention to the bronze work of Hiram'
+    ],
+    feedback_correct: '&#10003; &ldquo;Solomon was building his own house thirteen years, and he finished his entire house.&rdquo; (1 Kings 7:1). This verse is placed immediately after 1 Kings 6:38, which notes the temple took seven years to complete. The contrast is unavoidable: the house of God took seven years; the house of Solomon took nearly twice as long. The detail is not flattering. It does not accuse Solomon of wrongdoing, but it plants a quiet warning about where his heart was drifting. The seeds of the divided kingdom may already be visible in the king&#39;s measuring rod.',
+    feedback_wrong: 'Not quite. 1 Kings 7:1 says Solomon spent thirteen years building his own house — a verse placed immediately after 1 Kings 6:38, which notes the temple took seven years. The contrast is built into the text&#39;s structure. Seven years for the house of God; thirteen for the house of the king. The reader who notices is reading carefully.',
+    ref: '1 Kings 7:1'
+  },
+  {
+    id: 'q3',
+    text: 'According to 1 Kings 7:21, Hiram set up two bronze pillars at the portico of the temple. Which pillar received which name?',
+    correct: 0,
+    choices: [
+      'The right pillar was named Jakin and the left pillar was named Boaz',
+      'The right pillar was named Boaz and the left pillar was named Jakin',
+      'The nearer pillar was named Jakin and the far pillar was named Boaz; the text does not specify right or left placement',
+      'Both pillars bore the same inscription but were dedicated differently — one for the priests and one for the people entering the courts'
+    ],
+    feedback_correct: '&#10003; &ldquo;He set up the right pillar and named it Jakin, and he set up the left pillar and named it Boaz.&rdquo; (1 Kings 7:21). Their names have been variously translated &ldquo;He establishes&rdquo; (Jakin) and &ldquo;In him is strength&rdquo; (Boaz) — though neither meaning is given in the text itself. These were free-standing pillars at the portico entrance, not load-bearing columns but monuments. To walk between them was to pass under a declaration in bronze. Every priest and Levite who entered the temple courts passed daily through this proclamation of divine stability and strength.',
+    feedback_wrong: 'Not quite. 1 Kings 7:21 is clear: the right pillar was named Jakin, the left was named Boaz. Not reversed, not unnamed, not dedicated by function. The precision matters — these were named monuments standing at the gateway to the holy. Their names have been translated &ldquo;He establishes&rdquo; and &ldquo;In him is strength,&rdquo; though the text itself gives no translation.',
+    ref: '1 Kings 7:21'
+  },
+  {
+    id: 'q4',
+    text: 'The molten Sea rested on twelve bronze oxen (1 Kings 7:25). How were these animals positioned beneath it?',
+    correct: 3,
+    choices: [
+      'Six facing east and six facing west, forming two parallel rows on which the Sea was balanced above them',
+      'All twelve arranged in a single outward-facing ring, their backs pressed together at the center forming the base',
+      'Groups of four, each group facing one of the four compass directions, with four oxen per side',
+      'Three facing north, three facing west, three facing south, and three facing east — all with their hindquarters toward the center'
+    ],
+    feedback_correct: '&#10003; &ldquo;It stood on twelve oxen, three facing north, three facing west, three facing south and three facing east. The Sea rested on top of them, and their hindquarters were toward the center.&rdquo; (1 Kings 7:25). Three facing each direction: completeness to the compass. The twelve oxen evoke the twelve tribes. The image is of the whole nation — oriented toward every horizon — upholding the waters of priestly cleansing. The Sea resting on Israel&#39;s shoulders, pointed outward to the world: there is something quietly cosmic about a washing basin held up by the covenant people.',
+    feedback_wrong: 'Not quite. 1 Kings 7:25 specifies: three oxen faced each of the four cardinal directions, with their hindquarters all toward the center. Not east-and-west only, not a single outward ring, not groups of four. The arrangement is fourfold and complete — twelve tribes, four compass points, a cosmic symbol of the whole people upholding the waters of cleansing.',
+    ref: '1 Kings 7:25'
+  },
+  {
+    id: 'q5',
+    text: '1 Kings 7:26 describes the rim of the bronze Sea in unusual detail. How does the text characterize it?',
+    correct: 1,
+    choices: [
+      'Overlaid in hammered gold, a cubit in thickness, and inscribed with words of blessing along the outer surface',
+      'A handbreadth in thickness, shaped like the rim of a cup — like a lily blossom',
+      'Broad enough for a man to walk upon, inscribed with the names of the twelve tribes around the outer edge',
+      'Formed in the likeness of a bull&#39;s head repeated all around the outer edge, matching the twelve oxen that bore the Sea below'
+    ],
+    feedback_correct: '&#10003; &ldquo;It was a handbreadth in thickness, and its rim was shaped like the rim of a cup, like a lily blossom.&rdquo; (1 Kings 7:26). The lily recurs throughout the temple&#39;s ornamentation — in the pillar capitals, in the Song of Solomon, and now at the brim of the washing basin. A handbreadth thick, cup-shaped, flowering. Even the vessel that held the water for priestly cleansing was made to bloom. The temple declares throughout that holiness and beauty are not rivals but partners: nothing in the presence of God is merely functional.',
+    feedback_wrong: 'Not quite. 1 Kings 7:26 says the rim was a handbreadth thick, shaped like the rim of a cup, and like a lily blossom. No gold, no inscriptions, no walking surface. The lily blossom is a deliberate aesthetic choice in a washing basin — the same floral motif that appears on the pillar capitals. Beauty and function are not in competition; they are united in the service of the holy.',
+    ref: '1 Kings 7:26'
+  },
+  {
+    id: 'q6',
+    text: 'According to 2 Chronicles 4:6, the bronze Sea and the ten basins served two distinct purposes. What distinction does the text draw?',
+    correct: 2,
+    choices: [
+      'The Sea was for washing the great altar and its utensils; the basins were for the priestly hand-and-foot washing required before each service',
+      'The basins served the inner court priests and the Sea served the outer court Levites, each providing water proportionate to their level of access',
+      'The ten basins were for washing the things used for the burnt offerings; the Sea was for the priests to wash in',
+      'Both the Sea and the basins served identical purposes for priestly cleansing, but the Sea was reserved for the three annual feast days while the basins served the daily rites'
+    ],
+    feedback_correct: '&#10003; &ldquo;In them the things used for the burnt offering were washed, but the Sea was for the priests to wash in.&rdquo; (2 Chronicles 4:6). The distinction is theologically precise: the Sea — the great central basin — was for the priests themselves. The smaller basins handled the practical preparation of the sacrifices. Both vessels declare the same truth: nothing enters the presence of God unwashed. The one who brings the sacrifice and the sacrifice itself alike require cleansing. No blood reaches the altar without first passing through water.',
+    feedback_wrong: 'Not quite. 2 Chronicles 4:6 draws a clear line: the basins were for washing the things used for the burnt offerings; the Sea was for the priests to wash in. Not for altar pavement, not for vestments, not for feast-day-only use. The two vessels serve two aspects of the same requirement: the offerer and the offering both need cleansing before drawing near to God.',
+    ref: '2 Chronicles 4:6'
+  },
+  {
+    id: 'q7',
+    text: '2 Chronicles 4 opens with a furnishing completely absent from the parallel account in 1 Kings 7 — a large bronze altar. What does Chronicles record about its dimensions?',
+    correct: 0,
+    choices: [
+      'Twenty cubits long, twenty cubits wide, and ten cubits high',
+      'Built of hewn stone and overlaid with bronze plates, thirty cubits long and fifteen cubits wide',
+      'Chronicles refers to it only as &ldquo;the great altar of burnt offering&rdquo; without specifying any dimensions',
+      'Forty cubits long, twenty cubits wide, and fifteen cubits high — large enough to occupy the entire inner court'
+    ],
+    feedback_correct: '&#10003; &ldquo;He made a bronze altar twenty cubits long, twenty cubits wide and ten cubits high.&rdquo; (2 Chronicles 4:1). What makes this striking is that it is entirely absent from 1 Kings 7, which begins immediately with the two bronze pillars and the Sea. Chronicles opens with the altar — perhaps ensuring that readers do not miss the theological priority. Before the Sea for washing, before the lampstands for light, comes the altar for blood. The temple&#39;s business begins at the place of sacrifice. Atonement precedes illumination; the altar precedes the lamp.',
+    feedback_wrong: 'Not quite. 2 Chronicles 4:1 gives exact dimensions: twenty cubits long, twenty cubits wide, and ten cubits high. This opening verse is a distinctly Chronistic contribution — 1 Kings 7 never mentions this altar at all, moving directly to the bronze pillars. Chronicles&#39; placement of the altar first signals its priority: the first furnishing the reader meets is the one where sacrifice is made. Before water, before light, comes the altar.',
+    ref: '2 Chronicles 4:1'
+  },
+  {
+    id: 'q8',
+    text: 'According to 1 Kings 7:39, how did Hiram arrange the ten movable bronze stands, and where was the Sea specifically positioned?',
+    correct: 3,
+    choices: [
+      'All ten stands were arranged in a row along the eastern facade of the temple, facing the outer court and the rising sun',
+      'Five stands were placed in the inner court and five in the outer court, reflecting the two levels of priestly access to the sanctuary',
+      'Eight stands were grouped around the outer walls and two were placed flanking the entrance to the Hall of Pillars',
+      'Five stands on the south side and five on the north, with the Sea placed at the southeast corner of the temple'
+    ],
+    feedback_correct: '&#10003; &ldquo;He placed five of the stands on the south side of the temple and five on the north. He placed the Sea on the south side, at the southeast corner of the temple.&rdquo; (1 Kings 7:39). The bilateral arrangement — five and five — mirrors the organizing principle of the temple&#39;s furnishings throughout: lampstands five south and five north, vessels distributed in equal measure. The Sea, set apart for priestly washing alone, received a specific orientation: the southeast corner, where access and direction were carefully governed. The whole arrangement speaks of order, symmetry, and intention.',
+    feedback_wrong: 'Not quite. 1 Kings 7:39 says five stands were placed on the south side and five on the north. The Sea was given the southeast corner specifically. Not all on the east, not split between courts, not clustered together. The arrangement reflects the bilateral symmetry that runs throughout the temple&#39;s furnishing — five and five, south and north, with the Sea anchored at its designated corner.',
+    ref: '1 Kings 7:39'
+  },
+  {
+    id: 'q9',
+    text: 'The first building in Solomon&#39;s palace complex described in 1 Kings 7 is called &ldquo;the House of the Forest of Lebanon.&rdquo; What feature of this building most clearly explains its unusual name?',
+    correct: 1,
+    choices: [
+      'It was constructed beside the royal cedar nursery Solomon maintained in the Kidron Valley as a symbol of his trade covenant with Hiram',
+      'The entire hall was supported by four rows of cedar columns with cedar beams above, making it essentially a transplanted forest of Lebanon',
+      'All its windows and doors faced northward toward Lebanon so the king could survey the direction from which his timber was shipped',
+      'The building was named in honor of the Lebanese laborers who died during the dangerous timber-felling operations in the mountain forests'
+    ],
+    feedback_correct: '&#10003; &ldquo;He built the Palace of the Forest of Lebanon a hundred cubits long, fifty wide and thirty high, with four rows of cedar columns supporting trimmed cedar beams.&rdquo; (1 Kings 7:2). The name explains itself: four rows of cedar columns, cedar beams overhead, cedar paneling throughout. To stand inside was to be surrounded by the very forest Solomon had traded grain and oil to obtain from Hiram. Later texts tell us the great golden shields were stored here; in the prophets it becomes a symbol of Solomonic glory destined to fall. Its abundance of cedar was its distinction — and its implicit pride.',
+    feedback_wrong: 'Not quite. 1 Kings 7:2-3 explains the name through its description: four rows of cedar columns, cedar beams above, cedar paneling throughout. The building was so thoroughly cedar that it evoked the Lebanese forest itself. The name came from the material, not from a nursery&#39;s location, a compass orientation, or a tribute to fallen workers. Cedar was the point — its beauty, its fragrance, its cost.',
+    ref: '1 Kings 7:2-3'
+  },
+  {
+    id: 'q10',
+    text: 'According to 1 Kings 7:13-14, Solomon summoned a craftsman named Hiram from Tyre to execute all the bronze work for the temple. What does the text record about his lineage and skill?',
+    correct: 2,
+    choices: [
+      'He was of the household of Bezalel the tabernacle craftsman, trained from his youth in the crafts of gold, silver, and bronze according to the tabernacle tradition',
+      'Both his parents were from Tyre — his father the chief metalworker and his mother the daughter of the Phoenician high priest',
+      'His mother was a widow of the tribe of Naphtali and his father was a man of Tyre skilled in bronze; Hiram himself was filled with wisdom, understanding, and skill for all bronze work',
+      'He was King Hiram of Tyre&#39;s own son, sent as a royal pledge to seal the trade agreement and ensure Phoenician craftsmanship was represented throughout the temple'
+    ],
+    feedback_correct: '&#10003; &ldquo;He was the son of a widow of the tribe of Naphtali, and his father was a man of Tyre, a worker in bronze. And he was full of wisdom and understanding and skill to work all works in bronze.&rdquo; (1 Kings 7:13-14). The description of Hiram as &ldquo;full of wisdom, understanding, and skill&rdquo; echoes the language used for Bezalel in Exodus 31:3 — the craftsman of the tabernacle. Both men were of mixed heritage, both sovereignly equipped for sacred work. Note also that 1 Kings says his mother was from Naphtali while 2 Chronicles 2:14 says she was from Dan — one of the well-known minor discrepancies between the parallel histories, worth knowing and not worth fearing.',
+    feedback_wrong: 'Not quite. 1 Kings 7:13-14 says Hiram&#39;s mother was a widow of the tribe of Naphtali and his father was a Tyrian bronze craftsman. Hiram himself was &ldquo;full of wisdom, understanding, and skill for all works in bronze&rdquo; — language that echoes Bezalel of Exodus 31:3. Note: 1 Kings says Naphtali; 2 Chronicles 2:14 says Dan. The discrepancy is real, discussed by commentators for centuries, and does not need to be smoothed over. The portrait of Hiram as the Spirit-equipped craftsman remains consistent across both accounts.',
+    ref: '1 Kings 7:13-14'
+  }
+];
+
+let current = 0;
+let score = 0;
+let answers = [];
+
+function answer(btn, isCorrect, qId) {
+  const block = document.getElementById(qId);
+  const buttons = block.querySelectorAll('.choice-btn');
+  buttons.forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('fb-' + qId);
+  const qIdx = parseInt(qId.replace('q','')) - 1;
+  const q = QUESTIONS[qIdx];
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+    fb.className = 'feedback correct-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10003;</span>' + q.feedback_correct + '<span class="feedback-ref">' + q.ref + '</span>';
+    score++;
+    answers.push({ correct: true, question: q.text, ref: q.ref });
+  } else {
+    btn.classList.add('wrong');
+    buttons[q.correct].classList.add('correct');
+    fb.className = 'feedback wrong-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10007;</span>' + q.feedback_wrong + '<span class="feedback-ref">' + q.ref + '</span>';
+    answers.push({ correct: false, question: q.text, ref: q.ref });
+  }
+
+  const nextBtn = document.getElementById('next-' + qId);
+  if (nextBtn) nextBtn.classList.add('visible');
+}
+
+function nextQ(num) {
+  document.getElementById('q' + num).classList.remove('active');
+  current = num;
+  if (current < 10) {
+    document.getElementById('q' + (current+1)).classList.add('active');
+    updateProgress(current + 1);
+  } else {
+    showResults();
+  }
+}
+
+function updateProgress(qNum) {
+  const pct = Math.round((qNum / 10) * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = 'Question ' + qNum + ' of 10';
+}
+
+function showResults() {
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-label').textContent = 'Complete';
+  document.getElementById('results-screen').style.display = 'block';
+  document.getElementById('score-num').textContent = score;
+
+  const msgs = [
+    { min: 0,  max: 3,  msg: 'The pillars are not yet standing — return to the text and look more closely.' },
+    { min: 4,  max: 5,  msg: 'The foundation is laid. Keep reading; the cedar is still being dressed.' },
+    { min: 6,  max: 7,  msg: 'The walls are rising and the basins are in place. A few details remain.' },
+    { min: 8,  max: 9,  msg: 'Jakin and Boaz stand firm. A careful and close reading.' },
+    { min: 10, max: 10, msg: 'The Sea is full and the lily blossom gleams. A perfect and reverent reading.' }
+  ];
+  const m = msgs.find(x => score >= x.min && score <= x.max);
+  document.getElementById('results-msg').textContent = m ? m.msg : '';
+
+  const circumference = 339.3;
+  const offset = circumference - (score / 10) * circumference;
+  setTimeout(() => {
+    document.getElementById('ring-fill').style.strokeDashoffset = offset;
+  }, 100);
+
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  answers.forEach((a, i) => {
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (a.correct ? 'r-correct' : 'r-wrong');
+    div.innerHTML =
+      '<div class="review-q">Q' + (i+1) + ': ' + QUESTIONS[i].text + '</div>' +
+      '<div class="review-ans">' +
+        (a.correct
+          ? '<span class="review-correct-lbl">&#10003; Correct</span>'
+          : '<span class="review-wrong-lbl">&#10007; Incorrect</span>') +
+        ' &mdash; ' + a.ref +
+      '</div>';
+    reviewList.appendChild(div);
+  });
+}
+
+function resetQuiz() {
+  current = 0;
+  score = 0;
+  answers = [];
+
+  document.querySelectorAll('.question-block').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.choice-btn').forEach(b => {
+    b.disabled = false;
+    b.classList.remove('correct','wrong');
+  });
+  document.querySelectorAll('.feedback').forEach(f => {
+    f.className = 'feedback';
+    f.innerHTML = '';
+  });
+  document.querySelectorAll('.next-btn').forEach(b => b.classList.remove('visible'));
+
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('ring-fill').style.strokeDashoffset = 339.3;
+  document.getElementById('q1').classList.add('active');
+  updateProgress(1);
+  document.getElementById('prog-bar').style.width = '10%';
+}
+</script>
+</body>
+</html>
