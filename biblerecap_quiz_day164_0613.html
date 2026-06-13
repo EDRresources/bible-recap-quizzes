@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 164 Bible Recap Quiz — 1 Kings 8 &amp; 2 Chronicles 5</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.15);
+    border-color: #1a5c2a;
+    color: #1a5c2a;
+  }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.12);
+    border-color: #8b1a1a;
+    color: #8b1a1a;
+  }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #9a7a3a;
+    min-width: 18px;
+    padding-top: 2px;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong   .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    padding: 16px 18px;
+    border-radius: 4px;
+    font-size: 1.02rem;
+    line-height: 1.55;
+    margin-bottom: 18px;
+  }
+  .feedback.correct-fb {
+    display: block;
+    background: rgba(26,92,42,0.1);
+    border: 1px solid rgba(26,92,42,0.35);
+    color: #1a3d20;
+  }
+  .feedback.wrong-fb {
+    display: block;
+    background: rgba(139,26,26,0.08);
+    border: 1px solid rgba(139,26,26,0.3);
+    color: #4a1010;
+  }
+  .feedback-icon { font-weight: 700; margin-right: 6px; }
+  .feedback-ref {
+    display: block;
+    margin-top: 8px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    opacity: 0.7;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e1208;
+    border: none;
+    border-radius: 4px;
+    padding: 11px 28px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+  .next-btn.visible { display: inline-block; }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 20px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg  { fill: none; stroke: rgba(201,168,76,0.2); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1.2s ease;
+  }
+  .score-ring-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .score-num   { font-family: 'Cinzel', serif; font-size: 2rem; font-weight: 700; color: #1e1208; line-height: 1; }
+  .score-denom { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.1em; color: #9a7a3a; }
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1e1208;
+    margin-bottom: 10px;
+  }
+  .results-message {
+    font-size: 1.05rem;
+    color: #4a3010;
+    font-style: italic;
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    color: #9a7a3a;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    text-align: left;
+  }
+  .review-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 14px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    text-align: left;
+  }
+  .review-item.r-correct { background: rgba(26,92,42,0.08); border: 1px solid rgba(26,92,42,0.25); }
+  .review-item.r-wrong   { background: rgba(139,26,26,0.07); border: 1px solid rgba(139,26,26,0.22); }
+  .review-q   { font-size: 0.95rem; color: #1e1208; line-height: 1.4; font-weight: 600; }
+  .review-ans { font-size: 0.88rem; color: #5a4020; }
+  .review-correct-lbl { color: #1a5c2a; font-weight: 700; }
+  .review-wrong-lbl   { color: #8b1a1a; font-weight: 700; }
+  .take-again-btn {
+    margin-top: 24px;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e1208;
+    border: none;
+    border-radius: 4px;
+    padding: 12px 36px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+  .take-again-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- Header -->
+  <div class="quiz-header">
+    <div class="quiz-date">Saturday, June 13, 2026 &middot; Day 164</div>
+    <div class="quiz-title">Daily Bible Recap Quiz</div>
+    <div class="passage-tags">
+      <span class="passage-tag">1 Kings 8</span>
+      <span class="passage-tag">2 Chronicles 5</span>
+    </div>
+    <span class="ornament">&#10022;</span>
+    <span class="difficulty-badge">Challenging</span>
+    <span class="ornament">&#10022;</span>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="prog-bar"></div>
+  </div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- Card -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <div>
+          <div class="question-text">According to 1 Kings 8:9, what did the ark of the covenant contain when the priests placed it in the Most Holy Place?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">A</span>The two stone tablets, Aaron&#39;s rod that budded, and the golden jar of manna</button>
+        <button class="choice-btn" onclick="answer(this,true,'q1')"><span class="choice-letter">B</span>Nothing except the two stone tablets which Moses placed there at Horeb when the LORD made a covenant with Israel</button>
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">C</span>The two tablets of the law and a copy of the book of the covenant that Moses had written</button>
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">D</span>The golden mercy seat, the two tablets, and a scroll containing the words of the Davidic covenant</button>
+      </div>
+      <div class="feedback" id="fb-q1"></div>
+      <button class="next-btn" id="next-q1" onclick="nextQ(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">When the priests set the ark in the Most Holy Place, what unusual detail does 1 Kings 8:8 record about the carrying poles?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,'q2')"><span class="choice-letter">A</span>The ends of the poles were visible from the Holy Place in front of the inner sanctuary, but they could not be seen from outside the sanctuary</button>
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">B</span>The poles were so long they had to be bent sideways to pass through the entrance to the Most Holy Place</button>
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">C</span>The poles extended through the side walls of the sanctuary, protruding outward so they could never be removed</button>
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">D</span>The poles were withdrawn from the rings of the ark once it was in place, so the ark rested on the floor of the Most Holy Place alone</button>
+      </div>
+      <div class="feedback" id="fb-q2"></div>
+      <button class="next-btn" id="next-q2" onclick="nextQ(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <div>
+          <div class="question-text">Solomon opens his prayer of dedication in 1 Kings 8:23 with a specific declaration about who the LORD is. What does he say?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">A</span>&ldquo;You alone are holy, and no house built with human hands can truly contain you&rdquo;</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">B</span>&ldquo;You created the heavens and the earth and chose Jerusalem as the place where your name would dwell forever&rdquo;</button>
+        <button class="choice-btn" onclick="answer(this,true,'q3')"><span class="choice-letter">C</span>&ldquo;There is no God like you in heaven above or on earth beneath &mdash; keeping covenant and showing steadfast love to your servants&rdquo;</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">D</span>&ldquo;Heaven and the highest heaven cannot contain you; how much less this house that I have built for your name&rdquo;</button>
+      </div>
+      <div class="feedback" id="fb-q3"></div>
+      <button class="next-btn" id="next-q3" onclick="nextQ(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <div>
+          <div class="question-text">Solomon&#39;s prayer includes a petition on behalf of foreigners who pray toward the temple. What reason does he give God for answering such prayers? (1 Kings 8:43)</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">A</span>So that all nations might come to Jerusalem to bring tribute and acknowledge Israel&#39;s God as the greatest among the gods</button>
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">B</span>So that Israel might dwell at peace among surrounding peoples who have learned to revere the name of the LORD</button>
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">C</span>So that foreigners might observe the sacrificial rites and learn to offer worship acceptable to the God of Israel</button>
+        <button class="choice-btn" onclick="answer(this,true,'q4')"><span class="choice-letter">D</span>So that all the peoples of the earth may know the LORD&#39;s name and fear him, just as his own people Israel do</button>
+      </div>
+      <div class="feedback" id="fb-q4"></div>
+      <button class="next-btn" id="next-q4" onclick="nextQ(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+        <div>
+          <div class="question-text">According to 2 Chronicles 5:13&ndash;14, what happened at the moment when the trumpeters, singers, and musicians all praised the LORD together?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,'q5')"><span class="choice-letter">A</span>A cloud filled the house of the LORD, and the priests could not stand to minister because the glory of God had filled the temple</button>
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">B</span>Fire came down from heaven, consumed the burnt offering on the altar, and drove the priests back from the sanctuary entrance</button>
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">C</span>The ground beneath the temple shook, and the priests fell prostrate before the ark as the curtain between the courts billowed outward</button>
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">D</span>The sound of the music was heard throughout all Jerusalem and the surrounding hills, and the people bowed to the ground in worship</button>
+      </div>
+      <div class="feedback" id="fb-q5"></div>
+      <button class="next-btn" id="next-q5" onclick="nextQ(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <div>
+          <div class="question-text">When Solomon prays about the scenario in which Israel is defeated by an enemy because of sin, what condition does he attach to God&#39;s hearing and restoring them? (1 Kings 8:33&ndash;34)</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">A</span>That the king of Israel personally offers a burnt offering and grain offering at the altar as atonement for the nation&#39;s sin</button>
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">B</span>That the army returns from its defeat, fasts for seven days, and the elders lead the people in a national lament before the ark</button>
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">C</span>That the Levitical priests conduct a rite of public confession with sacrificial blood sprinkled on the temple&#39;s threshold</button>
+        <button class="choice-btn" onclick="answer(this,true,'q6')"><span class="choice-letter">D</span>That the people turn back, confess the LORD&#39;s name, pray and make supplication to him in this temple</button>
+      </div>
+      <div class="feedback" id="fb-q6"></div>
+      <button class="next-btn" id="next-q6" onclick="nextQ(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">According to 2 Chronicles 5:12, which three Levites are named as leading the musical worship when the ark was brought into the temple?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">A</span>Zadok, Abiathar, and Benaiah &mdash; the chief priest, his assistant, and the commander of the army who had supported Solomon&#39;s coronation</button>
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">B</span>Korah, Gershom, and Merari &mdash; the ancestral heads of the three Levitical clans appointed by Moses in the wilderness</button>
+        <button class="choice-btn" onclick="answer(this,true,'q7')"><span class="choice-letter">C</span>Asaph, Heman, and Jeduthun &mdash; dressed in fine linen with cymbals, harps, and lyres, standing east of the altar with 120 priests sounding trumpets</button>
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">D</span>Ethan, Zerah, and Chalcol &mdash; the three men of wisdom whose fame Solomon surpassed according to 1 Kings 4:31</button>
+      </div>
+      <div class="feedback" id="fb-q7"></div>
+      <button class="next-btn" id="next-q7" onclick="nextQ(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+        <div>
+          <div class="question-text">In his dedication prayer, Solomon specifically invokes God&#39;s covenant promise to David. What does Solomon say God promised his father? (1 Kings 8:25)</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">A</span>That David&#39;s name would be as great as the names of the greatest men on earth, and that his tomb would never be disturbed</button>
+        <button class="choice-btn" onclick="answer(this,true,'q8')"><span class="choice-letter">B</span>That there would always be a man from David&#39;s line on the throne of Israel, provided his sons keep their way before God as David walked before him</button>
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">C</span>That the kingdom given to David would endure until all his enemies were made a footstool, and that his throne would stand as long as the sun endures</button>
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">D</span>That God himself would fight on Israel&#39;s behalf in every generation, so long as a son of David honored the temple and kept the sacrificial calendar</button>
+      </div>
+      <div class="feedback" id="fb-q8"></div>
+      <button class="next-btn" id="next-q8" onclick="nextQ(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <div>
+          <div class="question-text">In Solomon&#39;s concluding blessing over the assembly (1 Kings 8:57&ndash;58), what is the deepest thing he asks God to do for the people?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,'q9')"><span class="choice-letter">A</span>That the LORD would not leave or forsake his people, and would incline their hearts toward him to walk in all his ways and keep his commandments</button>
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">B</span>That God would grant Israel long life, abundant rain, and lasting peace from all enemies surrounding the land</button>
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">C</span>That God would forgive all past transgressions before him and never remember the sins of the fathers against the children</button>
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">D</span>That God would send an angel to guard the entrance of the temple and prevent any idolatrous worship from taking root in Israel</button>
+      </div>
+      <div class="feedback" id="fb-q9"></div>
+      <button class="next-btn" id="next-q9" onclick="nextQ(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <div>
+          <div class="question-text">In the middle of his dedication prayer, Solomon makes a stunning theological admission about God and the temple he has built. What does he say? (1 Kings 8:27)</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">A</span>&ldquo;This temple is a shadow of your true dwelling; when the time is right, you will replace it with a house built without human hands&rdquo;</button>
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">B</span>&ldquo;You have no need of a house made of cedar and stone, yet you condescend to dwell among us and place your name in Jerusalem&rdquo;</button>
+        <button class="choice-btn" onclick="answer(this,true,'q10')"><span class="choice-letter">C</span>&ldquo;But will God indeed dwell on the earth? Behold, heaven and the highest heaven cannot contain you; how much less this house that I have built&rdquo;</button>
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">D</span>&ldquo;The house I have built is beautiful, but it is nothing compared to the tabernacle you yourself inhabit in the heaven of heavens above all creation&rdquo;</button>
+      </div>
+      <div class="feedback" id="fb-q10"></div>
+      <button class="next-btn" id="next-q10" onclick="nextQ(10)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Results -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 130 130">
+          <circle class="score-ring-bg" cx="65" cy="65" r="54"/>
+          <circle class="score-ring-fill" id="ring-fill" cx="65" cy="65" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <div class="score-num" id="score-num">0</div>
+          <div class="score-denom">out of 10</div>
+        </div>
+      </div>
+      <div class="results-title">Quiz Complete</div>
+      <div class="results-message" id="results-msg"></div>
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+    </div>
+
+  </div><!-- .card -->
+</div><!-- .outer-wrap -->
+
+<script>
+const QUESTIONS = [
+  {
+    id: 'q1',
+    text: 'According to 1 Kings 8:9, what did the ark of the covenant contain when the priests placed it in the Most Holy Place?',
+    correct: 1,
+    choices: [
+      'The two stone tablets, Aaron&#39;s rod that budded, and the golden jar of manna',
+      'Nothing except the two stone tablets which Moses placed there at Horeb when the LORD made a covenant with Israel',
+      'The two tablets of the law and a copy of the book of the covenant that Moses had written',
+      'The golden mercy seat, the two tablets, and a scroll containing the words of the Davidic covenant'
+    ],
+    feedback_correct: '&#10003; &ldquo;There was nothing in the ark except the two stone tablets that Moses had placed in it at Horeb, where the LORD made a covenant with the Israelites after they came out of Egypt.&rdquo; (1 Kings 8:9). Hebrews 9:4 mentions the jar of manna and Aaron&#39;s rod alongside the tablets, but 1 Kings 8:9 says the ark contained only the tablets at this point &mdash; centuries had passed since the Exodus, and those earlier items were apparently no longer present. What remained were the tablets: the Law alone, the covenant itself. It is fitting that the ark carried into the Most Holy Place held not relics of the wilderness but the covenant words that defined Israel&#39;s relationship with God.',
+    feedback_wrong: 'Not quite. 1 Kings 8:9 states explicitly: &ldquo;There was nothing in the ark except the two stone tablets.&rdquo; Although Hebrews 9:4 mentions the jar of manna and Aaron&#39;s rod in connection with the ark, by the time of Solomon&#39;s temple those items were no longer inside it. What remained were the tablets of the covenant &mdash; the Law alone, the defining document of God&#39;s relationship with Israel, carried into the Most Holy Place under the wings of the cherubim.',
+    ref: '1 Kings 8:9'
+  },
+  {
+    id: 'q2',
+    text: 'When the priests set the ark in the Most Holy Place, what unusual detail does 1 Kings 8:8 record about the carrying poles?',
+    correct: 0,
+    choices: [
+      'The ends of the poles were visible from the Holy Place in front of the inner sanctuary, but they could not be seen from outside the sanctuary',
+      'The poles were so long they had to be bent sideways to pass through the entrance to the Most Holy Place',
+      'The poles extended through the side walls of the sanctuary, protruding outward so they could never be removed',
+      'The poles were withdrawn from the rings of the ark once it was in place, so the ark rested on the floor of the Most Holy Place alone'
+    ],
+    feedback_correct: '&#10003; &ldquo;The poles were so long that their ends could be seen from the Holy Place in front of the inner sanctuary, but they were not visible from outside the Holy Place; and they are still there today.&rdquo; (1 Kings 8:8). The poles could not be removed &mdash; they were part of the ark&#39;s design from Sinai. What is remarkable here is the detail of visibility: the ends peeked into the Holy Place, a quiet reminder to every priest who served in that outer room that the ark, though veiled, was present just beyond the curtain. The poles pointed outward toward the servants of God as a constant, silent witness. The ark was hidden, but not absent.',
+    feedback_wrong: 'Not quite. 1 Kings 8:8 records that the poles were long enough for their ends to be seen from the Holy Place in front of the inner sanctuary &mdash; but not from outside. The poles were not bent, did not protrude through walls, and were not removed. They were permanent fixtures of the ark by design, and they served here as an invisible pointer: priests in the outer Holy Place, performing their daily duties with the lampstands and incense, could see the ends of the poles just beyond the curtain, reminding them that the presence of God was near.',
+    ref: '1 Kings 8:8'
+  },
+  {
+    id: 'q3',
+    text: 'Solomon opens his prayer of dedication in 1 Kings 8:23 with a specific declaration about who the LORD is. What does he say?',
+    correct: 2,
+    choices: [
+      '&ldquo;You alone are holy, and no house built with human hands can truly contain you&rdquo;',
+      '&ldquo;You created the heavens and the earth and chose Jerusalem as the place where your name would dwell forever&rdquo;',
+      '&ldquo;There is no God like you in heaven above or on earth beneath &mdash; keeping covenant and showing steadfast love to your servants&rdquo;',
+      '&ldquo;Heaven and the highest heaven cannot contain you; how much less this house that I have built for your name&rdquo;'
+    ],
+    feedback_correct: '&#10003; &ldquo;LORD, the God of Israel, there is no God like you in heaven above or on earth below &mdash; you who keep your covenant of love with your servants who continue wholeheartedly in your way.&rdquo; (1 Kings 8:23). Solomon begins not with a request but with a declaration of incomparability. The prayer opens with theology before it opens with petition: first, who God is; then, what Solomon asks. Note that choice D is also in the prayer &mdash; but it comes later, at verse 27. The opening word is not about God&#39;s transcendence (though that follows) but about his covenant faithfulness: there is no one like him, and the reason given is that he keeps his steadfast love. The God who built this temple is first and foremost the God who keeps his word.',
+    feedback_wrong: 'Not quite. The opening of Solomon&#39;s prayer in 1 Kings 8:23 is a declaration of God&#39;s incomparability rooted in his covenant faithfulness: &ldquo;There is no God like you in heaven above or on earth beneath &mdash; you who keep your covenant of love.&rdquo; Choice D does appear in the prayer, but at verse 27, not at the opening. Choice A captures the spirit of verse 27 as well. Solomon begins not with God&#39;s transcendence but with his covenant-keeping nature &mdash; that is the theological foundation of everything that follows.',
+    ref: '1 Kings 8:23'
+  },
+  {
+    id: 'q4',
+    text: 'Solomon&#39;s prayer includes a petition on behalf of foreigners who pray toward the temple. What reason does he give God for answering such prayers? (1 Kings 8:43)',
+    correct: 3,
+    choices: [
+      'So that all nations might come to Jerusalem to bring tribute and acknowledge Israel&#39;s God as the greatest among the gods',
+      'So that Israel might dwell at peace among surrounding peoples who have learned to revere the name of the LORD',
+      'So that foreigners might observe the sacrificial rites and learn to offer worship acceptable to the God of Israel',
+      'So that all the peoples of the earth may know the LORD&#39;s name and fear him, just as his own people Israel do'
+    ],
+    feedback_correct: '&#10003; &ldquo;Hear from heaven, your dwelling place, and do whatever the foreigner asks of you, so that all the peoples of the earth may know your name and fear you, as do your own people Israel.&rdquo; (1 Kings 8:43). The temple was never meant to be a tribal shrine. Solomon&#39;s prayer presses outward to the edges of the earth: every foreigner who hears of God&#39;s great name and comes to pray at this house is to be heard &mdash; and the reason is explicitly missional. God answers the foreigner&#39;s prayer so that the nations will know him. This is the Abrahamic promise embedded in temple theology: &ldquo;all the families of the earth will be blessed.&rdquo; Solomon had it right. His kingdom&#39;s fame would eventually draw the Queen of Sheba; his temple prayer drew the horizon of the whole world.',
+    feedback_wrong: 'Not quite. 1 Kings 8:43 gives a clear and striking reason: God should hear the foreigner &ldquo;so that all the peoples of the earth may know your name and fear you, as do your own people Israel.&rdquo; The reason is not tribute, not political peace, not instruction in sacrifice &mdash; it is knowledge of God spreading to the ends of the earth. The temple was meant from its dedication to be a house of prayer for the nations, not a house of privilege for one people alone.',
+    ref: '1 Kings 8:43'
+  },
+  {
+    id: 'q5',
+    text: 'According to 2 Chronicles 5:13&ndash;14, what happened at the moment when the trumpeters, singers, and musicians all praised the LORD together?',
+    correct: 0,
+    choices: [
+      'A cloud filled the house of the LORD, and the priests could not stand to minister because the glory of God had filled the temple',
+      'Fire came down from heaven, consumed the burnt offering on the altar, and drove the priests back from the sanctuary entrance',
+      'The ground beneath the temple shook, and the priests fell prostrate before the ark as the curtain between the courts billowed outward',
+      'The sound of the music was heard throughout all Jerusalem and the surrounding hills, and the people bowed to the ground in worship'
+    ],
+    feedback_correct: '&#10003; &ldquo;The trumpeters and musicians joined in unison to give praise and thanks to the LORD&hellip; Then the temple of the LORD was filled with the cloud, and the priests could not perform their service because of the cloud, for the glory of the LORD filled the temple of God.&rdquo; (2 Chronicles 5:13&ndash;14). The cloud is the same glory-cloud that had filled the tabernacle at Sinai when it was dedicated (Exodus 40:34&ndash;35), and Moses himself could not enter then either. The pattern repeats: when God moves into his dwelling, his servants are stopped in their tracks. The fire and the cloud are signs not of terror but of overwhelming presence. No priest could stand to minister. The one who fills all things had come to fill this house.',
+    feedback_wrong: 'Not quite. 2 Chronicles 5:13&ndash;14 records that when the musicians and trumpeters praised together, &ldquo;the temple of the LORD was filled with the cloud, and the priests could not perform their service because of the cloud, for the glory of the LORD filled the temple of God.&rdquo; The fire comes later &mdash; at the dedication in 2 Chronicles 7:1. Here, it is the cloud, the same Shekinah glory that had filled the tabernacle at Sinai. When God arrives at his house, his servants cannot stand. Worship had stopped, not because something went wrong, but because something went gloriously right.',
+    ref: '2 Chronicles 5:13-14'
+  },
+  {
+    id: 'q6',
+    text: 'When Solomon prays about the scenario in which Israel is defeated by an enemy because of sin, what condition does he attach to God&#39;s hearing and restoring them? (1 Kings 8:33&ndash;34)',
+    correct: 3,
+    choices: [
+      'That the king of Israel personally offers a burnt offering and grain offering at the altar as atonement for the nation&#39;s sin',
+      'That the army returns from its defeat, fasts for seven days, and the elders lead the people in a national lament before the ark',
+      'That the Levitical priests conduct a rite of public confession with sacrificial blood sprinkled on the temple&#39;s threshold',
+      'That the people turn back, confess the LORD&#39;s name, pray and make supplication to him in this temple'
+    ],
+    feedback_correct: '&#10003; &ldquo;When your people Israel have been defeated before an enemy because they have sinned against you, and when they turn back and give praise to your name, praying and making supplication before you in this temple, then hear from heaven and forgive the sin of your people Israel.&rdquo; (1 Kings 8:33&ndash;34). Solomon&#39;s whole prayer is structured around the same pattern: sin leads to suffering, suffering leads to repentance, repentance leads to prayer, prayer leads to forgiveness and restoration. The temple is not a mechanism for automatic forgiveness &mdash; it is a place to turn back toward. The condition is always the same: return to God, confess his name, pray. The temple is only as useful as the heart that turns toward it.',
+    feedback_wrong: 'Not quite. 1 Kings 8:33&ndash;34 attaches a clear condition: the people must &ldquo;turn back and give praise to your name, praying and making supplication before you in this temple.&rdquo; No royal sacrifice, no days of fasting, no priestly blood rite is specified. The condition is repentance directed toward God through prayer at the temple. The pattern runs through the entire prayer: sin &rarr; consequence &rarr; turning back &rarr; prayer &rarr; forgiveness. Solomon built a house of prayer, not a house of mechanical atonement.',
+    ref: '1 Kings 8:33-34'
+  },
+  {
+    id: 'q7',
+    text: 'According to 2 Chronicles 5:12, which three Levites are named as leading the musical worship when the ark was brought into the temple?',
+    correct: 2,
+    choices: [
+      'Zadok, Abiathar, and Benaiah &mdash; the chief priest, his assistant, and the commander of the army who had supported Solomon&#39;s coronation',
+      'Korah, Gershom, and Merari &mdash; the ancestral heads of the three Levitical clans appointed by Moses in the wilderness',
+      'Asaph, Heman, and Jeduthun &mdash; dressed in fine linen with cymbals, harps, and lyres, standing east of the altar with 120 priests sounding trumpets',
+      'Ethan, Zerah, and Chalcol &mdash; the three men of wisdom whose fame Solomon surpassed according to 1 Kings 4:31'
+    ],
+    feedback_correct: '&#10003; &ldquo;All the Levites who were musicians &mdash; Asaph, Heman, Jeduthun and their sons and relatives &mdash; stood on the east side of the altar, dressed in fine linen and playing cymbals, harps and lyres.&rdquo; (2 Chronicles 5:12). Asaph, Heman, and Jeduthun are the three great Levitical choir directors David had appointed for the worship of the tabernacle and tent of meeting (1 Chronicles 25). Several of the Psalms are dedicated to them. Here at the temple&#39;s opening moment, the same musicians David had trained and authorized are leading the nation in praise. The line from David&#39;s musical reformation to Solomon&#39;s temple dedication is direct and intentional.',
+    feedback_wrong: 'Not quite. 2 Chronicles 5:12 names Asaph, Heman, and Jeduthun as the three leading Levitical musicians at the temple&#39;s dedication. They were dressed in fine linen and standing east of the altar with 120 priests sounding trumpets. All three were musical directors appointed originally by David &mdash; their names appear on psalm superscriptions, and 1 Chronicles 25 records the full organization of their guilds. Choice D confuses this with the wisdom contest of 1 Kings 4:31, where different men named Ethan and others are mentioned.',
+    ref: '2 Chronicles 5:12'
+  },
+  {
+    id: 'q8',
+    text: 'In his dedication prayer, Solomon specifically invokes God&#39;s covenant promise to David. What does Solomon say God promised his father? (1 Kings 8:25)',
+    correct: 1,
+    choices: [
+      'That David&#39;s name would be as great as the names of the greatest men on earth, and that his tomb would never be disturbed',
+      'That there would always be a man from David&#39;s line on the throne of Israel, provided his sons keep their way before God as David walked before him',
+      'That the kingdom given to David would endure until all his enemies were made a footstool, and that his throne would stand as long as the sun endures',
+      'That God himself would fight on Israel&#39;s behalf in every generation, so long as a son of David honored the temple and kept the sacrificial calendar'
+    ],
+    feedback_correct: '&#10003; &ldquo;Now, LORD, the God of Israel, keep for your servant David my father the promises you made to him when you said, &#39;You shall never fail to have a successor to sit before me on the throne of Israel, if only your descendants are careful in all they do to walk before me faithfully as you have done.&#39;&rdquo; (1 Kings 8:25). Solomon repeats the condition his father received: the dynastic promise is real and unconditional in one sense &mdash; David&#39;s line &mdash; but conditional in its application: the sons must walk before God as David did. This is a prayer of faith, not presumption. Solomon knows the promise; he knows the condition. The whole prayer is an appeal to God to honor the covenant on terms both parties have agreed to.',
+    feedback_wrong: 'Not quite. 1 Kings 8:25 has Solomon recall the promise as: a successor of David will always sit on the throne of Israel &mdash; but only &ldquo;if&rdquo; his descendants walk faithfully before God as David did. The promise is dynastic but conditional. Choice C reflects the unconditional language of Psalm 89 and 2 Samuel 7, which is also genuine; but Solomon&#39;s prayer here quotes the conditional form. The tension between the unconditional covenant (2 Samuel 7) and the conditional warnings (1 Kings 8:25) runs throughout the Old Testament and reaches its resolution only in Christ, the Son of David who perfectly kept every condition.',
+    ref: '1 Kings 8:25'
+  },
+  {
+    id: 'q9',
+    text: 'In Solomon&#39;s concluding blessing over the assembly (1 Kings 8:57&ndash;58), what is the deepest thing he asks God to do for the people?',
+    correct: 0,
+    choices: [
+      'That the LORD would not leave or forsake his people, and would incline their hearts toward him to walk in all his ways and keep his commandments',
+      'That God would grant Israel long life, abundant rain, and lasting peace from all enemies surrounding the land',
+      'That God would forgive all past transgressions before him and never remember the sins of the fathers against the children',
+      'That God would send an angel to guard the entrance of the temple and prevent any idolatrous worship from taking root in Israel'
+    ],
+    feedback_correct: '&#10003; &ldquo;May the LORD our God be with us as he was with our ancestors; may he never leave us nor forsake us. May he turn our hearts to him, to walk in obedience to him and keep the commands, decrees and laws he gave our ancestors.&rdquo; (1 Kings 8:57&ndash;58). This is the heart of Solomon&#39;s prayer for the people: not material blessing, not military victory, not divine protection from enemies &mdash; but hearts inclined toward God. The deepest need is not external circumstances but internal direction. Solomon understood, at least at this moment, that the whole machinery of the temple &mdash; the sacrifice, the prayer, the dedication &mdash; would be useless without a people whose hearts were turned toward the one it was all meant to serve.',
+    feedback_wrong: 'Not quite. Solomon&#39;s concluding blessing in 1 Kings 8:57&ndash;58 asks that God would not leave or forsake his people and would &ldquo;turn our hearts to him.&rdquo; The request is fundamentally for faithful hearts, not material prosperity, forgiveness of past sins, or angelic protection. This is the most searching request in the entire prayer: it acknowledges that the people cannot incline their own hearts toward God and must ask him to do it. The theology of the new covenant &mdash; God writing the law on the heart &mdash; is already present in seed form at the dedication of Solomon&#39;s temple.',
+    ref: '1 Kings 8:57-58'
+  },
+  {
+    id: 'q10',
+    text: 'In the middle of his dedication prayer, Solomon makes a stunning theological admission about God and the temple he has built. What does he say? (1 Kings 8:27)',
+    correct: 2,
+    choices: [
+      '&ldquo;This temple is a shadow of your true dwelling; when the time is right, you will replace it with a house built without human hands&rdquo;',
+      '&ldquo;You have no need of a house made of cedar and stone, yet you condescend to dwell among us and place your name in Jerusalem&rdquo;',
+      '&ldquo;But will God indeed dwell on the earth? Behold, heaven and the highest heaven cannot contain you; how much less this house that I have built&rdquo;',
+      '&ldquo;The house I have built is beautiful, but it is nothing compared to the tabernacle you yourself inhabit in the heaven of heavens above all creation&rdquo;'
+    ],
+    feedback_correct: '&#10003; &ldquo;But will God really dwell on earth? The heavens, even the highest heaven, cannot contain you. How much less this temple I have built!&rdquo; (1 Kings 8:27). This is one of the most theologically remarkable statements in all of the Old Testament. Solomon, who has just completed the most magnificent building project in Israel&#39;s history &mdash; who has dedicated seven years to it, celebrated its completion with 22,000 oxen and 120,000 sheep &mdash; turns around and says: this house cannot contain the God it was built for. The God of Israel refuses to be domesticated by any structure, however beautiful. Stephen would quote this very theological instinct in Acts 7:48&ndash;49 when defending the Gospel. Solomon saw it: God is too big for any house. He graciously enters &mdash; but he is never contained.',
+    feedback_wrong: 'Not quite. 1 Kings 8:27 reads: &ldquo;But will God really dwell on earth? The heavens, even the highest heaven, cannot contain you. How much less this temple I have built!&rdquo; The quote is verbatim in meaning if not in translation. Choices A and B are paraphrases of ideas that go slightly beyond the text &mdash; the text does not say &ldquo;shadow&rdquo; or &ldquo;condescend,&rdquo; and choice D does not appear in Scripture. Choice C is the exact content of the verse. Stephen cited this verse in Acts 7:48 when arguing that God does not dwell in houses made by human hands &mdash; the instinct was already present in the temple&#39;s own dedication prayer.',
+    ref: '1 Kings 8:27'
+  }
+];
+
+let current = 0;
+let score = 0;
+let answers = [];
+
+function answer(btn, isCorrect, qId) {
+  const block = document.getElementById(qId);
+  const buttons = block.querySelectorAll('.choice-btn');
+  buttons.forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('fb-' + qId);
+  const qIdx = parseInt(qId.replace('q','')) - 1;
+  const q = QUESTIONS[qIdx];
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+    fb.className = 'feedback correct-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10003;</span>' + q.feedback_correct + '<span class="feedback-ref">' + q.ref + '</span>';
+    score++;
+    answers.push({ correct: true, question: q.text, ref: q.ref });
+  } else {
+    btn.classList.add('wrong');
+    buttons[q.correct].classList.add('correct');
+    fb.className = 'feedback wrong-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10007;</span>' + q.feedback_wrong + '<span class="feedback-ref">' + q.ref + '</span>';
+    answers.push({ correct: false, question: q.text, ref: q.ref });
+  }
+
+  const nextBtn = document.getElementById('next-' + qId);
+  if (nextBtn) nextBtn.classList.add('visible');
+}
+
+function nextQ(num) {
+  document.getElementById('q' + num).classList.remove('active');
+  current = num;
+  if (current < 10) {
+    document.getElementById('q' + (current+1)).classList.add('active');
+    updateProgress(current + 1);
+  } else {
+    showResults();
+  }
+}
+
+function updateProgress(qNum) {
+  const pct = Math.round((qNum / 10) * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = 'Question ' + qNum + ' of 10';
+}
+
+function showResults() {
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-label').textContent = 'Complete';
+  document.getElementById('results-screen').style.display = 'block';
+  document.getElementById('score-num').textContent = score;
+
+  const msgs = [
+    { min: 0,  max: 3,  msg: 'The cloud has not yet filled your house. Return to the text and read again with care.' },
+    { min: 4,  max: 5,  msg: 'The ark is in the court. A few more steps before you reach the Most Holy Place.' },
+    { min: 6,  max: 7,  msg: 'The poles are visible in the Holy Place. You are drawing near the inner sanctuary.' },
+    { min: 8,  max: 9,  msg: 'The cherubim spread their wings over your reading. A careful and faithful pass.' },
+    { min: 10, max: 10, msg: 'The glory of the LORD has filled this house. A perfect and reverent reading.' }
+  ];
+  const m = msgs.find(x => score >= x.min && score <= x.max);
+  document.getElementById('results-msg').textContent = m ? m.msg : '';
+
+  const circumference = 339.3;
+  const offset = circumference - (score / 10) * circumference;
+  setTimeout(() => {
+    document.getElementById('ring-fill').style.strokeDashoffset = offset;
+  }, 100);
+
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  answers.forEach((a, i) => {
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (a.correct ? 'r-correct' : 'r-wrong');
+    div.innerHTML =
+      '<div class="review-q">Q' + (i+1) + ': ' + QUESTIONS[i].text + '</div>' +
+      '<div class="review-ans">' +
+        (a.correct
+          ? '<span class="review-correct-lbl">&#10003; Correct</span>'
+          : '<span class="review-wrong-lbl">&#10007; Incorrect</span>') +
+        ' &mdash; ' + a.ref +
+      '</div>';
+    reviewList.appendChild(div);
+  });
+}
+
+function resetQuiz() {
+  current = 0;
+  score = 0;
+  answers = [];
+
+  document.querySelectorAll('.question-block').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.choice-btn').forEach(b => {
+    b.disabled = false;
+    b.classList.remove('correct','wrong');
+  });
+  document.querySelectorAll('.feedback').forEach(f => {
+    f.className = 'feedback';
+    f.innerHTML = '';
+  });
+  document.querySelectorAll('.next-btn').forEach(b => b.classList.remove('visible'));
+
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('ring-fill').style.strokeDashoffset = 339.3;
+  document.getElementById('q1').classList.add('active');
+  updateProgress(1);
+  document.getElementById('prog-bar').style.width = '10%';
+}
+</script>
+</body>
+</html>
