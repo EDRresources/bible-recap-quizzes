@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 165 Bible Recap Quiz — 2 Chronicles 6–7 &amp; Psalm 136</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.15);
+    border-color: #1a5c2a;
+    color: #1a5c2a;
+  }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.12);
+    border-color: #8b1a1a;
+    color: #8b1a1a;
+  }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #9a7a3a;
+    min-width: 18px;
+    padding-top: 2px;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong   .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    padding: 16px 18px;
+    border-radius: 4px;
+    font-size: 1.02rem;
+    line-height: 1.55;
+    margin-bottom: 18px;
+  }
+  .feedback.correct-fb {
+    display: block;
+    background: rgba(26,92,42,0.1);
+    border: 1px solid rgba(26,92,42,0.35);
+    color: #1a3d20;
+  }
+  .feedback.wrong-fb {
+    display: block;
+    background: rgba(139,26,26,0.08);
+    border: 1px solid rgba(139,26,26,0.3);
+    color: #4a1010;
+  }
+  .feedback-icon { font-weight: 700; margin-right: 6px; }
+  .feedback-ref {
+    display: block;
+    margin-top: 8px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    opacity: 0.7;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e1208;
+    border: none;
+    border-radius: 4px;
+    padding: 11px 28px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+  .next-btn.visible { display: inline-block; }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 20px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg  { fill: none; stroke: rgba(201,168,76,0.2); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1.2s ease;
+  }
+  .score-ring-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .score-num   { font-family: 'Cinzel', serif; font-size: 2rem; font-weight: 700; color: #1e1208; line-height: 1; }
+  .score-denom { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.1em; color: #9a7a3a; }
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1e1208;
+    margin-bottom: 10px;
+  }
+  .results-message {
+    font-size: 1.05rem;
+    color: #4a3010;
+    font-style: italic;
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    color: #9a7a3a;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    text-align: left;
+  }
+  .review-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 14px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    text-align: left;
+  }
+  .review-item.r-correct { background: rgba(26,92,42,0.08); border: 1px solid rgba(26,92,42,0.25); }
+  .review-item.r-wrong   { background: rgba(139,26,26,0.07); border: 1px solid rgba(139,26,26,0.22); }
+  .review-q   { font-size: 0.95rem; color: #1e1208; line-height: 1.4; font-weight: 600; }
+  .review-ans { font-size: 0.88rem; color: #5a4020; }
+  .review-correct-lbl { color: #1a5c2a; font-weight: 700; }
+  .review-wrong-lbl   { color: #8b1a1a; font-weight: 700; }
+  .take-again-btn {
+    margin-top: 24px;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e1208;
+    border: none;
+    border-radius: 4px;
+    padding: 12px 36px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+  .take-again-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- Header -->
+  <div class="quiz-header">
+    <div class="quiz-date">Sunday, June 14, 2026 &middot; Day 165</div>
+    <div class="quiz-title">Daily Bible Recap Quiz</div>
+    <div class="passage-tags">
+      <span class="passage-tag">2 Chronicles 6</span>
+      <span class="passage-tag">2 Chronicles 7</span>
+      <span class="passage-tag">Psalm 136</span>
+    </div>
+    <span class="ornament">&#10022;</span>
+    <span class="difficulty-badge">Challenging</span>
+    <span class="ornament">&#10022;</span>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="prog-bar"></div>
+  </div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- Card -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">According to 2 Chronicles 6:13, Solomon stood on a bronze platform to pray at the dedication. What were its dimensions?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">A</span>Ten cubits long, ten cubits wide, and five cubits high &mdash; matching the dimensions of the bronze altar of burnt offering</button>
+        <button class="choice-btn" onclick="answer(this,true,'q1')"><span class="choice-letter">B</span>Five cubits long, five cubits wide, and three cubits high &mdash; placed in the center of the outer court</button>
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">C</span>Seven cubits long, seven cubits wide, and seven cubits high &mdash; matching the seven lamps of the golden lampstand</button>
+        <button class="choice-btn" onclick="answer(this,false,'q1')"><span class="choice-letter">D</span>Three cubits long, three cubits wide, and five cubits high &mdash; the inverse of the altar&#39;s proportions</button>
+      </div>
+      <div class="feedback" id="fb-q1"></div>
+      <button class="next-btn" id="next-q1" onclick="nextQ(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+        <div>
+          <div class="question-text">According to 2 Chronicles 7:1, what happened the moment Solomon finished his prayer of dedication?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,'q2')"><span class="choice-letter">A</span>Fire came down from heaven and consumed the burnt offering and the sacrifices, and the glory of the LORD filled the temple</button>
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">B</span>A thick cloud descended as the 120 priests sounded their trumpets, and Solomon fell on his face before the LORD in the outer court</button>
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">C</span>The ground beneath the temple shook, and the poles of the ark shifted in their rings as the cherubim wings touched above the Most Holy Place</button>
+        <button class="choice-btn" onclick="answer(this,false,'q2')"><span class="choice-letter">D</span>Solomon heard a voice from the Most Holy Place directing him to go out and bless the assembled people of Israel</button>
+      </div>
+      <div class="feedback" id="fb-q2"></div>
+      <button class="next-btn" id="next-q2" onclick="nextQ(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <div>
+          <div class="question-text">In the middle of his dedication prayer, Solomon makes a stunning theological admission about God and the temple he has built. What does he say? (2 Chronicles 6:18)</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">A</span>&ldquo;This house I have built cannot hold your glory; let it be only a shadow of your true and eternal dwelling above the heavens&rdquo;</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">B</span>&ldquo;I have not built this house for my own glory but for your name, so that every prayer made here may ascend to your throne above&rdquo;</button>
+        <button class="choice-btn" onclick="answer(this,true,'q3')"><span class="choice-letter">C</span>&ldquo;But will God indeed dwell with man on the earth? Behold, heaven and the highest heaven cannot contain you; how much less this house that I have built!&rdquo;</button>
+        <button class="choice-btn" onclick="answer(this,false,'q3')"><span class="choice-letter">D</span>&ldquo;You have no need of gold or cedar; yet you have condescended to place your name among us and to dwell in this city forever&rdquo;</button>
+      </div>
+      <div class="feedback" id="fb-q3"></div>
+      <button class="next-btn" id="next-q3" onclick="nextQ(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <div>
+          <div class="question-text">In 2 Chronicles 7:14, God lists four things his people must do before he will hear, forgive, and heal their land. What is the FIRST condition listed?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">A</span>Seek his face</button>
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">B</span>Turn from their wicked ways</button>
+        <button class="choice-btn" onclick="answer(this,false,'q4')"><span class="choice-letter">C</span>Pray and cry out to him</button>
+        <button class="choice-btn" onclick="answer(this,true,'q4')"><span class="choice-letter">D</span>Humble themselves</button>
+      </div>
+      <div class="feedback" id="fb-q4"></div>
+      <button class="next-btn" id="next-q4" onclick="nextQ(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+        <div>
+          <div class="question-text">Psalm 136 has a distinctive structural feature shared by no other psalm. What is it?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">A</span>Each verse opens with a specific name or title of God, cycling through the divine names used in the Pentateuch</button>
+        <button class="choice-btn" onclick="answer(this,true,'q5')"><span class="choice-letter">B</span>Every one of its 26 verses ends with the refrain &ldquo;for his steadfast love endures forever&rdquo;</button>
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">C</span>Each verse pairs a divine act with a corresponding blessing upon Israel, creating 26 matched couplets of deed and reward</button>
+        <button class="choice-btn" onclick="answer(this,false,'q5')"><span class="choice-letter">D</span>The opening word of each verse follows the order of the Hebrew alphabet, making it a complete acrostic poem</button>
+      </div>
+      <div class="feedback" id="fb-q5"></div>
+      <button class="next-btn" id="next-q5" onclick="nextQ(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <div>
+          <div class="question-text">After the dedication festivities concluded, the LORD appeared to Solomon with his personal response to the prayer. According to 2 Chronicles 7:12, when did this appear­ance occur?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,'q6')"><span class="choice-letter">A</span>At night</button>
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">B</span>At dawn, as the priests were lighting the lamps for the morning service</button>
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">C</span>On the last day of the festival, during the great assembly when all Israel stood before the altar</button>
+        <button class="choice-btn" onclick="answer(this,false,'q6')"><span class="choice-letter">D</span>Three days after Solomon had returned to his palace, in a vision while he slept</button>
+      </div>
+      <div class="feedback" id="fb-q6"></div>
+      <button class="next-btn" id="next-q6" onclick="nextQ(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">In 2 Chronicles 6:22&ndash;23, Solomon prays about a case where one man sins against his neighbor and both come before the altar under oath. What does Solomon ask God to do with the guilty man?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">A</span>Withhold rain from his fields and strike his livestock until he repents and makes full restitution to the one he wronged</button>
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">B</span>Remove his name from the assembly and bar him from the temple courts until he has made amends before the priests</button>
+        <button class="choice-btn" onclick="answer(this,true,'q7')"><span class="choice-letter">C</span>Bring the guilty man&#39;s conduct on his own head, while vindicating the righteous man by rewarding him according to his righteousness</button>
+        <button class="choice-btn" onclick="answer(this,false,'q7')"><span class="choice-letter">D</span>Exile the guilty man from his tribe and grant his inheritance to the righteous man as compensation for the wrong done</button>
+      </div>
+      <div class="feedback" id="fb-q7"></div>
+      <button class="next-btn" id="next-q7" onclick="nextQ(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+        <div>
+          <div class="question-text">According to 2 Chronicles 7:3, how did all the people of Israel respond when they saw the fire come down and the glory of the LORD above the temple?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">A</span>They fled from the temple courtyard, falling on their faces outside the city gates in terror at what they had seen</button>
+        <button class="choice-btn" onclick="answer(this,true,'q8')"><span class="choice-letter">B</span>They knelt on the pavement with their faces to the ground, worshiped, and gave thanks to the LORD, saying &ldquo;He is good; his love endures forever&rdquo;</button>
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">C</span>They stood in stunned silence while the priests rushed back into the temple with additional offerings to sustain the heavenly fire</button>
+        <button class="choice-btn" onclick="answer(this,false,'q8')"><span class="choice-letter">D</span>They shouted with a great cry of joy and the sound of their praise was heard throughout all Jerusalem and the surrounding hills</button>
+      </div>
+      <div class="feedback" id="fb-q8"></div>
+      <button class="next-btn" id="next-q8" onclick="nextQ(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <span class="detail-badge">Detail</span>
+        <div>
+          <div class="question-text">In Psalm 136:12, the psalmist describes God&#39;s power in bringing Israel out of Egypt. What specific phrase does the verse use?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">A</span>&ldquo;Through signs and wonders that terrified the nations&rdquo;</button>
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">B</span>&ldquo;Through the waters of the Red Sea that he divided in two&rdquo;</button>
+        <button class="choice-btn" onclick="answer(this,false,'q9')"><span class="choice-letter">C</span>&ldquo;With his word alone, for he spoke and it was done&rdquo;</button>
+        <button class="choice-btn" onclick="answer(this,true,'q9')"><span class="choice-letter">D</span>&ldquo;With a strong hand and an outstretched arm&rdquo;</button>
+      </div>
+      <div class="feedback" id="fb-q9"></div>
+      <button class="next-btn" id="next-q9" onclick="nextQ(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <div>
+          <div class="question-text">In 2 Chronicles 7:19&ndash;20, immediately after the gracious promise of verse 14, God warns Solomon of what will happen if Israel turns away to serve other gods. What does God say he will do to the temple?</div>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,'q10')"><span class="choice-letter">A</span>He will uproot Israel from the land and reject the temple, making it a byword and an object of scorn among all peoples</button>
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">B</span>He will hand Israel over to their enemies, who will plunder the temple treasuries and carry the ark to a distant land</button>
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">C</span>He will withhold all rain and send locusts until the people repent, then consume the temple itself as the final sign of judgment</button>
+        <button class="choice-btn" onclick="answer(this,false,'q10')"><span class="choice-letter">D</span>He will remove the Davidic king from the throne and restore the high places throughout Israel as punishment for apostasy</button>
+      </div>
+      <div class="feedback" id="fb-q10"></div>
+      <button class="next-btn" id="next-q10" onclick="nextQ(10)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Results -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 130 130">
+          <circle class="score-ring-bg" cx="65" cy="65" r="54"/>
+          <circle class="score-ring-fill" id="ring-fill" cx="65" cy="65" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <div class="score-num" id="score-num">0</div>
+          <div class="score-denom">out of 10</div>
+        </div>
+      </div>
+      <div class="results-title">Quiz Complete</div>
+      <div class="results-message" id="results-msg"></div>
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+    </div>
+
+  </div><!-- .card -->
+</div><!-- .outer-wrap -->
+
+<script>
+const QUESTIONS = [
+  {
+    id: 'q1',
+    text: 'According to 2 Chronicles 6:13, Solomon stood on a bronze platform to pray at the dedication. What were its dimensions?',
+    correct: 1,
+    choices: [
+      'Ten cubits long, ten cubits wide, and five cubits high &mdash; matching the dimensions of the bronze altar of burnt offering',
+      'Five cubits long, five cubits wide, and three cubits high &mdash; placed in the center of the outer court',
+      'Seven cubits long, seven cubits wide, and seven cubits high &mdash; matching the seven lamps of the golden lampstand',
+      'Three cubits long, three cubits wide, and five cubits high &mdash; the inverse of the altar&#39;s proportions'
+    ],
+    feedback_correct: '&#10003; &ldquo;Now Solomon had made a bronze platform five cubits long, five cubits wide and three cubits high, and had placed it in the center of the outer court. He stood on the platform and then knelt down before the whole assembly of Israel and spread out his hands toward heaven.&rdquo; (2 Chronicles 6:13). This detail appears only in Chronicles, not in the parallel account in 1 Kings 8. By recording the platform, the Chronicler emphasizes that Solomon knelt in full view of the entire assembly &mdash; not hidden in the temple interior but visible to all Israel as their representative before God. The king himself descended to his knees, hands spread toward heaven. The precise measurements &mdash; 5&times;5&times;3 &mdash; signal that this was no improvised arrangement but a prepared place of public humility at the center of the court.',
+    feedback_wrong: 'Not quite. 2 Chronicles 6:13 specifies a bronze platform five cubits long, five cubits wide, and three cubits high &mdash; not 10&times;10&times;5, not 7&times;7&times;7, and not 3&times;3&times;5. This detail is unique to Chronicles and absent from the 1 Kings 8 parallel. Its inclusion emphasizes Solomon&#39;s visible posture of humility: the king knelt in the outer court where all Israel could see him. The measurements are precise because the Chronicler records what actually happened at the dedication &mdash; this was a prepared platform of prayer, not a coincidence of royal position.',
+    ref: '2 Chronicles 6:13'
+  },
+  {
+    id: 'q2',
+    text: 'According to 2 Chronicles 7:1, what happened the moment Solomon finished his prayer of dedication?',
+    correct: 0,
+    choices: [
+      'Fire came down from heaven and consumed the burnt offering and the sacrifices, and the glory of the LORD filled the temple',
+      'A thick cloud descended as the 120 priests sounded their trumpets, and Solomon fell on his face before the LORD in the outer court',
+      'The ground beneath the temple shook, and the poles of the ark shifted in their rings as the cherubim wings touched above the Most Holy Place',
+      'Solomon heard a voice from the Most Holy Place directing him to go out and bless the assembled people of Israel'
+    ],
+    feedback_correct: '&#10003; &ldquo;When Solomon finished praying, fire came down from heaven and consumed the burnt offering and the sacrifices, and the glory of the LORD filled the temple.&rdquo; (2 Chronicles 7:1). This dramatic detail &mdash; fire from heaven &mdash; appears in Chronicles but NOT in the parallel account in 1 Kings 8. The Chronicler records it to draw a deliberate line of connection: fire consumed Aaron&#39;s first sacrifice when the tabernacle was dedicated (Leviticus 9:24), fire fell on the threshing floor of Araunah &mdash; the very site of this temple &mdash; when David offered sacrifice there (1 Chronicles 21:26), and now fire falls again at Solomon&#39;s prayer. God has confirmed three new houses of worship with fire. He answers with what he sent before.',
+    feedback_wrong: 'Not quite. 2 Chronicles 7:1 records that when Solomon finished praying, &ldquo;fire came down from heaven and consumed the burnt offering and the sacrifices, and the glory of the LORD filled the temple.&rdquo; The cloud filling the temple (choice B) happened earlier, at 2 Chronicles 5:13&ndash;14, when the ark was brought in and the musicians praised. What marks the end of Solomon&#39;s prayer is fire from heaven &mdash; a detail unique to Chronicles, connecting this dedication to Aaron&#39;s first sacrifice (Leviticus 9:24) and David&#39;s offering on Araunah&#39;s threshing floor (1 Chronicles 21:26).',
+    ref: '2 Chronicles 7:1'
+  },
+  {
+    id: 'q3',
+    text: 'In the middle of his dedication prayer, Solomon makes a stunning theological admission about God and the temple he has built. What does he say? (2 Chronicles 6:18)',
+    correct: 2,
+    choices: [
+      '&ldquo;This house I have built cannot hold your glory; let it be only a shadow of your true and eternal dwelling above the heavens&rdquo;',
+      '&ldquo;I have not built this house for my own glory but for your name, so that every prayer made here may ascend to your throne above&rdquo;',
+      '&ldquo;But will God indeed dwell with man on the earth? Behold, heaven and the highest heaven cannot contain you; how much less this house that I have built!&rdquo;',
+      '&ldquo;You have no need of gold or cedar; yet you have condescended to place your name among us and to dwell in this city forever&rdquo;'
+    ],
+    feedback_correct: '&#10003; &ldquo;But will God really dwell on earth with humans? The heavens, even the highest heaven, cannot contain you. How much less this temple I have built!&rdquo; (2 Chronicles 6:18). This is one of the most theologically remarkable admissions in all of Scripture, placed at the center of a prayer dedicated to celebrating the very temple being described. Solomon has spent seven years building the most magnificent structure Israel had ever known &mdash; and then, mid-prayer, he acknowledges it cannot hold the God it was built for. The man who built the house declares the house too small. Stephen echoed exactly this instinct in Acts 7:48&ndash;49 when defending the Gospel. The temple&#39;s most honest interpreter at its own dedication was its builder: God is never contained; he is invited.',
+    feedback_wrong: 'Not quite. 2 Chronicles 6:18 reads: &ldquo;But will God really dwell on earth with humans? The heavens, even the highest heaven, cannot contain you. How much less this temple I have built!&rdquo; Choices A and B are paraphrases of ideas not in the text &mdash; &ldquo;shadow&rdquo; and &ldquo;ascend to your throne&rdquo; do not appear, and choice D inverts the direction of the argument. Choice C is the actual content of the verse. This admission is remarkable: the man who built the most glorious structure in Israel&#39;s history stops mid-prayer to say it cannot hold God. Stephen cited this very instinct in Acts 7:48 when arguing that the Most High does not dwell in houses made by human hands.',
+    ref: '2 Chronicles 6:18'
+  },
+  {
+    id: 'q4',
+    text: 'In 2 Chronicles 7:14, God lists four things his people must do before he will hear, forgive, and heal their land. What is the FIRST condition listed?',
+    correct: 3,
+    choices: [
+      'Seek his face',
+      'Turn from their wicked ways',
+      'Pray and cry out to him',
+      'Humble themselves'
+    ],
+    feedback_correct: '&#10003; &ldquo;&hellip;if my people, who are called by my name, will humble themselves and pray and seek my face and turn from their wicked ways, then I will hear from heaven, and I will forgive their sin and will heal their land.&rdquo; (2 Chronicles 7:14). The order is: humble &rarr; pray &rarr; seek &rarr; turn. Humility is the prerequisite for everything else. You cannot pray authentically without first acknowledging your need; you cannot seek God&#39;s face without admitting you have turned away; you cannot turn from wickedness without first recognizing it as wickedness. The sequence is a map of genuine repentance, not an arbitrary checklist. And the promise at the end is complete &mdash; hear, forgive, and heal. God answers all three. Not partially. Not conditionally on future performance. All three.',
+    feedback_wrong: 'Not quite. The four conditions in 2 Chronicles 7:14 are listed in this exact order: (1) humble themselves, (2) pray, (3) seek my face, (4) turn from their wicked ways. &ldquo;Humble themselves&rdquo; comes first. The other three &mdash; seek, turn, pray &mdash; are all genuine conditions in the verse, but none precedes humility. The sequence is a map of repentance: you cannot do any of the others until you first acknowledge your own smallness and need before God. A proud man who prays is not yet praying; a proud man who seeks is not yet seeking.',
+    ref: '2 Chronicles 7:14'
+  },
+  {
+    id: 'q5',
+    text: 'Psalm 136 has a distinctive structural feature shared by no other psalm. What is it?',
+    correct: 1,
+    choices: [
+      'Each verse opens with a specific name or title of God, cycling through the divine names used in the Pentateuch',
+      'Every one of its 26 verses ends with the refrain &ldquo;for his steadfast love endures forever&rdquo;',
+      'Each verse pairs a divine act with a corresponding blessing upon Israel, creating 26 matched couplets of deed and reward',
+      'The opening word of each verse follows the order of the Hebrew alphabet, making it a complete acrostic poem'
+    ],
+    feedback_correct: '&#10003; Psalm 136 is called the Great Hallel in Jewish tradition. Every one of its 26 verses ends with the Hebrew כִּי לְעוֹלָם חַסְדּוֹ &mdash; &ldquo;for his steadfast love endures forever.&rdquo; The psalm was used antiphonally in temple worship: a leader or choir sang the first half of each verse, and the congregation responded with the refrain. It surveys the whole of salvation history from creation (verses 4&ndash;9) through the Exodus (10&ndash;15), wilderness (16), conquest of kings (17&ndash;22), and rescue from lowly estate (23&ndash;25). After every act, no matter how cosmic or domestic, the same response: his love endures. This psalm is the perfect companion to 2 Chronicles 7:3, where the people&#39;s first words at the sight of fire and glory are the very words of this refrain.',
+    feedback_wrong: 'Not quite. Psalm 136&#39;s unique structural feature is that every verse &mdash; all 26 of them &mdash; ends with the refrain &ldquo;for his steadfast love endures forever.&rdquo; The psalm does not open each verse with a divine name (choice A), does not create reward couplets (choice C), and is not an acrostic (choice D). Acrostic psalms in the Hebrew Bible include Psalms 9, 25, 34, 37, 111, 112, 119, and 145 &mdash; Psalm 136 is not among them. What makes 136 structurally unique is the unbroken refrain: 26 verses, 26 repetitions of the same response. In light of 2 Chronicles 7:3, where the people&#39;s first words at the sight of fire from heaven are exactly this refrain, the choice of companion psalm today is anything but accidental.',
+    ref: 'Psalm 136'
+  },
+  {
+    id: 'q6',
+    text: 'After the dedication festivities concluded, the LORD appeared to Solomon with his personal response to the prayer. According to 2 Chronicles 7:12, when did this appearance occur?',
+    correct: 0,
+    choices: [
+      'At night',
+      'At dawn, as the priests were lighting the lamps for the morning service',
+      'On the last day of the festival, during the great assembly when all Israel stood before the altar',
+      'Three days after Solomon had returned to his palace, in a vision while he slept'
+    ],
+    feedback_correct: '&#10003; &ldquo;The LORD appeared to him at night and said: &#39;I have heard your prayer and have chosen this place for myself as a temple for sacrifices.&#39;&rdquo; (2 Chronicles 7:12). The timing is theologically significant. Solomon&#39;s prayer had ended with fire falling and glory filling the temple before all Israel in broad daylight &mdash; a great public display. God&#39;s personal response to the king came privately, in the night, not with spectacle but with direct speech. The public fire was for the people; the night visitation was for Solomon. God confirms the temple, accepts the prayer, and then &mdash; in verses 13&ndash;14 &mdash; gives his great conditional to the king before giving it to any generation: &ldquo;if my people&hellip; then I will hear.&rdquo;',
+    feedback_wrong: 'Not quite. 2 Chronicles 7:12 says simply: &ldquo;The LORD appeared to him at night.&rdquo; Not at dawn, not during the assembly, not three days later. The timing contrasts deliberately with what came before: the great public display of fire and glory at the end of Solomon&#39;s prayer was visible to all Israel. God&#39;s personal word to the king came afterward, quietly, after the festival ended (verse 10) and after Solomon returned to his palace (verse 11). Then &mdash; in the night &mdash; God spoke. The public and the private are two different registers of the same faithfulness.',
+    ref: '2 Chronicles 7:12'
+  },
+  {
+    id: 'q7',
+    text: 'In 2 Chronicles 6:22&ndash;23, Solomon prays about a case where one man sins against his neighbor and both come before the altar under oath. What does Solomon ask God to do with the guilty man?',
+    correct: 2,
+    choices: [
+      'Withhold rain from his fields and strike his livestock until he repents and makes full restitution to the one he wronged',
+      'Remove his name from the assembly and bar him from the temple courts until he has made amends before the priests',
+      'Bring the guilty man&#39;s conduct on his own head, while vindicating the righteous man by rewarding him according to his righteousness',
+      'Exile the guilty man from his tribe and grant his inheritance to the righteous man as compensation for the wrong done'
+    ],
+    feedback_correct: '&#10003; &ldquo;&hellip;then hear from heaven and act and judge your servants, repaying the guilty by bringing his conduct on his own head, and vindicating the righteous by rewarding him according to his righteousness.&rdquo; (2 Chronicles 6:23). Solomon is praying about civil disputes settled by oath before the altar &mdash; when there is no witness, no evidence, only two men and a name called upon. He asks God to be the true judge: bring the guilty man&#39;s deeds onto himself, and vindicate the innocent according to their righteousness. This is a prayer for divine justice when human courts have reached their limit. The oath before the altar made God the final arbiter. Solomon knew that the temple was not only a house of prayer but a court of last appeal, where the Judge of all the earth would do right.',
+    feedback_wrong: 'Not quite. 2 Chronicles 6:22&ndash;23 describes the case of a dispute between neighbors settled by oath before the altar. Solomon asks God to &ldquo;repay the guilty by bringing his conduct on his own head, and vindicate the righteous by rewarding him according to his righteousness.&rdquo; The text says nothing about withholding rain, excluding from the assembly, or transferring an inheritance. The temple oath was the ancient equivalent of a solemn court oath before God: when no human court could prove guilt, God was called as witness and judge. The guilty man&#39;s reckoning came from God&#39;s hand, not from communal penalty.',
+    ref: '2 Chronicles 6:22-23'
+  },
+  {
+    id: 'q8',
+    text: 'According to 2 Chronicles 7:3, how did all the people of Israel respond when they saw the fire come down and the glory of the LORD above the temple?',
+    correct: 1,
+    choices: [
+      'They fled from the temple courtyard, falling on their faces outside the city gates in terror at what they had seen',
+      'They knelt on the pavement with their faces to the ground, worshiped, and gave thanks to the LORD, saying &ldquo;He is good; his love endures forever&rdquo;',
+      'They stood in stunned silence while the priests rushed back into the temple with additional offerings to sustain the heavenly fire',
+      'They shouted with a great cry of joy and the sound of their praise was heard throughout all Jerusalem and the surrounding hills'
+    ],
+    feedback_correct: '&#10003; &ldquo;When all the Israelites saw the fire coming down and the glory of the LORD above the temple, they knelt on the pavement with their faces to the ground, and they worshiped and gave thanks to the LORD, saying, &#39;He is good; his love endures forever.&#39;&rdquo; (2 Chronicles 7:3). The people&#39;s response to fire from heaven is not panic &mdash; it is worship. And the words they sing are the exact refrain of Psalm 136, today&#39;s companion text: &ldquo;He is good; his love endures forever.&rdquo; The words that the formal Hallel liturgy had shaped into Israel&#39;s vocabulary became their instinctive response at the intersection of heaven and earth. The Psalter had prepared them for exactly this moment. When God showed up, they already knew what to say.',
+    feedback_wrong: 'Not quite. 2 Chronicles 7:3 says: &ldquo;When all the Israelites saw the fire coming down and the glory of the LORD above the temple, they knelt on the pavement with their faces to the ground, and they worshiped and gave thanks to the LORD, saying, &#39;He is good; his love endures forever.&#39;&rdquo; They did not flee, they did not stand in silence, and they did not shout a wordless cry. They knelt, bowed, and said the words &mdash; the exact refrain of Psalm 136. The fire did not frighten them away; it drew them to their knees in gratitude. What today&#39;s reading makes clear is that the Psalter&#39;s liturgy had formed Israel to respond to glory with exactly these words.',
+    ref: '2 Chronicles 7:3'
+  },
+  {
+    id: 'q9',
+    text: 'In Psalm 136:12, the psalmist describes God&#39;s power in bringing Israel out of Egypt. What specific phrase does the verse use?',
+    correct: 3,
+    choices: [
+      '&ldquo;Through signs and wonders that terrified the nations&rdquo;',
+      '&ldquo;Through the waters of the Red Sea that he divided in two&rdquo;',
+      '&ldquo;With his word alone, for he spoke and it was done&rdquo;',
+      '&ldquo;With a strong hand and an outstretched arm&rdquo;'
+    ],
+    feedback_correct: '&#10003; &ldquo;&hellip;with a strong hand and an outstretched arm; his love endures forever.&rdquo; (Psalm 136:12). The phrase &ldquo;strong hand and outstretched arm&rdquo; is one of the most repeated descriptions of the Exodus throughout the Old Testament &mdash; appearing in Deuteronomy 4:34; 5:15; 7:19; 11:2; 26:8; Jeremiah 32:21; and Ezekiel 20:33&ndash;34. The outstretched arm is God&#39;s way of acting in the world: not reluctantly, not barely, but with full extension on behalf of those he loves. Psalm 136 cycles through Exodus events across verses 10&ndash;15: striking the firstborn (v10), bringing Israel out (v11), with his arm (v12), dividing the sea (v13&ndash;14), leading through the wilderness (v16). Each clause receives its own &ldquo;his love endures forever.&rdquo; No act of God is too small or too obvious to acknowledge.',
+    feedback_wrong: 'Not quite. Psalm 136:12 says God brought Israel out of Egypt &ldquo;with a strong hand and an outstretched arm.&rdquo; This phrase is a characteristic description of the Exodus found throughout Deuteronomy (4:34; 26:8) and the prophets (Jeremiah 32:21). The other choices &mdash; signs and wonders, dividing the sea, speaking alone &mdash; are real Exodus themes found elsewhere in Scripture, but verse 12 specifically uses the arm imagery. In Psalm 136, the Exodus account is spread across verses 10&ndash;15, with each individual act receiving its own refrain. Verse 12 names the manner of the power, not the specific miracle. The arm stretched out to free Israel is the same arm that sustains his love &mdash; forever.',
+    ref: 'Psalm 136:12'
+  },
+  {
+    id: 'q10',
+    text: 'In 2 Chronicles 7:19&ndash;20, immediately after the gracious promise of verse 14, God warns Solomon of what will happen if Israel turns away to serve other gods. What does God say he will do to the temple?',
+    correct: 0,
+    choices: [
+      'He will uproot Israel from the land and reject the temple, making it a byword and an object of scorn among all peoples',
+      'He will hand Israel over to their enemies, who will plunder the temple treasuries and carry the ark to a distant land',
+      'He will withhold all rain and send locusts until the people repent, then consume the temple itself as the final sign of judgment',
+      'He will remove the Davidic king from the throne and restore the high places throughout Israel as punishment for apostasy'
+    ],
+    feedback_correct: '&#10003; &ldquo;But if you turn away and forsake the decrees and commands I have given you and go off to serve other gods and worship them, then I will uproot Israel from my land, which I have given them, and will reject this temple I have consecrated for my Name. I will make it a byword and an object of ridicule among all peoples.&rdquo; (2 Chronicles 7:19&ndash;20). This warning is spoken in the same night vision that delivered the promise of verse 14. The same God who offers to &ldquo;hear from heaven, forgive their sin, and heal their land&rdquo; also warns he will &ldquo;uproot&rdquo; and &ldquo;reject.&rdquo; Both are real. The rest of Israel&#39;s history &mdash; the exile, the destruction of the temple in 586 BC &mdash; demonstrated that God meant every word of the warning. That he also meant every word of the grace is the hope that carried Israel through captivity and carries us still.',
+    feedback_wrong: 'Not quite. 2 Chronicles 7:19&ndash;20 states explicitly: &ldquo;I will uproot Israel from my land&hellip; and will reject this temple I have consecrated for my Name. I will make it a byword and an object of ridicule among all peoples.&rdquo; The text does not mention foreign armies carrying away the ark (choice B), consuming fire from the altar (choice C), or removing the Davidic king (choice D). The judgment is stark and direct: uprooting from the land and rejection of the temple. This is precisely what happened when Nebuchadnezzar destroyed Jerusalem and burned the temple in 586 BC. God&#39;s warning at the moment of dedication was the frame that made the entire subsequent history of Israel legible.',
+    ref: '2 Chronicles 7:19-20'
+  }
+];
+
+let current = 0;
+let score = 0;
+let answers = [];
+
+function answer(btn, isCorrect, qId) {
+  const block = document.getElementById(qId);
+  const buttons = block.querySelectorAll('.choice-btn');
+  buttons.forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('fb-' + qId);
+  const qIdx = parseInt(qId.replace('q','')) - 1;
+  const q = QUESTIONS[qIdx];
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+    fb.className = 'feedback correct-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10003;</span>' + q.feedback_correct + '<span class="feedback-ref">' + q.ref + '</span>';
+    score++;
+    answers.push({ correct: true, question: q.text, ref: q.ref });
+  } else {
+    btn.classList.add('wrong');
+    buttons[q.correct].classList.add('correct');
+    fb.className = 'feedback wrong-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10007;</span>' + q.feedback_wrong + '<span class="feedback-ref">' + q.ref + '</span>';
+    answers.push({ correct: false, question: q.text, ref: q.ref });
+  }
+
+  const nextBtn = document.getElementById('next-' + qId);
+  if (nextBtn) nextBtn.classList.add('visible');
+}
+
+function nextQ(num) {
+  document.getElementById('q' + num).classList.remove('active');
+  current = num;
+  if (current < 10) {
+    document.getElementById('q' + (current+1)).classList.add('active');
+    updateProgress(current + 1);
+  } else {
+    showResults();
+  }
+}
+
+function updateProgress(qNum) {
+  const pct = Math.round((qNum / 10) * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = 'Question ' + qNum + ' of 10';
+}
+
+function showResults() {
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-label').textContent = 'Complete';
+  document.getElementById('results-screen').style.display = 'block';
+  document.getElementById('score-num').textContent = score;
+
+  const msgs = [
+    { min: 0,  max: 3,  msg: 'The fire has not yet fallen. Return to the text and read again with a listening heart.' },
+    { min: 4,  max: 5,  msg: 'Solomon has knelt on the platform. The prayer has begun &mdash; keep pressing toward the Most Holy Place.' },
+    { min: 6,  max: 7,  msg: 'The glory is filling the house. You are drawing near to where God&#39;s name dwells.' },
+    { min: 8,  max: 9,  msg: 'His steadfast love endures forever. A careful and faithful reading, worthy of the Great Hallel.' },
+    { min: 10, max: 10, msg: 'Fire from heaven, glory in the temple &mdash; and you have knelt on the pavement and worshiped well.' }
+  ];
+  const m = msgs.find(x => score >= x.min && score <= x.max);
+  document.getElementById('results-msg').textContent = m ? m.msg : '';
+
+  const circumference = 339.3;
+  const offset = circumference - (score / 10) * circumference;
+  setTimeout(() => {
+    document.getElementById('ring-fill').style.strokeDashoffset = offset;
+  }, 100);
+
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  answers.forEach((a, i) => {
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (a.correct ? 'r-correct' : 'r-wrong');
+    div.innerHTML =
+      '<div class="review-q">Q' + (i+1) + ': ' + QUESTIONS[i].text + '</div>' +
+      '<div class="review-ans">' +
+        (a.correct
+          ? '<span class="review-correct-lbl">&#10003; Correct</span>'
+          : '<span class="review-wrong-lbl">&#10007; Incorrect</span>') +
+        ' &mdash; ' + a.ref +
+      '</div>';
+    reviewList.appendChild(div);
+  });
+}
+
+function resetQuiz() {
+  current = 0;
+  score = 0;
+  answers = [];
+
+  document.querySelectorAll('.question-block').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.choice-btn').forEach(b => {
+    b.disabled = false;
+    b.classList.remove('correct','wrong');
+  });
+  document.querySelectorAll('.feedback').forEach(f => {
+    f.className = 'feedback';
+    f.innerHTML = '';
+  });
+  document.querySelectorAll('.next-btn').forEach(b => b.classList.remove('visible'));
+
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('ring-fill').style.strokeDashoffset = 339.3;
+  document.getElementById('q1').classList.add('active');
+  updateProgress(1);
+  document.getElementById('prog-bar').style.width = '10%';
+}
+</script>
+</body>
+</html>
