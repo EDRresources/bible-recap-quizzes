@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 166 Bible Quiz — Psalms 134, 146–150</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', serif;
+    color: #2a1a06;
+  }
+
+  /* ── Parchment Card ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead0 0%, #ede0b8 40%, #e8d5a0 70%, #dfc88a 100%);
+    border: 2px solid #c9a84c;
+    border-radius: 4px;
+    box-shadow: 0 0 0 6px #0e0a04, 0 0 0 8px #c9a84c55, 0 8px 40px rgba(0,0,0,0.7);
+    width: 100%;
+    max-width: 760px;
+    padding: 40px 48px 48px;
+    position: relative;
+  }
+
+  /* ── Header ── */
+  .header { text-align: center; margin-bottom: 28px; }
+
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #7a5c1e;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a0e00;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .passages-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .passage-tag {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    padding: 3px 10px;
+    border: 1px solid #c9a84c;
+    color: #7a5c1e;
+    border-radius: 2px;
+    background: rgba(201,168,76,0.10);
+  }
+
+  .badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .badge-challenging {
+    background: #7a5c1e;
+    color: #f5ead0;
+  }
+
+  /* ── Ornament ── */
+  .ornament {
+    text-align: center;
+    color: #c9a84c;
+    font-size: 18px;
+    margin: 8px 0 20px;
+    letter-spacing: 10px;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #c9a84c;
+    opacity: 0.5;
+    margin: 20px 0;
+  }
+
+  /* ── Progress Bar ── */
+  .progress-wrap {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c55;
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #f0d070);
+    border-radius: 3px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  /* ── Question ── */
+  .question-block {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  .question-block.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-counter {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #7a5c1e;
+    margin-bottom: 8px;
+  }
+
+  .q-text {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #1a0e00;
+    margin-bottom: 20px;
+  }
+
+  .detail-badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    background: #4a2c0a;
+    color: #f5ead0;
+    padding: 2px 7px;
+    border-radius: 2px;
+    vertical-align: middle;
+    margin-left: 8px;
+    position: relative;
+    top: -2px;
+  }
+
+  /* ── Answer Choices ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; }
+
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    border: 1.5px solid #c9a84c88;
+    border-radius: 3px;
+    background: rgba(245,234,208,0.5);
+    cursor: pointer;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 16px;
+    color: #2a1a06;
+    transition: background 0.2s, border-color 0.2s;
+    width: 100%;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.18);
+    border-color: #c9a84c;
+  }
+  .choice-btn:disabled { cursor: default; }
+
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #7a5c1e;
+    min-width: 18px;
+    padding-top: 2px;
+  }
+
+  .choice-btn.correct {
+    background: #d4edda;
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+
+  .choice-btn.wrong {
+    background: #f8d7da;
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── Feedback ── */
+  .feedback {
+    display: none;
+    margin-top: 18px;
+    padding: 14px 18px;
+    border-radius: 3px;
+    font-size: 15px;
+    line-height: 1.6;
+    border-left: 4px solid;
+  }
+  .feedback.show { display: block; animation: fadeIn 0.3s ease; }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.08);
+    border-color: #1a5c2a;
+    color: #1a3d14;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.08);
+    border-color: #8b1a1a;
+    color: #5c1010;
+  }
+
+  .feedback-ref {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    margin-bottom: 5px;
+    opacity: 0.75;
+  }
+
+  /* ── Next Button ── */
+  .btn-next {
+    display: none;
+    margin-top: 22px;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    padding: 10px 28px;
+    background: #c9a84c;
+    color: #1a0e00;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-next:hover { background: #dfc070; }
+  .btn-next.show { display: inline-block; }
+
+  /* ── Results Screen ── */
+  #results { display: none; text-align: center; }
+  #results.show { display: block; animation: fadeIn 0.5s ease; }
+
+  .score-ring-wrap { margin: 20px auto 24px; width: 140px; height: 140px; position: relative; }
+
+  .score-ring-wrap svg { position: absolute; top: 0; left: 0; }
+
+  .ring-track {
+    fill: none;
+    stroke: rgba(201,168,76,0.2);
+    stroke-width: 10;
+  }
+  .ring-progress {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 345;
+    stroke-dashoffset: 345;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .ring-progress.correct-ring { stroke: #1a5c2a; }
+  .ring-progress.partial-ring { stroke: #c9a84c; }
+  .ring-progress.low-ring     { stroke: #8b1a1a; }
+
+  .ring-score-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .ring-fraction {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a0e00;
+    display: block;
+    line-height: 1;
+  }
+  .ring-label {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: #7a5c1e;
+    display: block;
+    margin-top: 2px;
+  }
+
+  .results-msg {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a0e00;
+    margin-bottom: 8px;
+  }
+  .results-sub {
+    font-size: 15px;
+    color: #5c3d0e;
+    margin-bottom: 28px;
+    font-style: italic;
+  }
+
+  /* ── Question Review ── */
+  .review-list { text-align: left; margin-bottom: 30px; }
+
+  .review-item {
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    border-left: 4px solid;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.07);
+    border-color: #1a5c2a;
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.07);
+    border-color: #8b1a1a;
+  }
+
+  .review-q {
+    font-weight: 600;
+    color: #1a0e00;
+    margin-bottom: 4px;
+  }
+  .review-answer {
+    font-size: 13px;
+    color: #4a2c0a;
+  }
+  .review-icon { margin-right: 6px; }
+
+  .btn-again {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    padding: 11px 32px;
+    background: transparent;
+    color: #7a5c1e;
+    border: 1.5px solid #c9a84c;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .btn-again:hover {
+    background: #c9a84c;
+    color: #1a0e00;
+  }
+
+  @media (max-width: 600px) {
+    .card { padding: 28px 22px 36px; }
+    .quiz-title { font-size: 20px; }
+    .q-text { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="date-line">Monday, June 15, 2026 &middot; Day 166</div>
+    <div class="quiz-title">The Bible Recap<br>Daily Quiz</div>
+    <div class="passages-row">
+      <span class="passage-tag">Psalm 134</span>
+      <span class="passage-tag">Psalm 146</span>
+      <span class="passage-tag">Psalm 147</span>
+      <span class="passage-tag">Psalm 148</span>
+      <span class="passage-tag">Psalm 149</span>
+      <span class="passage-tag">Psalm 150</span>
+    </div>
+    <div class="badge-row">
+      <span class="badge badge-challenging">Challenging</span>
+    </div>
+  </div>
+
+  <div class="ornament">&#10022; &#10022; &#10022;</div>
+  <hr class="divider">
+
+  <!-- Progress Bar -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Questions -->
+  <div id="quiz-area">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="q-counter">Question 1 of 10</div>
+      <div class="q-text">According to Psalm 134, what are the servants of the LORD who minister by night in his house specifically called to do in the sanctuary? <span class="detail-badge">DETAIL</span></div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this, 1, true)"><span class="choice-letter">A</span><span>Lift up their hands and praise the LORD</span></button>
+        <button class="choice-btn" onclick="answer(this, 1, false)"><span class="choice-letter">B</span><span>Bow down before the altar of the LORD</span></button>
+        <button class="choice-btn" onclick="answer(this, 1, false)"><span class="choice-letter">C</span><span>Sing a new song to the Maker of heaven and earth</span></button>
+        <button class="choice-btn" onclick="answer(this, 1, false)"><span class="choice-letter">D</span><span>Offer the evening incense before the Most Holy Place</span></button>
+      </div>
+      <div class="feedback" id="fb1">
+        <div class="feedback-ref">Psalm 134:2</div>
+        <div>"Lift up your hands in the sanctuary and praise the LORD." This brief psalm — the last of the Songs of Ascents — calls the night-watch priests to active praise. The hands lifted in blessing echo the priestly gesture of Numbers 6:24–26, but here it is offered to God, not on behalf of the people.</div>
+      </div>
+      <button class="btn-next" id="next1" onclick="nextQ(1)">Next &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="q-counter">Question 2 of 10</div>
+      <div class="q-text">What specific reason does Psalm 146 give for why we should not put our trust in princes or in human beings?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this, 2, false)"><span class="choice-letter">A</span><span>They love wealth more than they love justice and the poor</span></button>
+        <button class="choice-btn" onclick="answer(this, 2, true)"><span class="choice-letter">B</span><span>When they die, their spirit departs and on that very day their plans come to nothing</span></button>
+        <button class="choice-btn" onclick="answer(this, 2, false)"><span class="choice-letter">C</span><span>They demand the kind of loyalty and praise that belongs to God alone</span></button>
+        <button class="choice-btn" onclick="answer(this, 2, false)"><span class="choice-letter">D</span><span>They lead the people astray into idolatry and foreign alliances</span></button>
+      </div>
+      <div class="feedback" id="fb2">
+        <div class="feedback-ref">Psalm 146:3–4</div>
+        <div>"Do not put your trust in princes, in human beings, who cannot save. When their spirit departs, they return to the ground; on that very day their plans come to nothing." The psalmist's argument is not primarily moral but ontological — human rulers are mortal. Their death severs every plan they made. Only the LORD, who made heaven and earth and "remains faithful forever" (v.6), is a reliable foundation.</div>
+      </div>
+      <button class="btn-next" id="next2" onclick="nextQ(2)">Next &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="q-counter">Question 3 of 10</div>
+      <div class="q-text">Psalm 146 lists many of the LORD's saving acts toward the vulnerable. Which group does the psalm say the LORD actively "frustrates"? <span class="detail-badge">DETAIL</span></div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this, 3, false)"><span class="choice-letter">A</span><span>The foreigner who sojourns among the people</span></button>
+        <button class="choice-btn" onclick="answer(this, 3, false)"><span class="choice-letter">B</span><span>The princes who oppress the poor and the fatherless</span></button>
+        <button class="choice-btn" onclick="answer(this, 3, true)"><span class="choice-letter">C</span><span>The wicked</span></button>
+        <button class="choice-btn" onclick="answer(this, 3, false)"><span class="choice-letter">D</span><span>The nations that do not call on the LORD's name</span></button>
+      </div>
+      <div class="feedback" id="fb3">
+        <div class="feedback-ref">Psalm 146:9</div>
+        <div>"The LORD watches over the foreigner and sustains the fatherless and the widow, but he frustrates the ways of the wicked." The contrast is pointed: God actively sustains the helpless and actively thwarts the wicked. The foreigner appears in the list as one whom God protects, not as someone frustrated — a detail easy to miss when reading quickly.</div>
+      </div>
+      <button class="btn-next" id="next3" onclick="nextQ(3)">Next &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="q-counter">Question 4 of 10</div>
+      <div class="q-text">Psalm 147 describes God sending something to the earth that "runs swiftly." What is it? <span class="detail-badge">DETAIL</span></div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this, 4, false)"><span class="choice-letter">A</span><span>The breezes that melt the snow and ice</span></button>
+        <button class="choice-btn" onclick="answer(this, 4, false)"><span class="choice-letter">B</span><span>The rain that falls to water the hills and valleys</span></button>
+        <button class="choice-btn" onclick="answer(this, 4, false)"><span class="choice-letter">C</span><span>The angels who carry out his decrees among the nations</span></button>
+        <button class="choice-btn" onclick="answer(this, 4, true)"><span class="choice-letter">D</span><span>His word — the command he sends to the earth</span></button>
+      </div>
+      <div class="feedback" id="fb4">
+        <div class="feedback-ref">Psalm 147:15</div>
+        <div>"He sends his command to the earth; his word runs swiftly." This is immediately followed by natural images — snow, frost, hail, thaw (vv.16–18) — all driven by that same commanding word. The breezes do appear (v.18), but as a result of the word, not as the thing that runs swiftly. The psalm's logic grounds creation's rhythms in God's active, spoken governance.</div>
+      </div>
+      <button class="btn-next" id="next4" onclick="nextQ(4)">Next &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="q-counter">Question 5 of 10</div>
+      <div class="q-text">In Psalm 147, what does the LORD specifically delight in?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this, 5, true)"><span class="choice-letter">A</span><span>Those who fear him and put their hope in his unfailing love</span></button>
+        <button class="choice-btn" onclick="answer(this, 5, false)"><span class="choice-letter">B</span><span>The strength of the horse brought out for battle</span></button>
+        <button class="choice-btn" onclick="answer(this, 5, false)"><span class="choice-letter">C</span><span>The finest of wheat brought as firstfruits to his sanctuary</span></button>
+        <button class="choice-btn" onclick="answer(this, 5, false)"><span class="choice-letter">D</span><span>The praises sung at the harp and lyre in the temple</span></button>
+      </div>
+      <div class="feedback" id="fb5">
+        <div class="feedback-ref">Psalm 147:10–11</div>
+        <div>"His delight is not in the strength of the horse, nor his pleasure in the legs of a warrior; the LORD delights in those who fear him, who put their hope in his unfailing love." Wheat (v.14) and harp (v.7) both appear in Psalm 147, making them plausible distractors — but the psalm is explicit that power and military strength are not what impress God. What delights him is humble, trusting dependence.</div>
+      </div>
+      <button class="btn-next" id="next5" onclick="nextQ(5)">Next &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="q-counter">Question 6 of 10</div>
+      <div class="q-text">What distinguishes Israel from all other nations according to the closing verses of Psalm 147?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this, 6, false)"><span class="choice-letter">A</span><span>God has strengthened the bars of Israel's gates and blessed the people within them</span></button>
+        <button class="choice-btn" onclick="answer(this, 6, true)"><span class="choice-letter">B</span><span>God has revealed his word, his laws, and his decrees to Israel, but has not done this for any other nation</span></button>
+        <button class="choice-btn" onclick="answer(this, 6, false)"><span class="choice-letter">C</span><span>Israel alone worships God with music, song, and the harp before his altar</span></button>
+        <button class="choice-btn" onclick="answer(this, 6, false)"><span class="choice-letter">D</span><span>God has gathered the exiles of Israel while leaving all other nations in darkness</span></button>
+      </div>
+      <div class="feedback" id="fb6">
+        <div class="feedback-ref">Psalm 147:19–20</div>
+        <div>"He has revealed his word to Jacob, his laws and decrees to Israel. He has done this for no other nation; they do not know his laws." The gate-strengthening (v.13) and the return of exiles (v.2) also appear in this psalm, so they make credible distractors. But the psalm's final note of distinction is specifically about the revelation of Torah — a privilege of knowledge, not merely of geography or military protection.</div>
+      </div>
+      <button class="btn-next" id="next6" onclick="nextQ(6)">Next &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="q-counter">Question 7 of 10</div>
+      <div class="q-text">Psalm 148 calls the sun, moon, and stars to praise the LORD. What reason does the psalm specifically give for this call? <span class="detail-badge">DETAIL</span></div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this, 7, false)"><span class="choice-letter">A</span><span>Because God calls each of them by name and knows their number</span></button>
+        <button class="choice-btn" onclick="answer(this, 7, false)"><span class="choice-letter">B</span><span>Because God set them as signs for the seasons, days, and years</span></button>
+        <button class="choice-btn" onclick="answer(this, 7, false)"><span class="choice-letter">C</span><span>Because their light shines out to declare his glory among all nations</span></button>
+        <button class="choice-btn" onclick="answer(this, 7, true)"><span class="choice-letter">D</span><span>Because at his command they were created and he established them forever by a decree that will never pass away</span></button>
+      </div>
+      <div class="feedback" id="fb7">
+        <div class="feedback-ref">Psalm 148:5–6</div>
+        <div>"Let them praise the name of the LORD, for at his command they were created, and he established them for ever and ever — he issued a decree that will never pass away." The naming of stars (which Psalm 147:4 does mention) is a plausible but wrong answer here. Psalm 148's reason is rooted in creation-by-command and perpetual establishment — the lights praise their Maker because they owe their very existence and permanence to his word.</div>
+      </div>
+      <button class="btn-next" id="next7" onclick="nextQ(7)">Next &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="q-counter">Question 8 of 10</div>
+      <div class="q-text">How does Psalm 148 describe Israel's unique status before the LORD in the psalm's closing verse?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this, 8, false)"><span class="choice-letter">A</span><span>They are a kingdom of priests and a holy nation set apart forever</span></button>
+        <button class="choice-btn" onclick="answer(this, 8, false)"><span class="choice-letter">B</span><span>They are the servants who minister by night in the LORD's holy sanctuary</span></button>
+        <button class="choice-btn" onclick="answer(this, 8, false)"><span class="choice-letter">C</span><span>They alone know his word and have gathered his laws from every nation</span></button>
+        <button class="choice-btn" onclick="answer(this, 8, true)"><span class="choice-letter">D</span><span>God has raised up a horn for them; they are the people close to his heart</span></button>
+      </div>
+      <div class="feedback" id="fb8">
+        <div class="feedback-ref">Psalm 148:14</div>
+        <div>"And he has raised up for his people a horn, the praise of all his faithful servants, of Israel, the people close to his heart." After summoning all creation — heavens, earth, every creature — the psalm ends by identifying the people for whose sake this cosmic praise rings out: Israel, whom God has honored with a raised horn (a sign of strength and salvation) and called his own intimate people.</div>
+      </div>
+      <button class="btn-next" id="next8" onclick="nextQ(8)">Next &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="q-counter">Question 9 of 10</div>
+      <div class="q-text">In Psalm 149, what do the faithful people of God hold in their hands while the praise of God is in their mouths? <span class="detail-badge">DETAIL</span></div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this, 9, false)"><span class="choice-letter">A</span><span>A harp for singing and a timbrel for dancing</span></button>
+        <button class="choice-btn" onclick="answer(this, 9, true)"><span class="choice-letter">B</span><span>A double-edged sword</span></button>
+        <button class="choice-btn" onclick="answer(this, 9, false)"><span class="choice-letter">C</span><span>A banner proclaiming God's name among the nations</span></button>
+        <button class="choice-btn" onclick="answer(this, 9, false)"><span class="choice-letter">D</span><span>A scroll containing the sentences written against the wicked</span></button>
+      </div>
+      <div class="feedback" id="fb9">
+        <div class="feedback-ref">Psalm 149:6</div>
+        <div>"May the praise of God be in their mouths and a double-edged sword in their hands." The harp and timbrel appear earlier (v.3) for dancing praise, but in v.6 the image shifts sharply: simultaneous song and sword. The psalm envisions God's people as worshipers who are also instruments of divine judgment — a motif that recurs in Revelation 19, where the Word of God himself wields a sharp sword.</div>
+      </div>
+      <button class="btn-next" id="next9" onclick="nextQ(9)">Next &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="q-counter">Question 10 of 10</div>
+      <div class="q-text">Psalm 150 gives two reasons for praising the LORD in verse 2. What are those two reasons?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this, 10, false)"><span class="choice-letter">A</span><span>For his holiness and his faithfulness to the covenant</span></button>
+        <button class="choice-btn" onclick="answer(this, 10, false)"><span class="choice-letter">B</span><span>For his word sent to Jacob and his laws revealed to Israel</span></button>
+        <button class="choice-btn" onclick="answer(this, 10, true)"><span class="choice-letter">C</span><span>For his acts of power and his surpassing greatness</span></button>
+        <button class="choice-btn" onclick="answer(this, 10, false)"><span class="choice-letter">D</span><span>For his love toward the humble and his wrath against the wicked</span></button>
+      </div>
+      <div class="feedback" id="fb10">
+        <div class="feedback-ref">Psalm 150:2</div>
+        <div>"Praise him for his acts of power; praise him for his surpassing greatness." The Psalter's grand doxology keeps its theology simple: praise God for what he does (his mighty deeds) and for who he is (his incomparable greatness). The word/Jacob/laws language is from Psalm 147; the humble/wicked contrast is from Psalms 146–147. Psalm 150 sweeps past all specifics into pure, unrestricted, universal praise.</div>
+      </div>
+      <button class="btn-next" id="next10" onclick="showResults()">See Results &rarr;</button>
+    </div>
+
+  </div><!-- /quiz-area -->
+
+  <!-- Results -->
+  <div id="results">
+    <div class="ornament">&#10022; &#10022; &#10022;</div>
+    <h2 style="font-family:'Cinzel',serif;font-size:18px;letter-spacing:2px;color:#7a5c1e;margin-bottom:20px;">YOUR RESULTS</h2>
+
+    <div class="score-ring-wrap">
+      <svg viewBox="0 0 120 120" width="140" height="140">
+        <circle class="ring-track" cx="60" cy="60" r="54"/>
+        <circle class="ring-progress" id="ringProgress" cx="60" cy="60" r="54"/>
+      </svg>
+      <div class="ring-score-text">
+        <span class="ring-fraction" id="ringFraction">0/10</span>
+        <span class="ring-label">CORRECT</span>
+      </div>
+    </div>
+
+    <div class="results-msg" id="resultsMsg"></div>
+    <div class="results-sub" id="resultsSub"></div>
+
+    <hr class="divider">
+
+    <div class="review-list" id="reviewList"></div>
+
+    <button class="btn-again" onclick="resetQuiz()">&#8635; Take Again</button>
+  </div>
+
+</div><!-- /card -->
+
+<script>
+  // ── State ──
+  const TOTAL = 10;
+  let score = 0;
+  let answers = {}; // {qNum: {correct, chosenText, correctText}}
+  let current = 1;
+
+  // Full question text (for review)
+  const qTexts = {
+    1: "What are the servants of the LORD called to do in the sanctuary? (Ps 134)",
+    2: "Why should we not trust in princes or human beings? (Ps 146)",
+    3: "Which group does the LORD 'frustrate'? (Ps 146)",
+    4: "What 'runs swiftly' when God sends it to the earth? (Ps 147)",
+    5: "What does the LORD delight in? (Ps 147)",
+    6: "What distinguishes Israel from all other nations? (Ps 147)",
+    7: "Why are the sun, moon, and stars called to praise the LORD? (Ps 148)",
+    8: "How does Psalm 148 describe Israel's unique status? (Ps 148)",
+    9: "What do the faithful hold in their hands while praising God? (Ps 149)",
+    10: "What two reasons does Psalm 150 give for praising the LORD? (Ps 150)"
+  };
+
+  const correctTexts = {
+    1: "Lift up their hands and praise the LORD",
+    2: "When they die, their spirit departs and their plans come to nothing",
+    3: "The wicked",
+    4: "His word — the command he sends to the earth",
+    5: "Those who fear him and put their hope in his unfailing love",
+    6: "God revealed his word, laws, and decrees to Israel but to no other nation",
+    7: "At his command they were created and established forever",
+    8: "God has raised up a horn for them; they are the people close to his heart",
+    9: "A double-edged sword",
+    10: "His acts of power and his surpassing greatness"
+  };
+
+  function answer(btn, qNum, isCorrect) {
+    // Disable all buttons in this question
+    const block = document.getElementById('q' + qNum);
+    const btns = block.querySelectorAll('.choice-btn');
+    btns.forEach(b => b.disabled = true);
+
+    // Style chosen button
+    btn.classList.add(isCorrect ? 'correct' : 'wrong');
+
+    // If wrong, highlight correct answer
+    if (!isCorrect) {
+      btns.forEach(b => {
+        if (b.querySelector('span:last-child').textContent === correctTexts[qNum] ||
+            b.onclick.toString().includes('true')) {
+          // Find correct button by checking onclick
+        }
+      });
+      // Highlight correct among all
+      btns.forEach(b => {
+        const fn = b.getAttribute('onclick');
+        if (fn && fn.includes(', true)')) {
+          b.classList.add('correct');
+        }
+      });
+    }
+
+    // Show feedback
+    const fb = document.getElementById('fb' + qNum);
+    fb.classList.add('show', isCorrect ? 'correct-fb' : 'wrong-fb');
+
+    // Track score
+    answers[qNum] = { correct: isCorrect, chosen: btn.querySelector('span:last-child').textContent };
+    if (isCorrect) score++;
+
+    // Show next button
+    document.getElementById('next' + qNum).classList.add('show');
+
+    // Update progress
+    updateProgress(qNum);
+  }
+
+  function updateProgress(qNum) {
+    const pct = (qNum / TOTAL) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+  }
+
+  function nextQ(qNum) {
+    document.getElementById('q' + qNum).classList.remove('active');
+    const next = qNum + 1;
+    if (next <= TOTAL) {
+      document.getElementById('q' + next).classList.add('active');
+    }
+  }
+
+  function showResults() {
+    document.getElementById('quiz-area').style.display = 'none';
+    document.getElementById('progressBar').style.width = '100%';
+
+    const resultsEl = document.getElementById('results');
+    resultsEl.classList.add('show');
+
+    // Score ring
+    const circumference = 2 * Math.PI * 54; // ~339.3, we use 345 approx
+    const offset = 345 * (1 - score / TOTAL);
+    const ring = document.getElementById('ringProgress');
+    setTimeout(() => {
+      ring.style.strokeDashoffset = offset;
+      if (score >= 9) ring.classList.add('correct-ring');
+      else if (score >= 6) ring.classList.add('partial-ring');
+      else ring.classList.add('low-ring');
+    }, 100);
+
+    document.getElementById('ringFraction').textContent = score + '/10';
+
+    // Message
+    let msg, sub;
+    if (score === 10) {
+      msg = "Perfect Score!";
+      sub = "\"His understanding has no limit.\" — Psalm 147:5";
+    } else if (score >= 8) {
+      msg = "Excellent Work!";
+      sub = "\"How good it is to sing praises to our God.\" — Psalm 147:1";
+    } else if (score >= 6) {
+      msg = "Well Done!";
+      sub = "\"The LORD delights in those who fear him, who put their hope in his unfailing love.\" — Psalm 147:11";
+    } else if (score >= 4) {
+      msg = "Keep Pressing In";
+      sub = "\"I will praise the LORD all my life.\" — Psalm 146:2";
+    } else {
+      msg = "Try Again!";
+      sub = "\"Sing to the LORD a new song.\" — Psalm 149:1";
+    }
+    document.getElementById('resultsMsg').textContent = msg;
+    document.getElementById('resultsSub').textContent = sub;
+
+    // Review list
+    const list = document.getElementById('reviewList');
+    let html = '';
+    for (let i = 1; i <= TOTAL; i++) {
+      const a = answers[i] || { correct: false, chosen: '(not answered)' };
+      const cls = a.correct ? 'r-correct' : 'r-wrong';
+      const icon = a.correct ? '✓' : '✗';
+      html += `<div class="review-item ${cls}">
+        <div class="review-q"><span class="review-icon">${icon}</span>${qTexts[i]}</div>
+        ${!a.correct ? `<div class="review-answer">Correct answer: ${correctTexts[i]}</div>` : ''}
+      </div>`;
+    }
+    list.innerHTML = html;
+  }
+
+  function resetQuiz() {
+    score = 0;
+    answers = {};
+    current = 1;
+
+    document.getElementById('results').classList.remove('show');
+    document.getElementById('quiz-area').style.display = 'block';
+    document.getElementById('progressBar').style.width = '0%';
+
+    const ring = document.getElementById('ringProgress');
+    ring.style.strokeDashoffset = 345;
+    ring.classList.remove('correct-ring', 'partial-ring', 'low-ring');
+
+    for (let i = 1; i <= TOTAL; i++) {
+      const block = document.getElementById('q' + i);
+      block.classList.remove('active');
+      block.querySelectorAll('.choice-btn').forEach(b => {
+        b.disabled = false;
+        b.classList.remove('correct', 'wrong');
+      });
+      const fb = document.getElementById('fb' + i);
+      fb.classList.remove('show', 'correct-fb', 'wrong-fb');
+      document.getElementById('next' + i).classList.remove('show');
+    }
+    document.getElementById('q1').classList.add('active');
+  }
+</script>
+</body>
+</html>
