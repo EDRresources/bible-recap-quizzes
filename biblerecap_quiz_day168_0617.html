@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 168 Bible Quiz — Proverbs 25–26</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', serif;
+    color: #2a1a06;
+  }
+
+  /* ── Parchment Card ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead0 0%, #ede0b8 40%, #e8d5a0 70%, #dfc88a 100%);
+    border: 2px solid #c9a84c;
+    border-radius: 4px;
+    box-shadow: 0 0 0 6px #0e0a04, 0 0 0 8px #c9a84c55, 0 8px 40px rgba(0,0,0,0.7);
+    width: 100%;
+    max-width: 760px;
+    padding: 40px 48px 48px;
+    position: relative;
+  }
+
+  /* ── Header ── */
+  .header { text-align: center; margin-bottom: 28px; }
+
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #7a5c1e;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a0e00;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .passages-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .passage-tag {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    padding: 3px 10px;
+    border: 1px solid #c9a84c;
+    color: #7a5c1e;
+    border-radius: 2px;
+    background: rgba(201,168,76,0.10);
+  }
+
+  .badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .badge-challenging {
+    background: #7a5c1e;
+    color: #f5ead0;
+  }
+
+  /* ── Ornament ── */
+  .ornament {
+    text-align: center;
+    color: #c9a84c;
+    font-size: 18px;
+    margin: 8px 0 20px;
+    letter-spacing: 10px;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #c9a84c;
+    opacity: 0.5;
+    margin: 20px 0;
+  }
+
+  /* ── Progress Bar ── */
+  .progress-wrap {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c55;
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #f0d070);
+    border-radius: 3px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  /* ── Question ── */
+  .question-block {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  .question-block.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-counter {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #7a5c1e;
+    margin-bottom: 8px;
+  }
+
+  .q-text {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #1a0e00;
+    margin-bottom: 20px;
+  }
+
+  .detail-badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    background: #4a2c0a;
+    color: #f5ead0;
+    padding: 2px 7px;
+    border-radius: 2px;
+    vertical-align: middle;
+    margin-left: 8px;
+    position: relative;
+    top: -2px;
+  }
+
+  /* ── Answer Choices ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; }
+
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    border: 1.5px solid #c9a84c88;
+    border-radius: 3px;
+    background: rgba(245,234,208,0.5);
+    cursor: pointer;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 16px;
+    color: #2a1a06;
+    transition: background 0.2s, border-color 0.2s;
+    width: 100%;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.18);
+    border-color: #c9a84c;
+  }
+  .choice-btn:disabled { cursor: default; }
+
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #7a5c1e;
+    min-width: 18px;
+    padding-top: 2px;
+  }
+
+  .choice-btn.correct {
+    background: #d4edda;
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+
+  .choice-btn.wrong {
+    background: #f8d7da;
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── Feedback ── */
+  .feedback {
+    display: none;
+    margin-top: 18px;
+    padding: 14px 18px;
+    border-radius: 3px;
+    font-size: 15px;
+    line-height: 1.6;
+    border-left: 4px solid;
+  }
+  .feedback.show { display: block; animation: fadeIn 0.3s ease; }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.08);
+    border-color: #1a5c2a;
+    color: #1a3d14;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.08);
+    border-color: #8b1a1a;
+    color: #5c1010;
+  }
+
+  .feedback-ref {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    margin-bottom: 5px;
+    opacity: 0.75;
+  }
+
+  /* ── Next Button ── */
+  .btn-next {
+    display: none;
+    margin-top: 22px;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    padding: 10px 28px;
+    background: #c9a84c;
+    color: #1a0e00;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-next:hover { background: #dfc070; }
+  .btn-next.show { display: inline-block; }
+
+  /* ── Results Screen ── */
+  #results { display: none; text-align: center; }
+  #results.show { display: block; animation: fadeIn 0.5s ease; }
+
+  .score-ring-wrap { margin: 20px auto 24px; width: 140px; height: 140px; position: relative; }
+
+  .score-ring-wrap svg { position: absolute; top: 0; left: 0; }
+
+  .ring-track {
+    fill: none;
+    stroke: rgba(201,168,76,0.2);
+    stroke-width: 10;
+  }
+  .ring-progress {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 345;
+    stroke-dashoffset: 345;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .ring-progress.correct-ring { stroke: #1a5c2a; }
+  .ring-progress.partial-ring { stroke: #c9a84c; }
+  .ring-progress.low-ring     { stroke: #8b1a1a; }
+
+  .ring-score-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .ring-fraction {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a0e00;
+    display: block;
+    line-height: 1;
+  }
+  .ring-label {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: #7a5c1e;
+    display: block;
+    margin-top: 2px;
+  }
+
+  .results-msg {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a0e00;
+    margin-bottom: 8px;
+  }
+  .results-sub {
+    font-size: 15px;
+    color: #5c3d0e;
+    margin-bottom: 28px;
+    font-style: italic;
+  }
+
+  /* ── Question Review ── */
+  .review-list { text-align: left; margin-bottom: 30px; }
+
+  .review-item {
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    border-left: 4px solid;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.07);
+    border-color: #1a5c2a;
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.07);
+    border-color: #8b1a1a;
+  }
+
+  .review-q {
+    font-weight: 600;
+    color: #1a0e00;
+    margin-bottom: 4px;
+  }
+  .review-answer {
+    font-size: 13px;
+    color: #4a2c0a;
+  }
+  .review-icon { margin-right: 6px; }
+
+  .btn-again {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    padding: 11px 32px;
+    background: transparent;
+    color: #7a5c1e;
+    border: 1.5px solid #c9a84c;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .btn-again:hover {
+    background: #c9a84c;
+    color: #1a0e00;
+  }
+
+  @media (max-width: 600px) {
+    .card { padding: 28px 22px 36px; }
+    .quiz-title { font-size: 20px; }
+    .q-text { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="date-line">Wednesday, June 17, 2026 &middot; Day 168</div>
+    <div class="quiz-title">The Bible Recap<br>Daily Quiz</div>
+    <div class="passages-row">
+      <span class="passage-tag">Proverbs 25</span>
+      <span class="passage-tag">Proverbs 26</span>
+    </div>
+    <div class="badge-row">
+      <span class="badge badge-challenging">Challenging</span>
+    </div>
+  </div>
+
+  <div class="ornament">&#10022; &#10022; &#10022;</div>
+  <hr class="divider">
+
+  <!-- Progress Bar -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Questions -->
+  <div id="quiz-area">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="q-counter">Question 1 of 10</div>
+      <div class="q-text">Proverbs 25 opens with a note identifying who transmitted these proverbs of Solomon to their present written form. Who was responsible?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this, 1, false)"><span class="choice-letter">A</span><span>The priests of Jerusalem, who copied them during Solomon&#39;s reign</span></button>
+        <button class="choice-btn" onclick="answer(this, 1, false)"><span class="choice-letter">B</span><span>The scribes of Josiah, who recovered them during the temple reforms</span></button>
+        <button class="choice-btn" onclick="answer(this, 1, true)"><span class="choice-letter">C</span><span>The men of Hezekiah, king of Judah</span></button>
+        <button class="choice-btn" onclick="answer(this, 1, false)"><span class="choice-letter">D</span><span>The disciples of the wise, who gathered them from Solomon&#39;s court records</span></button>
+      </div>
+      <div class="feedback" id="fb1">
+        <div class="feedback-ref">Proverbs 25:1</div>
+        <div>"These are more proverbs of Solomon, compiled by the men of Hezekiah king of Judah." Hezekiah reigned centuries after Solomon, making this an extraordinary act of literary and theological preservation. His scribal reform sits alongside his spiritual revival — a reminder that guarding the written word of wisdom is itself an act of faithfulness to God.</div>
+      </div>
+      <button class="btn-next" id="next1" onclick="nextQ(1)">Next &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="q-counter">Question 2 of 10</div>
+      <div class="q-text">According to Proverbs 25:13, what is a faithful messenger like to those who send him? <span class="detail-badge">DETAIL</span></div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this, 2, false)"><span class="choice-letter">A</span><span>Cold water to a thirsty soul</span></button>
+        <button class="choice-btn" onclick="answer(this, 2, false)"><span class="choice-letter">B</span><span>A refreshing breeze on a sweltering day</span></button>
+        <button class="choice-btn" onclick="answer(this, 2, false)"><span class="choice-letter">C</span><span>Apples of gold in settings of silver</span></button>
+        <button class="choice-btn" onclick="answer(this, 2, true)"><span class="choice-letter">D</span><span>The cold of snow in harvest time</span></button>
+      </div>
+      <div class="feedback" id="fb2">
+        <div class="feedback-ref">Proverbs 25:13</div>
+        <div>"Like the cold of snow in harvest time is a trustworthy messenger to the one who sends him; he refreshes the spirit of his master." "Cold water to a thirsty soul" is the comparison in verse 25 — but there it describes good news from a distant land, not a faithful messenger. The snow-in-harvest image vividly captures something precious and unexpected: snow is a rare relief in the Judean summer, making it a perfect emblem for the rare gift of total reliability.</div>
+      </div>
+      <button class="btn-next" id="next2" onclick="nextQ(2)">Next &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="q-counter">Question 3 of 10</div>
+      <div class="q-text">What does Proverbs 25 warn about when it comes to finding honey?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this, 3, false)"><span class="choice-letter">A</span><span>Share it generously with your neighbor, for abundance blesses the household</span></button>
+        <button class="choice-btn" onclick="answer(this, 3, false)"><span class="choice-letter">B</span><span>Give the first portion to your king before eating your own share</span></button>
+        <button class="choice-btn" onclick="answer(this, 3, true)"><span class="choice-letter">C</span><span>Eat only enough of it, lest you have your fill and vomit it</span></button>
+        <button class="choice-btn" onclick="answer(this, 3, false)"><span class="choice-letter">D</span><span>Savor it sparingly, for sweet things diminish in value when consumed quickly</span></button>
+      </div>
+      <div class="feedback" id="fb3">
+        <div class="feedback-ref">Proverbs 25:16</div>
+        <div>"If you find honey, eat just enough — too much of it, and you will vomit." The same principle is extended in verse 17 to visits with a neighbor: go too often and he will begin to hate you. Proverbs consistently argues that excess corrupts what is genuinely good — even legitimate blessings become harmful when they override self-restraint.</div>
+      </div>
+      <button class="btn-next" id="next3" onclick="nextQ(3)">Next &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="q-counter">Question 4 of 10</div>
+      <div class="q-text">What does Proverbs 25:21–22 instruct you to do if your enemy is hungry or thirsty, and what result does it promise?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this, 4, true)"><span class="choice-letter">A</span><span>Give him food and water; in doing so you will heap burning coals on his head and the LORD will reward you</span></button>
+        <button class="choice-btn" onclick="answer(this, 4, false)"><span class="choice-letter">B</span><span>Refuse him, lest your mercy be mistaken for weakness; the LORD will judge him in due time</span></button>
+        <button class="choice-btn" onclick="answer(this, 4, false)"><span class="choice-letter">C</span><span>Give him bread only; this will shame him and cause him to return what he owes you</span></button>
+        <button class="choice-btn" onclick="answer(this, 4, false)"><span class="choice-letter">D</span><span>Show him mercy with food and drink; the LORD will cause him to become your friend in time</span></button>
+      </div>
+      <div class="feedback" id="fb4">
+        <div class="feedback-ref">Proverbs 25:21–22</div>
+        <div>"If your enemy is hungry, give him food to eat; if he is thirsty, give him water to drink. In doing this, you will heap burning coals on his head, and the LORD will reward you." Paul quotes this directly in Romans 12:20, embedding it in his teaching on overcoming evil with good. The "burning coals" imagery likely points to the searing shame or conviction that unexpected kindness produces — not a vindictive punishment but a disarming grace.</div>
+      </div>
+      <button class="btn-next" id="next4" onclick="nextQ(4)">Next &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="q-counter">Question 5 of 10</div>
+      <div class="q-text">Proverbs 26:4–5 contains an apparent contradiction, offering opposite advice about answering a fool. What specific reason does verse 4 give for NOT answering a fool?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this, 5, true)"><span class="choice-letter">A</span><span>Lest you become like him yourself</span></button>
+        <button class="choice-btn" onclick="answer(this, 5, false)"><span class="choice-letter">B</span><span>Lest you encourage his folly to spread among the simple</span></button>
+        <button class="choice-btn" onclick="answer(this, 5, false)"><span class="choice-letter">C</span><span>Lest you waste your words on one who cannot hear wisdom</span></button>
+        <button class="choice-btn" onclick="answer(this, 5, false)"><span class="choice-letter">D</span><span>Lest you dishonor yourself before witnesses</span></button>
+      </div>
+      <div class="feedback" id="fb5">
+        <div class="feedback-ref">Proverbs 26:4–5</div>
+        <div>"Do not answer a fool according to his folly, or you yourself will be just like him. Answer a fool according to his folly, or he will be wise in his own eyes." The two reasons are precisely matched to two distinct dangers. Verse 4&#39;s danger is self-corruption — descend to the fool&#39;s level and you absorb his foolishness. Verse 5&#39;s danger is leaving his pride unchecked — silence can confirm him in his delusion. Wisdom requires reading the situation to know which danger is greater.</div>
+      </div>
+      <button class="btn-next" id="next5" onclick="nextQ(5)">Next &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="q-counter">Question 6 of 10</div>
+      <div class="q-text">What image does Proverbs 26:11 use for the fool who repeats his folly? (This verse is quoted in the New Testament.)</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this, 6, false)"><span class="choice-letter">A</span><span>A fly drawn back to a carcass</span></button>
+        <button class="choice-btn" onclick="answer(this, 6, true)"><span class="choice-letter">B</span><span>A dog that returns to its vomit</span></button>
+        <button class="choice-btn" onclick="answer(this, 6, false)"><span class="choice-letter">C</span><span>A pig that goes back to wallowing in the mud</span></button>
+        <button class="choice-btn" onclick="answer(this, 6, false)"><span class="choice-letter">D</span><span>A man who stumbles twice on the same stone</span></button>
+      </div>
+      <div class="feedback" id="fb6">
+        <div class="feedback-ref">Proverbs 26:11; 2 Peter 2:22</div>
+        <div>"As a dog returns to its vomit, so fools repeat their folly." Peter cites this proverb in 2 Peter 2:22 to describe false teachers who, after seeming to escape the corruption of the world, turn back to it. The pig in the mud appears in the same verse in 2 Peter — but that image is not from Proverbs 26. Proverbs uses the dog, not the pig, making this a test of close reading across both Testaments.</div>
+      </div>
+      <button class="btn-next" id="next6" onclick="nextQ(6)">Next &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="q-counter">Question 7 of 10</div>
+      <div class="q-text">Proverbs 26 describes the sluggard in several vivid ways. Which of the following is NOT one of the descriptions given in chapter 26? <span class="detail-badge">DETAIL</span></div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this, 7, false)"><span class="choice-letter">A</span><span>He says there is a lion in the road — a lion in the streets</span></button>
+        <button class="choice-btn" onclick="answer(this, 7, false)"><span class="choice-letter">B</span><span>He turns on his bed as a door turns on its hinges</span></button>
+        <button class="choice-btn" onclick="answer(this, 7, false)"><span class="choice-letter">C</span><span>He buries his hand in a dish but is too weary to bring it back to his mouth</span></button>
+        <button class="choice-btn" onclick="answer(this, 7, true)"><span class="choice-letter">D</span><span>He sleeps through harvest and brings shame to his household</span></button>
+      </div>
+      <div class="feedback" id="fb7">
+        <div class="feedback-ref">Proverbs 26:13–16; cf. Proverbs 10:5</div>
+        <div>The sleeping-through-harvest image appears in Proverbs 10:5 — "He who sleeps during harvest is a disgraceful son" — but not in chapter 26. Chapter 26&#39;s sluggard sequence (vv.13–16) gives us: the lion excuse (v.13), turning on his bed like a door (v.14), the hand buried in the dish (v.15), and the claim of being wiser than seven men who answer sensibly (v.16). The harvest image is a common association but comes from a different chapter.</div>
+      </div>
+      <button class="btn-next" id="next7" onclick="nextQ(7)">Next &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="q-counter">Question 8 of 10</div>
+      <div class="q-text">According to Proverbs 26:12, what type of person has even less hope than a fool?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this, 8, false)"><span class="choice-letter">A</span><span>A man who spreads slander and kindles strife among brothers</span></button>
+        <button class="choice-btn" onclick="answer(this, 8, false)"><span class="choice-letter">B</span><span>A man who flatters others with lying lips</span></button>
+        <button class="choice-btn" onclick="answer(this, 8, false)"><span class="choice-letter">C</span><span>A man who hires a fool as his messenger</span></button>
+        <button class="choice-btn" onclick="answer(this, 8, true)"><span class="choice-letter">D</span><span>A man who is wise in his own eyes</span></button>
+      </div>
+      <div class="feedback" id="fb8">
+        <div class="feedback-ref">Proverbs 26:12</div>
+        <div>"Do you see a person wise in their own eyes? There is more hope for a fool than for them." All three wrong answers describe behaviors that Proverbs 26 does condemn — slander (v.20), flattery (v.28), and hiring a fool (v.10). But the person without self-awareness is in the most hopeless position of all: a fool at least might recognize his need for wisdom, but the self-satisfied person has closed himself off from the very possibility of correction.</div>
+      </div>
+      <button class="btn-next" id="next8" onclick="nextQ(8)">Next &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="q-counter">Question 9 of 10</div>
+      <div class="q-text">What image does Proverbs 25:28 use for a person who lacks self-control?</div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this, 9, false)"><span class="choice-letter">A</span><span>A river that has broken its banks and flooded the land</span></button>
+        <button class="choice-btn" onclick="answer(this, 9, true)"><span class="choice-letter">B</span><span>A city broken into and left without walls</span></button>
+        <button class="choice-btn" onclick="answer(this, 9, false)"><span class="choice-letter">C</span><span>A ship tossed by the wind with no anchor</span></button>
+        <button class="choice-btn" onclick="answer(this, 9, false)"><span class="choice-letter">D</span><span>A fire left burning with no watchman</span></button>
+      </div>
+      <div class="feedback" id="fb9">
+        <div class="feedback-ref">Proverbs 25:28</div>
+        <div>"Like a city whose walls are broken through is a person who lacks self-control." In the ancient world, a city without walls was not merely inconvenient — it was defenseless, exposed to every invader. The image of a ruined city wall applies that same total vulnerability to the inner life: without self-mastery, a person has no defense against the passions, temptations, and influences that would destroy him. The other images are vivid but not what Proverbs uses here.</div>
+      </div>
+      <button class="btn-next" id="next9" onclick="nextQ(9)">Next &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="q-counter">Question 10 of 10</div>
+      <div class="q-text">How does Proverbs 26:18–19 describe the person who deceives his neighbor and then claims "I was only joking"? <span class="detail-badge">DETAIL</span></div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this, 10, false)"><span class="choice-letter">A</span><span>Like a man who whispers poison into the ear and then calls it medicine</span></button>
+        <button class="choice-btn" onclick="answer(this, 10, false)"><span class="choice-letter">B</span><span>Like a serpent that strikes and then retreats into hiding</span></button>
+        <button class="choice-btn" onclick="answer(this, 10, true)"><span class="choice-letter">C</span><span>Like a maniac who shoots flaming arrows, deadly arrows</span></button>
+        <button class="choice-btn" onclick="answer(this, 10, false)"><span class="choice-letter">D</span><span>Like one who digs a pit for his neighbor and then denies any knowledge of it</span></button>
+      </div>
+      <div class="feedback" id="fb10">
+        <div class="feedback-ref">Proverbs 26:18–19</div>
+        <div>"Like a maniac shooting flaming arrows or deadly arrows is one who deceives their neighbor and says, &#39;I was only joking!&#39;" The image is deliberately extreme: a madman indiscriminately hurling lethal, burning projectiles. Proverbs refuses to excuse harmful deception under the cover of humor — the damage caused by cruel "jokes" is real, and the joking defense does not diminish the injury. The pit-digger image appears in verse 27 but is used for a different point (retribution, not excuse-making).</div>
+      </div>
+      <button class="btn-next" id="next10" onclick="showResults()">See Results &rarr;</button>
+    </div>
+
+  </div><!-- /quiz-area -->
+
+  <!-- Results -->
+  <div id="results">
+    <div class="ornament">&#10022; &#10022; &#10022;</div>
+    <h2 style="font-family:'Cinzel',serif;font-size:18px;letter-spacing:2px;color:#7a5c1e;margin-bottom:20px;">YOUR RESULTS</h2>
+
+    <div class="score-ring-wrap">
+      <svg viewBox="0 0 120 120" width="140" height="140">
+        <circle class="ring-track" cx="60" cy="60" r="54"/>
+        <circle class="ring-progress" id="ringProgress" cx="60" cy="60" r="54"/>
+      </svg>
+      <div class="ring-score-text">
+        <span class="ring-fraction" id="ringFraction">0/10</span>
+        <span class="ring-label">CORRECT</span>
+      </div>
+    </div>
+
+    <div class="results-msg" id="resultsMsg"></div>
+    <div class="results-sub" id="resultsSub"></div>
+
+    <hr class="divider">
+
+    <div class="review-list" id="reviewList"></div>
+
+    <button class="btn-again" onclick="resetQuiz()">&#8635; Take Again</button>
+  </div>
+
+</div><!-- /card -->
+
+<script>
+  const TOTAL = 10;
+  let current = 1;
+  let score = 0;
+  const results = {};
+
+  const questions = [
+    "Who transmitted the proverbs of Solomon in chapter 25?",
+    "A faithful messenger is compared to what (Prov 25:13)?",
+    "What warning does Proverbs 25 give about honey?",
+    "What should you do for a hungry enemy, and what is the result (Prov 25:21–22)?",
+    "What reason does Prov 26:4 give for NOT answering a fool?",
+    "What image describes the fool who repeats his folly (Prov 26:11)?",
+    "Which description of the sluggard does NOT appear in Proverbs 26?",
+    "Who has less hope than a fool, according to Prov 26:12?",
+    "What image describes a man without self-control (Prov 25:28)?",
+    "How does Prov 26:18–19 describe the deceiver who claims he was joking?"
+  ];
+
+  const correctAnswers = {
+    1: "The men of Hezekiah, king of Judah",
+    2: "The cold of snow in harvest time",
+    3: "Eat only enough, lest you have your fill and vomit it",
+    4: "Give him food and water; you will heap burning coals on his head and the LORD will reward you",
+    5: "Lest you become like him yourself",
+    6: "A dog that returns to its vomit",
+    7: "He sleeps through harvest and brings shame to his household (not in ch. 26)",
+    8: "A man who is wise in his own eyes",
+    9: "A city broken into and left without walls",
+    10: "Like a maniac who shoots flaming arrows, deadly arrows"
+  };
+
+  function answer(btn, qNum, isCorrect) {
+    const block = document.getElementById('q' + qNum);
+    const buttons = block.querySelectorAll('.choice-btn');
+    buttons.forEach(b => b.disabled = true);
+
+    const fb = document.getElementById('fb' + qNum);
+    if (isCorrect) {
+      btn.classList.add('correct');
+      fb.classList.add('correct-fb', 'show');
+      score++;
+    } else {
+      btn.classList.add('wrong');
+      fb.classList.add('wrong-fb', 'show');
+      // Highlight the correct button
+      buttons.forEach(b => {
+        if (b.onclick.toString().includes('true')) b.classList.add('correct');
+      });
+    }
+
+    results[qNum] = isCorrect;
+    document.getElementById('next' + qNum).classList.add('show');
+    updateProgress(qNum);
+  }
+
+  function updateProgress(qNum) {
+    const pct = (qNum / TOTAL) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+  }
+
+  function nextQ(qNum) {
+    document.getElementById('q' + qNum).classList.remove('active');
+    const next = qNum + 1;
+    if (next <= TOTAL) {
+      document.getElementById('q' + next).classList.add('active');
+    }
+  }
+
+  function showResults() {
+    document.getElementById('quiz-area').style.display = 'none';
+    document.getElementById('progressBar').style.width = '100%';
+
+    const res = document.getElementById('results');
+    res.classList.add('show');
+
+    // Score ring
+    const fraction = document.getElementById('ringFraction');
+    fraction.textContent = score + '/10';
+
+    const ring = document.getElementById('ringProgress');
+    const circumference = 345;
+    const offset = circumference - (score / TOTAL) * circumference;
+    setTimeout(() => {
+      ring.style.strokeDashoffset = offset;
+      if (score >= 9) ring.classList.add('correct-ring');
+      else if (score >= 6) ring.classList.add('partial-ring');
+      else ring.classList.add('low-ring');
+    }, 100);
+
+    // Message
+    const msg = document.getElementById('resultsMsg');
+    const sub = document.getElementById('resultsSub');
+    if (score === 10) {
+      msg.textContent = "Perfect — Wisdom Mastered!";
+      sub.textContent = "You read Proverbs 25–26 with the sharpness Solomon himself commended.";
+    } else if (score >= 8) {
+      msg.textContent = "Excellent Work!";
+      sub.textContent = "A keen eye for the details hidden in these proverbs.";
+    } else if (score >= 6) {
+      msg.textContent = "Solid Effort!";
+      sub.textContent = "A few of the finer details slipped by — worth a second reading.";
+    } else if (score >= 4) {
+      msg.textContent = "Keep Studying!";
+      sub.textContent = "Proverbs rewards slow, careful re-reading. Try again.";
+    } else {
+      msg.textContent = "Back to the Scroll!";
+      sub.textContent = "These chapters are rich — another pass through will reward you.";
+    }
+
+    // Review list
+    const list = document.getElementById('reviewList');
+    list.innerHTML = '';
+    for (let i = 1; i <= TOTAL; i++) {
+      const correct = results[i];
+      const item = document.createElement('div');
+      item.className = 'review-item ' + (correct ? 'r-correct' : 'r-wrong');
+      item.innerHTML = '<div class="review-q"><span class="review-icon">' +
+        (correct ? '&#10003;' : '&#10007;') + '</span>Q' + i + ': ' + questions[i-1] + '</div>' +
+        '<div class="review-answer">' + (correct ? 'Correct' : 'Correct answer: ' + correctAnswers[i]) + '</div>';
+      list.appendChild(item);
+    }
+  }
+
+  function resetQuiz() {
+    score = 0;
+    current = 1;
+    for (let k in results) delete results[k];
+
+    document.getElementById('results').classList.remove('show');
+    document.getElementById('quiz-area').style.display = 'block';
+    document.getElementById('progressBar').style.width = '0%';
+
+    for (let i = 1; i <= TOTAL; i++) {
+      const block = document.getElementById('q' + i);
+      block.classList.remove('active');
+      block.querySelectorAll('.choice-btn').forEach(b => {
+        b.disabled = false;
+        b.classList.remove('correct', 'wrong');
+      });
+      const fb = document.getElementById('fb' + i);
+      fb.classList.remove('show', 'correct-fb', 'wrong-fb');
+      document.getElementById('next' + i).classList.remove('show');
+    }
+
+    const ring = document.getElementById('ringProgress');
+    ring.style.strokeDashoffset = '345';
+    ring.classList.remove('correct-ring', 'partial-ring', 'low-ring');
+
+    document.getElementById('q1').classList.add('active');
+  }
+</script>
+
+</body>
+</html>
