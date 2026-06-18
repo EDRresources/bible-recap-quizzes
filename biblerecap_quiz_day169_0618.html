@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 169 Bible Quiz — Proverbs 27–29</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #0e0a04;
+      font-family: 'Crimson Text', Georgia, serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem 4rem;
+      color: #2c1a06;
+    }
+    .scroll-wrap { width: 100%; max-width: 780px; }
+    .parchment {
+      background: linear-gradient(160deg, #f5ecd7 0%, #ede0c4 30%, #e8d5a8 70%, #dfc99a 100%);
+      border: 2px solid #c9a84c;
+      border-radius: 4px;
+      padding: 2.8rem 3rem;
+      position: relative;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.7), inset 0 0 60px rgba(201,168,76,0.08);
+    }
+    .parchment::before {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border: 1px solid rgba(201,168,76,0.35);
+      border-radius: 2px;
+      pointer-events: none;
+    }
+    .ornament {
+      text-align: center;
+      color: #c9a84c;
+      font-size: 1.3rem;
+      letter-spacing: 0.5rem;
+      margin-bottom: 0.4rem;
+      opacity: 0.8;
+    }
+    .date-line {
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.2rem;
+      color: #7a5c2e;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    h1.quiz-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.65rem;
+      font-weight: 700;
+      text-align: center;
+      color: #2c1a06;
+      line-height: 1.3;
+      margin-bottom: 0.6rem;
+    }
+    .passage-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.4rem;
+      margin-bottom: 0.75rem;
+    }
+    .passage-tag {
+      background: rgba(201,168,76,0.18);
+      border: 1px solid #c9a84c;
+      border-radius: 2px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.12rem;
+      color: #7a5c2e;
+      padding: 0.25rem 0.7rem;
+      text-transform: uppercase;
+    }
+    .badges {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1.4rem;
+    }
+    .badge {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.18rem;
+      text-transform: uppercase;
+      padding: 0.22rem 0.8rem;
+      border-radius: 2px;
+    }
+    .badge-challenging { background: #8b1a1a; color: #f5ecd7; border: 1px solid #6b1010; }
+    .progress-wrap {
+      background: rgba(44,26,6,0.12);
+      border-radius: 99px;
+      height: 5px;
+      margin-bottom: 1.8rem;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #c9a84c, #e8c96a);
+      border-radius: 99px;
+      transition: width 0.5s ease;
+      width: 0%;
+    }
+    .question-block { display: none; animation: fadeIn 0.4s ease; }
+    .question-block.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .q-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+    }
+    .q-counter {
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.15rem;
+      color: #7a5c2e;
+      text-transform: uppercase;
+    }
+    .detail-badge {
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.15rem;
+      text-transform: uppercase;
+      background: rgba(201,168,76,0.22);
+      border: 1px solid #c9a84c;
+      color: #7a5c2e;
+      padding: 0.18rem 0.55rem;
+      border-radius: 2px;
+    }
+    .q-text {
+      font-size: 1.15rem;
+      line-height: 1.6;
+      color: #1c0f02;
+      margin-bottom: 1.1rem;
+      font-weight: 600;
+    }
+    .choices { display: flex; flex-direction: column; gap: 0.55rem; }
+    .choice-btn {
+      background: rgba(255,255,255,0.45);
+      border: 1.5px solid rgba(201,168,76,0.5);
+      border-radius: 3px;
+      padding: 0.75rem 1rem;
+      font-family: 'Crimson Text', serif;
+      font-size: 1.05rem;
+      color: #2c1a06;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.2s, border-color 0.2s;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+    }
+    .choice-btn:hover:not(:disabled) {
+      background: rgba(201,168,76,0.18);
+      border-color: #c9a84c;
+    }
+    .choice-btn .choice-letter {
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #c9a84c;
+      min-width: 1.1rem;
+      margin-top: 0.1rem;
+    }
+    .choice-btn.correct { background: rgba(26,92,42,0.15); border-color: #1a5c2a; color: #0d3318; }
+    .choice-btn.correct .choice-letter { color: #1a5c2a; }
+    .choice-btn.wrong { background: rgba(139,26,26,0.12); border-color: #8b1a1a; color: #5a0e0e; }
+    .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+    .feedback {
+      display: none;
+      margin-top: 1rem;
+      padding: 0.85rem 1rem;
+      border-radius: 3px;
+      font-size: 1rem;
+      line-height: 1.55;
+    }
+    .feedback.correct-fb { background: rgba(26,92,42,0.1); border: 1px solid #1a5c2a; color: #0d3318; }
+    .feedback.wrong-fb { background: rgba(139,26,26,0.09); border: 1px solid #8b1a1a; color: #5a0e0e; }
+    .feedback .ref {
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.1rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+    .next-btn {
+      display: none;
+      margin-top: 1.2rem;
+      background: linear-gradient(135deg, #c9a84c, #b8922e);
+      color: #1c0f02;
+      border: none;
+      border-radius: 3px;
+      padding: 0.7rem 2rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.18rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .next-btn:hover { opacity: 0.85; }
+    .divider {
+      text-align: center;
+      color: #c9a84c;
+      opacity: 0.5;
+      margin: 1.8rem 0 0;
+      font-size: 0.9rem;
+      letter-spacing: 0.6rem;
+    }
+    #results-screen { display: none; text-align: center; animation: fadeIn 0.5s ease; }
+    .score-ring-wrap { display: flex; justify-content: center; margin: 1.2rem 0 1rem; }
+    .score-ring { position: relative; width: 130px; height: 130px; }
+    .score-ring svg { transform: rotate(-90deg); }
+    .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.2); stroke-width: 10; }
+    .score-ring-fill {
+      fill: none;
+      stroke: #c9a84c;
+      stroke-width: 10;
+      stroke-linecap: round;
+      stroke-dasharray: 345;
+      stroke-dashoffset: 345;
+      transition: stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1);
+    }
+    .score-ring-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .score-number { font-family: 'Cinzel', serif; font-size: 2rem; font-weight: 700; color: #2c1a06; line-height: 1; }
+    .score-label { font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.15rem; color: #7a5c2e; text-transform: uppercase; }
+    .result-message { font-size: 1.15rem; line-height: 1.6; color: #2c1a06; margin: 0.5rem 0 1.4rem; font-style: italic; }
+    .review-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.2rem;
+      text-transform: uppercase;
+      color: #7a5c2e;
+      margin-bottom: 0.8rem;
+    }
+    .review-item {
+      text-align: left;
+      background: rgba(255,255,255,0.35);
+      border: 1px solid rgba(201,168,76,0.35);
+      border-radius: 3px;
+      padding: 0.7rem 0.9rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .review-item .ri-q { font-weight: 600; color: #1c0f02; margin-bottom: 0.2rem; }
+    .review-item .ri-correct { color: #1a5c2a; font-size: 0.88rem; }
+    .review-item .ri-wrong { color: #8b1a1a; font-size: 0.88rem; }
+    .take-again-btn {
+      margin-top: 1.5rem;
+      background: linear-gradient(135deg, #c9a84c, #b8922e);
+      color: #1c0f02;
+      border: none;
+      border-radius: 3px;
+      padding: 0.75rem 2.4rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.18rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .take-again-btn:hover { opacity: 0.85; }
+  </style>
+</head>
+<body>
+<div class="scroll-wrap">
+  <div class="parchment">
+
+    <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+    <div class="date-line">Thursday, June 18, 2026 &middot; Day 169</div>
+    <h1 class="quiz-title">The Bible Recap Daily Quiz</h1>
+
+    <div class="passage-tags">
+      <span class="passage-tag">Proverbs 27</span>
+      <span class="passage-tag">Proverbs 28</span>
+      <span class="passage-tag">Proverbs 29</span>
+    </div>
+
+    <div class="badges">
+      <span class="badge badge-challenging">Challenging</span>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <div id="quiz-area">
+
+      <!-- Q1 -->
+      <div class="question-block active" id="q1">
+        <div class="q-meta">
+          <span class="q-counter">Question 1 of 10</span>
+          <span class="detail-badge">Detail</span>
+        </div>
+        <div class="q-text">Proverbs 27:21 uses the crucible for silver and the furnace for gold as analogies. According to this verse, what similarly tests people?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(this,'q1','A','wrong')">
+            <span class="choice-letter">A</span><span>Suffering and adversity that refines their character</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q1','B','correct')">
+            <span class="choice-letter">B</span><span>The praise they receive</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q1','C','wrong')">
+            <span class="choice-letter">C</span><span>The company of wise or foolish friends</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q1','D','wrong')">
+            <span class="choice-letter">D</span><span>How faithfully they tend their flocks and herds</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb-q1"></div>
+        <button class="next-btn" id="next-q1" onclick="nextQuestion(2)">Next &rarr;</button>
+      </div>
+
+      <!-- Q2 -->
+      <div class="question-block" id="q2">
+        <div class="q-meta">
+          <span class="q-counter">Question 2 of 10</span>
+          <span class="detail-badge">Detail</span>
+        </div>
+        <div class="q-text">According to Proverbs 27:14, what unexpected result follows when someone loudly blesses their neighbor early in the morning?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(this,'q2','A','wrong')">
+            <span class="choice-letter">A</span><span>Their blessing is seen as flattery and rejected</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q2','B','wrong')">
+            <span class="choice-letter">B</span><span>Their neighbor grows suspicious of their motives</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q2','C','wrong')">
+            <span class="choice-letter">C</span><span>Their house becomes troubled by strife</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q2','D','correct')">
+            <span class="choice-letter">D</span><span>It will be taken as a curse</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb-q2"></div>
+        <button class="next-btn" id="next-q2" onclick="nextQuestion(3)">Next &rarr;</button>
+      </div>
+
+      <!-- Q3 -->
+      <div class="question-block" id="q3">
+        <div class="q-meta">
+          <span class="q-counter">Question 3 of 10</span>
+        </div>
+        <div class="q-text">Proverbs 28:13 presents two contrasting outcomes. What does it say happens to the person who conceals their sins?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(this,'q3','A','correct')">
+            <span class="choice-letter">A</span><span>They do not prosper</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q3','B','wrong')">
+            <span class="choice-letter">B</span><span>Their sins will find them out at last</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q3','C','wrong')">
+            <span class="choice-letter">C</span><span>They harden their heart and fall into trouble</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q3','D','wrong')">
+            <span class="choice-letter">D</span><span>Their prayers become detestable to the LORD</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb-q3"></div>
+        <button class="next-btn" id="next-q3" onclick="nextQuestion(4)">Next &rarr;</button>
+      </div>
+
+      <!-- Q4 -->
+      <div class="question-block" id="q4">
+        <div class="q-meta">
+          <span class="q-counter">Question 4 of 10</span>
+        </div>
+        <div class="q-text">Proverbs 29:18 says, &ldquo;Where there is no revelation, people cast off restraint.&rdquo; What does the second half of that verse say about the contrasting group?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(this,'q4','A','wrong')">
+            <span class="choice-letter">A</span><span>They will lead their household in the fear of the LORD</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q4','B','wrong')">
+            <span class="choice-letter">B</span><span>They will find rest from all their enemies</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q4','C','correct')">
+            <span class="choice-letter">C</span><span>Blessed is the one who heeds wisdom&#39;s instruction</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q4','D','wrong')">
+            <span class="choice-letter">D</span><span>They will not lack any good thing</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb-q4"></div>
+        <button class="next-btn" id="next-q4" onclick="nextQuestion(5)">Next &rarr;</button>
+      </div>
+
+      <!-- Q5 -->
+      <div class="question-block" id="q5">
+        <div class="q-meta">
+          <span class="q-counter">Question 5 of 10</span>
+        </div>
+        <div class="q-text">Proverbs 27:17 says &ldquo;As iron sharpens iron.&rdquo; What, according to this verse, is sharpened in the same way?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(this,'q5','A','wrong')">
+            <span class="choice-letter">A</span><span>A wise son sharpens his understanding through his father&#39;s rebuke</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q5','B','correct')">
+            <span class="choice-letter">B</span><span>One person sharpens another</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q5','C','wrong')">
+            <span class="choice-letter">C</span><span>A king&#39;s judgment is sharpened by his counselors</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q5','D','wrong')">
+            <span class="choice-letter">D</span><span>A servant&#39;s character is sharpened through discipline</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb-q5"></div>
+        <button class="next-btn" id="next-q5" onclick="nextQuestion(6)">Next &rarr;</button>
+      </div>
+
+      <!-- Q6 -->
+      <div class="question-block" id="q6">
+        <div class="q-meta">
+          <span class="q-counter">Question 6 of 10</span>
+        </div>
+        <div class="q-text">Proverbs 28:1 says the wicked flee even though no one pursues them. How does the verse describe the righteous in contrast?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(this,'q6','A','wrong')">
+            <span class="choice-letter">A</span><span>They walk in safety on every path</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q6','B','wrong')">
+            <span class="choice-letter">B</span><span>They trust in the LORD and are not moved</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q6','C','wrong')">
+            <span class="choice-letter">C</span><span>They see through the schemes of the wicked</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q6','D','correct')">
+            <span class="choice-letter">D</span><span>They are as bold as a lion</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb-q6"></div>
+        <button class="next-btn" id="next-q6" onclick="nextQuestion(7)">Next &rarr;</button>
+      </div>
+
+      <!-- Q7 -->
+      <div class="question-block" id="q7">
+        <div class="q-meta">
+          <span class="q-counter">Question 7 of 10</span>
+        </div>
+        <div class="q-text">Proverbs 27:23&ndash;24 urges careful attention to one&#39;s flocks and herds. What reason does the text give for this diligence?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(this,'q7','A','correct')">
+            <span class="choice-letter">A</span><span>Riches do not endure forever, and a crown is not secure for all generations</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q7','B','wrong')">
+            <span class="choice-letter">B</span><span>A diligent shepherd will have wool for clothing and goats&#39; milk for food</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q7','C','wrong')">
+            <span class="choice-letter">C</span><span>The lazy shepherd&#39;s flock will scatter and be devoured</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q7','D','wrong')">
+            <span class="choice-letter">D</span><span>Wealth gained through neglect will quickly fade away</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb-q7"></div>
+        <button class="next-btn" id="next-q7" onclick="nextQuestion(8)">Next &rarr;</button>
+      </div>
+
+      <!-- Q8 -->
+      <div class="question-block" id="q8">
+        <div class="q-meta">
+          <span class="q-counter">Question 8 of 10</span>
+          <span class="detail-badge">Detail</span>
+        </div>
+        <div class="q-text">Proverbs 29:20 asks, &ldquo;Do you see someone who speaks in haste?&rdquo; What does the verse say about such a person?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(this,'q8','A','wrong')">
+            <span class="choice-letter">A</span><span>Their words will betray them before rulers</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q8','B','wrong')">
+            <span class="choice-letter">B</span><span>They stir up conflict and make many enemies</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q8','C','correct')">
+            <span class="choice-letter">C</span><span>There is more hope for a fool than for them</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q8','D','wrong')">
+            <span class="choice-letter">D</span><span>They will come to ruin before their time</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb-q8"></div>
+        <button class="next-btn" id="next-q8" onclick="nextQuestion(9)">Next &rarr;</button>
+      </div>
+
+      <!-- Q9 -->
+      <div class="question-block" id="q9">
+        <div class="q-meta">
+          <span class="q-counter">Question 9 of 10</span>
+          <span class="detail-badge">Detail</span>
+        </div>
+        <div class="q-text">Proverbs 27:6 says wounds from a friend &ldquo;can be trusted.&rdquo; How does the verse describe an enemy&#39;s behavior in contrast?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(this,'q9','A','wrong')">
+            <span class="choice-letter">A</span><span>An enemy gives hollow praise to lead you astray</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q9','B','correct')">
+            <span class="choice-letter">B</span><span>An enemy multiplies kisses</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q9','C','wrong')">
+            <span class="choice-letter">C</span><span>An enemy flatters your face and curses behind your back</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q9','D','wrong')">
+            <span class="choice-letter">D</span><span>An enemy&#39;s counsel is sweet to the ear but bitter to the soul</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb-q9"></div>
+        <button class="next-btn" id="next-q9" onclick="nextQuestion(10)">Next &rarr;</button>
+      </div>
+
+      <!-- Q10 -->
+      <div class="question-block" id="q10">
+        <div class="q-meta">
+          <span class="q-counter">Question 10 of 10</span>
+        </div>
+        <div class="q-text">Proverbs 29:25 warns that &ldquo;fear of man will prove to be a snare.&rdquo; What does the verse promise to whoever trusts in the LORD?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(this,'q10','A','wrong')">
+            <span class="choice-letter">A</span><span>They will have no fear of evil tidings</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q10','B','wrong')">
+            <span class="choice-letter">B</span><span>They will find justice in the courts of the land</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q10','C','wrong')">
+            <span class="choice-letter">C</span><span>Their enemies will be put to flight before them</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q10','D','correct')">
+            <span class="choice-letter">D</span><span>They are kept safe</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb-q10"></div>
+        <button class="next-btn" id="next-q10" onclick="showResults()">See Results &rarr;</button>
+      </div>
+
+    </div><!-- end #quiz-area -->
+
+    <!-- RESULTS -->
+    <div id="results-screen">
+      <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+      <div class="date-line" style="margin-top:0.3rem;">Day 169 &middot; Proverbs 27&ndash;29</div>
+      <h1 class="quiz-title" style="margin-bottom:0.5rem;">Your Results</h1>
+
+      <div class="score-ring-wrap">
+        <div class="score-ring">
+          <svg viewBox="0 0 120 120" width="130" height="130">
+            <circle class="score-ring-bg" cx="60" cy="60" r="55"/>
+            <circle class="score-ring-fill" id="ring-fill" cx="60" cy="60" r="55"/>
+          </svg>
+          <div class="score-ring-text">
+            <span class="score-number" id="score-display">0</span>
+            <span class="score-label">/ 10</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-message" id="result-message"></div>
+
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+
+      <button class="take-again-btn" onclick="resetQuiz()">&#8635; Take Again</button>
+    </div>
+
+    <div class="divider">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+  </div>
+</div>
+
+<script>
+  var questions = [
+    {id:'q1', text:'Proverbs 27:21 uses the crucible for silver and the furnace for gold as analogies. According to this verse, what similarly tests people?', correct:'B', ref:'Proverbs 27:21', explanation:'&ldquo;The crucible for silver and the furnace for gold, but people are tested by their praise.&rdquo; The kind of praise a person receives &mdash; and how they respond to it &mdash; reveals what they are truly made of.'},
+    {id:'q2', text:'According to Proverbs 27:14, what unexpected result follows when someone loudly blesses their neighbor early in the morning?', correct:'D', ref:'Proverbs 27:14', explanation:'&ldquo;If anyone loudly blesses their neighbor early in the morning, it will be taken as a curse.&rdquo; Effusive, untimely enthusiasm can be so overbearing that a genuine blessing lands as an irritant. Context and timing matter.'},
+    {id:'q3', text:'Proverbs 28:13 presents two contrasting outcomes. What does it say happens to the person who conceals their sins?', correct:'A', ref:'Proverbs 28:13', explanation:'&ldquo;Whoever conceals their sins does not prosper, but the one who confesses and renounces them finds mercy.&rdquo; The other choices reflect truths found elsewhere in Proverbs 28 (vv. 9, 14) but are not what this verse says.'},
+    {id:'q4', text:'Proverbs 29:18 says, “Where there is no revelation, people cast off restraint.” What does the second half of that verse say about the contrasting group?', correct:'C', ref:'Proverbs 29:18', explanation:'&ldquo;Where there is no revelation, people cast off restraint; but blessed is the one who heeds wisdom&#39;s instruction.&rdquo; The Hebrew word for &ldquo;revelation&rdquo; (chāzōn) refers to prophetic vision &mdash; without God&#39;s word, society unravels.'},
+    {id:'q5', text:'Proverbs 27:17 says “As iron sharpens iron.” What, according to this verse, is sharpened in the same way?', correct:'B', ref:'Proverbs 27:17', explanation:'&ldquo;As iron sharpens iron, so one person sharpens another.&rdquo; The proverb points to the mutual benefit of honest, close relationships &mdash; real friendship involves the friction that produces growth.'},
+    {id:'q6', text:'Proverbs 28:1 says the wicked flee even though no one pursues them. How does the verse describe the righteous in contrast?', correct:'D', ref:'Proverbs 28:1', explanation:'&ldquo;The wicked flee though no one pursues, but the righteous are as bold as a lion.&rdquo; Guilt produces a paranoid, hunted conscience; righteousness produces courageous security.'},
+    {id:'q7', text:'Proverbs 27:23–24 urges careful attention to one’s flocks and herds. What reason does the text give for this diligence?', correct:'A', ref:'Proverbs 27:23–24', explanation:'&ldquo;Be sure you know the condition of your flocks, give careful attention to your herds; for riches do not endure forever, and a crown is not secure for all generations.&rdquo; The reason given is the impermanence of wealth and power, not a promise of reward for diligence.'},
+    {id:'q8', text:'Proverbs 29:20 asks, “Do you see someone who speaks in haste?” What does the verse say about such a person?', correct:'C', ref:'Proverbs 29:20', explanation:'&ldquo;Do you see someone who speaks in haste? There is more hope for a fool than for them.&rdquo; This striking reversal places hasty speech below outright folly on the scale of hopelessness.'},
+    {id:'q9', text:'Proverbs 27:6 says wounds from a friend “can be trusted.” How does the verse describe an enemy’s behavior in contrast?', correct:'B', ref:'Proverbs 27:6', explanation:'&ldquo;Wounds from a friend can be trusted, but an enemy multiplies kisses.&rdquo; The contrast is jarring: a friend’s painful honesty is more reliable than an enemy’s affectionate deception.'},
+    {id:'q10', text:'Proverbs 29:25 warns that “fear of man will prove to be a snare.” What does the verse promise to whoever trusts in the LORD?', correct:'D', ref:'Proverbs 29:25', explanation:'&ldquo;Fear of man will prove to be a snare, but whoever trusts in the LORD is kept safe.&rdquo; The verse sets two foundations against each other: human opinion versus divine faithfulness. Only one is secure.'}
+  ];
+
+  var score = 0;
+  var wasCorrect = {};
+
+  function answer(btn, qId, chosen, result) {
+    if (wasCorrect.hasOwnProperty(qId)) return;
+    wasCorrect[qId] = (result === 'correct');
+    if (result === 'correct') score++;
+
+    var q = questions.filter(function(x){ return x.id === qId; })[0];
+    var allBtns = btn.closest('.choices').querySelectorAll('.choice-btn');
+    allBtns.forEach(function(b) {
+      b.disabled = true;
+      var letter = b.querySelector('.choice-letter').textContent.trim();
+      if (letter === q.correct) b.classList.add('correct');
+    });
+    if (result !== 'correct') btn.classList.add('wrong');
+
+    var fb = document.getElementById('fb-' + qId);
+    fb.style.display = 'block';
+    fb.className = 'feedback ' + (result === 'correct' ? 'correct-fb' : 'wrong-fb');
+    fb.innerHTML = '<div class="ref">' + q.ref + '</div>' + q.explanation;
+
+    document.getElementById('next-' + qId).style.display = 'inline-block';
+    updateProgress();
+  }
+
+  function nextQuestion(num) {
+    var current = document.querySelector('.question-block.active');
+    if (current) current.classList.remove('active');
+    var next = document.getElementById('q' + num);
+    if (next) { next.classList.add('active'); window.scrollTo({top:0, behavior:'smooth'}); }
+  }
+
+  function updateProgress() {
+    var pct = (Object.keys(wasCorrect).length / questions.length) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+  }
+
+  function showResults() {
+    document.getElementById('quiz-area').style.display = 'none';
+    document.getElementById('results-screen').style.display = 'block';
+    document.getElementById('score-display').textContent = score;
+
+    var circumference = 345;
+    setTimeout(function() {
+      document.getElementById('ring-fill').style.strokeDashoffset = circumference - (score / 10) * circumference;
+    }, 100);
+
+    var msgs = [
+      [10, 'Outstanding! &ldquo;The heart of the discerning acquires knowledge.&rdquo; &mdash; Prov 18:15'],
+      [8,  'Excellent! You read these chapters closely and it shows.'],
+      [6,  'Good effort. A second pass through these proverbs will sharpen you further.'],
+      [4,  'Keep pressing in. Wisdom rewards those who seek her diligently.'],
+      [0,  '&ldquo;Apply your heart to instruction and your ears to words of knowledge.&rdquo; &mdash; Prov 23:12']
+    ];
+    var msg = msgs[msgs.length - 1][1];
+    for (var i = 0; i < msgs.length; i++) {
+      if (score >= msgs[i][0]) { msg = msgs[i][1]; break; }
+    }
+    document.getElementById('result-message').innerHTML = msg;
+
+    var rl = document.getElementById('review-list');
+    rl.innerHTML = '';
+    questions.forEach(function(q, i) {
+      var correct = wasCorrect[q.id];
+      var item = document.createElement('div');
+      item.className = 'review-item';
+      item.innerHTML = '<div class="ri-q">' + (i+1) + '. ' + q.text + '</div>' +
+        '<div class="' + (correct ? 'ri-correct' : 'ri-wrong') + '">' +
+        (correct ? '&#10003; Correct' : '&#10007; Incorrect') + ' &mdash; ' + q.ref + '</div>';
+      rl.appendChild(item);
+    });
+
+    updateProgress();
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function resetQuiz() {
+    score = 0;
+    wasCorrect = {};
+    document.getElementById('results-screen').style.display = 'none';
+    document.getElementById('quiz-area').style.display = 'block';
+    document.getElementById('progress-bar').style.width = '0%';
+    document.getElementById('ring-fill').style.strokeDashoffset = '345';
+    document.querySelectorAll('.question-block').forEach(function(block) {
+      block.classList.remove('active');
+      block.querySelectorAll('.choice-btn').forEach(function(b) {
+        b.disabled = false; b.classList.remove('correct','wrong');
+      });
+      block.querySelectorAll('.feedback').forEach(function(fb) {
+        fb.style.display = 'none'; fb.className = 'feedback';
+      });
+      block.querySelectorAll('.next-btn').forEach(function(nb) {
+        nb.style.display = 'none';
+      });
+    });
+    document.getElementById('q1').classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+</script>
+</body>
+</html>
