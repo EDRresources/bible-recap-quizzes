@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 170 Bible Quiz — Ecclesiastes 1–6</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #0e0a04;
+      font-family: 'Crimson Text', Georgia, serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem 4rem;
+      color: #2c1a06;
+    }
+    .scroll-wrap { width: 100%; max-width: 780px; }
+    .parchment {
+      background: linear-gradient(160deg, #f5ecd7 0%, #ede0c4 30%, #e8d5a8 70%, #dfc99a 100%);
+      border: 2px solid #c9a84c;
+      border-radius: 4px;
+      padding: 2.8rem 3rem;
+      position: relative;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.7), inset 0 0 60px rgba(201,168,76,0.08);
+    }
+    .parchment::before {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border: 1px solid rgba(201,168,76,0.35);
+      border-radius: 2px;
+      pointer-events: none;
+    }
+    .ornament {
+      text-align: center;
+      color: #c9a84c;
+      font-size: 1.3rem;
+      letter-spacing: 0.5rem;
+      margin-bottom: 0.4rem;
+      opacity: 0.8;
+    }
+    .date-line {
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.2rem;
+      color: #7a5c2e;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    h1.quiz-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.65rem;
+      font-weight: 700;
+      text-align: center;
+      color: #2c1a06;
+      line-height: 1.3;
+      margin-bottom: 0.6rem;
+    }
+    .passage-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.4rem;
+      margin-bottom: 0.75rem;
+    }
+    .passage-tag {
+      background: rgba(201,168,76,0.18);
+      border: 1px solid #c9a84c;
+      border-radius: 2px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.12rem;
+      color: #7a5c2e;
+      padding: 0.25rem 0.7rem;
+      text-transform: uppercase;
+    }
+    .badges {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1.4rem;
+    }
+    .badge {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.18rem;
+      text-transform: uppercase;
+      padding: 0.22rem 0.8rem;
+      border-radius: 2px;
+    }
+    .badge-challenging { background: #8b1a1a; color: #f5ecd7; border: 1px solid #6b1010; }
+    .progress-wrap {
+      background: rgba(44,26,6,0.12);
+      border-radius: 99px;
+      height: 5px;
+      margin-bottom: 1.8rem;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #c9a84c, #e8c96a);
+      border-radius: 99px;
+      transition: width 0.5s ease;
+      width: 0%;
+    }
+    .question-block { display: none; animation: fadeIn 0.4s ease; }
+    .question-block.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .q-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+    }
+    .q-counter {
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.15rem;
+      color: #7a5c2e;
+      text-transform: uppercase;
+    }
+    .detail-badge {
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.15rem;
+      text-transform: uppercase;
+      background: rgba(201,168,76,0.22);
+      border: 1px solid #c9a84c;
+      color: #7a5c2e;
+      padding: 0.18rem 0.55rem;
+      border-radius: 2px;
+    }
+    .q-text {
+      font-size: 1.15rem;
+      line-height: 1.6;
+      color: #1c0f02;
+      margin-bottom: 1.1rem;
+      font-weight: 600;
+    }
+    .choices { display: flex; flex-direction: column; gap: 0.55rem; }
+    .choice-btn {
+      background: rgba(255,255,255,0.45);
+      border: 1.5px solid rgba(201,168,76,0.5);
+      border-radius: 3px;
+      padding: 0.75rem 1rem;
+      font-family: 'Crimson Text', serif;
+      font-size: 1.05rem;
+      color: #2c1a06;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.2s, border-color 0.2s;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+    }
+    .choice-btn:hover:not(:disabled) {
+      background: rgba(201,168,76,0.18);
+      border-color: #c9a84c;
+    }
+    .choice-btn .choice-letter {
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #c9a84c;
+      min-width: 1.1rem;
+      margin-top: 0.1rem;
+    }
+    .choice-btn.correct { background: rgba(26,92,42,0.15); border-color: #1a5c2a; color: #0d3318; }
+    .choice-btn.correct .choice-letter { color: #1a5c2a; }
+    .choice-btn.wrong { background: rgba(139,26,26,0.12); border-color: #8b1a1a; color: #5a0e0e; }
+    .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+    .feedback {
+      display: none;
+      margin-top: 1rem;
+      padding: 0.85rem 1rem;
+      border-radius: 3px;
+      font-size: 1rem;
+      line-height: 1.55;
+    }
+    .feedback.correct-fb { background: rgba(26,92,42,0.1); border: 1px solid #1a5c2a; color: #0d3318; }
+    .feedback.wrong-fb { background: rgba(139,26,26,0.09); border: 1px solid #8b1a1a; color: #5a0e0e; }
+    .feedback .ref {
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.1rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+    .next-btn {
+      display: none;
+      margin-top: 1.2rem;
+      background: linear-gradient(135deg, #c9a84c, #b8922e);
+      color: #1c0f02;
+      border: none;
+      border-radius: 3px;
+      padding: 0.7rem 2rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.18rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .next-btn:hover { opacity: 0.85; }
+    .divider {
+      text-align: center;
+      color: #c9a84c;
+      opacity: 0.5;
+      margin: 1.8rem 0 0;
+      font-size: 0.9rem;
+      letter-spacing: 0.6rem;
+    }
+    #results-screen { display: none; text-align: center; animation: fadeIn 0.5s ease; }
+    .score-ring-wrap { display: flex; justify-content: center; margin: 1.2rem 0 1rem; }
+    .score-ring { position: relative; width: 130px; height: 130px; }
+    .score-ring svg { transform: rotate(-90deg); }
+    .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.2); stroke-width: 10; }
+    .score-ring-fill {
+      fill: none;
+      stroke: #c9a84c;
+      stroke-width: 10;
+      stroke-linecap: round;
+      stroke-dasharray: 345;
+      stroke-dashoffset: 345;
+      transition: stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1);
+    }
+    .score-ring-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .score-number { font-family: 'Cinzel', serif; font-size: 2rem; font-weight: 700; color: #2c1a06; line-height: 1; }
+    .score-label { font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.15rem; color: #7a5c2e; text-transform: uppercase; }
+    .result-message { font-size: 1.15rem; line-height: 1.6; color: #2c1a06; margin: 0.5rem 0 1.4rem; font-style: italic; }
+    .review-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.2rem;
+      text-transform: uppercase;
+      color: #7a5c2e;
+      margin-bottom: 0.8rem;
+    }
+    .review-item {
+      text-align: left;
+      background: rgba(255,255,255,0.35);
+      border: 1px solid rgba(201,168,76,0.35);
+      border-radius: 3px;
+      padding: 0.7rem 0.9rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .review-item .ri-q { font-weight: 600; color: #1c0f02; margin-bottom: 0.2rem; }
+    .review-item .ri-correct { color: #1a5c2a; font-size: 0.88rem; }
+    .review-item .ri-wrong { color: #8b1a1a; font-size: 0.88rem; }
+    .take-again-btn {
+      margin-top: 1.5rem;
+      background: linear-gradient(135deg, #c9a84c, #b8922e);
+      color: #1c0f02;
+      border: none;
+      border-radius: 3px;
+      padding: 0.75rem 2.4rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.18rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .take-again-btn:hover { opacity: 0.85; }
+  </style>
+</head>
+<body>
+<div class="scroll-wrap">
+  <div class="parchment">
+
+    <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+    <div class="date-line">Friday, June 19, 2026 &middot; Day 170</div>
+    <h1 class="quiz-title">The Bible Recap Daily Quiz</h1>
+
+    <div class="passage-tags">
+      <span class="passage-tag">Ecclesiastes 1</span>
+      <span class="passage-tag">Ecclesiastes 2</span>
+      <span class="passage-tag">Ecclesiastes 3</span>
+      <span class="passage-tag">Ecclesiastes 4</span>
+      <span class="passage-tag">Ecclesiastes 5</span>
+      <span class="passage-tag">Ecclesiastes 6</span>
+    </div>
+
+    <div class="badges">
+      <span class="badge badge-challenging">Challenging</span>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <div id="quiz-area">
+
+      <!-- Q1 -->
+      <div class="question-block active" id="q1">
+        <div class="q-meta">
+          <span class="q-counter">Question 1 of 10</span>
+          <span style="width:1rem;"></span>
+        </div>
+        <div class="q-text">Qohelet concludes his opening reflection on wisdom with a striking paradox. According to Ecclesiastes 1:18, what accompanies an increase in wisdom and knowledge?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(this,'q1','A','wrong')">
+            <span class="choice-letter">A</span><span>Greater understanding of God&#39;s purposes in creation</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q1','B','correct')">
+            <span class="choice-letter">B</span><span>Increased sorrow and grief</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q1','C','wrong')">
+            <span class="choice-letter">C</span><span>A sharper ability to distinguish righteousness from folly</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q1','D','wrong')">
+            <span class="choice-letter">D</span><span>A longer and more fulfilling life</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb-q1"></div>
+        <button class="next-btn" id="next-q1" onclick="nextQuestion(2)">Next &rarr;</button>
+      </div>
+
+      <!-- Q2 -->
+      <div class="question-block" id="q2">
+        <div class="q-meta">
+          <span class="q-counter">Question 2 of 10</span>
+          <span style="width:1rem;"></span>
+        </div>
+        <div class="q-text">In Ecclesiastes 2, Qohelet acknowledges that the wise man has an advantage over the fool &#8212; like light over darkness. Yet he immediately calls even this &ldquo;vanity.&rdquo; What is his reason?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(this,'q2','A','wrong')">
+            <span class="choice-letter">A</span><span>Because wisdom ultimately leads to pride, which cancels out its benefits</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q2','B','wrong')">
+            <span class="choice-letter">B</span><span>Because God withholds the fruit of wisdom from those who seek it</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q2','C','wrong')">
+            <span class="choice-letter">C</span><span>Because suffering falls equally on the wise and foolish during their lifetimes</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q2','D','correct')">
+            <span class="choice-letter">D</span><span>Because the same fate &#8212; death &#8212; overtakes both the wise and the fool, and neither will be long remembered</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb-q2"></div>
+        <button class="next-btn" id="next-q2" onclick="nextQuestion(3)">Next &rarr;</button>
+      </div>
+
+      <!-- Q3 -->
+      <div class="question-block" id="q3">
+        <div class="q-meta">
+          <span class="q-counter">Question 3 of 10</span>
+          <span class="detail-badge">Detail</span>
+        </div>
+        <div class="q-text">In Ecclesiastes 2, Qohelet describes the great works and accumulations he undertook as part of his experiment with pleasure. Which of the following does he NOT include among his undertakings?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(this,'q3','A','correct')">
+            <span class="choice-letter">A</span><span>Gathering a collection of wisdom writings and scrolls</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q3','B','wrong')">
+            <span class="choice-letter">B</span><span>Building houses and planting vineyards, gardens, and orchards</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q3','C','wrong')">
+            <span class="choice-letter">C</span><span>Amassing silver and gold and the treasures of kings and provinces</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q3','D','wrong')">
+            <span class="choice-letter">D</span><span>Acquiring male and female singers for entertainment</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb-q3"></div>
+        <button class="next-btn" id="next-q3" onclick="nextQuestion(4)">Next &rarr;</button>
+      </div>
+
+      <!-- Q4 -->
+      <div class="question-block" id="q4">
+        <div class="q-meta">
+          <span class="q-counter">Question 4 of 10</span>
+          <span style="width:1rem;"></span>
+        </div>
+        <div class="q-text">After the famous poem listing a time for everything (Ecclesiastes 3:1&#8211;8), Qohelet says God has made everything beautiful in its time. What else does he say God has placed within the human heart, making humanity&#39;s situation both profound and frustrating?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(this,'q4','A','wrong')">
+            <span class="choice-letter">A</span><span>A longing for justice and righteousness</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q4','B','wrong')">
+            <span class="choice-letter">B</span><span>A deep fear of death and what lies beyond it</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q4','C','correct')">
+            <span class="choice-letter">C</span><span>Eternity &#8212; yet no one can fathom what God has done from beginning to end</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q4','D','wrong')">
+            <span class="choice-letter">D</span><span>A desire for fellowship and companionship with others</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb-q4"></div>
+        <button class="next-btn" id="next-q4" onclick="nextQuestion(5)">Next &rarr;</button>
+      </div>
+
+      <!-- Q5 -->
+      <div class="question-block" id="q5">
+        <div class="q-meta">
+          <span class="q-counter">Question 5 of 10</span>
+          <span style="width:1rem;"></span>
+        </div>
+        <div class="q-text">In Ecclesiastes 3, Qohelet draws a sobering comparison between the fate of human beings and the fate of animals. What is his main conclusion from this comparison?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(this,'q5','A','wrong')">
+            <span class="choice-letter">A</span><span>Both humans and animals serve equal purposes in God&#39;s created order and will be equally judged</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q5','B','correct')">
+            <span class="choice-letter">B</span><span>Both humans and animals die the same death and return to dust, giving humans no certain advantage over the beasts</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q5','C','wrong')">
+            <span class="choice-letter">C</span><span>Humans surpass animals because they can pursue wisdom before death, which grants them a lasting legacy</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q5','D','wrong')">
+            <span class="choice-letter">D</span><span>Animals face death as a consequence of human sin, but humans face death as part of God&#39;s design for them</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb-q5"></div>
+        <button class="next-btn" id="next-q5" onclick="nextQuestion(6)">Next &rarr;</button>
+      </div>
+
+      <!-- Q6 -->
+      <div class="question-block" id="q6">
+        <div class="q-meta">
+          <span class="q-counter">Question 6 of 10</span>
+          <span class="detail-badge">Detail</span>
+        </div>
+        <div class="q-text">In his famous reflection on companionship in Ecclesiastes 4:9&#8211;12 (&ldquo;Two are better than one&rdquo;), Qohelet lists specific advantages of having a companion. Which of the following benefits does he explicitly name?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(this,'q6','A','wrong')">
+            <span class="choice-letter">A</span><span>Two companions can defend each other from slander and false accusation</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q6','B','wrong')">
+            <span class="choice-letter">B</span><span>Two companions share their wisdom so that each becomes wiser than when alone</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q6','C','wrong')">
+            <span class="choice-letter">C</span><span>Two companions will mourn together when tragedy strikes, halving the burden of grief</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q6','D','correct')">
+            <span class="choice-letter">D</span><span>If one companion falls, the other will lift him up &#8212; but woe to the one who falls with no one to help</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb-q6"></div>
+        <button class="next-btn" id="next-q6" onclick="nextQuestion(7)">Next &rarr;</button>
+      </div>
+
+      <!-- Q7 -->
+      <div class="question-block" id="q7">
+        <div class="q-meta">
+          <span class="q-counter">Question 7 of 10</span>
+          <span style="width:1rem;"></span>
+        </div>
+        <div class="q-text">In Ecclesiastes 4:13&#8211;14, Qohelet contrasts a poor but wise youth with an old and foolish king. What does he say distinguishes the wise youth as better than the king, regardless of the youth&#39;s humble origins?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(this,'q7','A','correct')">
+            <span class="choice-letter">A</span><span>The poor wise youth is better because he still knows how to receive advice &#8212; even if he came from prison or poverty to his position</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q7','B','wrong')">
+            <span class="choice-letter">B</span><span>The poor wise youth is better because his suffering has refined his character beyond anything wealth could provide</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q7','C','wrong')">
+            <span class="choice-letter">C</span><span>The poor wise youth is better because the people will eventually overthrow the foolish king and crown him</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q7','D','wrong')">
+            <span class="choice-letter">D</span><span>The poor wise youth is better because wisdom earned through hardship surpasses wisdom inherited through privilege</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb-q7"></div>
+        <button class="next-btn" id="next-q7" onclick="nextQuestion(8)">Next &rarr;</button>
+      </div>
+
+      <!-- Q8 -->
+      <div class="question-block" id="q8">
+        <div class="q-meta">
+          <span class="q-counter">Question 8 of 10</span>
+          <span style="width:1rem;"></span>
+        </div>
+        <div class="q-text">In Ecclesiastes 5, Qohelet addresses how one should handle vows made before God. What does he conclude is the wisest course of action?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(this,'q8','A','wrong')">
+            <span class="choice-letter">A</span><span>Vow often and earnestly, for God honors a heart that seeks to make and keep commitments</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q8','B','wrong')">
+            <span class="choice-letter">B</span><span>Make only vows that are within your immediate power to fulfill, lest delay bring God&#39;s displeasure</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q8','C','correct')">
+            <span class="choice-letter">C</span><span>It is better not to vow at all than to vow and fail to pay &#8212; do not let your mouth cause your flesh to sin</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q8','D','wrong')">
+            <span class="choice-letter">D</span><span>Delay the payment of a vow until you have gathered enough to present it to God with full honor</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb-q8"></div>
+        <button class="next-btn" id="next-q8" onclick="nextQuestion(9)">Next &rarr;</button>
+      </div>
+
+      <!-- Q9 -->
+      <div class="question-block" id="q9">
+        <div class="q-meta">
+          <span class="q-counter">Question 9 of 10</span>
+          <span class="detail-badge">Detail</span>
+        </div>
+        <div class="q-text">Ecclesiastes 5:12 draws a pointed contrast between the worker and the wealthy man. What specific observation does Qohelet make about their sleep?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(this,'q9','A','wrong')">
+            <span class="choice-letter">A</span><span>The rich man sleeps long hours while the laborer must rise before dawn, showing that wealth brings its own kind of bondage</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q9','B','wrong')">
+            <span class="choice-letter">B</span><span>Both the laborer and the rich man toss and turn at night, for toil and wealth both bring anxious care</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q9','C','wrong')">
+            <span class="choice-letter">C</span><span>The laborer dreams of wealth while the rich man dreams of rest, and neither wakes satisfied</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q9','D','correct')">
+            <span class="choice-letter">D</span><span>The sleep of a laboring man is sweet whether he eats little or much, but the full stomach of the rich will not let him sleep</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb-q9"></div>
+        <button class="next-btn" id="next-q9" onclick="nextQuestion(10)">Next &rarr;</button>
+      </div>
+
+      <!-- Q10 -->
+      <div class="question-block" id="q10">
+        <div class="q-meta">
+          <span class="q-counter">Question 10 of 10</span>
+          <span style="width:1rem;"></span>
+        </div>
+        <div class="q-text">In Ecclesiastes 6:3&#8211;5, Qohelet considers a man who fathers a hundred children, lives many years, and yet his soul is never satisfied with life&#39;s good things. What startling conclusion does he draw about such a man?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(this,'q10','A','wrong')">
+            <span class="choice-letter">A</span><span>Such a man is still greatly blessed, for long life and many children are God&#39;s covenant favor regardless of inner contentment</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q10','B','correct')">
+            <span class="choice-letter">B</span><span>A stillborn child is better off than he is, for the stillborn comes and goes in darkness but rests from the vanity the man never escapes</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q10','C','wrong')">
+            <span class="choice-letter">C</span><span>Such a man will face a heavier judgment because many children multiplied his opportunity to practice righteousness</span>
+          </button>
+          <button class="choice-btn" onclick="answer(this,'q10','D','wrong')">
+            <span class="choice-letter">D</span><span>A man with many children finds that none of them can inherit his wisdom, only his possessions, compounding his futility</span>
+          </button>
+        </div>
+        <div class="feedback" id="fb-q10"></div>
+        <button class="next-btn" id="next-q10" onclick="showResults()">See Results &rarr;</button>
+      </div>
+
+    </div><!-- #quiz-area -->
+
+    <!-- Results -->
+    <div id="results-screen">
+      <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+      <div class="date-line" style="margin-top:0.4rem;">Results &middot; Day 170</div>
+      <h1 class="quiz-title" style="margin-bottom:0.3rem;">Quiz Complete</h1>
+      <div class="score-ring-wrap">
+        <div class="score-ring">
+          <svg viewBox="0 0 120 120" width="130" height="130">
+            <circle class="score-ring-bg" cx="60" cy="60" r="55"/>
+            <circle class="score-ring-fill" id="ring-fill" cx="60" cy="60" r="55"/>
+          </svg>
+          <div class="score-ring-text">
+            <span class="score-number" id="score-number">0</span>
+            <span class="score-label">of 10</span>
+          </div>
+        </div>
+      </div>
+      <div class="result-message" id="result-message"></div>
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+    </div>
+
+    <div class="divider">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+  </div>
+</div>
+
+<script>
+  const questions = [
+    {
+      id: 'q1',
+      text: 'Qohelet concludes his opening reflection on wisdom with a striking paradox. According to Ecclesiastes 1:18, what accompanies an increase in wisdom and knowledge?',
+      correct: 'B',
+      correctText: 'Increased sorrow and grief',
+      ref: 'Ecclesiastes 1:18',
+      explanation: '"For in much wisdom is much grief, and he who increases knowledge increases sorrow." Qohelet finds that seeing clearly how broken and futile the world is only deepens one\'s anguish.',
+      detail: false
+    },
+    {
+      id: 'q2',
+      text: 'In Ecclesiastes 2, Qohelet acknowledges that the wise man has an advantage over the fool — like light over darkness. Yet he immediately calls even this "vanity." What is his reason?',
+      correct: 'D',
+      correctText: 'Because the same fate — death — overtakes both the wise and the fool, and neither will be long remembered',
+      ref: 'Ecclesiastes 2:14–16',
+      explanation: '"For of the wise man, even as of the fool, there is no enduring remembrance, seeing that in the days to come all will have been long forgotten." The advantage of wisdom is real, but death levels both.',
+      detail: false
+    },
+    {
+      id: 'q3',
+      text: 'In Ecclesiastes 2, Qohelet describes the great works and accumulations he undertook as part of his experiment with pleasure. Which of the following does he NOT include among his undertakings?',
+      correct: 'A',
+      correctText: 'Gathering a collection of wisdom writings and scrolls',
+      ref: 'Ecclesiastes 2:4–8',
+      explanation: 'Qohelet lists houses, vineyards, gardens, orchards, pools, servants, herds and flocks, silver and gold, singers, and concubines — but nowhere does he mention compiling written wisdom or scrolls.',
+      detail: true
+    },
+    {
+      id: 'q4',
+      text: 'After the famous poem listing a time for everything (Ecclesiastes 3:1–8), Qohelet says God has made everything beautiful in its time. What else does he say God has placed within the human heart, making humanity\'s situation both profound and frustrating?',
+      correct: 'C',
+      correctText: 'Eternity — yet no one can fathom what God has done from beginning to end',
+      ref: 'Ecclesiastes 3:11',
+      explanation: '"He has also set eternity in the human heart, yet no one can fathom what God has done from beginning to end." God gives us a longing that transcends time, but withholds the ability to comprehend his full plan.',
+      detail: false
+    },
+    {
+      id: 'q5',
+      text: 'In Ecclesiastes 3, Qohelet draws a sobering comparison between the fate of human beings and the fate of animals. What is his main conclusion from this comparison?',
+      correct: 'B',
+      correctText: 'Both humans and animals die the same death and return to dust, giving humans no certain advantage over the beasts',
+      ref: 'Ecclesiastes 3:19–21',
+      explanation: '"Man has no advantage over the beasts, for all is vanity. All go to one place. All are from the dust, and to dust all return. Who knows whether the spirit of man goes upward and the spirit of the beast goes down?" Qohelet\'s point is not denial of an afterlife, but honest uncertainty about what lies beyond.',
+      detail: false
+    },
+    {
+      id: 'q6',
+      text: 'In his famous reflection on companionship in Ecclesiastes 4:9–12 ("Two are better than one"), Qohelet lists specific advantages of having a companion. Which of the following benefits does he explicitly name?',
+      correct: 'D',
+      correctText: 'If one companion falls, the other will lift him up — but woe to the one who falls with no one to help',
+      ref: 'Ecclesiastes 4:10',
+      explanation: '"For if they fall, one will lift up his fellow. But woe to him who is alone when he falls and has not another to lift him up!" Qohelet also mentions shared reward for toil, warmth, and the strength of a threefold cord.',
+      detail: true
+    },
+    {
+      id: 'q7',
+      text: 'In Ecclesiastes 4:13–14, Qohelet contrasts a poor but wise youth with an old and foolish king. What does he say distinguishes the wise youth as better than the king, regardless of the youth\'s humble origins?',
+      correct: 'A',
+      correctText: 'The poor wise youth is better because he still knows how to receive advice — even if he came from prison or poverty to his position',
+      ref: 'Ecclesiastes 4:13–14',
+      explanation: '"Better is a poor and wise youth than an old and foolish king who no longer knows how to take advice. For he went from prison to the throne, though in his own kingdom he had been born poor." The ability to receive counsel is the decisive mark of wisdom.',
+      detail: false
+    },
+    {
+      id: 'q8',
+      text: 'In Ecclesiastes 5, Qohelet addresses how one should handle vows made before God. What does he conclude is the wisest course of action?',
+      correct: 'C',
+      correctText: 'It is better not to vow at all than to vow and fail to pay — do not let your mouth cause your flesh to sin',
+      ref: 'Ecclesiastes 5:4–6',
+      explanation: '"It is better that you should not vow than that you should vow and not pay." God takes vows seriously; the fool multiplies words before him, but the wise guard their lips.',
+      detail: false
+    },
+    {
+      id: 'q9',
+      text: 'Ecclesiastes 5:12 draws a pointed contrast between the worker and the wealthy man. What specific observation does Qohelet make about their sleep?',
+      correct: 'D',
+      correctText: 'The sleep of a laboring man is sweet whether he eats little or much, but the full stomach of the rich will not let him sleep',
+      ref: 'Ecclesiastes 5:12',
+      explanation: '"Sweet is the sleep of a laborer, whether he eats little or much, but the full stomach of the rich will not let him sleep." Abundance brings anxiety rather than rest — another face of vanity.',
+      detail: true
+    },
+    {
+      id: 'q10',
+      text: 'In Ecclesiastes 6:3–5, Qohelet considers a man who fathers a hundred children, lives many years, and yet his soul is never satisfied with life\'s good things. What startling conclusion does he draw about such a man?',
+      correct: 'B',
+      correctText: 'A stillborn child is better off than he is, for the stillborn comes and goes in darkness but rests from the vanity the man never escapes',
+      ref: 'Ecclesiastes 6:3–5',
+      explanation: '"A stillborn child is better off than he. For it comes in vanity and goes in darkness... though it never sees the sun or knows anything, yet it finds rest rather than he." Without inner satisfaction, even the longest and most prolific life is empty.',
+      detail: false
+    }
+  ];
+
+  const feedbacks = {
+    q1: {
+      correct: { text: '"For in much wisdom is much grief, and he who increases knowledge increases sorrow." Qohelet finds that seeing clearly how broken and futile the world is only deepens one\'s anguish.', ref: 'Ecclesiastes 1:18' },
+      wrong:   { text: '"For in much wisdom is much grief, and he who increases knowledge increases sorrow." Correct answer: Increased sorrow and grief.', ref: 'Ecclesiastes 1:18' }
+    },
+    q2: {
+      correct: { text: '"For of the wise man, even as of the fool, there is no enduring remembrance, seeing that in the days to come all will have been long forgotten." The advantage of wisdom is real, but death levels both.', ref: 'Ecclesiastes 2:14–16' },
+      wrong:   { text: 'Qohelet says the same fate — death — overtakes both wise and fool, and both will be forgotten. This is why even wisdom\'s advantage is called vanity.', ref: 'Ecclesiastes 2:14–16' }
+    },
+    q3: {
+      correct: { text: 'Qohelet lists houses, vineyards, gardens, orchards, pools, servants, herds and flocks, silver and gold, singers, and concubines — but nowhere does he mention compiling written wisdom or scrolls.', ref: 'Ecclesiastes 2:4–8' },
+      wrong:   { text: 'Gathering a collection of writings and scrolls is the item not mentioned. Qohelet\'s experiment involved physical pleasures, works, and wealth — not literary accumulation.', ref: 'Ecclesiastes 2:4–8' }
+    },
+    q4: {
+      correct: { text: '"He has also set eternity in the human heart, yet no one can fathom what God has done from beginning to end." God gives us a longing that transcends time, but withholds the ability to comprehend his full plan.', ref: 'Ecclesiastes 3:11' },
+      wrong:   { text: 'God has set eternity in the human heart — a sense that there is more beyond this present life — and yet no one can fathom his full purposes.', ref: 'Ecclesiastes 3:11' }
+    },
+    q5: {
+      correct: { text: '"Man has no advantage over the beasts, for all is vanity. All are from the dust, and to dust all return. Who knows whether the spirit of man goes upward and the spirit of the beast goes down?" The uncertainty is frank and sobering.', ref: 'Ecclesiastes 3:19–21' },
+      wrong:   { text: 'Qohelet concludes that both humans and animals die the same death and return to dust — and he admits uncertainty about whether human spirits ascend while animal spirits descend.', ref: 'Ecclesiastes 3:19–21' }
+    },
+    q6: {
+      correct: { text: '"For if they fall, one will lift up his fellow. But woe to him who is alone when he falls and has not another to lift him up!" Qohelet also names shared reward for toil, warmth, and the strength of a threefold cord.', ref: 'Ecclesiastes 4:10' },
+      wrong:   { text: 'Qohelet explicitly names: shared reward for toil, lifting one another up when one falls, keeping warm, and the strength of a threefold cord. The correct answer matches verse 10 precisely.', ref: 'Ecclesiastes 4:9–12' }
+    },
+    q7: {
+      correct: { text: '"Better is a poor and wise youth than an old and foolish king who no longer knows how to take advice. For he went from prison to the throne, though in his own kingdom he had been born poor." The ability to receive counsel is the decisive mark of wisdom.', ref: 'Ecclesiastes 4:13–14' },
+      wrong:   { text: 'The key contrast is about teachability: the old king can no longer receive advice. The poor wise youth is better precisely because he remains open to counsel, regardless of his lowly background.', ref: 'Ecclesiastes 4:13–14' }
+    },
+    q8: {
+      correct: { text: '"It is better that you should not vow than that you should vow and not pay." God takes vows seriously; the fool multiplies words before him, but the wise guard their lips.', ref: 'Ecclesiastes 5:4–6' },
+      wrong:   { text: 'Qohelet\'s counsel: do not delay paying a vow, do not let your mouth lead you into sin — and ultimately, it is better not to vow at all than to vow and fail to fulfill it.', ref: 'Ecclesiastes 5:4–6' }
+    },
+    q9: {
+      correct: { text: '"Sweet is the sleep of a laborer, whether he eats little or much, but the full stomach of the rich will not let him sleep." Abundance brings anxiety rather than rest — another face of vanity.', ref: 'Ecclesiastes 5:12' },
+      wrong:   { text: 'Qohelet observes the irony that the laborer sleeps sweetly on little or much, while the wealthy man\'s own fullness robs him of rest.', ref: 'Ecclesiastes 5:12' }
+    },
+    q10: {
+      correct: { text: '"A stillborn child is better off than he. For it comes in vanity and goes in darkness... though it never sees the sun or knows anything, yet it finds rest rather than he." Without inner satisfaction, even the longest and most prolific life is empty.', ref: 'Ecclesiastes 6:3–5' },
+      wrong:   { text: 'Qohelet says a stillborn child is better off than the man with a hundred children and long years, because the stillborn at least finds rest — while the unsatisfied man simply accumulates more vanity.', ref: 'Ecclesiastes 6:3–5' }
+    }
+  };
+
+  let userAnswers = {};
+  let score = 0;
+
+  function answer(btn, qId, letter, result) {
+    const block = document.getElementById(qId);
+    const allBtns = block.querySelectorAll('.choice-btn');
+    allBtns.forEach(b => b.disabled = true);
+
+    const isCorrect = result === 'correct';
+    btn.classList.add(isCorrect ? 'correct' : 'wrong');
+
+    if (!isCorrect) {
+      allBtns.forEach(b => {
+        const q = questions.find(q => q.id === qId);
+        if (b.querySelector('.choice-letter').textContent === q.correct) {
+          b.classList.add('correct');
+        }
+      });
+    }
+
+    const fb = document.getElementById('fb-' + qId);
+    const qNum = parseInt(qId.replace('q', ''));
+    const fbData = feedbacks[qId][isCorrect ? 'correct' : 'wrong'];
+    fb.className = 'feedback ' + (isCorrect ? 'correct-fb' : 'wrong-fb');
+    fb.innerHTML = '<div class="ref">' + fbData.ref + '</div>' + fbData.text;
+    fb.style.display = 'block';
+
+    userAnswers[qId] = { letter, result };
+    if (isCorrect) score++;
+
+    const nextBtn = document.getElementById('next-' + qId);
+    nextBtn.style.display = 'inline-block';
+
+    updateProgress(qNum);
+  }
+
+  function updateProgress(qNum) {
+    const pct = (qNum / 10) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+  }
+
+  function nextQuestion(n) {
+    const currentQ = document.querySelector('.question-block.active');
+    currentQ.classList.remove('active');
+    const nextQ = document.getElementById('q' + n);
+    nextQ.classList.add('active');
+  }
+
+  function showResults() {
+    document.getElementById('quiz-area').style.display = 'none';
+    const results = document.getElementById('results-screen');
+    results.style.display = 'block';
+
+    document.getElementById('score-number').textContent = score;
+
+    const pct = score / 10;
+    const circumference = 345;
+    setTimeout(() => {
+      document.getElementById('ring-fill').style.strokeDashoffset = circumference - (circumference * pct);
+    }, 100);
+
+    let msg = '';
+    if (score === 10) msg = 'Perfect score! You read Ecclesiastes with the careful attention the Preacher demands.';
+    else if (score >= 8) msg = 'Excellent. You have sat with Qohelet and listened closely.';
+    else if (score >= 6) msg = 'Good work. The Teacher rewards those who return to the text.';
+    else if (score >= 4) msg = 'A solid effort. "Vanity of vanities" — but wisdom grows with each attempt.';
+    else msg = 'Keep reading. Qohelet himself circled back to these mysteries many times.';
+    document.getElementById('result-message').textContent = msg;
+
+    const reviewList = document.getElementById('review-list');
+    reviewList.innerHTML = '';
+    questions.forEach((q, i) => {
+      const ua = userAnswers['q' + (i + 1)];
+      const isCorrect = ua && ua.result === 'correct';
+      const item = document.createElement('div');
+      item.className = 'review-item';
+      item.innerHTML = '<div class="ri-q">Q' + (i + 1) + '. ' + q.text + '</div>' +
+        (isCorrect
+          ? '<div class="ri-correct">&#10003; Correct — ' + q.correctText + '</div>'
+          : '<div class="ri-wrong">&#10007; Correct answer: ' + q.correctText + '</div>');
+      reviewList.appendChild(item);
+    });
+  }
+
+  function resetQuiz() {
+    userAnswers = {};
+    score = 0;
+    document.getElementById('results-screen').style.display = 'none';
+    document.getElementById('quiz-area').style.display = 'block';
+    document.getElementById('progress-bar').style.width = '0%';
+    document.getElementById('ring-fill').style.strokeDashoffset = '345';
+
+    questions.forEach((q, i) => {
+      const block = document.getElementById(q.id);
+      block.classList.remove('active');
+      const btns = block.querySelectorAll('.choice-btn');
+      btns.forEach(b => {
+        b.disabled = false;
+        b.classList.remove('correct', 'wrong');
+      });
+      const fb = document.getElementById('fb-' + q.id);
+      fb.style.display = 'none';
+      fb.className = 'feedback';
+      const nextBtn = document.getElementById('next-' + q.id);
+      nextBtn.style.display = 'none';
+    });
+
+    document.getElementById('q1').classList.add('active');
+  }
+</script>
+</body>
+</html>
