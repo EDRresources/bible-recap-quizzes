@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 171 Bible Quiz — Ecclesiastes 7–12</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #0e0a04;
+      font-family: 'Crimson Text', Georgia, serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem 4rem;
+      color: #2c1a06;
+    }
+    .scroll-wrap { width: 100%; max-width: 780px; }
+    .parchment {
+      background: linear-gradient(160deg, #f5ecd7 0%, #ede0c4 30%, #e8d5a8 70%, #dfc99a 100%);
+      border: 2px solid #c9a84c;
+      border-radius: 4px;
+      padding: 2.8rem 3rem;
+      position: relative;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.7), inset 0 0 60px rgba(201,168,76,0.08);
+    }
+    .parchment::before {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border: 1px solid rgba(201,168,76,0.35);
+      border-radius: 2px;
+      pointer-events: none;
+    }
+    .ornament {
+      text-align: center;
+      color: #c9a84c;
+      font-size: 1.3rem;
+      letter-spacing: 0.5rem;
+      margin-bottom: 0.4rem;
+      opacity: 0.8;
+    }
+    .date-line {
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.2rem;
+      color: #7a5c2e;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    h1.quiz-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.65rem;
+      font-weight: 700;
+      text-align: center;
+      color: #2c1a06;
+      line-height: 1.3;
+      margin-bottom: 0.6rem;
+    }
+    .passage-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.4rem;
+      margin-bottom: 0.75rem;
+    }
+    .passage-tag {
+      background: rgba(201,168,76,0.18);
+      border: 1px solid #c9a84c;
+      border-radius: 2px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.12rem;
+      color: #7a5c2e;
+      padding: 0.25rem 0.7rem;
+      text-transform: uppercase;
+    }
+    .badges {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1.4rem;
+    }
+    .badge {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.18rem;
+      text-transform: uppercase;
+      padding: 0.22rem 0.8rem;
+      border-radius: 2px;
+    }
+    .badge-challenging { background: #8b1a1a; color: #f5ecd7; border: 1px solid #6b1010; }
+    .progress-wrap {
+      background: rgba(44,26,6,0.12);
+      border-radius: 99px;
+      height: 5px;
+      margin-bottom: 1.8rem;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #c9a84c, #e8c96a);
+      border-radius: 99px;
+      transition: width 0.5s ease;
+      width: 0%;
+    }
+    .question-block { display: none; animation: fadeIn 0.4s ease; }
+    .question-block.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .q-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+    }
+    .q-counter {
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.15rem;
+      color: #7a5c2e;
+      text-transform: uppercase;
+    }
+    .detail-badge {
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.15rem;
+      text-transform: uppercase;
+      background: rgba(201,168,76,0.22);
+      border: 1px solid #c9a84c;
+      color: #7a5c2e;
+      padding: 0.18rem 0.55rem;
+      border-radius: 2px;
+    }
+    .q-text {
+      font-size: 1.15rem;
+      line-height: 1.6;
+      color: #1c0f02;
+      margin-bottom: 1.1rem;
+      font-weight: 600;
+    }
+    .choices { display: flex; flex-direction: column; gap: 0.55rem; }
+    .choice-btn {
+      background: rgba(255,255,255,0.45);
+      border: 1.5px solid rgba(201,168,76,0.5);
+      border-radius: 3px;
+      padding: 0.75rem 1rem;
+      font-family: 'Crimson Text', serif;
+      font-size: 1.05rem;
+      color: #2c1a06;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.2s, border-color 0.2s;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+    }
+    .choice-btn:hover:not(:disabled) {
+      background: rgba(201,168,76,0.18);
+      border-color: #c9a84c;
+    }
+    .choice-btn .choice-letter {
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #c9a84c;
+      min-width: 1.1rem;
+      margin-top: 0.1rem;
+    }
+    .choice-btn.correct { background: rgba(26,92,42,0.15); border-color: #1a5c2a; color: #0d3318; }
+    .choice-btn.correct .choice-letter { color: #1a5c2a; }
+    .choice-btn.wrong { background: rgba(139,26,26,0.12); border-color: #8b1a1a; color: #5a0e0e; }
+    .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+    .feedback {
+      display: none;
+      margin-top: 1rem;
+      padding: 0.85rem 1rem;
+      border-radius: 3px;
+      font-size: 1rem;
+      line-height: 1.55;
+    }
+    .feedback.correct-fb { background: rgba(26,92,42,0.1); border: 1px solid #1a5c2a; color: #0d3318; }
+    .feedback.wrong-fb { background: rgba(139,26,26,0.09); border: 1px solid #8b1a1a; color: #5a0e0e; }
+    .feedback .ref {
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.1rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+    .next-btn {
+      display: none;
+      margin-top: 1.2rem;
+      background: linear-gradient(135deg, #c9a84c, #b8922e);
+      color: #1c0f02;
+      border: none;
+      border-radius: 3px;
+      padding: 0.7rem 2rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.18rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .next-btn:hover { opacity: 0.85; }
+    .divider {
+      text-align: center;
+      color: #c9a84c;
+      opacity: 0.5;
+      margin: 1.8rem 0 0;
+      font-size: 0.9rem;
+      letter-spacing: 0.6rem;
+    }
+    #results-screen { display: none; text-align: center; animation: fadeIn 0.5s ease; }
+    .score-ring-wrap { display: flex; justify-content: center; margin: 1.2rem 0 1rem; }
+    .score-ring { position: relative; width: 130px; height: 130px; }
+    .score-ring svg { transform: rotate(-90deg); }
+    .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.2); stroke-width: 10; }
+    .score-ring-fill {
+      fill: none;
+      stroke: #c9a84c;
+      stroke-width: 10;
+      stroke-linecap: round;
+      stroke-dasharray: 345;
+      stroke-dashoffset: 345;
+      transition: stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1);
+    }
+    .score-ring-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .score-number { font-family: 'Cinzel', serif; font-size: 2rem; font-weight: 700; color: #2c1a06; line-height: 1; }
+    .score-label { font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.15rem; color: #7a5c2e; text-transform: uppercase; }
+    .result-message { font-size: 1.15rem; line-height: 1.6; color: #2c1a06; margin: 0.5rem 0 1.4rem; font-style: italic; }
+    .review-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.2rem;
+      text-transform: uppercase;
+      color: #7a5c2e;
+      margin-bottom: 0.8rem;
+    }
+    .review-item {
+      text-align: left;
+      background: rgba(255,255,255,0.35);
+      border: 1px solid rgba(201,168,76,0.35);
+      border-radius: 3px;
+      padding: 0.7rem 0.9rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .review-item .ri-q { font-weight: 600; color: #1c0f02; margin-bottom: 0.2rem; }
+    .review-item .ri-correct { color: #1a5c2a; font-size: 0.88rem; }
+    .review-item .ri-wrong { color: #8b1a1a; font-size: 0.88rem; }
+    .take-again-btn {
+      margin-top: 1.5rem;
+      background: linear-gradient(135deg, #c9a84c, #b8922e);
+      color: #1c0f02;
+      border: none;
+      border-radius: 3px;
+      padding: 0.75rem 2.4rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.18rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .take-again-btn:hover { opacity: 0.85; }
+  </style>
+</head>
+<body>
+<div class="scroll-wrap">
+  <div class="parchment">
+
+    <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+    <div class="date-line">Saturday, June 20, 2026 &middot; Day 171</div>
+    <h1 class="quiz-title">The Bible Recap Daily Quiz</h1>
+
+    <div class="passage-tags">
+      <span class="passage-tag">Ecclesiastes 7</span>
+      <span class="passage-tag">Ecclesiastes 8</span>
+      <span class="passage-tag">Ecclesiastes 9</span>
+      <span class="passage-tag">Ecclesiastes 10</span>
+      <span class="passage-tag">Ecclesiastes 11</span>
+      <span class="passage-tag">Ecclesiastes 12</span>
+    </div>
+
+    <div class="badges">
+      <span class="badge badge-challenging">Challenging</span>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <div id="quiz-area">
+
+      <!-- Q1 -->
+      <div class="question-block active" id="q1">
+        <div class="q-meta">
+          <span class="q-counter">Question 1 of 10</span>
+          <span style="width:1rem;"></span>
+        </div>
+        <div class="q-text">In Ecclesiastes 7, Qohelet contrasts a good name with fine perfume and then makes a startling comparison. What does he say is better than the day of one's birth?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(1,'A','B')"><span class="choice-letter">A</span>The day one attains wisdom</button>
+          <button class="choice-btn" onclick="answer(1,'B','B')"><span class="choice-letter">B</span>The day of one's death</button>
+          <button class="choice-btn" onclick="answer(1,'C','B')"><span class="choice-letter">C</span>The day one fears God</button>
+          <button class="choice-btn" onclick="answer(1,'D','B')"><span class="choice-letter">D</span>The day one repents of folly</button>
+        </div>
+        <div class="feedback" id="fb1"></div>
+        <button class="next-btn" id="next1" onclick="nextQ(2)">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q2 -->
+      <div class="question-block" id="q2">
+        <div class="q-meta">
+          <span class="q-counter">Question 2 of 10</span>
+          <span class="detail-badge">Detail</span>
+        </div>
+        <div class="q-text">In his extensive search among a thousand people (Ecclesiastes 7:28), the Teacher says he found one upright man. How many upright women did he find?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(2,'A','A')"><span class="choice-letter">A</span>None</button>
+          <button class="choice-btn" onclick="answer(2,'B','A')"><span class="choice-letter">B</span>One</button>
+          <button class="choice-btn" onclick="answer(2,'C','A')"><span class="choice-letter">C</span>Seven</button>
+          <button class="choice-btn" onclick="answer(2,'D','A')"><span class="choice-letter">D</span>He did not search among women</button>
+        </div>
+        <div class="feedback" id="fb2"></div>
+        <button class="next-btn" id="next2" onclick="nextQ(3)">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q3 -->
+      <div class="question-block" id="q3">
+        <div class="q-meta">
+          <span class="q-counter">Question 3 of 10</span>
+          <span style="width:1rem;"></span>
+        </div>
+        <div class="q-text">Ecclesiastes 8 acknowledges that a sinner may do evil a hundred times and still live long. Yet what does Qohelet affirm will be the outcome for those who fear God?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(3,'A','C')"><span class="choice-letter">A</span>They will be remembered long after the wicked are forgotten</button>
+          <button class="choice-btn" onclick="answer(3,'B','C')"><span class="choice-letter">B</span>They will be given twice the lifespan of the sinner</button>
+          <button class="choice-btn" onclick="answer(3,'C','C')"><span class="choice-letter">C</span>It will go well with them</button>
+          <button class="choice-btn" onclick="answer(3,'D','C')"><span class="choice-letter">D</span>They will not face the same fate as the wicked in death</button>
+        </div>
+        <div class="feedback" id="fb3"></div>
+        <button class="next-btn" id="next3" onclick="nextQ(4)">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q4 -->
+      <div class="question-block" id="q4">
+        <div class="q-meta">
+          <span class="q-counter">Question 4 of 10</span>
+          <span class="detail-badge">Detail</span>
+        </div>
+        <div class="q-text">According to Ecclesiastes 9:5, what do the dead know?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(4,'A','D')"><span class="choice-letter">A</span>When they will be resurrected to face judgment</button>
+          <button class="choice-btn" onclick="answer(4,'B','D')"><span class="choice-letter">B</span>The deeds of the living who come after them</button>
+          <button class="choice-btn" onclick="answer(4,'C','D')"><span class="choice-letter">C</span>Whether they lived wisely or foolishly</button>
+          <button class="choice-btn" onclick="answer(4,'D','D')"><span class="choice-letter">D</span>Nothing</button>
+        </div>
+        <div class="feedback" id="fb4"></div>
+        <button class="next-btn" id="next4" onclick="nextQ(5)">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q5 -->
+      <div class="question-block" id="q5">
+        <div class="q-meta">
+          <span class="q-counter">Question 5 of 10</span>
+          <span style="width:1rem;"></span>
+        </div>
+        <div class="q-text">Ecclesiastes 9 tells of a poor wise man whose wisdom delivered a small city from a powerful attacking king. What happened to this man after the city was saved?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(5,'A','B')"><span class="choice-letter">A</span>He was made ruler over the city he had saved</button>
+          <button class="choice-btn" onclick="answer(5,'B','B')"><span class="choice-letter">B</span>Nobody remembered him</button>
+          <button class="choice-btn" onclick="answer(5,'C','B')"><span class="choice-letter">C</span>He was given great wealth as a reward by the citizens</button>
+          <button class="choice-btn" onclick="answer(5,'D','B')"><span class="choice-letter">D</span>He became an advisor to the king who had besieged them</button>
+        </div>
+        <div class="feedback" id="fb5"></div>
+        <button class="next-btn" id="next5" onclick="nextQ(6)">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q6 -->
+      <div class="question-block" id="q6">
+        <div class="q-meta">
+          <span class="q-counter">Question 6 of 10</span>
+          <span style="width:1rem;"></span>
+        </div>
+        <div class="q-text">Ecclesiastes 10 opens with a vivid image comparing the corrupting effect of a little folly on wisdom and honor. What is the image used?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(6,'A','A')"><span class="choice-letter">A</span>Dead flies making perfumer's ointment give off a foul smell</button>
+          <button class="choice-btn" onclick="answer(6,'B','A')"><span class="choice-letter">B</span>A single cloud blocking the light of the sun</button>
+          <button class="choice-btn" onclick="answer(6,'C','A')"><span class="choice-letter">C</span>Weeds choking a garden of precious herbs</button>
+          <button class="choice-btn" onclick="answer(6,'D','A')"><span class="choice-letter">D</span>A broken wall through which serpents enter</button>
+        </div>
+        <div class="feedback" id="fb6"></div>
+        <button class="next-btn" id="next6" onclick="nextQ(7)">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q7 -->
+      <div class="question-block" id="q7">
+        <div class="q-meta">
+          <span class="q-counter">Question 7 of 10</span>
+          <span class="detail-badge">Detail</span>
+        </div>
+        <div class="q-text">In Ecclesiastes 10:2, the Teacher contrasts the heart of the wise with the heart of the fool using a directional image. Which direction does the fool's heart incline?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(7,'A','C')"><span class="choice-letter">A</span>Downward, toward earthly things</button>
+          <button class="choice-btn" onclick="answer(7,'B','C')"><span class="choice-letter">B</span>Backward, toward former days</button>
+          <button class="choice-btn" onclick="answer(7,'C','C')"><span class="choice-letter">C</span>To the left</button>
+          <button class="choice-btn" onclick="answer(7,'D','C')"><span class="choice-letter">D</span>Outward, toward the wealth of others</button>
+        </div>
+        <div class="feedback" id="fb7"></div>
+        <button class="next-btn" id="next7" onclick="nextQ(8)">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q8 -->
+      <div class="question-block" id="q8">
+        <div class="q-meta">
+          <span class="q-counter">Question 8 of 10</span>
+          <span style="width:1rem;"></span>
+        </div>
+        <div class="q-text">In Ecclesiastes 11, Qohelet warns against excessive caution. What does he say will be the outcome for one who watches the wind and observes the clouds?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(8,'A','D')"><span class="choice-letter">A</span>They will gain wisdom by reading the signs of nature</button>
+          <button class="choice-btn" onclick="answer(8,'B','D')"><span class="choice-letter">B</span>They will be blessed because they honor the works of God</button>
+          <button class="choice-btn" onclick="answer(8,'C','D')"><span class="choice-letter">C</span>They will know the right season to sow and to reap</button>
+          <button class="choice-btn" onclick="answer(8,'D','D')"><span class="choice-letter">D</span>They will neither plant nor reap</button>
+        </div>
+        <div class="feedback" id="fb8"></div>
+        <button class="next-btn" id="next8" onclick="nextQ(9)">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q9 -->
+      <div class="question-block" id="q9">
+        <div class="q-meta">
+          <span class="q-counter">Question 9 of 10</span>
+          <span style="width:1rem;"></span>
+        </div>
+        <div class="q-text">Ecclesiastes 12 opens with an urgent call to remember your Creator while young, before certain things arrive. How does Qohelet describe these coming days or years?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(9,'A','B')"><span class="choice-letter">A</span>The years of harvest, when labor ceases and rest comes</button>
+          <button class="choice-btn" onclick="answer(9,'B','B')"><span class="choice-letter">B</span>The evil days, when one will say, "I find no pleasure in them"</button>
+          <button class="choice-btn" onclick="answer(9,'C','B')"><span class="choice-letter">C</span>The days of vanity, when the sun and stars grow dark</button>
+          <button class="choice-btn" onclick="answer(9,'D','B')"><span class="choice-letter">D</span>The years of testing, when God weighs every deed</button>
+        </div>
+        <div class="feedback" id="fb9"></div>
+        <button class="next-btn" id="next9" onclick="nextQ(10)">Next Question &rarr;</button>
+      </div>
+
+      <!-- Q10 -->
+      <div class="question-block" id="q10">
+        <div class="q-meta">
+          <span class="q-counter">Question 10 of 10</span>
+          <span style="width:1rem;"></span>
+        </div>
+        <div class="q-text">Ecclesiastes ends with what Qohelet calls "the conclusion of the matter" — the whole duty of mankind. What is it?</div>
+        <div class="choices">
+          <button class="choice-btn" onclick="answer(10,'A','C')"><span class="choice-letter">A</span>Seek wisdom above silver and pursue understanding above gold</button>
+          <button class="choice-btn" onclick="answer(10,'B','C')"><span class="choice-letter">B</span>Enjoy the life God has given you, for it is your portion under the sun</button>
+          <button class="choice-btn" onclick="answer(10,'C','C')"><span class="choice-letter">C</span>Fear God and keep his commandments</button>
+          <button class="choice-btn" onclick="answer(10,'D','C')"><span class="choice-letter">D</span>Do not trust in your own understanding but acknowledge God in all your ways</button>
+        </div>
+        <div class="feedback" id="fb10"></div>
+        <button class="next-btn" id="next10" onclick="showResults()">See Results &rarr;</button>
+      </div>
+
+    </div><!-- /quiz-area -->
+
+    <!-- Results -->
+    <div id="results-screen">
+      <div class="ornament" style="margin-bottom:0.6rem;">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+      <div class="date-line" style="margin-bottom:0.8rem;">Results &middot; Day 171</div>
+      <div class="score-ring-wrap">
+        <div class="score-ring">
+          <svg viewBox="0 0 120 120" width="130" height="130">
+            <circle class="score-ring-bg" cx="60" cy="60" r="55"/>
+            <circle class="score-ring-fill" id="ring-fill" cx="60" cy="60" r="55"/>
+          </svg>
+          <div class="score-ring-text">
+            <span class="score-number" id="score-number">0/10</span>
+            <span class="score-label">Score</span>
+          </div>
+        </div>
+      </div>
+      <div class="result-message" id="result-message"></div>
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+    </div>
+
+    <div class="divider">&#8901; &nbsp; &#8901; &nbsp; &#8901;</div>
+  </div>
+</div>
+
+<script>
+  const feedbackData = {
+    1: {
+      correct: 'B',
+      explanation: {
+        A: 'Ecclesiastes 7:1 contrasts birth and death, not wisdom. The day of death — not wisdom — is said to be better than the day of birth.',
+        B: 'Correct. Ecclesiastes 7:1 says, "A good name is better than fine perfume, and the day of death better than the day of birth." In context, this reflects the Teacher\'s sober realism: death clarifies what truly matters and ends the toil under the sun.',
+        C: 'Ecclesiastes 7 does value fearing God, but verse 1 specifically sets up the comparison with birth and death, not with fearing God.',
+        D: 'Repentance is not the subject of Ecclesiastes 7:1. The contrast is between the day of death and the day of birth.'
+      },
+      ref: 'Ecclesiastes 7:1'
+    },
+    2: {
+      correct: 'A',
+      explanation: {
+        A: 'Correct. Ecclesiastes 7:28 reads: "while I was still searching but not finding — I found one upright man among a thousand, but not one upright woman among all of them." The Teacher found zero upright women in his search.',
+        B: 'The Teacher found one upright man, not one upright woman. Among the thousand, no upright woman was found (Ecclesiastes 7:28).',
+        C: 'Seven has no basis in this text. Ecclesiastes 7:28 records the count as zero for women.',
+        D: 'The text does not say he excluded women from his search; rather, he searched and found none who were upright (Ecclesiastes 7:28).'
+      },
+      ref: 'Ecclesiastes 7:28'
+    },
+    3: {
+      correct: 'C',
+      explanation: {
+        A: 'Being long-remembered is not what Ecclesiastes 8:12 promises to those who fear God. It says it will "go better" with them.',
+        B: 'Ecclesiastes 8 does not promise extended lifespan to the God-fearer as a reward. The promise is qualitative, not quantitative.',
+        C: 'Correct. Ecclesiastes 8:12 states: "Although a wicked person who commits a hundred crimes may live a long time, I know that it will go better with those who fear God, who are reverent before him." Even where justice seems delayed, Qohelet holds to this conviction.',
+        D: 'Ecclesiastes 9:2–3 explicitly says the same fate — death — comes to both the righteous and the wicked. The God-fearer is not exempt from death but will fare better in another sense.'
+      },
+      ref: 'Ecclesiastes 8:12'
+    },
+    4: {
+      correct: 'D',
+      explanation: {
+        A: 'Ecclesiastes 9:5 makes no mention of resurrection awareness among the dead. The dead "know nothing."',
+        B: 'The dead have no awareness of the living, according to Ecclesiastes 9:5–6: "the dead know nothing... their love, their hate and their jealousy have long since vanished."',
+        C: 'Ecclesiastes 9:5 denies any ongoing knowledge to the dead. They do not retain awareness of their own earthly track record.',
+        D: 'Correct. Ecclesiastes 9:5 says plainly: "but the dead know nothing; they have no further reward, and even their name is forgotten." This is part of Qohelet\'s stark meditation on death under the sun.'
+      },
+      ref: 'Ecclesiastes 9:5'
+    },
+    5: {
+      correct: 'B',
+      explanation: {
+        A: 'The text says the poor wise man saved the city, but no mention is made of him being rewarded with rulership. In fact, the opposite is implied — he remained unknown.',
+        B: 'Correct. Ecclesiastes 9:15 says the poor man "saved the city by his wisdom. But nobody remembered that poor man." The story illustrates that wisdom, though powerful, goes unrewarded and unrecognized in a world under the sun.',
+        C: 'No reward or wealth is mentioned in the passage. The irony is precisely that he received nothing and was forgotten.',
+        D: 'The text does not describe any subsequent relationship between the wise man and the attacking king. He simply disappears from memory.'
+      },
+      ref: 'Ecclesiastes 9:14–15'
+    },
+    6: {
+      correct: 'A',
+      explanation: {
+        A: 'Correct. Ecclesiastes 10:1 opens: "As dead flies give perfume a bad smell, so a little folly outweighs wisdom and honor." A small contamination ruins something of great value — a striking image for how folly corrupts wisdom.',
+        B: 'A cloud blocking the sun is not the image used in Ecclesiastes 10:1. That is an independent theme in Ecclesiastes 11.',
+        C: 'Weeds and gardens are not the imagery here. The image is olfactory — perfume ruined by dead flies.',
+        D: 'A broken wall and serpents does appear in Ecclesiastes 10:8 ("Whoever breaks through a wall may be bitten by a snake") but that is a different proverb, not the opening comparison about folly and wisdom.'
+      },
+      ref: 'Ecclesiastes 10:1'
+    },
+    7: {
+      correct: 'C',
+      explanation: {
+        A: '"Downward" is not the directional language of Ecclesiastes 10:2. The contrast is right vs. left.',
+        B: '"Backward" does not appear in Ecclesiastes 10:2. The Teacher does warn against longing for former days in 7:10, but this verse uses a different image.',
+        C: 'Correct. Ecclesiastes 10:2 says: "The heart of the wise inclines to the right, but the heart of the fool to the left." In ancient Near Eastern idiom, right (yamin) connoted favor and skill; left connoted weakness or misfortune.',
+        D: '"Outward toward wealth" is not the language of this verse. The directional contrast is simply right (wise) versus left (fool).'
+      },
+      ref: 'Ecclesiastes 10:2'
+    },
+    8: {
+      correct: 'D',
+      explanation: {
+        A: 'Ecclesiastes 11:4 does not commend sky-watching as a path to wisdom. It warns that such caution leads to inaction.',
+        B: 'Honoring God\'s works is not the point of Ecclesiastes 11:4. The verse is a caution against paralysis: watching and waiting prevents both planting and reaping.',
+        C: 'This inverts the text\'s point. The one who watches the wind does NOT discern the right season — he is too cautious to act at all.',
+        D: 'Correct. Ecclesiastes 11:4 states: "Whoever watches the wind will not plant; whoever looks at the clouds will not reap." The Teacher is urging diligent action rather than fearful inaction.'
+      },
+      ref: 'Ecclesiastes 11:4'
+    },
+    9: {
+      correct: 'B',
+      explanation: {
+        A: '"Years of harvest" is not the language of Ecclesiastes 12:1. The phrase used is "the evil days."',
+        B: 'Correct. Ecclesiastes 12:1 reads: "Remember your Creator in the days of your youth, before the evil days come and the years approach when you will say, \'I find no pleasure in them.\'" This introduces the extended poem about aging and death that follows.',
+        C: 'While Ecclesiastes 12:2 does mention the darkening of sun, light, moon, and stars as part of the poem of aging, the specific description of the coming days in verse 1 is "the evil days," not "the days of vanity."',
+        D: '"Years of testing" is not the phrase Qohelet uses. He calls them "evil days" when pleasure is gone (Ecclesiastes 12:1).'
+      },
+      ref: 'Ecclesiastes 12:1'
+    },
+    10: {
+      correct: 'C',
+      explanation: {
+        A: 'Seeking wisdom above silver is language from Proverbs (e.g., Proverbs 8:10–11), not the conclusion of Ecclesiastes. Qohelet\'s climax is about fearing God and keeping his commands.',
+        B: 'Enjoying life as one\'s portion is a recurring theme throughout Ecclesiastes (3:22; 5:18; 9:7–9), but it is not the final summary. The book closes with a more weighty declaration.',
+        C: 'Correct. Ecclesiastes 12:13–14 declares: "Now all has been heard; here is the conclusion of the matter: Fear God and keep his commandments, for this is the duty of all mankind. For God will bring every deed into judgment, including every hidden thing, whether it is good or evil."',
+        D: '"Do not lean on your own understanding" is from Proverbs 3:5, not Ecclesiastes. Though both books address wisdom, Ecclesiastes ends with reverence and obedience, not anti-self-reliance language.'
+      },
+      ref: 'Ecclesiastes 12:13–14'
+    }
+  };
+
+  let score = 0;
+  let userAnswers = {};
+  const totalQ = 10;
+
+  function answer(qNum, chosen, correct) {
+    const btns = document.querySelectorAll(`#q${qNum} .choice-btn`);
+    btns.forEach(b => b.disabled = true);
+
+    const isCorrect = (chosen === correct);
+    if (isCorrect) score++;
+    userAnswers[qNum] = { chosen, correct, isCorrect };
+
+    const data = feedbackData[qNum];
+    const fb = document.getElementById(`fb${qNum}`);
+    fb.className = 'feedback ' + (isCorrect ? 'correct-fb' : 'wrong-fb');
+    fb.innerHTML = `<div class="ref">${data.ref}</div>${data.explanation[chosen]}`;
+    fb.style.display = 'block';
+
+    btns.forEach(b => {
+      const letter = b.querySelector('.choice-letter').textContent;
+      if (letter === correct) b.classList.add('correct');
+      else if (letter === chosen && !isCorrect) b.classList.add('wrong');
+    });
+
+    document.getElementById(`next${qNum}`).style.display = 'inline-block';
+    updateProgress(qNum);
+  }
+
+  function updateProgress(qNum) {
+    const pct = (qNum / totalQ) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+  }
+
+  function nextQ(qNum) {
+    document.getElementById(`q${qNum - 1}`).classList.remove('active');
+    const next = document.getElementById(`q${qNum}`);
+    next.classList.add('active');
+    next.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function showResults() {
+    document.getElementById('q10').classList.remove('active');
+    document.getElementById('progress-bar').style.width = '100%';
+
+    const rs = document.getElementById('results-screen');
+    rs.style.display = 'block';
+    rs.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    document.getElementById('score-number').textContent = score + '/10';
+
+    // Animate ring
+    const circumference = 345;
+    const offset = circumference - (score / totalQ) * circumference;
+    setTimeout(() => {
+      document.getElementById('ring-fill').style.strokeDashoffset = offset;
+    }, 100);
+
+    // Result message
+    let msg;
+    if (score === 10) msg = 'Perfect score! You read Ecclesiastes with the care of a scribe — and the Teacher would say, "Even this is a gift from God."';
+    else if (score >= 8) msg = 'Excellent work. You have sat long with Qohelet and heard him well. "The heart of the wise inclines to the right."';
+    else if (score >= 6) msg = 'A solid showing. Some of the finer details eluded you — but you know the Teacher\'s refrain: wisdom is better than folly, even when it goes unrewarded.';
+    else if (score >= 4) msg = 'You caught the broad strokes but the details slipped by. Qohelet would counsel a second reading — there is more to find beneath the sun.';
+    else msg = 'Even the wisest need to read again. Qohelet himself searched long: "I searched and found..." Return to these chapters — the words repay close attention.';
+    document.getElementById('result-message').textContent = msg;
+
+    // Review list
+    const reviewList = document.getElementById('review-list');
+    const questions = [
+      'What does Qohelet say is better than the day of one\'s birth?',
+      'Among a thousand people, how many upright women did the Teacher find?',
+      'What does Qohelet affirm will be the outcome for those who fear God?',
+      'According to Ecclesiastes 9:5, what do the dead know?',
+      'What happened to the poor wise man who saved the city?',
+      'What image opens Ecclesiastes 10 about folly corrupting wisdom?',
+      'In Ecclesiastes 10:2, which direction does the fool\'s heart incline?',
+      'What happens to the person who watches the wind and observes the clouds?',
+      'How does Qohelet describe the days coming after youth, in Ecclesiastes 12?',
+      'What is "the conclusion of the matter" at the end of Ecclesiastes?'
+    ];
+    const correctAnswers = {1:'B',2:'A',3:'C',4:'D',5:'B',6:'A',7:'C',8:'D',9:'B',10:'C'};
+    const correctTexts = {
+      1: 'B — The day of one\'s death',
+      2: 'A — None',
+      3: 'C — It will go well with them',
+      4: 'D — Nothing',
+      5: 'B — Nobody remembered him',
+      6: 'A — Dead flies making perfumer\'s ointment give off a foul smell',
+      7: 'C — To the left',
+      8: 'D — They will neither plant nor reap',
+      9: 'B — The evil days, when one will say, "I find no pleasure in them"',
+      10: 'C — Fear God and keep his commandments'
+    };
+
+    let html = '';
+    for (let i = 1; i <= 10; i++) {
+      const ua = userAnswers[i];
+      const isCorrect = ua && ua.isCorrect;
+      html += `<div class="review-item">
+        <div class="ri-q">${i}. ${questions[i-1]}</div>
+        ${isCorrect
+          ? `<div class="ri-correct">&#10003; ${correctTexts[i]}</div>`
+          : `<div class="ri-wrong">&#10007; Your answer: ${ua ? ua.chosen : '—'} &nbsp;|&nbsp; Correct: ${correctTexts[i]}</div>`
+        }
+      </div>`;
+    }
+    reviewList.innerHTML = html;
+  }
+
+  function resetQuiz() {
+    score = 0;
+    userAnswers = {};
+    document.getElementById('results-screen').style.display = 'none';
+    document.getElementById('ring-fill').style.strokeDashoffset = 345;
+    document.getElementById('progress-bar').style.width = '0%';
+
+    for (let i = 1; i <= 10; i++) {
+      const qBlock = document.getElementById(`q${i}`);
+      qBlock.classList.remove('active');
+      const btns = qBlock.querySelectorAll('.choice-btn');
+      btns.forEach(b => {
+        b.disabled = false;
+        b.classList.remove('correct','wrong');
+      });
+      const fb = document.getElementById(`fb${i}`);
+      fb.style.display = 'none';
+      fb.className = 'feedback';
+      document.getElementById(`next${i}`).style.display = 'none';
+    }
+    document.getElementById('q1').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
