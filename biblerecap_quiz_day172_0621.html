@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Recap Quiz — Day 172</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: #0e0a04;
+    background-image: radial-gradient(ellipse at 20% 20%, #1a1005 0%, #0e0a04 60%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2c1810;
+  }
+
+  .scroll-card {
+    background: linear-gradient(160deg, #f5ecd5 0%, #ede0c0 35%, #e8d8b0 65%, #dfc99a 100%);
+    border: 2px solid #c9a84c;
+    border-radius: 4px;
+    box-shadow: 0 0 0 1px #8b6914, 0 8px 40px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.4);
+    max-width: 780px;
+    width: 100%;
+    padding: 44px 48px 48px;
+    position: relative;
+  }
+
+  .scroll-card::before, .scroll-card::after {
+    content: '';
+    display: block;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c 20%, #8b6914 50%, #c9a84c 80%, transparent);
+    margin-bottom: 28px;
+  }
+  .scroll-card::after { margin-bottom: 0; margin-top: 28px; }
+
+  /* ── Header ── */
+  .header { text-align: center; margin-bottom: 32px; }
+
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #7a5c1e;
+    margin-bottom: 10px;
+  }
+
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a0e00;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    line-height: 1.25;
+  }
+
+  .passages {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+
+  .passage-tag {
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    border-radius: 2px;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #5c3d0a;
+    padding: 3px 10px;
+  }
+
+  .difficulty-badge {
+    display: inline-block;
+    background: #8b1a1a;
+    color: #f5ecd5;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    padding: 3px 10px;
+    border-radius: 2px;
+  }
+
+  /* ── Progress Bar ── */
+  .progress-wrap {
+    margin-bottom: 28px;
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: #7a5c1e;
+    margin-bottom: 6px;
+  }
+  .progress-track {
+    height: 5px;
+    background: rgba(139,105,20,0.2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #8b6914);
+    border-radius: 3px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  /* ── Question ── */
+  .question-block { display: none; }
+  .question-block.active { display: block; animation: fadeIn 0.4s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-number {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #7a5c1e;
+    margin-bottom: 8px;
+  }
+
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.25);
+    border: 1px solid #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    color: #5c3d0a;
+    padding: 1px 7px;
+    border-radius: 2px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .question-text {
+    font-size: 19px;
+    font-weight: 600;
+    color: #1a0e00;
+    line-height: 1.45;
+    margin-bottom: 22px;
+  }
+
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(139,105,20,0.3);
+    border-radius: 3px;
+    padding: 13px 16px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    text-align: left;
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: 17px;
+    color: #2c1810;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(2px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.15);
+    border-color: #1a5c2a;
+    color: #0f3318;
+  }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.12);
+    border-color: #8b1a1a;
+    color: #5a0f0f;
+  }
+  .choice-btn.revealed {
+    background: rgba(26,92,42,0.1);
+    border-color: rgba(26,92,42,0.5);
+  }
+
+  .letter-dot {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(139,105,20,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: #7a5c1e;
+    background: rgba(255,255,255,0.5);
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .choice-btn.correct .letter-dot {
+    background: #1a5c2a;
+    border-color: #1a5c2a;
+    color: #f5ecd5;
+  }
+  .choice-btn.wrong .letter-dot {
+    background: #8b1a1a;
+    border-color: #8b1a1a;
+    color: #f5ecd5;
+  }
+  .choice-btn.revealed .letter-dot {
+    background: rgba(26,92,42,0.3);
+    border-color: #1a5c2a;
+    color: #0f3318;
+  }
+
+  /* ── Feedback ── */
+  .feedback {
+    display: none;
+    border-left: 3px solid #c9a84c;
+    padding: 12px 16px;
+    margin-bottom: 22px;
+    background: rgba(201,168,76,0.08);
+    border-radius: 0 3px 3px 0;
+  }
+  .feedback.show { display: block; animation: fadeIn 0.3s ease; }
+  .feedback-verdict {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+    font-weight: 600;
+  }
+  .feedback-verdict.correct-v { color: #1a5c2a; }
+  .feedback-verdict.wrong-v   { color: #8b1a1a; }
+  .feedback-ref {
+    font-size: 15px;
+    color: #3d2008;
+    line-height: 1.5;
+  }
+  .feedback-ref em { font-style: italic; color: #5c3d0a; }
+
+  /* ── Next button ── */
+  .next-btn {
+    display: none;
+    background: linear-gradient(135deg, #c9a84c 0%, #8b6914 100%);
+    color: #1a0e00;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    border: none;
+    border-radius: 3px;
+    padding: 12px 32px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    font-weight: 600;
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.show { display: inline-block; }
+
+  /* ── Divider ornament ── */
+  .ornament {
+    text-align: center;
+    color: #c9a84c;
+    font-size: 18px;
+    letter-spacing: 6px;
+    margin: 8px 0 20px;
+    opacity: 0.7;
+  }
+
+  /* ── Results ── */
+  #results-screen { display: none; }
+  #results-screen.active { display: block; animation: fadeIn 0.5s ease; }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    color: #1a0e00;
+    letter-spacing: 2px;
+    margin-bottom: 28px;
+  }
+
+  .score-ring-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+  .score-ring-svg { overflow: visible; }
+  .score-ring-bg   { fill: none; stroke: rgba(139,105,20,0.2); }
+  .score-ring-fill { fill: none; stroke-linecap: round; transition: stroke-dashoffset 1.2s ease; }
+  .score-ring-text-num {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    font-weight: 700;
+    fill: #1a0e00;
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+  .score-ring-text-label {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    fill: #7a5c1e;
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+
+  .results-message {
+    text-align: center;
+    font-size: 18px;
+    color: #3d2008;
+    font-style: italic;
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+
+  .review-header {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #7a5c1e;
+    border-bottom: 1px solid rgba(139,105,20,0.3);
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+  }
+
+  .review-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(139,105,20,0.15);
+  }
+  .review-icon { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+  .review-q { font-size: 15px; color: #2c1810; line-height: 1.45; }
+  .review-q strong { display: block; margin-bottom: 3px; color: #1a0e00; }
+  .review-ans { font-size: 14px; }
+  .review-ans.r-correct { color: #1a5c2a; }
+  .review-ans.r-wrong   { color: #8b1a1a; }
+
+  .take-again-btn {
+    display: block;
+    margin: 32px auto 0;
+    background: transparent;
+    border: 1.5px solid #c9a84c;
+    color: #7a5c1e;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 11px 28px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .take-again-btn:hover {
+    background: rgba(201,168,76,0.2);
+    color: #3d2008;
+  }
+
+  @media (max-width: 560px) {
+    .scroll-card { padding: 28px 22px 32px; }
+    .quiz-title  { font-size: 21px; }
+    .question-text { font-size: 17px; }
+    .choice-btn  { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="scroll-card">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="date-line">SUNDAY, JUNE 21, 2026 &middot; DAY 172</div>
+    <div class="quiz-title">The Bible Recap<br>Daily Quiz</div>
+    <div class="passages">
+      <span class="passage-tag">1 KINGS 10</span>
+      <span class="passage-tag">1 KINGS 11</span>
+      <span class="passage-tag">2 CHRONICLES 9</span>
+    </div>
+    <span class="difficulty-badge">CHALLENGING</span>
+  </div>
+
+  <div class="ornament">&#10022; &#10022; &#10022;</div>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span id="prog-label">QUESTION 1 OF 10</span>
+      <span id="prog-pct">0%</span>
+    </div>
+    <div class="progress-track"><div class="progress-bar" id="prog-bar"></div></div>
+  </div>
+
+  <!-- ═══════════════ QUESTIONS ═══════════════ -->
+
+  <!-- Q1 -->
+  <div class="question-block active" id="q1">
+    <div class="question-number">QUESTION 1 OF 10</div>
+    <div class="question-text">What cargo did Solomon's fleet of Tarshish ships bring back, arriving once every three years?</div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(1,'A','B')"><span class="letter-dot">A</span> Gold, silver, cedar wood, and spices</button>
+      <button class="choice-btn" onclick="answer(1,'B','B')"><span class="letter-dot">B</span> Gold, silver, ivory, apes, and peacocks</button>
+      <button class="choice-btn" onclick="answer(1,'C','B')"><span class="letter-dot">C</span> Gold, almug wood, precious stones, and apes</button>
+      <button class="choice-btn" onclick="answer(1,'D','B')"><span class="letter-dot">D</span> Silver, ivory, peacocks, and cinnamon</button>
+    </div>
+    <div class="feedback" id="fb1">
+      <div class="feedback-verdict" id="fv1"></div>
+      <div class="feedback-ref">According to <em>1 Kings 10:22</em>, Solomon&#39;s fleet of Tarshish ships came once every three years bearing gold, silver, ivory, apes, and peacocks (or baboons). This extraordinary menagerie illustrated the legendary reach of Solomon&#39;s commercial empire. Cedar wood and spices, while mentioned elsewhere in connection with Hiram&#39;s trade, are not part of this specific cargo list.</div>
+    </div>
+    <button class="next-btn" id="nb1" onclick="next(1)">NEXT QUESTION &rarr;</button>
+  </div>
+
+  <!-- Q2 -->
+  <div class="question-block" id="q2">
+    <div class="question-number">QUESTION 2 OF 10 <span class="detail-badge">DETAIL</span></div>
+    <div class="question-text">For what two specific purposes did Solomon use the almug wood that arrived from Ophir via Hiram&#39;s ships?</div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(2,'A','D')"><span class="letter-dot">A</span> To build the temple altar and to construct the ark&#39;s carrying poles</button>
+      <button class="choice-btn" onclick="answer(2,'B','D')"><span class="letter-dot">B</span> To furnish the king&#39;s bedroom and to panel the inner walls of the temple</button>
+      <button class="choice-btn" onclick="answer(2,'C','D')"><span class="letter-dot">C</span> To build chariot frames and to line the walls of the palace courtyard</button>
+      <button class="choice-btn" onclick="answer(2,'D','D')"><span class="letter-dot">D</span> To make supports for the temple and royal palace, and to craft lyres and harps</button>
+    </div>
+    <div class="feedback" id="fb2">
+      <div class="feedback-verdict" id="fv2"></div>
+      <div class="feedback-ref"><em>1 Kings 10:11&ndash;12</em> records that Hiram&#39;s fleet brought almug wood from Ophir, and Solomon used it for two purposes: structural supports (pillars) for the temple and the royal palace, and for making musical instruments &mdash; lyres and harps for the singers. The text adds that no such almug wood had ever been seen before or since.</div>
+    </div>
+    <button class="next-btn" id="nb2" onclick="next(2)">NEXT QUESTION &rarr;</button>
+  </div>
+
+  <!-- Q3 -->
+  <div class="question-block" id="q3">
+    <div class="question-number">QUESTION 3 OF 10 <span class="detail-badge">DETAIL</span></div>
+    <div class="question-text">According to 1 Kings 11:1, Solomon&#39;s foreign wives who led him astray came from many nations. Which of the following peoples is <em>not</em> listed among their origins?</div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(3,'A','A')"><span class="letter-dot">A</span> Philistines</button>
+      <button class="choice-btn" onclick="answer(3,'B','A')"><span class="letter-dot">B</span> Moabites</button>
+      <button class="choice-btn" onclick="answer(3,'C','A')"><span class="letter-dot">C</span> Hittites</button>
+      <button class="choice-btn" onclick="answer(3,'D','A')"><span class="letter-dot">D</span> Edomites</button>
+    </div>
+    <div class="feedback" id="fb3">
+      <div class="feedback-verdict" id="fv3"></div>
+      <div class="feedback-ref"><em>1 Kings 11:1</em> lists Solomon&#39;s foreign wives as coming from Moab, Ammon, Edom, Sidon, and the Hittites. Philistines, though Israel&#39;s persistent enemy and geographically close, are conspicuously absent from this list. The nations named are those whose intermarriage with Israel the LORD had expressly forbidden, for they would turn Israel&#39;s hearts after other gods.</div>
+    </div>
+    <button class="next-btn" id="nb3" onclick="next(3)">NEXT QUESTION &rarr;</button>
+  </div>
+
+  <!-- Q4 -->
+  <div class="question-block" id="q4">
+    <div class="question-number">QUESTION 4 OF 10</div>
+    <div class="question-text">In 1 Kings 11, what reason does God give for not tearing the kingdom away from Solomon during Solomon&#39;s own lifetime?</div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(4,'A','C')"><span class="letter-dot">A</span> Because Solomon had built the temple and honored God faithfully in his early years</button>
+      <button class="choice-btn" onclick="answer(4,'B','C')"><span class="letter-dot">B</span> Because Israel was not yet ready for the upheaval of a new ruling dynasty</button>
+      <button class="choice-btn" onclick="answer(4,'C','C')"><span class="letter-dot">C</span> For the sake of David, Solomon&#39;s father</button>
+      <button class="choice-btn" onclick="answer(4,'D','C')"><span class="letter-dot">D</span> Because Solomon repented of his idolatry before his death</button>
+    </div>
+    <div class="feedback" id="fb4">
+      <div class="feedback-verdict" id="fv4"></div>
+      <div class="feedback-ref"><em>1 Kings 11:12</em> records God&#39;s word to Solomon: &ldquo;Yet for the sake of David your father I will not do it in your days.&rdquo; It is David, not Solomon&#39;s temple-building or any personal merit, that stays God&#39;s immediate judgment. Verse 13 reinforces the same reason: &ldquo;for the sake of David my servant and for the sake of Jerusalem that I have chosen.&rdquo; There is no record of Solomon repenting.</div>
+    </div>
+    <button class="next-btn" id="nb4" onclick="next(4)">NEXT QUESTION &rarr;</button>
+  </div>
+
+  <!-- Q5 -->
+  <div class="question-block" id="q5">
+    <div class="question-number">QUESTION 5 OF 10</div>
+    <div class="question-text">What specific news prompted Hadad the Edomite to ask Pharaoh for permission to return to his homeland?</div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(5,'A','B')"><span class="letter-dot">A</span> God appeared to him in a dream commanding him to return and rule Edom</button>
+      <button class="choice-btn" onclick="answer(5,'B','B')"><span class="letter-dot">B</span> He heard that both David and Joab the commander were dead</button>
+      <button class="choice-btn" onclick="answer(5,'C','B')"><span class="letter-dot">C</span> His son Genubath had come of age and summoned him to claim the Edomite throne</button>
+      <button class="choice-btn" onclick="answer(5,'D','B')"><span class="letter-dot">D</span> Pharaoh commanded him to return and stir up trouble for Israel</button>
+    </div>
+    <div class="feedback" id="fb5">
+      <div class="feedback-verdict" id="fv5"></div>
+      <div class="feedback-ref"><em>1 Kings 11:21</em> specifies that when Hadad &ldquo;heard in Egypt that David slept with his fathers and that Joab the commander of the army was dead,&rdquo; he asked Pharaoh to let him return. Pharaoh&#39;s puzzled response &mdash; &ldquo;What have you lacked with me that you seek to go to your own country?&rdquo; &mdash; underscores how completely Hadad had been absorbed into Egyptian court life since his childhood flight from Joab&#39;s slaughter.</div>
+    </div>
+    <button class="next-btn" id="nb5" onclick="next(5)">NEXT QUESTION &rarr;</button>
+  </div>
+
+  <!-- Q6 -->
+  <div class="question-block" id="q6">
+    <div class="question-number">QUESTION 6 OF 10</div>
+    <div class="question-text">In 1 Kings 11:33, what specific charge does God level against Solomon when explaining the coming division of the kingdom?</div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(6,'A','D')"><span class="letter-dot">A</span> That Solomon taxed the people unjustly and conscripted the northern tribes into forced labor</button>
+      <button class="choice-btn" onclick="answer(6,'B','D')"><span class="letter-dot">B</span> That Solomon accumulated more gold and horses than any other king, violating the covenant</button>
+      <button class="choice-btn" onclick="answer(6,'C','D')"><span class="letter-dot">C</span> That Solomon had forsaken the house of David and sought the kingdom for himself</button>
+      <button class="choice-btn" onclick="answer(6,'D','D')"><span class="letter-dot">D</span> That they followed Ashtoreth, Chemosh, and Milcom, and did not walk in God&#39;s ways as David did</button>
+    </div>
+    <div class="feedback" id="fb6">
+      <div class="feedback-verdict" id="fv6"></div>
+      <div class="feedback-ref"><em>1 Kings 11:33</em> gives God&#39;s precise indictment: &ldquo;because they have forsaken me and worshiped Ashtoreth the goddess of the Sidonians, Chemosh the god of Moab, and Milcom the god of the Ammonites, and they have not walked in my ways, doing what is right in my sight and keeping my statutes and my rules, as David his father did.&rdquo; The comparison to David&#39;s faithfulness makes Solomon&#39;s apostasy all the more stark.</div>
+    </div>
+    <button class="next-btn" id="nb6" onclick="next(6)">NEXT QUESTION &rarr;</button>
+  </div>
+
+  <!-- Q7 -->
+  <div class="question-block" id="q7">
+    <div class="question-number">QUESTION 7 OF 10 <span class="detail-badge">DETAIL</span></div>
+    <div class="question-text">According to 1 Kings 11:7, which two gods did Solomon specifically build high places for on the mountain east of Jerusalem?</div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(7,'A','A')"><span class="letter-dot">A</span> Chemosh and Molech</button>
+      <button class="choice-btn" onclick="answer(7,'B','A')"><span class="letter-dot">B</span> Ashtoreth and Milcom</button>
+      <button class="choice-btn" onclick="answer(7,'C','A')"><span class="letter-dot">C</span> Baal and Asherah</button>
+      <button class="choice-btn" onclick="answer(7,'D','A')"><span class="letter-dot">D</span> Milcom and Chemosh</button>
+    </div>
+    <div class="feedback" id="fb7">
+      <div class="feedback-verdict" id="fv7"></div>
+      <div class="feedback-ref"><em>1 Kings 11:7</em> names the two deities whose high places Solomon built on the mountain east of Jerusalem: &ldquo;a high place for Chemosh the abomination of Moab, and for Molech the abomination of the Ammonites.&rdquo; Option B (Ashtoreth and Milcom) are mentioned in verse 5 as gods Solomon followed, but those specific high places are not placed on the eastern hill. Option D reverses the pair and uses &ldquo;Milcom&rdquo; instead of &ldquo;Molech,&rdquo; making it technically inaccurate to verse 7.</div>
+    </div>
+    <button class="next-btn" id="nb7" onclick="next(7)">NEXT QUESTION &rarr;</button>
+  </div>
+
+  <!-- Q8 -->
+  <div class="question-block" id="q8">
+    <div class="question-number">QUESTION 8 OF 10</div>
+    <div class="question-text">What trading arrangement involving horses does 1 Kings 10:28&ndash;29 describe?</div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(8,'A','C')"><span class="letter-dot">A</span> Solomon purchased horses exclusively from Arabia and imported chariots from Phoenicia</button>
+      <button class="choice-btn" onclick="answer(8,'B','C')"><span class="letter-dot">B</span> Solomon sold horses to Egypt in exchange for gold and finely woven linen</button>
+      <button class="choice-btn" onclick="answer(8,'C','C')"><span class="letter-dot">C</span> Solomon imported horses from Egypt and Kue, and his agents exported them to Hittite and Aramean kings</button>
+      <button class="choice-btn" onclick="answer(8,'D','C')"><span class="letter-dot">D</span> Solomon&#39;s traders bought horses from all nations at fixed prices set by royal decree</button>
+    </div>
+    <div class="feedback" id="fb8">
+      <div class="feedback-verdict" id="fv8"></div>
+      <div class="feedback-ref"><em>1 Kings 10:28&ndash;29</em> describes a sophisticated re-export trade: horses were imported from Egypt and Kue (Cilicia), then Solomon&#39;s traders exported them to the kings of the Hittites and the kings of Aram. A chariot cost 600 shekels of silver and a horse 150 shekels. This arrangement made Solomon a middleman in the ancient Near East&#39;s military supply chain &mdash; and violated Deuteronomy 17&#39;s warning against a king multiplying horses.</div>
+    </div>
+    <button class="next-btn" id="nb8" onclick="next(8)">NEXT QUESTION &rarr;</button>
+  </div>
+
+  <!-- Q9 -->
+  <div class="question-block" id="q9">
+    <div class="question-number">QUESTION 9 OF 10 <span class="detail-badge">DETAIL</span></div>
+    <div class="question-text">What does 1 Kings 11:26 tell us about Jeroboam&#39;s parentage and family background?</div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(9,'A','B')"><span class="letter-dot">A</span> He was the son of a Moabite woman who had converted to worship of the LORD</button>
+      <button class="choice-btn" onclick="answer(9,'B','B')"><span class="letter-dot">B</span> He was an Ephraimite from Zeredah, the son of a widow named Zeruah</button>
+      <button class="choice-btn" onclick="answer(9,'C','B')"><span class="letter-dot">C</span> He was the firstborn son of Nebat, a royal official in Solomon&#39;s administration</button>
+      <button class="choice-btn" onclick="answer(9,'D','B')"><span class="letter-dot">D</span> He was from the tribe of Judah, raised in the household of the prophet Ahijah</button>
+    </div>
+    <div class="feedback" id="fb9">
+      <div class="feedback-verdict" id="fv9"></div>
+      <div class="feedback-ref"><em>1 Kings 11:26</em> introduces Jeroboam as &ldquo;the son of Nebat, an Ephraimite of Zeredah, a servant of Solomon, whose mother&#39;s name was Zeruah, a widow.&rdquo; His Ephraimite tribal identity is significant &mdash; it places him squarely within the northern tribes who would eventually follow him. The detail that his mother was a widow adds to the picture of Jeroboam as a self-made man who caught Solomon&#39;s eye through sheer industry.</div>
+    </div>
+    <button class="next-btn" id="nb9" onclick="next(9)">NEXT QUESTION &rarr;</button>
+  </div>
+
+  <!-- Q10 -->
+  <div class="question-block" id="q10">
+    <div class="question-number">QUESTION 10 OF 10</div>
+    <div class="question-text">What was Solomon&#39;s annual income of gold, as recorded in both 1 Kings 10:14 and 2 Chronicles 9:13?</div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(10,'A','A')"><span class="letter-dot">A</span> 666 talents of gold</button>
+      <button class="choice-btn" onclick="answer(10,'B','A')"><span class="letter-dot">B</span> 420 talents of gold</button>
+      <button class="choice-btn" onclick="answer(10,'C','A')"><span class="letter-dot">C</span> 450 talents of gold</button>
+      <button class="choice-btn" onclick="answer(10,'D','A')"><span class="letter-dot">D</span> 120 talents of gold</button>
+    </div>
+    <div class="feedback" id="fb10">
+      <div class="feedback-verdict" id="fv10"></div>
+      <div class="feedback-ref">Both <em>1 Kings 10:14</em> and <em>2 Chronicles 9:13</em> agree precisely: Solomon&#39;s annual income of gold was 666 talents &mdash; a staggering figure. The other numbers are plausible distractors drawn from the same chapters: 420 talents is what Hiram&#39;s ships brought from Ophir (1 Kgs 10:11), 450 is the parallel figure in 2 Chronicles 9:13 for that shipment, and 120 talents was the Queen of Sheba&#39;s gift to Solomon.</div>
+    </div>
+    <button class="next-btn" id="nb10" onclick="finish()">SEE RESULTS &rarr;</button>
+  </div>
+
+  <!-- ═══════════════ RESULTS ═══════════════ -->
+  <div id="results-screen">
+    <div class="results-title">QUIZ COMPLETE</div>
+
+    <div class="score-ring-wrap">
+      <svg class="score-ring-svg" width="150" height="150" viewBox="0 0 150 150">
+        <circle class="score-ring-bg" cx="75" cy="75" r="60" stroke-width="10"/>
+        <circle class="score-ring-fill" id="ring-fill" cx="75" cy="75" r="60" stroke-width="10"
+          stroke-dasharray="377" stroke-dashoffset="377"
+          transform="rotate(-90 75 75)"/>
+        <text class="score-ring-text-num" id="ring-num" x="75" y="70">0/10</text>
+        <text class="score-ring-text-label" x="75" y="90">SCORE</text>
+      </svg>
+    </div>
+
+    <div class="results-message" id="results-msg"></div>
+
+    <div class="review-header">QUESTION REVIEW</div>
+    <div id="review-list"></div>
+
+    <button class="take-again-btn" onclick="resetQuiz()">&#8635; Take Again</button>
+  </div>
+
+</div><!-- end scroll-card -->
+
+<script>
+  const questions = [
+    {
+      text: "What cargo did Solomon&#39;s fleet of Tarshish ships bring back, arriving once every three years?",
+      correct: 'B',
+      choices: {
+        A: "Gold, silver, cedar wood, and spices",
+        B: "Gold, silver, ivory, apes, and peacocks",
+        C: "Gold, almug wood, precious stones, and apes",
+        D: "Silver, ivory, peacocks, and cinnamon"
+      },
+      ref: "1 Kings 10:22"
+    },
+    {
+      text: "For what two specific purposes did Solomon use the almug wood that arrived from Ophir via Hiram&#39;s ships?",
+      correct: 'D',
+      choices: {
+        A: "To build the temple altar and to construct the ark&#39;s carrying poles",
+        B: "To furnish the king&#39;s bedroom and to panel the inner walls of the temple",
+        C: "To build chariot frames and to line the walls of the palace courtyard",
+        D: "To make supports for the temple and royal palace, and to craft lyres and harps"
+      },
+      ref: "1 Kings 10:11-12"
+    },
+    {
+      text: "According to 1 Kings 11:1, Solomon&#39;s foreign wives who led him astray came from many nations. Which of the following peoples is not listed among their origins?",
+      correct: 'A',
+      choices: {
+        A: "Philistines",
+        B: "Moabites",
+        C: "Hittites",
+        D: "Edomites"
+      },
+      ref: "1 Kings 11:1"
+    },
+    {
+      text: "In 1 Kings 11, what reason does God give for not tearing the kingdom away from Solomon during Solomon&#39;s own lifetime?",
+      correct: 'C',
+      choices: {
+        A: "Because Solomon had built the temple and honored God faithfully in his early years",
+        B: "Because Israel was not yet ready for the upheaval of a new ruling dynasty",
+        C: "For the sake of David, Solomon&#39;s father",
+        D: "Because Solomon repented of his idolatry before his death"
+      },
+      ref: "1 Kings 11:12"
+    },
+    {
+      text: "What specific news prompted Hadad the Edomite to ask Pharaoh for permission to return to his homeland?",
+      correct: 'B',
+      choices: {
+        A: "God appeared to him in a dream commanding him to return and rule Edom",
+        B: "He heard that both David and Joab the commander were dead",
+        C: "His son Genubath had come of age and summoned him to claim the Edomite throne",
+        D: "Pharaoh commanded him to return and stir up trouble for Israel"
+      },
+      ref: "1 Kings 11:21"
+    },
+    {
+      text: "In 1 Kings 11:33, what specific charge does God level against Solomon when explaining the coming division of the kingdom?",
+      correct: 'D',
+      choices: {
+        A: "That Solomon taxed the people unjustly and conscripted the northern tribes into forced labor",
+        B: "That Solomon accumulated more gold and horses than any other king, violating the covenant",
+        C: "That Solomon had forsaken the house of David and sought the kingdom for himself",
+        D: "That they followed Ashtoreth, Chemosh, and Milcom, and did not walk in God&#39;s ways as David did"
+      },
+      ref: "1 Kings 11:33"
+    },
+    {
+      text: "According to 1 Kings 11:7, which two gods did Solomon specifically build high places for on the mountain east of Jerusalem?",
+      correct: 'A',
+      choices: {
+        A: "Chemosh and Molech",
+        B: "Ashtoreth and Milcom",
+        C: "Baal and Asherah",
+        D: "Milcom and Chemosh"
+      },
+      ref: "1 Kings 11:7"
+    },
+    {
+      text: "What trading arrangement involving horses does 1 Kings 10:28-29 describe?",
+      correct: 'C',
+      choices: {
+        A: "Solomon purchased horses exclusively from Arabia and imported chariots from Phoenicia",
+        B: "Solomon sold horses to Egypt in exchange for gold and finely woven linen",
+        C: "Solomon imported horses from Egypt and Kue, and his agents exported them to Hittite and Aramean kings",
+        D: "Solomon&#39;s traders bought horses from all nations at fixed prices set by royal decree"
+      },
+      ref: "1 Kings 10:28-29"
+    },
+    {
+      text: "What does 1 Kings 11:26 tell us about Jeroboam&#39;s parentage and family background?",
+      correct: 'B',
+      choices: {
+        A: "He was the son of a Moabite woman who had converted to worship of the LORD",
+        B: "He was an Ephraimite from Zeredah, the son of a widow named Zeruah",
+        C: "He was the firstborn son of Nebat, a royal official in Solomon&#39;s administration",
+        D: "He was from the tribe of Judah, raised in the household of the prophet Ahijah"
+      },
+      ref: "1 Kings 11:26"
+    },
+    {
+      text: "What was Solomon&#39;s annual income of gold, as recorded in both 1 Kings 10:14 and 2 Chronicles 9:13?",
+      correct: 'A',
+      choices: {
+        A: "666 talents of gold",
+        B: "420 talents of gold",
+        C: "450 talents of gold",
+        D: "120 talents of gold"
+      },
+      ref: "1 Kings 10:14 / 2 Chronicles 9:13"
+    }
+  ];
+
+  let score = 0;
+  let userAnswers = [];
+  const total = questions.length;
+
+  function answer(qNum, chosen, correct) {
+    const block = document.getElementById('q' + qNum);
+    const btns = block.querySelectorAll('.choice-btn');
+    const letters = ['A','B','C','D'];
+
+    btns.forEach((btn, i) => {
+      btn.disabled = true;
+      const l = letters[i];
+      if (l === correct) {
+        btn.classList.add(chosen === correct ? 'correct' : 'revealed');
+      } else if (l === chosen) {
+        btn.classList.add('wrong');
+      }
+    });
+
+    const isCorrect = chosen === correct;
+    if (isCorrect) score++;
+    userAnswers.push({ qNum, chosen, correct, isCorrect, ref: questions[qNum-1].ref, text: questions[qNum-1].text, correctText: questions[qNum-1].choices[correct] });
+
+    const fb = document.getElementById('fb' + qNum);
+    fb.classList.add('show');
+    const fv = document.getElementById('fv' + qNum);
+    fv.className = 'feedback-verdict ' + (isCorrect ? 'correct-v' : 'wrong-v');
+    fv.textContent = isCorrect ? '✓ Correct' : '✗ Incorrect';
+
+    document.getElementById('nb' + qNum).classList.add('show');
+
+    // Update progress
+    const done = userAnswers.length;
+    const pct = Math.round((done / total) * 100);
+    document.getElementById('prog-bar').style.width = pct + '%';
+    document.getElementById('prog-pct').textContent = pct + '%';
+    if (done < total) {
+      document.getElementById('prog-label').textContent = 'QUESTION ' + (done + 1) + ' OF ' + total;
+    } else {
+      document.getElementById('prog-label').textContent = 'COMPLETE';
+    }
+  }
+
+  function next(qNum) {
+    document.getElementById('q' + qNum).classList.remove('active');
+    if (qNum < total) {
+      document.getElementById('q' + (qNum + 1)).classList.add('active');
+    }
+  }
+
+  function finish() {
+    document.getElementById('q10').classList.remove('active');
+    const rs = document.getElementById('results-screen');
+    rs.classList.add('active');
+
+    // Animate ring
+    const circumference = 377;
+    const offset = circumference - (score / total) * circumference;
+    const ringFill = document.getElementById('ring-fill');
+    const pct = Math.round((score / total) * 100);
+    ringFill.style.stroke = pct >= 70 ? '#1a5c2a' : pct >= 50 ? '#c9a84c' : '#8b1a1a';
+    setTimeout(() => { ringFill.style.strokeDashoffset = offset; }, 100);
+    document.getElementById('ring-num').textContent = score + '/' + total;
+
+    // Message
+    let msg;
+    if (score === 10) msg = "Perfect score — you read these chapters with the eyes of a scribe. Solomon&#39;s glory and fall are yours to ponder deeply.";
+    else if (score >= 8) msg = "Excellent work. You have a keen eye for the details that the Spirit preserved for our instruction.";
+    else if (score >= 6) msg = "Good effort. These chapters are rich with historical and theological texture &mdash; a second reading will reward you.";
+    else if (score >= 4) msg = "Keep pressing in. The story of Solomon&#39;s rise and ruin holds warnings the New Testament writers took seriously.";
+    else msg = "These are dense chapters. Return to the passages and let the contrast of Solomon&#39;s wisdom and his folly sink in.";
+    document.getElementById('results-msg').textContent = msg;
+
+    // Review list
+    const reviewList = document.getElementById('review-list');
+    userAnswers.forEach((a, i) => {
+      const div = document.createElement('div');
+      div.className = 'review-item';
+      const icon = a.isCorrect ? '✅' : '❌';
+      const ansClass = a.isCorrect ? 'r-correct' : 'r-wrong';
+      const yourLabel = a.isCorrect ? 'Correct: ' : `Your answer: ${a.chosen} &mdash; Correct: ${a.correct} (${a.correctText})`;
+      div.innerHTML = `
+        <div class="review-icon">${icon}</div>
+        <div class="review-q">
+          <strong>Q${i+1}: ${a.text}</strong>
+          <div class="review-ans ${ansClass}">
+            ${a.isCorrect ? 'Correct (' + a.ref + ')' : 'Wrong — ' + a.ref}
+          </div>
+        </div>`;
+      reviewList.appendChild(div);
+    });
+  }
+
+  function resetQuiz() {
+    score = 0;
+    userAnswers = [];
+
+    // Reset all question blocks
+    for (let i = 1; i <= total; i++) {
+      const block = document.getElementById('q' + i);
+      block.classList.remove('active');
+      block.querySelectorAll('.choice-btn').forEach(b => {
+        b.disabled = false;
+        b.classList.remove('correct','wrong','revealed');
+      });
+      document.getElementById('fb' + i).classList.remove('show');
+      document.getElementById('nb' + i).classList.remove('show');
+    }
+
+    // Reset progress
+    document.getElementById('prog-bar').style.width = '0%';
+    document.getElementById('prog-pct').textContent = '0%';
+    document.getElementById('prog-label').textContent = 'QUESTION 1 OF 10';
+
+    // Hide results
+    const rs = document.getElementById('results-screen');
+    rs.classList.remove('active');
+    const ringFill = document.getElementById('ring-fill');
+    ringFill.style.strokeDashoffset = '377';
+    document.getElementById('ring-num').textContent = '0/10';
+    document.getElementById('review-list').innerHTML = '';
+
+    // Show first question
+    document.getElementById('q1').classList.add('active');
+  }
+</script>
+
+</body>
+</html>
