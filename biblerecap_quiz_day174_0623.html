@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Recap Quiz — Day 174</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: #0e0a04;
+    background-image: radial-gradient(ellipse at 20% 20%, #1a1005 0%, #0e0a04 60%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2c1810;
+  }
+
+  .scroll-card {
+    background: linear-gradient(160deg, #f5ecd5 0%, #ede0c0 35%, #e8d8b0 65%, #dfc99a 100%);
+    border: 2px solid #c9a84c;
+    border-radius: 4px;
+    box-shadow: 0 0 0 1px #8b6914, 0 8px 40px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.4);
+    max-width: 780px;
+    width: 100%;
+    padding: 44px 48px 48px;
+    position: relative;
+  }
+
+  .scroll-card::before, .scroll-card::after {
+    content: '';
+    display: block;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c 20%, #8b6914 50%, #c9a84c 80%, transparent);
+    margin-bottom: 28px;
+  }
+  .scroll-card::after { margin-bottom: 0; margin-top: 28px; }
+
+  /* ── Header ── */
+  .header { text-align: center; margin-bottom: 32px; }
+
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #7a5c1e;
+    margin-bottom: 10px;
+  }
+
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a0e00;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    line-height: 1.25;
+  }
+
+  .passages {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+
+  .passage-tag {
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    border-radius: 2px;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #5c3d0a;
+    padding: 3px 10px;
+  }
+
+  .difficulty-badge {
+    display: inline-block;
+    background: #8b1a1a;
+    color: #f5ecd5;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    padding: 3px 10px;
+    border-radius: 2px;
+  }
+
+  /* ── Progress Bar ── */
+  .progress-wrap {
+    margin-bottom: 28px;
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: #7a5c1e;
+    margin-bottom: 6px;
+  }
+  .progress-track {
+    height: 5px;
+    background: rgba(139,105,20,0.2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #8b6914);
+    border-radius: 3px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  /* ── Question ── */
+  .question-block { display: none; }
+  .question-block.active { display: block; animation: fadeIn 0.4s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-number {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #7a5c1e;
+    margin-bottom: 8px;
+  }
+
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.25);
+    border: 1px solid #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    color: #5c3d0a;
+    padding: 1px 7px;
+    border-radius: 2px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .question-text {
+    font-size: 19px;
+    font-weight: 600;
+    color: #1a0e00;
+    line-height: 1.45;
+    margin-bottom: 22px;
+  }
+
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(139,105,20,0.3);
+    border-radius: 3px;
+    padding: 13px 16px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    text-align: left;
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: 17px;
+    color: #2c1810;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(2px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.15);
+    border-color: #1a5c2a;
+    color: #0f3318;
+  }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.12);
+    border-color: #8b1a1a;
+    color: #5a0f0f;
+  }
+  .choice-btn.revealed {
+    background: rgba(26,92,42,0.1);
+    border-color: rgba(26,92,42,0.5);
+  }
+
+  .letter-dot {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(139,105,20,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: #7a5c1e;
+    background: rgba(255,255,255,0.5);
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .choice-btn.correct .letter-dot {
+    background: #1a5c2a;
+    border-color: #1a5c2a;
+    color: #f5ecd5;
+  }
+  .choice-btn.wrong .letter-dot {
+    background: #8b1a1a;
+    border-color: #8b1a1a;
+    color: #f5ecd5;
+  }
+  .choice-btn.revealed .letter-dot {
+    background: rgba(26,92,42,0.3);
+    border-color: #1a5c2a;
+    color: #0f3318;
+  }
+
+  /* ── Feedback ── */
+  .feedback {
+    display: none;
+    border-left: 3px solid #c9a84c;
+    padding: 12px 16px;
+    margin-bottom: 22px;
+    background: rgba(201,168,76,0.08);
+    border-radius: 0 3px 3px 0;
+  }
+  .feedback.show { display: block; animation: fadeIn 0.3s ease; }
+  .feedback-verdict {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+    font-weight: 600;
+  }
+  .feedback-verdict.correct-v { color: #1a5c2a; }
+  .feedback-verdict.wrong-v   { color: #8b1a1a; }
+  .feedback-ref {
+    font-size: 15px;
+    color: #3d2008;
+    line-height: 1.5;
+  }
+  .feedback-ref em { font-style: italic; color: #5c3d0a; }
+
+  /* ── Next button ── */
+  .next-btn {
+    display: none;
+    background: linear-gradient(135deg, #c9a84c 0%, #8b6914 100%);
+    color: #1a0e00;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    border: none;
+    border-radius: 3px;
+    padding: 12px 32px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    font-weight: 600;
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.show { display: inline-block; }
+
+  /* ── Divider ornament ── */
+  .ornament {
+    text-align: center;
+    color: #c9a84c;
+    font-size: 18px;
+    letter-spacing: 6px;
+    margin: 8px 0 20px;
+    opacity: 0.7;
+  }
+
+  /* ── Results ── */
+  #results-screen { display: none; }
+  #results-screen.active { display: block; animation: fadeIn 0.5s ease; }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    color: #1a0e00;
+    letter-spacing: 2px;
+    margin-bottom: 28px;
+  }
+
+  .score-ring-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+  .score-ring-svg { overflow: visible; }
+  .score-ring-bg   { fill: none; stroke: rgba(139,105,20,0.2); }
+  .score-ring-fill { fill: none; stroke-linecap: round; transition: stroke-dashoffset 1.2s ease; }
+  .score-ring-text-num {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    font-weight: 700;
+    fill: #1a0e00;
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+  .score-ring-text-label {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    fill: #7a5c1e;
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+
+  .results-message {
+    text-align: center;
+    font-size: 18px;
+    color: #3d2008;
+    font-style: italic;
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+
+  .review-header {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #7a5c1e;
+    border-bottom: 1px solid rgba(139,105,20,0.3);
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+  }
+
+  .review-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(139,105,20,0.15);
+  }
+  .review-icon { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+  .review-q { font-size: 15px; color: #2c1810; line-height: 1.45; }
+  .review-q strong { display: block; margin-bottom: 3px; color: #1a0e00; }
+  .review-ans { font-size: 14px; }
+  .review-ans.r-correct { color: #1a5c2a; }
+  .review-ans.r-wrong   { color: #8b1a1a; }
+
+  .take-again-btn {
+    display: block;
+    margin: 32px auto 0;
+    background: transparent;
+    border: 1.5px solid #c9a84c;
+    color: #7a5c1e;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 11px 28px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .take-again-btn:hover {
+    background: rgba(201,168,76,0.2);
+    color: #3d2008;
+  }
+
+  @media (max-width: 560px) {
+    .scroll-card { padding: 28px 22px 32px; }
+    .quiz-title  { font-size: 21px; }
+    .question-text { font-size: 17px; }
+    .choice-btn  { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="scroll-card">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="date-line">TUESDAY, JUNE 23, 2026 &middot; DAY 174</div>
+    <div class="quiz-title">The Bible Recap<br>Daily Quiz</div>
+    <div class="passages">
+      <span class="passage-tag">1 KINGS 12</span>
+      <span class="passage-tag">1 KINGS 13</span>
+      <span class="passage-tag">1 KINGS 14</span>
+    </div>
+    <span class="difficulty-badge">CHALLENGING</span>
+  </div>
+
+  <div class="ornament">&#10022; &#10022; &#10022;</div>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span id="prog-label">QUESTION 1 OF 10</span>
+      <span id="prog-pct">0%</span>
+    </div>
+    <div class="progress-track"><div class="progress-bar" id="prog-bar"></div></div>
+  </div>
+
+  <!-- ═══════════════ QUESTIONS ═══════════════ -->
+
+  <!-- Q1 -->
+  <div class="question-block active" id="q1">
+    <div class="question-number">QUESTION 1 OF 10</div>
+    <div class="question-text">What did the assembly of Israel ask Rehoboam when they gathered at Shechem?</div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(1,'A','B')"><span class="letter-dot">A</span> To allow them to worship at local shrines rather than traveling to Jerusalem</button>
+      <button class="choice-btn" onclick="answer(1,'B','B')"><span class="letter-dot">B</span> To lighten the heavy yoke and hard service his father Solomon had placed on them</button>
+      <button class="choice-btn" onclick="answer(1,'C','B')"><span class="letter-dot">C</span> To release Jeroboam from exile in Egypt immediately</button>
+      <button class="choice-btn" onclick="answer(1,'D','B')"><span class="letter-dot">D</span> To divide the kingdom equally between the tribes of Judah and Ephraim</button>
+    </div>
+    <div class="feedback" id="fb1">
+      <div class="feedback-verdict" id="fv1"></div>
+      <div class="feedback-ref"><em>1 Kings 12:4</em> &mdash; &ldquo;Your father made our yoke heavy. Now therefore lighten the hard service of your father and his heavy yoke on us, and we will serve you.&rdquo; The people were not rebelling; they were offering conditional loyalty. Rehoboam had a genuine opportunity to rule with wisdom, and his choice to reject sound counsel set the course of Israel&#39;s history.</div>
+    </div>
+    <button class="next-btn" id="nb1" onclick="next(1)">NEXT QUESTION &rarr;</button>
+  </div>
+
+  <!-- Q2 -->
+  <div class="question-block" id="q2">
+    <div class="question-number">QUESTION 2 OF 10</div>
+    <div class="question-text">Rehoboam rejected the counsel of the elders who had served his father. Whose advice did he follow instead?</div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(2,'A','C')"><span class="letter-dot">A</span> The priests and Levites who served in the temple at Jerusalem</button>
+      <button class="choice-btn" onclick="answer(2,'B','C')"><span class="letter-dot">B</span> Jeroboam&#39;s former advisors who urged severity to prevent rebellion</button>
+      <button class="choice-btn" onclick="answer(2,'C','C')"><span class="letter-dot">C</span> The young men who had grown up with him and now stood before him</button>
+      <button class="choice-btn" onclick="answer(2,'D','C')"><span class="letter-dot">D</span> His mother&#39;s family, who counseled strength over diplomacy</button>
+    </div>
+    <div class="feedback" id="fb2">
+      <div class="feedback-verdict" id="fv2"></div>
+      <div class="feedback-ref"><em>1 Kings 12:8&ndash;10</em> &mdash; Rehoboam rejected the elders and consulted the young men who had grown up with him. Their advice was to tell the people his little finger was thicker than his father&#39;s waist. The elders understood statecraft; the young men understood flattery. The contrast between wise counsel and youthful pride could hardly be drawn more sharply.</div>
+    </div>
+    <button class="next-btn" id="nb2" onclick="next(2)">NEXT QUESTION &rarr;</button>
+  </div>
+
+  <!-- Q3 -->
+  <div class="question-block" id="q3">
+    <div class="question-number">QUESTION 3 OF 10 <span class="detail-badge">DETAIL</span></div>
+    <div class="question-text">Rehoboam warned the people that his father had disciplined them with whips. What did he threaten to use instead?</div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(3,'A','A')"><span class="letter-dot">A</span> Scorpions</button>
+      <button class="choice-btn" onclick="answer(3,'B','A')"><span class="letter-dot">B</span> Chains of iron</button>
+      <button class="choice-btn" onclick="answer(3,'C','A')"><span class="letter-dot">C</span> Fire</button>
+      <button class="choice-btn" onclick="answer(3,'D','A')"><span class="letter-dot">D</span> The edge of the sword</button>
+    </div>
+    <div class="feedback" id="fb3">
+      <div class="feedback-verdict" id="fv3"></div>
+      <div class="feedback-ref"><em>1 Kings 12:14</em> &mdash; &ldquo;My father disciplined you with whips, but I will discipline you with scorpions.&rdquo; Note that verse 15 immediately adds: &ldquo;So the king did not listen to the people, for it was a turn of affairs brought about by the LORD that he might fulfill his word&rdquo; &mdash; the word he had spoken to Jeroboam through Ahijah. Rehoboam&#39;s pride was real, and God&#39;s sovereignty was no less real.</div>
+    </div>
+    <button class="next-btn" id="nb3" onclick="next(3)">NEXT QUESTION &rarr;</button>
+  </div>
+
+  <!-- Q4 -->
+  <div class="question-block" id="q4">
+    <div class="question-number">QUESTION 4 OF 10</div>
+    <div class="question-text">When Rehoboam mustered 180,000 warriors to fight Jeroboam and reclaim the northern tribes, God sent the prophet Shemaiah to stop him. What reason did God give for forbidding the war?</div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(4,'A','D')"><span class="letter-dot">A</span> Rehoboam&#39;s army was too small to prevail against all Israel</button>
+      <button class="choice-btn" onclick="answer(4,'B','D')"><span class="letter-dot">B</span> Egypt was preparing to invade and Judah needed its forces for defense</button>
+      <button class="choice-btn" onclick="answer(4,'C','D')"><span class="letter-dot">C</span> Israel had made a covenant that God commanded Judah to honor</button>
+      <button class="choice-btn" onclick="answer(4,'D','D')"><span class="letter-dot">D</span> This thing was from the LORD</button>
+    </div>
+    <div class="feedback" id="fb4">
+      <div class="feedback-verdict" id="fv4"></div>
+      <div class="feedback-ref"><em>1 Kings 12:24</em> &mdash; &ldquo;Thus says the LORD, You shall not go up or fight against your relatives the people of Israel. Every man return to his home, for this thing is from me.&rdquo; The division of the kingdom was God&#39;s sovereign act &mdash; the consequence of Solomon&#39;s unfaithfulness. Even Rehoboam&#39;s folly and Jeroboam&#39;s ambition served the divine purpose.</div>
+    </div>
+    <button class="next-btn" id="nb4" onclick="next(4)">NEXT QUESTION &rarr;</button>
+  </div>
+
+  <!-- Q5 -->
+  <div class="question-block" id="q5">
+    <div class="question-number">QUESTION 5 OF 10 <span class="detail-badge">DETAIL</span></div>
+    <div class="question-text">Jeroboam set up two golden calves so his people would not travel to Jerusalem to worship. In which two cities did he place them?</div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(5,'A','B')"><span class="letter-dot">A</span> Shechem and Tirzah</button>
+      <button class="choice-btn" onclick="answer(5,'B','B')"><span class="letter-dot">B</span> Bethel and Dan</button>
+      <button class="choice-btn" onclick="answer(5,'C','B')"><span class="letter-dot">C</span> Gilgal and Mizpah</button>
+      <button class="choice-btn" onclick="answer(5,'D','B')"><span class="letter-dot">D</span> Samaria and Shiloh</button>
+    </div>
+    <div class="feedback" id="fb5">
+      <div class="feedback-verdict" id="fv5"></div>
+      <div class="feedback-ref"><em>1 Kings 12:28&ndash;29</em> &mdash; Jeroboam placed one calf in Bethel (the southern end of his kingdom, near Judah) and one in Dan (the far north). His proclamation &mdash; &ldquo;Here are your gods, O Israel, who brought you up out of the land of Egypt&rdquo; &mdash; deliberately echoed Aaron&#39;s sin at Sinai word for word (Exodus 32:4). This invented religion became the defining iniquity of the northern kingdom for every generation that followed.</div>
+    </div>
+    <button class="next-btn" id="nb5" onclick="next(5)">NEXT QUESTION &rarr;</button>
+  </div>
+
+  <!-- Q6 -->
+  <div class="question-block" id="q6">
+    <div class="question-number">QUESTION 6 OF 10</div>
+    <div class="question-text">A man of God came from Judah and prophesied against Jeroboam&#39;s altar at Bethel. What sign did he give that the altar would one day be desecrated?</div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(6,'A','C')"><span class="letter-dot">A</span> Fire from heaven would consume the altar</button>
+      <button class="choice-btn" onclick="answer(6,'B','C')"><span class="letter-dot">B</span> An earthquake would shake the sanctuary and bring down its walls</button>
+      <button class="choice-btn" onclick="answer(6,'C','C')"><span class="letter-dot">C</span> The altar would be torn down and its ashes poured out</button>
+      <button class="choice-btn" onclick="answer(6,'D','C')"><span class="letter-dot">D</span> The altar would crack in two from top to bottom</button>
+    </div>
+    <div class="feedback" id="fb6">
+      <div class="feedback-verdict" id="fv6"></div>
+      <div class="feedback-ref"><em>1 Kings 13:3, 5</em> &mdash; &ldquo;This is the sign that the LORD has spoken: Behold, the altar shall be torn down, and the ashes that are on it shall be poured out.&rdquo; When Jeroboam stretched out his hand to seize the man of God, his hand withered, and the altar was split and the ashes poured out &mdash; the sign fulfilled on the spot. The prophecy of Josiah by name (v.2) was fulfilled some 300 years later in 2 Kings 23.</div>
+    </div>
+    <button class="next-btn" id="nb6" onclick="next(6)">NEXT QUESTION &rarr;</button>
+  </div>
+
+  <!-- Q7 -->
+  <div class="question-block" id="q7">
+    <div class="question-number">QUESTION 7 OF 10 <span class="detail-badge">DETAIL</span></div>
+    <div class="question-text">God commanded the man of God not to eat, drink, or return by the way he came. How did the old prophet of Bethel deceive him into disobeying?</div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(7,'A','A')"><span class="letter-dot">A</span> He claimed an angel had spoken to him commanding him to bring the man of God back to eat and drink</button>
+      <button class="choice-btn" onclick="answer(7,'B','A')"><span class="letter-dot">B</span> He told him the king had repented and God had lifted the restriction</button>
+      <button class="choice-btn" onclick="answer(7,'C','A')"><span class="letter-dot">C</span> He warned him that soldiers were lying in ambush on his original route</button>
+      <button class="choice-btn" onclick="answer(7,'D','A')"><span class="letter-dot">D</span> He said God had sent a new message through the old prophet&#39;s son</button>
+    </div>
+    <div class="feedback" id="fb7">
+      <div class="feedback-verdict" id="fv7"></div>
+      <div class="feedback-ref"><em>1 Kings 13:18</em> &mdash; &ldquo;He said to him, &#39;I also am a prophet as you are, and an angel spoke to me by the word of the LORD, saying, &ldquo;Bring him back with you into your house that he may eat bread and drink water.&rdquo;&#39; But he lied to him.&rdquo; The text does not soften it: he lied. This is a sobering warning that a clear word already given by God is not to be set aside because of a newer &ldquo;revelation,&rdquo; even from a fellow prophet.</div>
+    </div>
+    <button class="next-btn" id="nb7" onclick="next(7)">NEXT QUESTION &rarr;</button>
+  </div>
+
+  <!-- Q8 -->
+  <div class="question-block" id="q8">
+    <div class="question-number">QUESTION 8 OF 10</div>
+    <div class="question-text">What judgment did God announce against the man of God for disobeying his command by eating in Bethel?</div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(8,'A','D')"><span class="letter-dot">A</span> His prophecy against Jeroboam&#39;s altar would be nullified</button>
+      <button class="choice-btn" onclick="answer(8,'B','D')"><span class="letter-dot">B</span> He would wander without rest until he returned to his homeland in Judah</button>
+      <button class="choice-btn" onclick="answer(8,'C','D')"><span class="letter-dot">C</span> He was struck with leprosy as a sign of God&#39;s displeasure</button>
+      <button class="choice-btn" onclick="answer(8,'D','D')"><span class="letter-dot">D</span> His body would not be buried in the tomb of his fathers</button>
+    </div>
+    <div class="feedback" id="fb8">
+      <div class="feedback-verdict" id="fv8"></div>
+      <div class="feedback-ref"><em>1 Kings 13:21&ndash;22</em> &mdash; The word came while they were still at the table: &ldquo;your body shall not come to the tomb of your fathers.&rdquo; The judgment was delivered through the very prophet who had deceived him. The man of God had faithfully delivered God&#39;s word and performed signs &mdash; and then fell through trusting a lying voice over a clear command. The irony is sharp and the warning lasting.</div>
+    </div>
+    <button class="next-btn" id="nb8" onclick="next(8)">NEXT QUESTION &rarr;</button>
+  </div>
+
+  <!-- Q9 -->
+  <div class="question-block" id="q9">
+    <div class="question-number">QUESTION 9 OF 10</div>
+    <div class="question-text">What made the scene on the road after the man of God was struck down especially remarkable?</div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(9,'A','B')"><span class="letter-dot">A</span> A second lion appeared and guarded the body from other scavengers</button>
+      <button class="choice-btn" onclick="answer(9,'B','B')"><span class="letter-dot">B</span> The lion had killed him but had not eaten his body, and both the lion and the donkey stood peacefully beside the corpse</button>
+      <button class="choice-btn" onclick="answer(9,'C','B')"><span class="letter-dot">C</span> Ravens circled above throughout the night to mark the location</button>
+      <button class="choice-btn" onclick="answer(9,'D','B')"><span class="letter-dot">D</span> The body was found in the posture of prayer with hands outstretched</button>
+    </div>
+    <div class="feedback" id="fb9">
+      <div class="feedback-verdict" id="fv9"></div>
+      <div class="feedback-ref"><em>1 Kings 13:24&ndash;28</em> &mdash; &ldquo;The lion had not eaten the body or mauled the donkey.&rdquo; A predator that kills but does not consume was unmistakably supernatural. This restraint confirmed that the man&#39;s death was divine judgment rather than ordinary misfortune, and it moved the old prophet to honor the body and believe in earnest that the prophecy against Bethel would surely come to pass.</div>
+    </div>
+    <button class="next-btn" id="nb9" onclick="next(9)">NEXT QUESTION &rarr;</button>
+  </div>
+
+  <!-- Q10 -->
+  <div class="question-block" id="q10">
+    <div class="question-number">QUESTION 10 OF 10</div>
+    <div class="question-text">According to Ahijah&#39;s prophecy in 1 Kings 14, why would Jeroboam&#39;s sick son Abijah be the only member of the household to receive a proper burial and mourning?</div>
+    <div class="choices">
+      <button class="choice-btn" onclick="answer(10,'A','C')"><span class="letter-dot">A</span> He was the firstborn heir and the people would mourn him as their future king</button>
+      <button class="choice-btn" onclick="answer(10,'B','C')"><span class="letter-dot">B</span> He had been dedicated from birth to serve in the sanctuary at Shiloh</button>
+      <button class="choice-btn" onclick="answer(10,'C','C')"><span class="letter-dot">C</span> He was the only one in Jeroboam&#39;s house in whom the LORD found something good</button>
+      <button class="choice-btn" onclick="answer(10,'D','C')"><span class="letter-dot">D</span> He had refused to bow before the golden calves at Bethel and Dan</button>
+    </div>
+    <div class="feedback" id="fb10">
+      <div class="feedback-verdict" id="fv10"></div>
+      <div class="feedback-ref"><em>1 Kings 14:13</em> &mdash; &ldquo;All Israel shall mourn for him and bury him, for he alone of Jeroboam&#39;s family shall come to the grave, because in him there is found something pleasing to the LORD, the God of Israel, in the house of Jeroboam.&rdquo; The text does not specify what was pleasing &mdash; only that God saw it. The rest of Jeroboam&#39;s line would be swept away unburied. Even in the midst of wholesale judgment on a corrupt dynasty, God&#39;s grace marks out those who belong to him.</div>
+    </div>
+    <button class="next-btn" id="nb10" onclick="finish()">SEE RESULTS &rarr;</button>
+  </div>
+
+  <!-- ═══════════════ RESULTS ═══════════════ -->
+  <div id="results-screen">
+    <div class="results-title">QUIZ COMPLETE</div>
+
+    <div class="score-ring-wrap">
+      <svg class="score-ring-svg" width="150" height="150" viewBox="0 0 150 150">
+        <circle class="score-ring-bg" cx="75" cy="75" r="60" stroke-width="10"/>
+        <circle class="score-ring-fill" id="ring-fill" cx="75" cy="75" r="60" stroke-width="10"
+          stroke-dasharray="377" stroke-dashoffset="377"
+          transform="rotate(-90 75 75)"/>
+        <text class="score-ring-text-num" id="ring-num" x="75" y="70">0/10</text>
+        <text class="score-ring-text-label" x="75" y="90">SCORE</text>
+      </svg>
+    </div>
+
+    <div class="results-message" id="results-msg"></div>
+
+    <div class="review-header">QUESTION REVIEW</div>
+    <div id="review-list"></div>
+
+    <button class="take-again-btn" onclick="resetQuiz()">&#8635; Take Again</button>
+  </div>
+
+</div><!-- end scroll-card -->
+
+<script>
+  const questions = [
+    {
+      text: "What did the assembly of Israel ask Rehoboam when they gathered at Shechem?",
+      correct: 'B',
+      choices: {
+        A: "To allow them to worship at local shrines rather than traveling to Jerusalem",
+        B: "To lighten the heavy yoke and hard service his father Solomon had placed on them",
+        C: "To release Jeroboam from exile in Egypt immediately",
+        D: "To divide the kingdom equally between the tribes of Judah and Ephraim"
+      },
+      ref: "1 Kings 12:4"
+    },
+    {
+      text: "Rehoboam rejected the counsel of the elders who had served his father. Whose advice did he follow instead?",
+      correct: 'C',
+      choices: {
+        A: "The priests and Levites who served in the temple at Jerusalem",
+        B: "Jeroboam&#39;s former advisors who urged severity to prevent rebellion",
+        C: "The young men who had grown up with him and now stood before him",
+        D: "His mother&#39;s family, who counseled strength over diplomacy"
+      },
+      ref: "1 Kings 12:8-10"
+    },
+    {
+      text: "Rehoboam warned the people that his father had disciplined them with whips. What did he threaten to use instead?",
+      correct: 'A',
+      choices: {
+        A: "Scorpions",
+        B: "Chains of iron",
+        C: "Fire",
+        D: "The edge of the sword"
+      },
+      ref: "1 Kings 12:14"
+    },
+    {
+      text: "When Rehoboam mustered 180,000 warriors to fight Jeroboam and reclaim the northern tribes, God sent the prophet Shemaiah to stop him. What reason did God give for forbidding the war?",
+      correct: 'D',
+      choices: {
+        A: "Rehoboam&#39;s army was too small to prevail against all Israel",
+        B: "Egypt was preparing to invade and Judah needed its forces for defense",
+        C: "Israel had made a covenant that God commanded Judah to honor",
+        D: "This thing was from the LORD"
+      },
+      ref: "1 Kings 12:24"
+    },
+    {
+      text: "Jeroboam set up two golden calves so his people would not travel to Jerusalem to worship. In which two cities did he place them?",
+      correct: 'B',
+      choices: {
+        A: "Shechem and Tirzah",
+        B: "Bethel and Dan",
+        C: "Gilgal and Mizpah",
+        D: "Samaria and Shiloh"
+      },
+      ref: "1 Kings 12:29"
+    },
+    {
+      text: "A man of God came from Judah and prophesied against Jeroboam&#39;s altar at Bethel. What sign did he give that the altar would one day be desecrated?",
+      correct: 'C',
+      choices: {
+        A: "Fire from heaven would consume the altar",
+        B: "An earthquake would shake the sanctuary and bring down its walls",
+        C: "The altar would be torn down and its ashes poured out",
+        D: "The altar would crack in two from top to bottom"
+      },
+      ref: "1 Kings 13:3"
+    },
+    {
+      text: "God commanded the man of God not to eat, drink, or return by the way he came. How did the old prophet of Bethel deceive him into disobeying?",
+      correct: 'A',
+      choices: {
+        A: "He claimed an angel had spoken to him commanding him to bring the man of God back to eat and drink",
+        B: "He told him the king had repented and God had lifted the restriction",
+        C: "He warned him that soldiers were lying in ambush on his original route",
+        D: "He said God had sent a new message through the old prophet&#39;s son"
+      },
+      ref: "1 Kings 13:18"
+    },
+    {
+      text: "What judgment did God announce against the man of God for disobeying his command by eating in Bethel?",
+      correct: 'D',
+      choices: {
+        A: "His prophecy against Jeroboam&#39;s altar would be nullified",
+        B: "He would wander without rest until he returned to his homeland in Judah",
+        C: "He was struck with leprosy as a sign of God&#39;s displeasure",
+        D: "His body would not be buried in the tomb of his fathers"
+      },
+      ref: "1 Kings 13:21-22"
+    },
+    {
+      text: "What made the scene on the road after the man of God was struck down especially remarkable?",
+      correct: 'B',
+      choices: {
+        A: "A second lion appeared and guarded the body from other scavengers",
+        B: "The lion had killed him but had not eaten his body, and both the lion and the donkey stood peacefully beside the corpse",
+        C: "Ravens circled above throughout the night to mark the location",
+        D: "The body was found in the posture of prayer with hands outstretched"
+      },
+      ref: "1 Kings 13:28"
+    },
+    {
+      text: "According to Ahijah&#39;s prophecy in 1 Kings 14, why would Jeroboam&#39;s sick son Abijah be the only member of the household to receive a proper burial and mourning?",
+      correct: 'C',
+      choices: {
+        A: "He was the firstborn heir and the people would mourn him as their future king",
+        B: "He had been dedicated from birth to serve in the sanctuary at Shiloh",
+        C: "He was the only one in Jeroboam&#39;s house in whom the LORD found something good",
+        D: "He had refused to bow before the golden calves at Bethel and Dan"
+      },
+      ref: "1 Kings 14:13"
+    }
+  ];
+
+  let score = 0;
+  let userAnswers = [];
+  const total = questions.length;
+
+  function answer(qNum, chosen, correct) {
+    const block = document.getElementById('q' + qNum);
+    const btns = block.querySelectorAll('.choice-btn');
+    const letters = ['A','B','C','D'];
+
+    btns.forEach((btn, i) => {
+      btn.disabled = true;
+      const l = letters[i];
+      if (l === correct) {
+        btn.classList.add(chosen === correct ? 'correct' : 'revealed');
+      } else if (l === chosen) {
+        btn.classList.add('wrong');
+      }
+    });
+
+    const isCorrect = chosen === correct;
+    if (isCorrect) score++;
+    userAnswers.push({ qNum, chosen, correct, isCorrect, ref: questions[qNum-1].ref, text: questions[qNum-1].text, correctText: questions[qNum-1].choices[correct] });
+
+    const fb = document.getElementById('fb' + qNum);
+    fb.classList.add('show');
+    const fv = document.getElementById('fv' + qNum);
+    fv.className = 'feedback-verdict ' + (isCorrect ? 'correct-v' : 'wrong-v');
+    fv.textContent = isCorrect ? '✓ Correct' : '✗ Incorrect';
+
+    document.getElementById('nb' + qNum).classList.add('show');
+
+    // Update progress
+    const done = userAnswers.length;
+    const pct = Math.round((done / total) * 100);
+    document.getElementById('prog-bar').style.width = pct + '%';
+    document.getElementById('prog-pct').textContent = pct + '%';
+    if (done < total) {
+      document.getElementById('prog-label').textContent = 'QUESTION ' + (done + 1) + ' OF ' + total;
+    } else {
+      document.getElementById('prog-label').textContent = 'COMPLETE';
+    }
+  }
+
+  function next(qNum) {
+    document.getElementById('q' + qNum).classList.remove('active');
+    if (qNum < total) {
+      document.getElementById('q' + (qNum + 1)).classList.add('active');
+    }
+  }
+
+  function finish() {
+    document.getElementById('q10').classList.remove('active');
+    const rs = document.getElementById('results-screen');
+    rs.classList.add('active');
+
+    // Animate ring
+    const circumference = 377;
+    const offset = circumference - (score / total) * circumference;
+    const ringFill = document.getElementById('ring-fill');
+    const pct = Math.round((score / total) * 100);
+    ringFill.style.stroke = pct >= 70 ? '#1a5c2a' : pct >= 50 ? '#c9a84c' : '#8b1a1a';
+    setTimeout(() => { ringFill.style.strokeDashoffset = offset; }, 100);
+    document.getElementById('ring-num').textContent = score + '/' + total;
+
+    // Message
+    let msg;
+    if (score === 10) msg = "Perfect score — you read the fracture of the kingdom and the tragedies of 1 Kings 12–14 with the eyes of a careful scribe. The sins of Jeroboam echo through Israel’s history for centuries.";
+    else if (score >= 8) msg = "Excellent work. The stories of Rehoboam’s folly, Jeroboam’s idolatry, and the unnamed man of God’s fatal compromise are rich with detail you clearly absorbed.";
+    else if (score >= 6) msg = "Good effort. These chapters are dense with drama and warning — a second reading will sharpen your eye for the details the Spirit preserved for our instruction.";
+    else if (score >= 4) msg = "Keep pressing in. The sins of Jeroboam and the tragedy of the deceived prophet hold warnings the later prophets would return to again and again.";
+    else msg = "These are layered and sobering chapters. Return to the text and let the weight of the kingdom’s fracture — and the grace still shown within judgment — sink in.";
+    document.getElementById('results-msg').textContent = msg;
+
+    // Review list
+    const reviewList = document.getElementById('review-list');
+    userAnswers.forEach((a, i) => {
+      const div = document.createElement('div');
+      div.className = 'review-item';
+      const icon = a.isCorrect ? '✅' : '❌';
+      const ansClass = a.isCorrect ? 'r-correct' : 'r-wrong';
+      div.innerHTML = `
+        <div class="review-icon">${icon}</div>
+        <div class="review-q">
+          <strong>Q${i+1}: ${a.text}</strong>
+          <div class="review-ans ${ansClass}">
+            ${a.isCorrect ? 'Correct (' + a.ref + ')' : 'Wrong &mdash; ' + a.ref}
+          </div>
+        </div>`;
+      reviewList.appendChild(div);
+    });
+  }
+
+  function resetQuiz() {
+    score = 0;
+    userAnswers = [];
+
+    // Reset all question blocks
+    for (let i = 1; i <= total; i++) {
+      const block = document.getElementById('q' + i);
+      block.classList.remove('active');
+      block.querySelectorAll('.choice-btn').forEach(b => {
+        b.disabled = false;
+        b.classList.remove('correct','wrong','revealed');
+      });
+      document.getElementById('fb' + i).classList.remove('show');
+      document.getElementById('nb' + i).classList.remove('show');
+    }
+
+    // Reset progress
+    document.getElementById('prog-bar').style.width = '0%';
+    document.getElementById('prog-pct').textContent = '0%';
+    document.getElementById('prog-label').textContent = 'QUESTION 1 OF 10';
+
+    // Hide results
+    const rs = document.getElementById('results-screen');
+    rs.classList.remove('active');
+    const ringFill = document.getElementById('ring-fill');
+    ringFill.style.strokeDashoffset = '377';
+    document.getElementById('ring-num').textContent = '0/10';
+    document.getElementById('review-list').innerHTML = '';
+
+    // Show first question
+    document.getElementById('q1').classList.add('active');
+  }
+</script>
+</body>
+</html>
