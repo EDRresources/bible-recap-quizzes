@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Recap Quiz — Day 175 · June 24, 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2c1a00;
+  }
+
+  .scroll-card {
+    width: 100%;
+    max-width: 760px;
+    background: linear-gradient(180deg, #f5e9d0 0%, #ede0c4 30%, #e8d8b8 70%, #dfd0a8 100%);
+    border: 2px solid #c9a84c;
+    border-radius: 4px;
+    box-shadow: 0 0 0 6px #0e0a04, 0 0 0 8px #c9a84c44, 0 8px 40px rgba(0,0,0,0.7);
+    padding: 40px 48px 48px;
+    position: relative;
+  }
+
+  .scroll-card::before, .scroll-card::after {
+    content: '';
+    display: block;
+    height: 12px;
+    background: linear-gradient(90deg, #c9a84c, #a07830, #c9a84c, #a07830, #c9a84c);
+    margin: 0 -48px;
+  }
+  .scroll-card::before { margin-bottom: 32px; border-radius: 4px 4px 0 0; }
+  .scroll-card::after  { margin-top: 36px; border-radius: 0 0 4px 4px; }
+
+  .header { text-align: center; margin-bottom: 24px; }
+
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    color: #7a5c20;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #2c1a00;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+
+  .passage-tag {
+    background: #c9a84c22;
+    border: 1px solid #c9a84c;
+    border-radius: 2px;
+    padding: 3px 10px;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: #7a5c20;
+    text-transform: uppercase;
+  }
+
+  .badges {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 2px;
+  }
+
+  .badge-challenging {
+    background: #8b1a1a22;
+    border: 1px solid #8b1a1a;
+    color: #8b1a1a;
+  }
+
+  .ornament {
+    text-align: center;
+    color: #c9a84c;
+    font-size: 20px;
+    margin: 8px 0 20px;
+    letter-spacing: 0.3em;
+  }
+
+  /* Progress bar */
+  .progress-container {
+    margin-bottom: 28px;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: #7a5c20;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .progress-track {
+    height: 6px;
+    background: #c9a84c33;
+    border-radius: 3px;
+    overflow: hidden;
+    border: 1px solid #c9a84c55;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #a07830);
+    border-radius: 3px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  /* Question */
+  .question-block {
+    animation: fadeIn 0.4s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .q-number {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: #7a5c20;
+    text-transform: uppercase;
+  }
+
+  .detail-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    background: #c9a84c33;
+    border: 1px solid #c9a84c;
+    color: #7a5c20;
+  }
+
+  .question-text {
+    font-size: 19px;
+    line-height: 1.55;
+    color: #1e1000;
+    margin-bottom: 20px;
+    font-weight: 400;
+  }
+
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: #c9a84c11;
+    border: 1.5px solid #c9a84c66;
+    border-radius: 3px;
+    padding: 12px 16px;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: 17px;
+    color: #2c1a00;
+    transition: background 0.15s, border-color 0.15s;
+    width: 100%;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: #c9a84c22;
+    border-color: #c9a84c;
+  }
+  .choice-btn:disabled { cursor: default; }
+
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 20px;
+    margin-top: 1px;
+  }
+
+  .choice-btn.correct {
+    background: #1a5c2a22;
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: #8b1a1a22;
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* Feedback */
+  .feedback-box {
+    display: none;
+    border-left: 3px solid #c9a84c;
+    padding: 12px 16px;
+    background: #c9a84c0d;
+    margin-bottom: 20px;
+    border-radius: 0 3px 3px 0;
+  }
+  .feedback-box.show { display: block; animation: fadeIn 0.3s ease; }
+  .feedback-box.correct-fb { border-color: #1a5c2a; background: #1a5c2a0d; }
+  .feedback-box.wrong-fb   { border-color: #8b1a1a; background: #8b1a1a0d; }
+
+  .feedback-verdict {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .correct-fb .feedback-verdict { color: #1a5c2a; }
+  .wrong-fb   .feedback-verdict { color: #8b1a1a; }
+
+  .feedback-text {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #2c1a00;
+  }
+  .feedback-ref {
+    font-style: italic;
+    color: #7a5c20;
+    font-size: 14px;
+    margin-top: 4px;
+  }
+
+  .next-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 10px 28px;
+    background: linear-gradient(135deg, #c9a84c, #a07830);
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    display: none;
+    transition: opacity 0.2s;
+  }
+  .next-btn:hover { opacity: 0.88; }
+  .next-btn.show { display: inline-block; }
+
+  /* Results */
+  #results-screen { display: none; }
+  #results-screen.show { display: block; animation: fadeIn 0.5s ease; }
+
+  .results-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #2c1a00;
+    margin-bottom: 6px;
+  }
+  .results-subtitle {
+    font-size: 16px;
+    color: #7a5c20;
+    font-style: italic;
+  }
+
+  .score-ring-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0 24px;
+  }
+  .score-ring-svg { transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: #c9a84c33; stroke-width: 10; }
+  .ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 283;
+    stroke-dashoffset: 283;
+    transition: stroke-dashoffset 1.2s ease;
+  }
+  .ring-fill.green  { stroke: #1a5c2a; }
+  .ring-fill.yellow { stroke: #c9a84c; }
+  .ring-fill.red    { stroke: #8b1a1a; }
+
+  .score-text-group { font-family: 'Cinzel', serif; }
+  .score-num { font-size: 32px; font-weight: 700; fill: #2c1a00; }
+  .score-denom { font-size: 16px; fill: #7a5c20; }
+
+  .results-message {
+    text-align: center;
+    font-size: 19px;
+    color: #2c1a00;
+    margin-bottom: 28px;
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #c9a84c55;
+    margin: 24px 0;
+  }
+
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #7a5c20;
+    margin-bottom: 16px;
+  }
+
+  .review-item {
+    border-left: 3px solid #c9a84c55;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    border-radius: 0 3px 3px 0;
+  }
+  .review-item.correct-rv { border-color: #1a5c2a; background: #1a5c2a0a; }
+  .review-item.wrong-rv   { border-color: #8b1a1a; background: #8b1a1a0a; }
+
+  .review-q {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e1000;
+    margin-bottom: 4px;
+    line-height: 1.4;
+  }
+  .review-answers {
+    font-size: 14px;
+    color: #2c1a00;
+    line-height: 1.5;
+  }
+  .review-correct-ans { color: #1a5c2a; font-weight: 600; }
+  .review-wrong-ans   { color: #8b1a1a; }
+  .review-ref { font-size: 13px; color: #7a5c20; font-style: italic; margin-top: 3px; }
+
+  .actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    margin-top: 28px;
+  }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 11px 30px;
+    background: linear-gradient(135deg, #c9a84c, #a07830);
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .take-again-btn:hover { opacity: 0.88; }
+</style>
+</head>
+<body>
+
+<div class="scroll-card">
+
+  <div class="header">
+    <div class="date-line">Wednesday, June 24, 2026 &middot; Day 175</div>
+    <div class="quiz-title">The Bible Recap Daily Quiz</div>
+    <div class="passage-tags">
+      <span class="passage-tag">2 Chronicles 10</span>
+      <span class="passage-tag">2 Chronicles 11</span>
+      <span class="passage-tag">2 Chronicles 12</span>
+    </div>
+    <div class="badges">
+      <span class="badge badge-challenging">Challenging</span>
+    </div>
+  </div>
+
+  <div class="ornament">&#10022; &#10022; &#10022;</div>
+
+  <div id="quiz-screen">
+    <div class="progress-container">
+      <div class="progress-label">
+        <span>Progress</span>
+        <span id="progress-text">Question 1 of 10</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <div id="question-area"></div>
+  </div>
+
+  <div id="results-screen">
+    <div class="results-header">
+      <div class="results-title">Quiz Complete</div>
+      <div class="results-subtitle">2 Chronicles 10–12</div>
+    </div>
+
+    <div class="score-ring-container">
+      <svg class="score-ring-svg" width="120" height="120" viewBox="0 0 120 120">
+        <circle class="ring-bg" cx="60" cy="60" r="45"/>
+        <circle class="ring-fill" id="ring-fill" cx="60" cy="60" r="45"/>
+        <g transform="rotate(90, 60, 60)">
+          <text class="score-num" id="score-num" x="60" y="55" text-anchor="middle" dominant-baseline="middle"></text>
+          <text class="score-denom" id="score-denom" x="60" y="76" text-anchor="middle" dominant-baseline="middle"></text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="results-message" id="results-message"></div>
+
+    <hr class="divider">
+
+    <div class="review-title">Question Review</div>
+    <div id="review-list"></div>
+
+    <div class="actions">
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  {
+    text: "When Rehoboam went to Shechem to be made king, the assembly of Israel sent for Jeroboam to come from Egypt. Who had caused Jeroboam to flee to Egypt in the first place?",
+    detail: false,
+    choices: ["David", "Ahijah the Shilonite", "Solomon", "Joab"],
+    correct: 2,
+    feedback: "Jeroboam had fled to Egypt from Solomon, who sought to kill him after Ahijah's prophecy. (2 Chronicles 10:2)",
+    ref: "2 Chronicles 10:2"
+  },
+  {
+    text: "The people asked Rehoboam to lighten the yoke his father had placed on them. His older counselors advised him to speak kind words. What did they say he should become to this people?",
+    detail: true,
+    choices: ["A servant to this people forever", "A shepherd to this people forever", "A father to this people forever", "A refuge to this people forever"],
+    correct: 0,
+    feedback: "The older counselors told Rehoboam, 'If you will be kind to this people and please them and speak good words to them, they will be your servants forever.' (2 Chronicles 10:7)",
+    ref: "2 Chronicles 10:7"
+  },
+  {
+    text: "Rehoboam followed the counsel of the young men. He said his little finger was thicker than his father's what?",
+    detail: true,
+    choices: ["Neck", "Arm", "Thighs", "Waist"],
+    correct: 2,
+    feedback: "Rehoboam told the people, 'My little finger is thicker than my father's thighs.' (2 Chronicles 10:10)",
+    ref: "2 Chronicles 10:10"
+  },
+  {
+    text: "The narrator explains that the king did not listen to the people because the turn of events was from God, in order to fulfill the word the LORD had spoken through which prophet?",
+    detail: false,
+    choices: ["Elijah", "Nathan", "Ahijah the Shilonite", "Shemaiah the man of God"],
+    correct: 2,
+    feedback: "2 Chronicles 10:15 states the turn was from God to fulfill the word he had spoken through Ahijah the Shilonite.",
+    ref: "2 Chronicles 10:15"
+  },
+  {
+    text: "When Rehoboam sent Adoniram — who was in charge of forced labor — to the northern tribes, what did the Israelites do?",
+    detail: false,
+    choices: ["They arrested him and brought him to Jeroboam", "They stoned him to death", "They beat him and sent him back to Jerusalem", "They forced him to work alongside the laborers"],
+    correct: 1,
+    feedback: "All Israel stoned Adoniram to death, and Rehoboam quickly mounted his chariot to flee to Jerusalem. (2 Chronicles 10:18)",
+    ref: "2 Chronicles 10:18"
+  },
+  {
+    text: "God sent the prophet Shemaiah to stop Rehoboam from going to war against the northern tribes to reclaim the kingdom. What message did Shemaiah deliver?",
+    detail: false,
+    choices: ["The division was permanent and could not be reversed by any army", "They must not go up or fight against their brothers, for this was God's doing", "Jeroboam would be defeated within three years if they were patient", "God would restore the kingdom after forty years in the wilderness"],
+    correct: 1,
+    feedback: "Shemaiah told Rehoboam and all Israel not to fight their brothers, 'for this thing is from me.' They obeyed and returned home. (2 Chronicles 11:4)",
+    ref: "2 Chronicles 11:4"
+  },
+  {
+    text: "Rehoboam fortified cities in Judah and Benjamin. According to 2 Chronicles 11, why were the Levites and priests from all the territories of Israel crucial to Rehoboam's early strength?",
+    detail: true,
+    choices: ["They brought offerings from the northern tribes that funded his building projects", "They left their lands and came to Judah and Jerusalem because Jeroboam had rejected them from serving as priests", "They organized the military conscription in the fortified cities", "They persuaded the northern tribes to continue paying tithes to the Jerusalem temple"],
+    correct: 1,
+    feedback: "Jeroboam appointed his own non-Levitical priests for the high places and golden calves, so the Levites throughout Israel abandoned their lands and came to Jerusalem, strengthening Judah. (2 Chronicles 11:13–14)",
+    ref: "2 Chronicles 11:13–14"
+  },
+  {
+    text: "Rehoboam took many wives and concubines. Among his wives, he loved one above all others. Who was she, and who was her father?",
+    detail: true,
+    choices: ["Mahalath, daughter of Jerimoth son of David", "Naamah the Ammonite, daughter of Shobach", "Maacah daughter of Absalom, whom he loved more than all his wives and concubines", "Abihail daughter of Eliab son of Jesse"],
+    correct: 2,
+    feedback: "Rehoboam loved Maacah daughter of Absalom more than all his other wives and concubines. (2 Chronicles 11:21)",
+    ref: "2 Chronicles 11:21"
+  },
+  {
+    text: "In the fifth year of Rehoboam's reign, Shishak king of Egypt attacked Jerusalem. The text says this happened because Rehoboam and all Israel had been unfaithful to the LORD. What did Shishak take from the temple?",
+    detail: false,
+    choices: ["The ark of the covenant and the bronze sea", "The treasures of the house of the LORD and the golden shields Solomon had made", "The ten golden lampstands and the altar of incense", "The bronze pillars Jachin and Boaz and the priests' vestments"],
+    correct: 1,
+    feedback: "Shishak carried off the treasures of the house of the LORD and the treasures of the royal palace, including the golden shields Solomon had made. (2 Chronicles 12:9)",
+    ref: "2 Chronicles 12:9"
+  },
+  {
+    text: "After Shemaiah declared that God had abandoned Judah to Shishak because they abandoned God, the princes and the king humbled themselves. What was God's response to their humbling, and what did the final verdict on Rehoboam's reign say about his character?",
+    detail: false,
+    choices: ["God restored all the plundered gold, and Rehoboam was remembered as a king who sought the LORD", "God granted some deliverance and would not pour out his wrath through Shishak; Rehoboam did evil because he had not set his heart to seek the LORD", "God turned Shishak's army against Egypt; Rehoboam was praised for his eventual faithfulness", "God gave Judah victory over the remaining Egyptians; Rehoboam was called righteous in his later years"],
+    correct: 1,
+    feedback: "Because they humbled themselves, God said his wrath would not be poured out through Shishak, though they would become servants to him. The chapter closes noting Rehoboam did evil because he did not set his heart to seek the LORD. (2 Chronicles 12:12, 14)",
+    ref: "2 Chronicles 12:12, 14"
+  }
+];
+
+let current = 0;
+let score = 0;
+let userAnswers = [];
+
+function renderQuestion() {
+  const q = questions[current];
+  const pct = (current / questions.length) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = `Question ${current + 1} of ${questions.length}`;
+
+  const letters = ['A','B','C','D'];
+  let choicesHTML = q.choices.map((c, i) => `
+    <button class="choice-btn" id="choice-${i}" onclick="selectAnswer(${i})">
+      <span class="choice-letter">${letters[i]}</span>
+      <span>${c}</span>
+    </button>
+  `).join('');
+
+  document.getElementById('question-area').innerHTML = `
+    <div class="question-block">
+      <div class="question-meta">
+        <span class="q-number">Question ${current + 1}</span>
+        ${q.detail ? '<span class="detail-badge">Detail</span>' : ''}
+      </div>
+      <div class="question-text">${q.text}</div>
+      <div class="choices">${choicesHTML}</div>
+      <div class="feedback-box" id="feedback-box">
+        <div class="feedback-verdict" id="feedback-verdict"></div>
+        <div class="feedback-text" id="feedback-text"></div>
+        <div class="feedback-ref" id="feedback-ref"></div>
+      </div>
+      <button class="next-btn" id="next-btn" onclick="nextQuestion()">
+        ${current === questions.length - 1 ? 'See Results' : 'Next Question'}
+      </button>
+    </div>
+  `;
+}
+
+function selectAnswer(idx) {
+  const q = questions[current];
+  const correct = q.correct;
+  userAnswers.push(idx);
+
+  const btns = document.querySelectorAll('.choice-btn');
+  btns.forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('feedback-box');
+  const verdict = document.getElementById('feedback-verdict');
+  const text = document.getElementById('feedback-text');
+  const ref = document.getElementById('feedback-ref');
+
+  if (idx === correct) {
+    score++;
+    btns[idx].classList.add('correct');
+    fb.classList.add('correct-fb', 'show');
+    verdict.textContent = 'Correct!';
+  } else {
+    btns[idx].classList.add('wrong');
+    btns[correct].classList.add('correct');
+    fb.classList.add('wrong-fb', 'show');
+    verdict.textContent = 'Incorrect';
+  }
+
+  text.textContent = q.feedback;
+  ref.textContent = q.ref;
+  document.getElementById('next-btn').classList.add('show');
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= questions.length) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  document.getElementById('quiz-screen').style.display = 'none';
+  const rs = document.getElementById('results-screen');
+  rs.classList.add('show');
+
+  document.getElementById('score-num').textContent = score;
+  document.getElementById('score-denom').textContent = `/ ${questions.length}`;
+
+  const pct = score / questions.length;
+  const circumference = 283;
+  const offset = circumference - (pct * circumference);
+  const ring = document.getElementById('ring-fill');
+  ring.classList.add(pct >= 0.8 ? 'green' : pct >= 0.5 ? 'yellow' : 'red');
+  setTimeout(() => { ring.style.strokeDashoffset = offset; }, 100);
+
+  let msg = '';
+  if (pct === 1)       msg = 'Perfect score — you read every verse with precision and care.';
+  else if (pct >= 0.8) msg = 'Excellent work! The division of the kingdom and its causes are clearly in your memory.';
+  else if (pct >= 0.6) msg = 'Solid effort. A second pass through Chronicles will sharpen the details.';
+  else if (pct >= 0.4) msg = 'Keep at it — these chapters are dense with kings, priests, and politics.';
+  else                 msg = 'This passage is rich with detail. Read it again slowly; it will open up.';
+  document.getElementById('results-message').textContent = msg;
+
+  const letters = ['A','B','C','D'];
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = questions.map((q, i) => {
+    const isCorrect = userAnswers[i] === q.correct;
+    return `
+      <div class="review-item ${isCorrect ? 'correct-rv' : 'wrong-rv'}">
+        <div class="review-q">${i+1}. ${q.text}</div>
+        <div class="review-answers">
+          ${!isCorrect ? `<span class="review-wrong-ans">Your answer: ${letters[userAnswers[i]]}. ${q.choices[userAnswers[i]]}</span><br>` : ''}
+          <span class="review-correct-ans">Correct: ${letters[q.correct]}. ${q.choices[q.correct]}</span>
+        </div>
+        <div class="review-ref">${q.ref}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function resetQuiz() {
+  current = 0; score = 0; userAnswers = [];
+  document.getElementById('results-screen').classList.remove('show');
+  document.getElementById('results-screen').style.display = '';
+  document.getElementById('quiz-screen').style.display = '';
+  renderQuestion();
+}
+
+renderQuestion();
+</script>
+</body>
+</html>
