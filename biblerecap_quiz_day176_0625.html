@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Recap Quiz — Day 176 · June 25, 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2c1a00;
+  }
+
+  .scroll-card {
+    width: 100%;
+    max-width: 760px;
+    background: linear-gradient(180deg, #f5e9d0 0%, #ede0c4 30%, #e8d8b8 70%, #dfd0a8 100%);
+    border: 2px solid #c9a84c;
+    border-radius: 4px;
+    box-shadow: 0 0 0 6px #0e0a04, 0 0 0 8px #c9a84c44, 0 8px 40px rgba(0,0,0,0.7);
+    padding: 40px 48px 48px;
+    position: relative;
+  }
+
+  .scroll-card::before, .scroll-card::after {
+    content: '';
+    display: block;
+    height: 12px;
+    background: linear-gradient(90deg, #c9a84c, #a07830, #c9a84c, #a07830, #c9a84c);
+    margin: 0 -48px;
+  }
+  .scroll-card::before { margin-bottom: 32px; border-radius: 4px 4px 0 0; }
+  .scroll-card::after  { margin-top: 36px; border-radius: 0 0 4px 4px; }
+
+  .header { text-align: center; margin-bottom: 24px; }
+
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    color: #7a5c20;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #2c1a00;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+
+  .passage-tag {
+    background: #c9a84c22;
+    border: 1px solid #c9a84c;
+    border-radius: 2px;
+    padding: 3px 10px;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: #7a5c20;
+    text-transform: uppercase;
+  }
+
+  .badges {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 2px;
+  }
+
+  .badge-challenging {
+    background: #8b1a1a22;
+    border: 1px solid #8b1a1a;
+    color: #8b1a1a;
+  }
+
+  .ornament {
+    text-align: center;
+    color: #c9a84c;
+    font-size: 20px;
+    margin: 8px 0 20px;
+    letter-spacing: 0.3em;
+  }
+
+  /* Progress bar */
+  .progress-container {
+    margin-bottom: 28px;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: #7a5c20;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .progress-track {
+    height: 6px;
+    background: #c9a84c33;
+    border-radius: 3px;
+    overflow: hidden;
+    border: 1px solid #c9a84c55;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #a07830);
+    border-radius: 3px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  /* Question */
+  .question-block {
+    animation: fadeIn 0.4s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .q-number {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: #7a5c20;
+    text-transform: uppercase;
+  }
+
+  .detail-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    background: #c9a84c33;
+    border: 1px solid #c9a84c;
+    color: #7a5c20;
+  }
+
+  .question-text {
+    font-size: 19px;
+    line-height: 1.55;
+    color: #1e1000;
+    margin-bottom: 20px;
+    font-weight: 400;
+  }
+
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: #c9a84c11;
+    border: 1.5px solid #c9a84c66;
+    border-radius: 3px;
+    padding: 12px 16px;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: 17px;
+    color: #2c1a00;
+    transition: background 0.15s, border-color 0.15s;
+    width: 100%;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: #c9a84c22;
+    border-color: #c9a84c;
+  }
+  .choice-btn:disabled { cursor: default; }
+
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 20px;
+    margin-top: 1px;
+  }
+
+  .choice-btn.correct {
+    background: #1a5c2a22;
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: #8b1a1a22;
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* Feedback */
+  .feedback-box {
+    display: none;
+    border-left: 3px solid #c9a84c;
+    padding: 12px 16px;
+    background: #c9a84c0d;
+    margin-bottom: 20px;
+    border-radius: 0 3px 3px 0;
+  }
+  .feedback-box.show { display: block; animation: fadeIn 0.3s ease; }
+  .feedback-box.correct-fb { border-color: #1a5c2a; background: #1a5c2a0d; }
+  .feedback-box.wrong-fb   { border-color: #8b1a1a; background: #8b1a1a0d; }
+
+  .feedback-verdict {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .correct-fb .feedback-verdict { color: #1a5c2a; }
+  .wrong-fb   .feedback-verdict { color: #8b1a1a; }
+
+  .feedback-text {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #2c1a00;
+  }
+  .feedback-ref {
+    font-style: italic;
+    color: #7a5c20;
+    font-size: 14px;
+    margin-top: 4px;
+  }
+
+  .next-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 10px 28px;
+    background: linear-gradient(135deg, #c9a84c, #a07830);
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    display: none;
+    transition: opacity 0.2s;
+  }
+  .next-btn:hover { opacity: 0.88; }
+  .next-btn.show { display: inline-block; }
+
+  /* Results */
+  #results-screen { display: none; }
+  #results-screen.show { display: block; animation: fadeIn 0.5s ease; }
+
+  .results-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #2c1a00;
+    margin-bottom: 6px;
+  }
+  .results-subtitle {
+    font-size: 16px;
+    color: #7a5c20;
+    font-style: italic;
+  }
+
+  .score-ring-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0 24px;
+  }
+  .score-ring-svg { transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: #c9a84c33; stroke-width: 10; }
+  .ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 283;
+    stroke-dashoffset: 283;
+    transition: stroke-dashoffset 1.2s ease;
+  }
+  .ring-fill.green  { stroke: #1a5c2a; }
+  .ring-fill.yellow { stroke: #c9a84c; }
+  .ring-fill.red    { stroke: #8b1a1a; }
+
+  .score-text-group { font-family: 'Cinzel', serif; }
+  .score-num { font-size: 32px; font-weight: 700; fill: #2c1a00; }
+  .score-denom { font-size: 16px; fill: #7a5c20; }
+
+  .results-message {
+    text-align: center;
+    font-size: 19px;
+    color: #2c1a00;
+    margin-bottom: 28px;
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #c9a84c55;
+    margin: 24px 0;
+  }
+
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #7a5c20;
+    margin-bottom: 16px;
+  }
+
+  .review-item {
+    border-left: 3px solid #c9a84c55;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    border-radius: 0 3px 3px 0;
+  }
+  .review-item.correct-rv { border-color: #1a5c2a; background: #1a5c2a0a; }
+  .review-item.wrong-rv   { border-color: #8b1a1a; background: #8b1a1a0a; }
+
+  .review-q {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e1000;
+    margin-bottom: 4px;
+    line-height: 1.4;
+  }
+  .review-answers {
+    font-size: 14px;
+    color: #2c1a00;
+    line-height: 1.5;
+  }
+  .review-correct-ans { color: #1a5c2a; font-weight: 600; }
+  .review-wrong-ans   { color: #8b1a1a; }
+  .review-ref { font-size: 13px; color: #7a5c20; font-style: italic; margin-top: 3px; }
+
+  .actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    margin-top: 28px;
+  }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 11px 30px;
+    background: linear-gradient(135deg, #c9a84c, #a07830);
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .take-again-btn:hover { opacity: 0.88; }
+</style>
+</head>
+<body>
+
+<div class="scroll-card">
+
+  <div class="header">
+    <div class="date-line">Thursday, June 25, 2026 &middot; Day 176</div>
+    <div class="quiz-title">The Bible Recap Daily Quiz</div>
+    <div class="passage-tags">
+      <span class="passage-tag">1 Kings 15</span>
+      <span class="passage-tag">2 Chronicles 13</span>
+      <span class="passage-tag">2 Chronicles 14</span>
+      <span class="passage-tag">2 Chronicles 15</span>
+      <span class="passage-tag">2 Chronicles 16</span>
+    </div>
+    <div class="badges">
+      <span class="badge badge-challenging">Challenging</span>
+    </div>
+  </div>
+
+  <div class="ornament">&#10022; &#10022; &#10022;</div>
+
+  <div id="quiz-screen">
+    <div class="progress-container">
+      <div class="progress-label">
+        <span>Progress</span>
+        <span id="progress-text">Question 1 of 10</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <div id="question-area"></div>
+  </div>
+
+  <div id="results-screen">
+    <div class="results-header">
+      <div class="results-title">Quiz Complete</div>
+      <div class="results-subtitle">1 Kings 15 &amp; 2 Chronicles 13–16</div>
+    </div>
+
+    <div class="score-ring-container">
+      <svg class="score-ring-svg" width="120" height="120" viewBox="0 0 120 120">
+        <circle class="ring-bg" cx="60" cy="60" r="45"/>
+        <circle class="ring-fill" id="ring-fill" cx="60" cy="60" r="45"/>
+        <g transform="rotate(90, 60, 60)">
+          <text class="score-num" id="score-num" x="60" y="55" text-anchor="middle" dominant-baseline="middle"></text>
+          <text class="score-denom" id="score-denom" x="60" y="76" text-anchor="middle" dominant-baseline="middle"></text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="results-message" id="results-message"></div>
+
+    <hr class="divider">
+
+    <div class="review-title">Question Review</div>
+    <div id="review-list"></div>
+
+    <div class="actions">
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  {
+    text: "According to 1 Kings 15:5, God did not cut off Judah for David's sake. What specific sin does the text name as the one exception to David's otherwise complete obedience?",
+    detail: true,
+    choices: [
+      "David had built high places for his foreign wives in Jerusalem",
+      "David had sinned in the matter of Uriah the Hittite",
+      "David had taken an unauthorized census of all Israel",
+      "David had worshipped at the altar Jeroboam set up in Bethel"
+    ],
+    correct: 1,
+    feedback: "1 Kings 15:5 praises David's lifelong faithfulness but carves out one exception: 'except in the matter of Uriah the Hittite.' This is a pointed reference to David's adultery with Bathsheba and his orchestrating Uriah's death.",
+    ref: "1 Kings 15:5"
+  },
+  {
+    text: "In his speech from Mount Zemaraim before battle, Abijah accused Jeroboam of seizing power unlawfully. By what specific term did he describe the covenant through which God gave the kingship to David's house permanently?",
+    detail: false,
+    choices: [
+      "A covenant of salt",
+      "A covenant of blood",
+      "An everlasting covenant",
+      "A covenant of fire and iron"
+    ],
+    correct: 0,
+    feedback: "Abijah declared that God had given the kingship to David and his sons by 'a covenant of salt' (2 Chronicles 13:5) — a covenant of salt being a binding, permanent agreement in the ancient Near East, associated with preservation and incorruptibility.",
+    ref: "2 Chronicles 13:5"
+  },
+  {
+    text: "During the battle between Abijah and Jeroboam, Jeroboam executed an ambush that surrounded Judah on both sides. What did the men of Judah do that immediately preceded God's intervention on their behalf?",
+    detail: false,
+    choices: [
+      "Abijah called a retreat toward the hill of Zemaraim to regroup",
+      "Abijah's generals broke through the front line by sheer force",
+      "They sent envoys to Jeroboam requesting terms of surrender",
+      "The men of Judah cried out to the LORD, and the priests blew the trumpets"
+    ],
+    correct: 3,
+    feedback: "Surrounded front and rear, 'the men of Judah raised the battle cry. And when the men of Judah shouted, God defeated Jeroboam and all Israel before Abijah and Judah.' The priests blowing the trumpets was part of this cry to God. (2 Chronicles 13:14–15)",
+    ref: "2 Chronicles 13:14–15"
+  },
+  {
+    text: "Asa's great military test came when a massive foreign army invaded from the south. Who led this invasion, and what was the size of his force?",
+    detail: false,
+    choices: [
+      "Shishak king of Egypt with an army of 1,200 chariots and 60,000 horsemen",
+      "Zerah the Cushite with an army of a million men and 300 chariots",
+      "Ben-hadad king of Syria with an army of 32 kings and their horses",
+      "Pul king of Assyria with a great host from the river Euphrates"
+    ],
+    correct: 1,
+    feedback: "Zerah the Cushite (Ethiopian) came out against Asa 'with an army of a million men and 300 chariots.' Asa prayed to the LORD, and God struck the Cushites. (2 Chronicles 14:9–12)",
+    ref: "2 Chronicles 14:9–12"
+  },
+  {
+    text: "After Asa's victory over the Cushites, a prophet came to him with a message urging him to take courage in his reforms. Who was this prophet?",
+    detail: false,
+    choices: [
+      "Hanani the seer",
+      "Jehu son of Hanani",
+      "Azariah son of Oded",
+      "Shemaiah the man of God"
+    ],
+    correct: 2,
+    feedback: "The Spirit of God came upon Azariah son of Oded, and he went out to meet Asa and told him: 'The LORD is with you while you are with him. If you seek him, he will be found by you.' (2 Chronicles 15:1–2)",
+    ref: "2 Chronicles 15:1–2"
+  },
+  {
+    text: "Both 1 Kings 15 and 2 Chronicles 15 record Asa removing his mother (or grandmother) Maacah from the position of queen mother. What was her offense, and what did Asa do with her idolatrous object?",
+    detail: false,
+    choices: [
+      "He removed her from being queen mother, cut down her Asherah image, and burned it at the Kidron Valley",
+      "He banished her to Egypt and confiscated all her property and wealth",
+      "He had her put to death in accordance with the Mosaic law against idolatry",
+      "He confined her to the palace under house arrest and stripped her of all titles"
+    ],
+    correct: 0,
+    feedback: "Asa removed Maacah from being queen mother because she had made a detestable image for Asherah. He cut down her image and burned it at the brook Kidron. (1 Kings 15:13; 2 Chronicles 15:16)",
+    ref: "1 Kings 15:13; 2 Chronicles 15:16"
+  },
+  {
+    text: "When Baasha of Israel threatened Judah by fortifying Ramah, Asa sent silver and gold from the temple treasury to Ben-hadad of Syria to break their alliance. The seer Hanani rebuked Asa for this. What happened to Hanani as a result?",
+    detail: false,
+    choices: [
+      "He fled to the wilderness to escape the king's anger",
+      "He was exiled to a foreign nation by royal decree",
+      "He was executed at the command of Asa",
+      "Asa was enraged and put him in prison; Asa also oppressed some of the people at that time"
+    ],
+    correct: 3,
+    feedback: "Asa was so angry at Hanani's rebuke that he put him in the stocks/prison. Furthermore, 'Asa inflicted cruelties upon some of the people at the same time.' (2 Chronicles 16:10)",
+    ref: "2 Chronicles 16:10"
+  },
+  {
+    text: "In what year of Asa's reign did his foot disease begin, and what does 2 Chronicles say he did — and failed to do — when it struck?",
+    detail: true,
+    choices: [
+      "The thirty-ninth year; he did not seek the LORD but sought physicians",
+      "The thirty-fifth year; he repented and sought the LORD but was not healed",
+      "The thirty-sixth year; he sought both the LORD and the physicians equally",
+      "The fortieth year; he sought the LORD in prayer but refused all medical help"
+    ],
+    correct: 0,
+    feedback: "In the thirty-ninth year of his reign, Asa was diseased in his feet. 'Yet even in his disease he did not seek the LORD, but sought help from physicians.' (2 Chronicles 16:12) — a stark contrast to his earlier piety.",
+    ref: "2 Chronicles 16:12"
+  },
+  {
+    text: "Baasha conspired against Nadab and killed him, then wiped out all of Jeroboam's house. 1 Kings 15 says this fulfilled a prophecy. Through which prophet had the LORD spoken that word?",
+    detail: false,
+    choices: [
+      "Elijah the Tishbite",
+      "Micaiah son of Imlah",
+      "Ahijah the Shilonite",
+      "Jehu son of Hanani"
+    ],
+    correct: 2,
+    feedback: "Baasha killed Nadab and destroyed all the house of Jeroboam 'according to the word of the LORD that he spoke by his servant Ahijah the Shilonite.' (1 Kings 15:29) Ahijah had earlier prophesied judgment on Jeroboam's dynasty.",
+    ref: "1 Kings 15:29"
+  },
+  {
+    text: "After routing Jeroboam's army, Abijah pressed his advantage and captured territory from Israel. Which three cities does 2 Chronicles 13 name as having been taken by Abijah?",
+    detail: true,
+    choices: [
+      "Samaria, Shechem, and Penuel",
+      "Bethel, Jeshanah, and Ephron",
+      "Ramah, Gibeah, and Mizpah",
+      "Dan, Tirzah, and Shiloh"
+    ],
+    correct: 1,
+    feedback: "After God's decisive victory, 'Abijah pursued Jeroboam and took cities from him, Bethel with its villages and Jeshanah with its villages and Ephron with its villages.' (2 Chronicles 13:19) — Bethel being especially significant as the site of one of Jeroboam's golden calves.",
+    ref: "2 Chronicles 13:19"
+  }
+];
+
+let current = 0;
+let score = 0;
+let userAnswers = [];
+
+function renderQuestion() {
+  const q = questions[current];
+  const pct = (current / questions.length) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = `Question ${current + 1} of ${questions.length}`;
+
+  const letters = ['A','B','C','D'];
+  let choicesHTML = q.choices.map((c, i) => `
+    <button class="choice-btn" onclick="selectAnswer(${i})">
+      <span class="choice-letter">${letters[i]}</span>
+      <span>${c}</span>
+    </button>`).join('');
+
+  const metaHTML = `
+    <div class="question-meta">
+      <span class="q-number">Question ${current + 1}</span>
+      ${q.detail ? '<span class="detail-badge">Detail</span>' : ''}
+    </div>`;
+
+  document.getElementById('question-area').innerHTML = `
+    <div class="question-block">
+      ${metaHTML}
+      <div class="question-text">${q.text}</div>
+      <div class="choices">${choicesHTML}</div>
+      <div class="feedback-box" id="feedback-box">
+        <div class="feedback-verdict" id="feedback-verdict"></div>
+        <div class="feedback-text" id="feedback-text"></div>
+        <div class="feedback-ref" id="feedback-ref"></div>
+      </div>
+      <button class="next-btn" id="next-btn" onclick="nextQuestion()">
+        ${current < questions.length - 1 ? 'Next Question' : 'See Results'}
+      </button>
+    </div>`;
+}
+
+function selectAnswer(idx) {
+  const q = questions[current];
+  const btns = document.querySelectorAll('.choice-btn');
+  btns.forEach(b => b.disabled = true);
+
+  const isCorrect = idx === q.correct;
+  if (isCorrect) score++;
+  userAnswers.push({ chosen: idx, correct: q.correct, isCorrect });
+
+  btns[idx].classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) btns[q.correct].classList.add('correct');
+
+  const fb = document.getElementById('feedback-box');
+  fb.className = 'feedback-box show ' + (isCorrect ? 'correct-fb' : 'wrong-fb');
+  document.getElementById('feedback-verdict').textContent = isCorrect ? 'Correct' : 'Incorrect';
+  document.getElementById('feedback-text').textContent = q.feedback;
+  document.getElementById('feedback-ref').textContent = q.ref;
+
+  document.getElementById('next-btn').classList.add('show');
+}
+
+function nextQuestion() {
+  current++;
+  if (current < questions.length) {
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('quiz-screen').style.display = 'none';
+  const rs = document.getElementById('results-screen');
+  rs.classList.add('show');
+
+  document.getElementById('score-num').textContent = score;
+  document.getElementById('score-denom').textContent = `/ ${questions.length}`;
+
+  const pct = score / questions.length;
+  const circumference = 283;
+  const offset = circumference - (circumference * pct);
+  const ring = document.getElementById('ring-fill');
+  ring.className = 'ring-fill ' + (pct >= 0.8 ? 'green' : pct >= 0.5 ? 'yellow' : 'red');
+  setTimeout(() => { ring.style.strokeDashoffset = offset; }, 100);
+
+  const messages = [
+    { min: 10, text: "Perfect score — you read every verse carefully. May this word dwell richly in you." },
+    { min: 8,  text: "Excellent work. The kings of Israel and Judah are coming into focus." },
+    { min: 6,  text: "Good effort. The divided kingdom is complex — keep pressing into the text." },
+    { min: 4,  text: "Keep reading closely. These chapters reward careful attention." },
+    { min: 0,  text: "The story of Asa is one of warning and grace — take another look and try again." }
+  ];
+  const msg = messages.find(m => score >= m.min);
+  document.getElementById('results-message').textContent = msg.text;
+
+  const letters = ['A','B','C','D'];
+  const reviewHTML = questions.map((q, i) => {
+    const ua = userAnswers[i];
+    const cls = ua.isCorrect ? 'correct-rv' : 'wrong-rv';
+    const chosenText = ua.isCorrect
+      ? `<span class="review-correct-ans">${letters[ua.chosen]}. ${q.choices[ua.chosen]}</span>`
+      : `<span class="review-wrong-ans">${letters[ua.chosen]}. ${q.choices[ua.chosen]}</span>` +
+        ` &rarr; <span class="review-correct-ans">${letters[ua.correct]}. ${q.choices[ua.correct]}</span>`;
+    return `
+      <div class="review-item ${cls}">
+        <div class="review-q">Q${i+1}. ${q.text}</div>
+        <div class="review-answers">${chosenText}</div>
+        <div class="review-ref">${q.ref}</div>
+      </div>`;
+  }).join('');
+  document.getElementById('review-list').innerHTML = reviewHTML;
+}
+
+function resetQuiz() {
+  current = 0; score = 0; userAnswers = [];
+  document.getElementById('results-screen').classList.remove('show');
+  document.getElementById('results-screen').style.display = '';
+  document.getElementById('quiz-screen').style.display = '';
+  document.getElementById('progress-fill').style.width = '0%';
+  document.getElementById('ring-fill').style.strokeDashoffset = '283';
+  renderQuestion();
+}
+
+renderQuestion();
+</script>
+</body>
+</html>
