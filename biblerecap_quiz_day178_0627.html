@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Recap Quiz — Day 178</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 40px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2c1a08;
+  }
+
+  /* ── Parchment card ── */
+  .card {
+    background: linear-gradient(160deg, #f5e9c9 0%, #ecddb0 40%, #e4d09a 70%, #d9c285 100%);
+    border: 2px solid #c9a84c;
+    border-radius: 4px;
+    box-shadow:
+      0 0 0 1px #8a6a20,
+      0 8px 40px rgba(0,0,0,0.7),
+      inset 0 1px 0 rgba(255,255,255,0.4);
+    max-width: 780px;
+    width: 100%;
+    padding: 48px 52px;
+    position: relative;
+  }
+
+  /* Corner ornaments */
+  .card::before, .card::after {
+    content: '✦';
+    position: absolute;
+    font-size: 18px;
+    color: #c9a84c;
+  }
+  .card::before { top: 12px; left: 16px; }
+  .card::after  { top: 12px; right: 16px; }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    border-bottom: 1px solid #c9a84c;
+    padding-bottom: 24px;
+    margin-bottom: 28px;
+  }
+
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #7a5c1e;
+    margin-bottom: 6px;
+  }
+
+  .title {
+    font-family: 'Cinzel', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a0f00;
+    line-height: 1.2;
+    margin-bottom: 14px;
+  }
+
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .passage-tag {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: #5a3e10;
+    border: 1px solid #c9a84c;
+    padding: 3px 10px;
+    border-radius: 2px;
+    background: rgba(201,168,76,0.12);
+  }
+
+  .badges {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    padding: 4px 12px;
+    border-radius: 2px;
+  }
+
+  .badge-challenging {
+    background: #1a0f00;
+    color: #c9a84c;
+    border: 1px solid #c9a84c;
+  }
+
+  /* ── Progress bar ── */
+  .progress-wrap {
+    margin-bottom: 32px;
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #7a5c1e;
+    margin-bottom: 6px;
+  }
+
+  .progress-track {
+    height: 5px;
+    background: rgba(201,168,76,0.2);
+    border-radius: 3px;
+    overflow: hidden;
+    border: 1px solid rgba(201,168,76,0.3);
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #8a6a20, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  /* ── Question block ── */
+  .question-block {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .question-block.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .q-number {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #7a5c1e;
+  }
+
+  .detail-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    background: #5a3e10;
+    color: #f5e9c9;
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+
+  .question-text {
+    font-size: 19px;
+    font-weight: 600;
+    color: #1a0f00;
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+
+  /* ── Answer choices ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+
+  .choice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    border: 1.5px solid #c9a84c;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.25);
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    font-size: 16px;
+    line-height: 1.4;
+    color: #2c1a08;
+  }
+
+  .choice:hover:not(.locked) {
+    background: rgba(201,168,76,0.18);
+    border-color: #8a6a20;
+    transform: translateX(3px);
+  }
+
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 20px;
+    margin-top: 2px;
+  }
+
+  .choice.correct {
+    background: rgba(26,92,42,0.15);
+    border-color: #1a5c2a;
+  }
+
+  .choice.correct .choice-letter { color: #1a5c2a; }
+
+  .choice.wrong {
+    background: rgba(139,26,26,0.12);
+    border-color: #8b1a1a;
+  }
+
+  .choice.wrong .choice-letter { color: #8b1a1a; }
+
+  .choice.locked { cursor: default; }
+
+  /* ── Feedback ── */
+  .feedback {
+    display: none;
+    border-left: 3px solid #c9a84c;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    background: rgba(201,168,76,0.08);
+    border-radius: 0 3px 3px 0;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .feedback.show { display: block; }
+
+  .feedback-result {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  .feedback-result.correct-text { color: #1a5c2a; }
+  .feedback-result.wrong-text   { color: #8b1a1a; }
+
+  .feedback-ref {
+    font-size: 13px;
+    font-style: italic;
+    color: #5a3e10;
+    margin-bottom: 4px;
+  }
+
+  .feedback-body {
+    font-size: 15px;
+    color: #2c1a08;
+    line-height: 1.55;
+  }
+
+  /* ── Navigation ── */
+  .nav-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 12px 28px;
+    border: 1.5px solid #c9a84c;
+    border-radius: 2px;
+    background: #1a0f00;
+    color: #c9a84c;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .nav-btn:hover { background: #c9a84c; color: #1a0f00; }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+  /* ── Divider ornament ── */
+  .ornament {
+    text-align: center;
+    color: #c9a84c;
+    font-size: 16px;
+    letter-spacing: 8px;
+    margin: 20px 0;
+  }
+
+  /* ── Results screen ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+  }
+
+  #results-screen.show { display: block; }
+
+  .score-ring-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 24px 0;
+  }
+
+  .score-ring-svg circle { transition: stroke-dashoffset 1.2s ease; }
+
+  .score-ring-label {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    font-weight: 700;
+    fill: #1a0f00;
+  }
+
+  .score-ring-sub {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    fill: #7a5c1e;
+  }
+
+  .result-message {
+    font-family: 'Cinzel', serif;
+    font-size: 15px;
+    letter-spacing: 1px;
+    color: #1a0f00;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+
+  .result-sub {
+    font-size: 15px;
+    font-style: italic;
+    color: #5a3e10;
+    margin-bottom: 28px;
+  }
+
+  /* Review */
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: #7a5c1e;
+    text-align: left;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #c9a84c;
+    padding-bottom: 8px;
+  }
+
+  .review-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(201,168,76,0.25);
+    text-align: left;
+  }
+
+  .review-icon {
+    font-size: 14px;
+    min-width: 20px;
+    margin-top: 2px;
+  }
+
+  .review-q { font-size: 14px; color: #2c1a08; line-height: 1.45; }
+  .review-a { font-size: 13px; font-style: italic; color: #5a3e10; margin-top: 3px; }
+
+  @media (max-width: 600px) {
+    .card { padding: 28px 20px; }
+    .title { font-size: 20px; }
+    .question-text { font-size: 17px; }
+    .choice { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="date-line">SATURDAY, JUNE 27, 2026 &middot; DAY 178</div>
+    <div class="title">The Bible Recap<br>Daily Quiz</div>
+    <div class="passage-tags">
+      <span class="passage-tag">1 KINGS 17</span>
+      <span class="passage-tag">1 KINGS 18</span>
+      <span class="passage-tag">1 KINGS 19</span>
+      <span class="passage-tag">2 CHRONICLES 18</span>
+    </div>
+    <div class="badges">
+      <span class="badge badge-challenging">CHALLENGING</span>
+    </div>
+  </div>
+
+  <!-- Quiz Area -->
+  <div id="quiz-area">
+
+    <!-- Progress -->
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span id="prog-text">QUESTION 1 OF 10</span>
+        <span id="prog-pct">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-header">
+        <span class="q-number">QUESTION 1</span>
+      </div>
+      <div class="question-text">When God directed Elijah to go into hiding at the start of the drought, at what location did He command him to camp?</div>
+      <div class="choices">
+        <div class="choice" onclick="answer(this,'q1','A','correct')">
+          <span class="choice-letter">A</span>
+          <span>The Kerith Ravine, east of the Jordan</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q1','B','wrong')">
+          <span class="choice-letter">B</span>
+          <span>The wilderness of Beersheba near a broom tree</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q1','C','wrong')">
+          <span class="choice-letter">C</span>
+          <span>A cave on Mount Horeb in the wilderness</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q1','D','wrong')">
+          <span class="choice-letter">D</span>
+          <span>The town gate of Zarephath in Sidon</span>
+        </div>
+      </div>
+      <div class="feedback" id="fb-q1">
+        <div class="feedback-result" id="fb-q1-result"></div>
+        <div class="feedback-ref">1 Kings 17:3</div>
+        <div class="feedback-body">God told Elijah, "Leave here, turn eastward and hide in the Kerith Ravine, east of the Jordan." The brook provided water there until it dried up — at which point God redirected Elijah to Zarephath. Beersheba and the cave on Horeb come later in the story, in chapter 19.</div>
+      </div>
+      <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="nav-btn" id="next-q1" onclick="nextQ(1)" disabled>NEXT &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-header">
+        <span class="q-number">QUESTION 2</span>
+        <span class="detail-badge">DETAIL</span>
+      </div>
+      <div class="question-text">According to 1 Kings 17:6, in what precise manner did the ravens supply Elijah with food at the Kerith Ravine?</div>
+      <div class="choices">
+        <div class="choice" onclick="answer(this,'q2','A','wrong')">
+          <span class="choice-letter">A</span>
+          <span>They brought him grain each morning and meat every third evening</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q2','B','correct')">
+          <span class="choice-letter">B</span>
+          <span>They brought him bread and meat in the morning and bread and meat in the evening</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q2','C','wrong')">
+          <span class="choice-letter">C</span>
+          <span>They brought him flesh only, both morning and evening, without bread</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q2','D','wrong')">
+          <span class="choice-letter">D</span>
+          <span>They brought him bread in the morning and water in the evening</span>
+        </div>
+      </div>
+      <div class="feedback" id="fb-q2">
+        <div class="feedback-result" id="fb-q2-result"></div>
+        <div class="feedback-ref">1 Kings 17:6</div>
+        <div class="feedback-body">The text is specific: "The ravens brought him bread and meat in the morning and bread and meat in the evening." Both bread and meat were provided twice daily. God's provision through unclean birds in a drought-stricken land demonstrates that He is not limited by natural means or ceremonial categories.</div>
+      </div>
+      <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="nav-btn" id="next-q2" onclick="nextQ(2)" disabled>NEXT &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-header">
+        <span class="q-number">QUESTION 3</span>
+      </div>
+      <div class="question-text">What was the widow of Zarephath doing when Elijah first encountered her?</div>
+      <div class="choices">
+        <div class="choice" onclick="answer(this,'q3','A','wrong')">
+          <span class="choice-letter">A</span>
+          <span>Drawing water from the city well for her son</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q3','B','wrong')">
+          <span class="choice-letter">B</span>
+          <span>Praying at the city gate for God to send provision</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q3','C','correct')">
+          <span class="choice-letter">C</span>
+          <span>Gathering sticks at the town gate</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q3','D','wrong')">
+          <span class="choice-letter">D</span>
+          <span>Weeping over her dying son's sickbed inside her home</span>
+        </div>
+      </div>
+      <div class="feedback" id="fb-q3">
+        <div class="feedback-result" id="fb-q3-result"></div>
+        <div class="feedback-ref">1 Kings 17:10</div>
+        <div class="feedback-body">When Elijah arrived at the town gate of Zarephath, "a widow was there gathering sticks." Elijah called to her and asked first for water, then for bread. Her response revealed she was preparing a final meal before expected starvation — a context that makes Elijah's request, and God's subsequent provision, all the more striking.</div>
+      </div>
+      <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="nav-btn" id="next-q3" onclick="nextQ(3)" disabled>NEXT &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-header">
+        <span class="q-number">QUESTION 4</span>
+        <span class="detail-badge">DETAIL</span>
+      </div>
+      <div class="question-text">When Elijah asked the widow of Zarephath for bread, what did she say she had left?</div>
+      <div class="choices">
+        <div class="choice" onclick="answer(this,'q4','A','wrong')">
+          <span class="choice-letter">A</span>
+          <span>A small measure of barley and a cruse of olive oil</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q4','B','wrong')">
+          <span class="choice-letter">B</span>
+          <span>Enough flour for one small loaf and no oil at all</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q4','C','wrong')">
+          <span class="choice-letter">C</span>
+          <span>A bit of meal in a bowl and a few drops of oil in a flask</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q4','D','correct')">
+          <span class="choice-letter">D</span>
+          <span>A handful of flour in a jar and a little oil in a jug</span>
+        </div>
+      </div>
+      <div class="feedback" id="fb-q4">
+        <div class="feedback-result" id="fb-q4-result"></div>
+        <div class="feedback-ref">1 Kings 17:12</div>
+        <div class="feedback-body">The widow said, "I don't have any bread — only a handful of flour in a jar and a little oil in a jug." The miracle of God's ongoing provision was that these two minimal quantities never ran out until the drought ended — a picture of God sustaining life from what appears to be nothing.</div>
+      </div>
+      <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="nav-btn" id="next-q4" onclick="nextQ(4)" disabled>NEXT &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-header">
+        <span class="q-number">QUESTION 5</span>
+      </div>
+      <div class="question-text">When Ahab finally saw Elijah after years of drought, what accusation did he level at him?</div>
+      <div class="choices">
+        <div class="choice" onclick="answer(this,'q5','A','correct')">
+          <span class="choice-letter">A</span>
+          <span>"Is that you, you troubler of Israel?"</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q5','B','wrong')">
+          <span class="choice-letter">B</span>
+          <span>"You enemy of the king and the gods of Israel!"</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q5','C','wrong')">
+          <span class="choice-letter">C</span>
+          <span>"You who have hidden yourself from us and left the people to die!"</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q5','D','wrong')">
+          <span class="choice-letter">D</span>
+          <span>"You false prophet who serves a powerless God!"</span>
+        </div>
+      </div>
+      <div class="feedback" id="fb-q5">
+        <div class="feedback-result" id="fb-q5-result"></div>
+        <div class="feedback-ref">1 Kings 18:17</div>
+        <div class="feedback-body">Ahab greeted Elijah with "Is that you, you troubler of Israel?" Elijah's reply is theologically pointed: he turns the accusation back on Ahab, saying it is Ahab who has troubled Israel by abandoning God's commands and following the Baals. The true troubler was the unfaithful king, not the faithful prophet.</div>
+      </div>
+      <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="nav-btn" id="next-q5" onclick="nextQ(5)" disabled>NEXT &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-header">
+        <span class="q-number">QUESTION 6</span>
+        <span class="detail-badge">DETAIL</span>
+      </div>
+      <div class="question-text">At Mount Carmel, Elijah challenged the false prophets summoned there. What was the precise breakdown of their numbers?</div>
+      <div class="choices">
+        <div class="choice" onclick="answer(this,'q6','A','wrong')">
+          <span class="choice-letter">A</span>
+          <span>400 prophets of Baal and 400 prophets of Asherah</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q6','B','correct')">
+          <span class="choice-letter">B</span>
+          <span>450 prophets of Baal and 400 prophets of Asherah</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q6','C','wrong')">
+          <span class="choice-letter">C</span>
+          <span>850 prophets of Baal, with no prophets of Asherah present</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q6','D','wrong')">
+          <span class="choice-letter">D</span>
+          <span>400 prophets of Baal and 450 prophets of Asherah</span>
+        </div>
+      </div>
+      <div class="feedback" id="fb-q6">
+        <div class="feedback-result" id="fb-q6-result"></div>
+        <div class="feedback-ref">1 Kings 18:19</div>
+        <div class="feedback-body">Elijah summoned "the 450 prophets of Baal and the 400 prophets of Asherah." The prophets of Asherah eat at Jezebel's table — a detail that underscores her personal role in promoting this idolatry. Elijah faced 850 false prophets alone, making God&#39;s vindication through fire all the more dramatic.</div>
+      </div>
+      <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="nav-btn" id="next-q6" onclick="nextQ(6)" disabled>NEXT &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-header">
+        <span class="q-number">QUESTION 7</span>
+      </div>
+      <div class="question-text">After fire from the LORD consumed Elijah's sacrifice on Mount Carmel, what became of the prophets of Baal?</div>
+      <div class="choices">
+        <div class="choice" onclick="answer(this,'q7','A','wrong')">
+          <span class="choice-letter">A</span>
+          <span>Elijah sent them into exile beyond the Jordan River</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q7','B','wrong')">
+          <span class="choice-letter">B</span>
+          <span>Elijah brought them bound before King Ahab for royal judgment</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q7','C','wrong')">
+          <span class="choice-letter">C</span>
+          <span>They scattered and fled toward Jezreel to seek Jezebel&#39;s protection</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q7','D','correct')">
+          <span class="choice-letter">D</span>
+          <span>Elijah had them seized and slaughtered at the Kishon River</span>
+        </div>
+      </div>
+      <div class="feedback" id="fb-q7">
+        <div class="feedback-result" id="fb-q7-result"></div>
+        <div class="feedback-ref">1 Kings 18:40</div>
+        <div class="feedback-body">Elijah commanded, "Seize the prophets of Baal. Don&#39;t let anyone get away!" They were seized and Elijah brought them down to the Kishon Valley and slaughtered them there. This is consonant with Deuteronomy&#39;s law on false prophets (Deut. 13:5) — and it is what triggers Jezebel&#39;s murderous threat in chapter 19.</div>
+      </div>
+      <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="nav-btn" id="next-q7" onclick="nextQ(7)" disabled>NEXT &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-header">
+        <span class="q-number">QUESTION 8</span>
+      </div>
+      <div class="question-text">What did Elijah ask God for when he collapsed under the broom tree in the wilderness?</div>
+      <div class="choices">
+        <div class="choice" onclick="answer(this,'q8','A','wrong')">
+          <span class="choice-letter">A</span>
+          <span>That God would send an angel to guide him to a place of safety</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q8','B','wrong')">
+          <span class="choice-letter">B</span>
+          <span>That God would restore his strength and courage for the road ahead</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q8','C','correct')">
+          <span class="choice-letter">C</span>
+          <span>That God would take his life, saying he was no better than his ancestors</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q8','D','wrong')">
+          <span class="choice-letter">D</span>
+          <span>That God would strike Jezebel dead before she could reach him</span>
+        </div>
+      </div>
+      <div class="feedback" id="fb-q8">
+        <div class="feedback-result" id="fb-q8-result"></div>
+        <div class="feedback-ref">1 Kings 19:4</div>
+        <div class="feedback-body">Elijah prayed, "I have had enough, LORD. Take my life; I am no better than my ancestors." The prophet who had just called fire from heaven now wanted to die. God&#39;s response is tender: He does not rebuke Elijah but sends an angel with food, twice, and simply says, "The journey is too much for you." God meets exhaustion with provision, not condemnation.</div>
+      </div>
+      <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="nav-btn" id="next-q8" onclick="nextQ(8)" disabled>NEXT &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-header">
+        <span class="q-number">QUESTION 9</span>
+      </div>
+      <div class="question-text">On Mount Horeb, after the great wind, the earthquake, and the fire had passed, how did God&#39;s presence finally come to Elijah?</div>
+      <div class="choices">
+        <div class="choice" onclick="answer(this,'q9','A','correct')">
+          <span class="choice-letter">A</span>
+          <span>As a gentle whisper — a still, small voice</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q9','B','wrong')">
+          <span class="choice-letter">B</span>
+          <span>As a pillar of cloud that settled at the mouth of the cave</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q9','C','wrong')">
+          <span class="choice-letter">C</span>
+          <span>As a blinding light that caused Elijah to fall facedown on the ground</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q9','D','wrong')">
+          <span class="choice-letter">D</span>
+          <span>As a dream that came to Elijah while he slept at the cave entrance</span>
+        </div>
+      </div>
+      <div class="feedback" id="fb-q9">
+        <div class="feedback-result" id="fb-q9-result"></div>
+        <div class="feedback-ref">1 Kings 19:11–12</div>
+        <div class="feedback-body">After the wind, earthquake, and fire — none of which contained God&#39;s voice — came "a gentle whisper" (KJV: "a still small voice"). When Elijah heard it, he wrapped his face in his cloak and stood at the cave entrance. The contrast is theologically rich: God is not found in the spectacular displays of power but in the quiet word — the same pattern by which He speaks through Scripture and proclamation today.</div>
+      </div>
+      <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="nav-btn" id="next-q9" onclick="nextQ(9)" disabled>NEXT &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-header">
+        <span class="q-number">QUESTION 10</span>
+      </div>
+      <div class="question-text">In 2 Chronicles 18, Jehoshaphat joined Ahab at Samaria, but before agreeing to march on Ramoth Gilead, what did Jehoshaphat insist on?</div>
+      <div class="choices">
+        <div class="choice" onclick="answer(this,'q10','A','wrong')">
+          <span class="choice-letter">A</span>
+          <span>That his own military commanders review and approve Ahab&#39;s battle plan</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q10','B','correct')">
+          <span class="choice-letter">B</span>
+          <span>That they first seek the word of the LORD</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q10','C','wrong')">
+          <span class="choice-letter">C</span>
+          <span>That all four hundred prophets swear a binding oath before speaking</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q10','D','wrong')">
+          <span class="choice-letter">D</span>
+          <span>That Ahab formalize their military alliance with a blood covenant</span>
+        </div>
+      </div>
+      <div class="feedback" id="fb-q10">
+        <div class="feedback-result" id="fb-q10-result"></div>
+        <div class="feedback-ref">2 Chronicles 18:4</div>
+        <div class="feedback-body">Jehoshaphat said to Ahab, "First seek the counsel of the LORD." This is Jehoshaphat&#39;s characteristic instinct (cf. 2 Chr. 17:4). Four hundred prophets then spoke with unified enthusiasm for war — but Jehoshaphat&#39;s further request for "a prophet of the LORD" led to Micaiah, whose true prophecy of defeat Ahab despised. The episode is a cautionary portrait of surrounding yourself only with those who tell you what you want to hear.</div>
+      </div>
+      <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="nav-btn" id="next-q10" onclick="showResults()" disabled>SEE RESULTS &rarr;</button>
+      </div>
+    </div>
+
+  </div><!-- #quiz-area -->
+
+  <!-- Results Screen -->
+  <div id="results-screen">
+    <div class="date-line" style="margin-bottom:8px;">DAY 178 &middot; JUNE 27, 2026</div>
+    <div class="title" style="margin-bottom:4px;">Quiz Complete</div>
+
+    <div class="score-ring-wrap">
+      <svg class="score-ring-svg" width="140" height="140" viewBox="0 0 140 140">
+        <circle cx="70" cy="70" r="58" fill="none" stroke="rgba(201,168,76,0.2)" stroke-width="10"/>
+        <circle id="ring-arc" cx="70" cy="70" r="58" fill="none" stroke="#c9a84c" stroke-width="10"
+                stroke-linecap="round" stroke-dasharray="364.4" stroke-dashoffset="364.4"
+                transform="rotate(-90 70 70)"/>
+        <text x="70" y="64" text-anchor="middle" class="score-ring-label" id="ring-label">0/10</text>
+        <text x="70" y="82" text-anchor="middle" class="score-ring-sub">CORRECT</text>
+      </svg>
+    </div>
+
+    <div class="result-message" id="result-message"></div>
+    <div class="result-sub" id="result-sub"></div>
+
+    <button class="nav-btn" onclick="resetQuiz()" style="margin-bottom:36px;">&#8635; TAKE AGAIN</button>
+
+    <div class="review-title">QUESTION REVIEW</div>
+    <div id="review-list"></div>
+  </div>
+
+</div><!-- .card -->
+
+<script>
+  const TOTAL = 10;
+  let score = 0;
+  let answers = {}; // { q1: { chosen: 'A', correct: true, text: '...' }, ... }
+
+  const questions = [
+    "When God directed Elijah to go into hiding at the start of the drought, at what location did He command him to camp?",
+    "According to 1 Kings 17:6, in what precise manner did the ravens supply Elijah with food at the Kerith Ravine?",
+    "What was the widow of Zarephath doing when Elijah first encountered her?",
+    "When Elijah asked the widow of Zarephath for bread, what did she say she had left?",
+    "When Ahab finally saw Elijah after years of drought, what accusation did he level at him?",
+    "At Mount Carmel, Elijah challenged the false prophets summoned there. What was the precise breakdown of their numbers?",
+    "After fire from the LORD consumed Elijah's sacrifice on Mount Carmel, what became of the prophets of Baal?",
+    "What did Elijah ask God for when he collapsed under the broom tree in the wilderness?",
+    "On Mount Horeb, after the great wind, the earthquake, and the fire had passed, how did God's presence finally come to Elijah?",
+    "In 2 Chronicles 18, Jehoshaphat joined Ahab at Samaria, but before agreeing to march on Ramoth Gilead, what did Jehoshaphat insist on?"
+  ];
+
+  const correctAnswers = {
+    q1: 'A', q2: 'B', q3: 'C', q4: 'D',
+    q5: 'A', q6: 'B', q7: 'D', q8: 'C',
+    q9: 'A', q10: 'B'
+  };
+
+  function answer(el, qId, letter, result) {
+    const block = document.getElementById(qId);
+    if (block.querySelector('.choice.locked')) return;
+
+    const isCorrect = (result === 'correct');
+    if (isCorrect) score++;
+
+    // Lock all choices
+    block.querySelectorAll('.choice').forEach(c => {
+      c.classList.add('locked');
+      const ltr = c.querySelector('.choice-letter').textContent.trim();
+      if (ltr === correctAnswers[qId]) c.classList.add('correct');
+    });
+    if (!isCorrect) el.classList.add('wrong');
+
+    // Show feedback
+    const fb = document.getElementById('fb-' + qId);
+    const fbResult = document.getElementById('fb-' + qId + '-result');
+    fb.classList.add('show');
+    if (isCorrect) {
+      fbResult.textContent = 'CORRECT';
+      fbResult.className = 'feedback-result correct-text';
+    } else {
+      fbResult.textContent = 'INCORRECT';
+      fbResult.className = 'feedback-result wrong-text';
+    }
+
+    // Record answer
+    const chosenText = el.querySelector('span:last-child').textContent;
+    answers[qId] = { chosen: letter, correct: isCorrect, text: chosenText };
+
+    // Enable next
+    const qNum = parseInt(qId.replace('q',''));
+    const nextBtn = document.getElementById('next-' + qId);
+    if (nextBtn) nextBtn.disabled = false;
+
+    // Update progress
+    updateProgress(qNum);
+  }
+
+  function updateProgress(qNum) {
+    const pct = Math.round((qNum / TOTAL) * 100);
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('prog-pct').textContent = pct + '%';
+  }
+
+  function nextQ(current) {
+    document.getElementById('q' + current).classList.remove('active');
+    const next = current + 1;
+    document.getElementById('q' + next).classList.add('active');
+    document.getElementById('prog-text').textContent = 'QUESTION ' + next + ' OF ' + TOTAL;
+  }
+
+  function showResults() {
+    document.getElementById('quiz-area').style.display = 'none';
+    const rs = document.getElementById('results-screen');
+    rs.classList.add('show');
+
+    // Animate ring
+    const circumference = 364.4;
+    const offset = circumference - (score / TOTAL) * circumference;
+    document.getElementById('ring-label').textContent = score + '/' + TOTAL;
+    setTimeout(() => {
+      document.getElementById('ring-arc').style.strokeDashoffset = offset;
+    }, 100);
+
+    // Result message
+    const msgs = [
+      ["BACK TO THE SCROLLS", "Even Elijah needed the angel to touch him twice. Press on."],
+      ["KEEP SEEKING", "Jehoshaphat asked for the word of the LORD — keep that instinct."],
+      ["GROWING STRONG", "The jar of flour is not exhausted. Neither is your study."],
+      ["WELL DONE", "Like Micaiah, you stood firm and spoke truth."],
+      ["OUTSTANDING", "Fire from heaven — a perfect score worthy of Mount Carmel!"]
+    ];
+    const idx = score <= 3 ? 0 : score <= 5 ? 1 : score <= 7 ? 2 : score <= 9 ? 3 : 4;
+    document.getElementById('result-message').textContent = msgs[idx][0];
+    document.getElementById('result-sub').textContent = msgs[idx][1];
+
+    // Review list
+    const reviewList = document.getElementById('review-list');
+    reviewList.innerHTML = '';
+    for (let i = 1; i <= TOTAL; i++) {
+      const qId = 'q' + i;
+      const data = answers[qId];
+      const item = document.createElement('div');
+      item.className = 'review-item';
+      const icon = data && data.correct ? '✅' : '❌';
+      const answerText = data ? data.text : '—';
+      item.innerHTML =
+        '<span class="review-icon">' + icon + '</span>' +
+        '<div>' +
+          '<div class="review-q">' + questions[i-1] + '</div>' +
+          '<div class="review-a">' + (data ? data.chosen + '. ' + answerText : 'Not answered') + '</div>' +
+        '</div>';
+      reviewList.appendChild(item);
+    }
+  }
+
+  function resetQuiz() {
+    score = 0;
+    answers = {};
+    document.getElementById('results-screen').classList.remove('show');
+    document.getElementById('quiz-area').style.display = 'block';
+
+    for (let i = 1; i <= TOTAL; i++) {
+      const block = document.getElementById('q' + i);
+      block.classList.remove('active');
+      block.querySelectorAll('.choice').forEach(c => {
+        c.classList.remove('correct','wrong','locked');
+      });
+      const fb = document.getElementById('fb-q' + i);
+      if (fb) fb.classList.remove('show');
+      const btn = document.getElementById('next-q' + i);
+      if (btn) btn.disabled = true;
+    }
+
+    document.getElementById('q1').classList.add('active');
+    document.getElementById('progress-fill').style.width = '0%';
+    document.getElementById('prog-pct').textContent = '0%';
+    document.getElementById('prog-text').textContent = 'QUESTION 1 OF 10';
+    document.getElementById('ring-arc').style.strokeDashoffset = '364.4';
+  }
+</script>
+
+</body>
+</html>
