@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Recap Quiz — Day 179</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 40px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2c1a08;
+  }
+
+  /* ── Parchment card ── */
+  .card {
+    background: linear-gradient(160deg, #f5e9c9 0%, #ecddb0 40%, #e4d09a 70%, #d9c285 100%);
+    border: 2px solid #c9a84c;
+    border-radius: 4px;
+    box-shadow:
+      0 0 0 1px #8a6a20,
+      0 8px 40px rgba(0,0,0,0.7),
+      inset 0 1px 0 rgba(255,255,255,0.4);
+    max-width: 780px;
+    width: 100%;
+    padding: 48px 52px;
+    position: relative;
+  }
+
+  /* Corner ornaments */
+  .card::before, .card::after {
+    content: '✦';
+    position: absolute;
+    font-size: 18px;
+    color: #c9a84c;
+  }
+  .card::before { top: 12px; left: 16px; }
+  .card::after  { top: 12px; right: 16px; }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    border-bottom: 1px solid #c9a84c;
+    padding-bottom: 24px;
+    margin-bottom: 28px;
+  }
+
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #7a5c1e;
+    margin-bottom: 6px;
+  }
+
+  .title {
+    font-family: 'Cinzel', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a0f00;
+    line-height: 1.2;
+    margin-bottom: 14px;
+  }
+
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .passage-tag {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: #5a3e10;
+    border: 1px solid #c9a84c;
+    padding: 3px 10px;
+    border-radius: 2px;
+    background: rgba(201,168,76,0.12);
+  }
+
+  .badges {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    padding: 4px 12px;
+    border-radius: 2px;
+  }
+
+  .badge-challenging {
+    background: #1a0f00;
+    color: #c9a84c;
+    border: 1px solid #c9a84c;
+  }
+
+  /* ── Progress bar ── */
+  .progress-wrap {
+    margin-bottom: 32px;
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #7a5c1e;
+    margin-bottom: 6px;
+  }
+
+  .progress-track {
+    height: 5px;
+    background: rgba(201,168,76,0.2);
+    border-radius: 3px;
+    overflow: hidden;
+    border: 1px solid rgba(201,168,76,0.3);
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #8a6a20, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  /* ── Question block ── */
+  .question-block {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .question-block.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .q-number {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #7a5c1e;
+  }
+
+  .detail-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    background: #5a3e10;
+    color: #f5e9c9;
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+
+  .question-text {
+    font-size: 19px;
+    font-weight: 600;
+    color: #1a0f00;
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+
+  /* ── Answer choices ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+
+  .choice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    border: 1.5px solid #c9a84c;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.25);
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    font-size: 16px;
+    line-height: 1.4;
+    color: #2c1a08;
+  }
+
+  .choice:hover:not(.locked) {
+    background: rgba(201,168,76,0.18);
+    border-color: #8a6a20;
+    transform: translateX(3px);
+  }
+
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 20px;
+    margin-top: 2px;
+  }
+
+  .choice.correct {
+    background: rgba(26,92,42,0.15);
+    border-color: #1a5c2a;
+  }
+
+  .choice.correct .choice-letter { color: #1a5c2a; }
+
+  .choice.wrong {
+    background: rgba(139,26,26,0.12);
+    border-color: #8b1a1a;
+  }
+
+  .choice.wrong .choice-letter { color: #8b1a1a; }
+
+  .choice.locked { cursor: default; }
+
+  /* ── Feedback ── */
+  .feedback {
+    display: none;
+    border-left: 3px solid #c9a84c;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    background: rgba(201,168,76,0.08);
+    border-radius: 0 3px 3px 0;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .feedback.show { display: block; }
+
+  .feedback-result {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  .feedback-result.correct-text { color: #1a5c2a; }
+  .feedback-result.wrong-text   { color: #8b1a1a; }
+
+  .feedback-ref {
+    font-size: 13px;
+    font-style: italic;
+    color: #5a3e10;
+    margin-bottom: 4px;
+  }
+
+  .feedback-body {
+    font-size: 15px;
+    color: #2c1a08;
+    line-height: 1.55;
+  }
+
+  /* ── Navigation ── */
+  .nav-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 12px 28px;
+    border: 1.5px solid #c9a84c;
+    border-radius: 2px;
+    background: #1a0f00;
+    color: #c9a84c;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .nav-btn:hover { background: #c9a84c; color: #1a0f00; }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+  /* ── Divider ornament ── */
+  .ornament {
+    text-align: center;
+    color: #c9a84c;
+    font-size: 16px;
+    letter-spacing: 8px;
+    margin: 20px 0;
+  }
+
+  /* ── Results screen ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+  }
+
+  #results-screen.show { display: block; }
+
+  .score-ring-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 24px 0;
+  }
+
+  .score-ring-svg circle { transition: stroke-dashoffset 1.2s ease; }
+
+  .score-ring-label {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    font-weight: 700;
+    fill: #1a0f00;
+  }
+
+  .score-ring-sub {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    fill: #7a5c1e;
+  }
+
+  .result-message {
+    font-family: 'Cinzel', serif;
+    font-size: 15px;
+    letter-spacing: 1px;
+    color: #1a0f00;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+
+  .result-sub {
+    font-size: 15px;
+    font-style: italic;
+    color: #5a3e10;
+    margin-bottom: 28px;
+  }
+
+  /* Review */
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: #7a5c1e;
+    text-align: left;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #c9a84c;
+    padding-bottom: 8px;
+  }
+
+  .review-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(201,168,76,0.25);
+    text-align: left;
+  }
+
+  .review-icon {
+    font-size: 14px;
+    min-width: 20px;
+    margin-top: 2px;
+  }
+
+  .review-q { font-size: 14px; color: #2c1a08; line-height: 1.45; }
+  .review-a { font-size: 13px; font-style: italic; color: #5a3e10; margin-top: 3px; }
+
+  @media (max-width: 600px) {
+    .card { padding: 28px 20px; }
+    .title { font-size: 20px; }
+    .question-text { font-size: 17px; }
+    .choice { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="date-line">SUNDAY, JUNE 28, 2026 &middot; DAY 179</div>
+    <div class="title">The Bible Recap<br>Daily Quiz</div>
+    <div class="passage-tags">
+      <span class="passage-tag">1 KINGS 20</span>
+      <span class="passage-tag">1 KINGS 21</span>
+    </div>
+    <div class="badges">
+      <span class="badge badge-challenging">CHALLENGING</span>
+    </div>
+  </div>
+
+  <!-- Quiz Area -->
+  <div id="quiz-area">
+
+    <!-- Progress -->
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span id="prog-text">QUESTION 1 OF 10</span>
+        <span id="prog-pct">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-header">
+        <span class="q-number">QUESTION 1</span>
+      </div>
+      <div class="question-text">Ahab initially agreed to Ben-hadad&#39;s demands for silver, gold, wives, and children. What escalated the dispute and caused Ahab to refuse?</div>
+      <div class="choices">
+        <div class="choice" onclick="answer(this,'q1','A','wrong')">
+          <span class="choice-letter">A</span>
+          <span>Ben-hadad demanded Ahab&#39;s military commanders surrender their weapons to Aramean officers</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q1','B','wrong')">
+          <span class="choice-letter">B</span>
+          <span>Ben-hadad raised the tribute demand to double what Ahab had agreed to pay</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q1','C','correct')">
+          <span class="choice-letter">C</span>
+          <span>Ben-hadad&#39;s servants declared they would search Ahab&#39;s palace and his officials&#39; houses and take whatever they pleased</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q1','D','wrong')">
+          <span class="choice-letter">D</span>
+          <span>Ben-hadad demanded Ahab send hostages to Damascus as surety against future rebellion</span>
+        </div>
+      </div>
+      <div class="feedback" id="fb-q1">
+        <div class="feedback-result" id="fb-q1-result"></div>
+        <div class="feedback-ref">1 Kings 20:5–6</div>
+        <div class="feedback-body">Ben-hadad sent a second message: his servants would come the next day and search Ahab&#39;s palace and his officials&#39; houses, taking whatever they found desirable. This was not a fixed tribute demand but an open-ended right of plunder. Ahab called the elders and the people, who agreed this demand was too much — and the refusal set off the war.</div>
+      </div>
+      <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="nav-btn" id="next-q1" onclick="nextQ(1)" disabled>NEXT &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-header">
+        <span class="q-number">QUESTION 2</span>
+      </div>
+      <div class="question-text">After Israel&#39;s first defeat of his army, what tactical advice did Ben-hadad&#39;s servants give him about where and how to fight Israel?</div>
+      <div class="choices">
+        <div class="choice" onclick="answer(this,'q2','A','correct')">
+          <span class="choice-letter">A</span>
+          <span>Israel&#39;s gods are gods of the hills; fight them on the plains and we will surely be stronger</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q2','B','wrong')">
+          <span class="choice-letter">B</span>
+          <span>Replace the kings with infantry commanders and attack at night when Israel&#39;s watch is weakest</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q2','C','wrong')">
+          <span class="choice-letter">C</span>
+          <span>Besiege Israel&#39;s cities until famine weakens them, then strike in the harvest season</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q2','D','wrong')">
+          <span class="choice-letter">D</span>
+          <span>Remove Ahab from the battlefield by targeting him with archers, and the army will scatter</span>
+        </div>
+      </div>
+      <div class="feedback" id="fb-q2">
+        <div class="feedback-result" id="fb-q2-result"></div>
+        <div class="feedback-ref">1 Kings 20:23</div>
+        <div class="feedback-body">Ben-hadad&#39;s servants reasoned that Israel&#39;s gods were gods of the hills, making Israel invincible in the mountains. They urged fighting on the plains where they expected Israel would be weak. They also advised replacing the vassal kings with military commanders. The strategy reflected a pagan worldview of geographically limited deities — a worldview God would decisively refute at Aphek.</div>
+      </div>
+      <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="nav-btn" id="next-q2" onclick="nextQ(2)" disabled>NEXT &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-header">
+        <span class="q-number">QUESTION 3</span>
+        <span class="detail-badge">DETAIL</span>
+      </div>
+      <div class="question-text">Who led the first Israelite attack against Ben-hadad&#39;s army at Samaria, and at what time of day did the attack begin?</div>
+      <div class="choices">
+        <div class="choice" onclick="answer(this,'q3','A','wrong')">
+          <span class="choice-letter">A</span>
+          <span>Ahab&#39;s royal guard, attacking at dawn before Ben-hadad&#39;s army had assembled</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q3','B','wrong')">
+          <span class="choice-letter">B</span>
+          <span>The 7,000 remaining Israelite soldiers, who charged out at dusk under cover of the setting sun</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q3','C','wrong')">
+          <span class="choice-letter">C</span>
+          <span>Elijah, who returned to lead the army according to the word of the LORD</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q3','D','correct')">
+          <span class="choice-letter">D</span>
+          <span>The young men of the district commanders — 232 men — who went out at noon</span>
+        </div>
+      </div>
+      <div class="feedback" id="fb-q3">
+        <div class="feedback-result" id="fb-q3-result"></div>
+        <div class="feedback-ref">1 Kings 20:14–16</div>
+        <div class="feedback-body">A prophet told Ahab that the young men of the district commanders would lead the attack. There were 232 of them. They went out at noon — while Ben-hadad and his allied kings were getting drunk in their tents. Ahab followed with 7,000 Israelites. The unlikely force, the unusual hour, and the enemy&#39;s drunken unpreparedness all highlight that the victory was the LORD&#39;s.</div>
+      </div>
+      <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="nav-btn" id="next-q3" onclick="nextQ(3)" disabled>NEXT &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-header">
+        <span class="q-number">QUESTION 4</span>
+        <span class="detail-badge">DETAIL</span>
+      </div>
+      <div class="question-text">When Ben-hadad&#39;s servants approached Ahab after the second defeat to plead for their master&#39;s life, how were they dressed?</div>
+      <div class="choices">
+        <div class="choice" onclick="answer(this,'q4','A','wrong')">
+          <span class="choice-letter">A</span>
+          <span>In white linen, barefoot, with palms raised and faces covered in ashes</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q4','B','correct')">
+          <span class="choice-letter">B</span>
+          <span>In sackcloth around their waists and ropes on their heads</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q4','C','wrong')">
+          <span class="choice-letter">C</span>
+          <span>In royal armor stripped of weapons, bearing gifts of gold as tribute</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q4','D','wrong')">
+          <span class="choice-letter">D</span>
+          <span>In torn garments with their swords surrendered, kneeling at the city gate</span>
+        </div>
+      </div>
+      <div class="feedback" id="fb-q4">
+        <div class="feedback-result" id="fb-q4-result"></div>
+        <div class="feedback-ref">1 Kings 20:31–32</div>
+        <div class="feedback-body">The servants proposed going to Ahab wearing sackcloth around their waists and ropes on their heads — garb that signaled complete submission and a plea for mercy. They had heard the kings of Israel were merciful. Ahab accepted Ben-hadad as a "brother" and made a treaty, releasing him. A prophet would soon tell Ahab this mercy came at a catastrophic cost.</div>
+      </div>
+      <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="nav-btn" id="next-q4" onclick="nextQ(4)" disabled>NEXT &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-header">
+        <span class="q-number">QUESTION 5</span>
+      </div>
+      <div class="question-text">What verdict did the prophet pronounce against Ahab for releasing Ben-hadad instead of executing him?</div>
+      <div class="choices">
+        <div class="choice" onclick="answer(this,'q5','A','correct')">
+          <span class="choice-letter">A</span>
+          <span>"Your life for his life, and your people for his people"</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q5','B','wrong')">
+          <span class="choice-letter">B</span>
+          <span>"You will not return alive from your next battle against Aram"</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q5','C','wrong')">
+          <span class="choice-letter">C</span>
+          <span>"The kingdom will be torn from your hands before the year is out"</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q5','D','wrong')">
+          <span class="choice-letter">D</span>
+          <span>"No prophet of the LORD will speak to you again until the day of your death"</span>
+        </div>
+      </div>
+      <div class="feedback" id="fb-q5">
+        <div class="feedback-result" id="fb-q5-result"></div>
+        <div class="feedback-ref">1 Kings 20:42</div>
+        <div class="feedback-body">The prophet declared: "This is what the LORD says: &#39;Because you have set free a man I had determined should die, your life will go for his life, your people for his people.&#39;" Ben-hadad was under God&#39;s ban (herem) — devoted to destruction. By showing unauthorized mercy, Ahab transferred the death sentence to himself. Ahab went home sullen and angry at the word.</div>
+      </div>
+      <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="nav-btn" id="next-q5" onclick="nextQ(5)" disabled>NEXT &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-header">
+        <span class="q-number">QUESTION 6</span>
+        <span class="detail-badge">DETAIL</span>
+      </div>
+      <div class="question-text">After Israel routed the Aramean army at Aphek, what happened to the survivors who fled into the city?</div>
+      <div class="choices">
+        <div class="choice" onclick="answer(this,'q6','A','wrong')">
+          <span class="choice-letter">A</span>
+          <span>They surrendered to Ahab&#39;s forces and were taken captive to Samaria</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q6','B','wrong')">
+          <span class="choice-letter">B</span>
+          <span>Elijah called fire from the LORD to destroy the city and its remaining defenders</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q6','C','correct')">
+          <span class="choice-letter">C</span>
+          <span>The city wall collapsed on them, killing 27,000</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q6','D','wrong')">
+          <span class="choice-letter">D</span>
+          <span>Ben-hadad ordered them to fight to the last man inside the city gates</span>
+        </div>
+      </div>
+      <div class="feedback" id="fb-q6">
+        <div class="feedback-result" id="fb-q6-result"></div>
+        <div class="feedback-ref">1 Kings 20:29–30</div>
+        <div class="feedback-body">After Israel killed 100,000 Aramean foot soldiers in a single day on the battlefield, the rest fled into the city of Aphek — and the city wall fell on them, killing 27,000. God had promised to defeat the Aramean army to demonstrate He is LORD everywhere, not only in the hills. The wall&#39;s collapse underscored that no refuge exists from the God of all the earth.</div>
+      </div>
+      <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="nav-btn" id="next-q6" onclick="nextQ(6)" disabled>NEXT &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-header">
+        <span class="q-number">QUESTION 7</span>
+      </div>
+      <div class="question-text">When Ahab offered to buy Naboth&#39;s vineyard or trade it for a better one, what reason did Naboth give for refusing?</div>
+      <div class="choices">
+        <div class="choice" onclick="answer(this,'q7','A','wrong')">
+          <span class="choice-letter">A</span>
+          <span>The vineyard had been his family&#39;s for seven generations and he had sworn to his father never to sell it</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q7','B','wrong')">
+          <span class="choice-letter">B</span>
+          <span>He did not trust that any land Ahab offered in exchange would be comparable in quality</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q7','C','wrong')">
+          <span class="choice-letter">C</span>
+          <span>The vineyard was dedicated to the LORD&#39;s use and its grapes could not be given to a king who served Baal</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q7','D','correct')">
+          <span class="choice-letter">D</span>
+          <span>"The LORD forbid that I should give you the inheritance of my fathers"</span>
+        </div>
+      </div>
+      <div class="feedback" id="fb-q7">
+        <div class="feedback-result" id="fb-q7-result"></div>
+        <div class="feedback-ref">1 Kings 21:3</div>
+        <div class="feedback-body">Naboth&#39;s refusal was rooted in the Mosaic law&#39;s theology of land: ancestral land was a covenantal inheritance (nachalah) given by God, not a commodity to be sold or traded away permanently (cf. Lev. 25:23–28; Num. 36:7). Naboth was not being stubborn — he was being faithful to covenant obligations that even a king had no authority to override.</div>
+      </div>
+      <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="nav-btn" id="next-q7" onclick="nextQ(7)" disabled>NEXT &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-header">
+        <span class="q-number">QUESTION 8</span>
+      </div>
+      <div class="question-text">What specific false charge did the two scoundrels bring against Naboth to secure his condemnation and execution?</div>
+      <div class="choices">
+        <div class="choice" onclick="answer(this,'q8','A','wrong')">
+          <span class="choice-letter">A</span>
+          <span>They accused him of plotting armed rebellion against the crown</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q8','B','correct')">
+          <span class="choice-letter">B</span>
+          <span>They testified that Naboth had cursed both God and the king</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q8','C','wrong')">
+          <span class="choice-letter">C</span>
+          <span>They claimed he had withheld the required tithes from the temple and kept them for himself</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q8','D','wrong')">
+          <span class="choice-letter">D</span>
+          <span>They swore he had desecrated the royal seal on letters sent in Ahab&#39;s name</span>
+        </div>
+      </div>
+      <div class="feedback" id="fb-q8">
+        <div class="feedback-result" id="fb-q8-result"></div>
+        <div class="feedback-ref">1 Kings 21:13</div>
+        <div class="feedback-body">"Naboth has cursed God and the king" — a capital charge under Mosaic law (Lev. 24:16; Ex. 22:28). Jezebel&#39;s letters required two witnesses to sit opposite Naboth and testify to this blasphemy, which the law required for capital cases (Deut. 17:6). She weaponized Israel&#39;s own legal procedures to destroy an innocent man, then had him stoned. The letter of the law served murder.</div>
+      </div>
+      <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="nav-btn" id="next-q8" onclick="nextQ(8)" disabled>NEXT &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-header">
+        <span class="q-number">QUESTION 9</span>
+      </div>
+      <div class="question-text">What specific judgment did Elijah pronounce concerning Jezebel when he confronted Ahab in Naboth&#39;s vineyard?</div>
+      <div class="choices">
+        <div class="choice" onclick="answer(this,'q9','A','correct')">
+          <span class="choice-letter">A</span>
+          <span>Dogs will devour Jezebel within the plot of ground at Jezreel</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q9','B','wrong')">
+          <span class="choice-letter">B</span>
+          <span>Jezebel will be handed over to foreign enemies and carried into exile beyond the river</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q9','C','wrong')">
+          <span class="choice-letter">C</span>
+          <span>Jezebel will die in childbirth and her children will be put to the sword</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q9','D','wrong')">
+          <span class="choice-letter">D</span>
+          <span>Fire from heaven will fall on Jezebel&#39;s house in the valley of Jezreel</span>
+        </div>
+      </div>
+      <div class="feedback" id="fb-q9">
+        <div class="feedback-result" id="fb-q9-result"></div>
+        <div class="feedback-ref">1 Kings 21:23</div>
+        <div class="feedback-body">Elijah declared that dogs would devour Jezebel in the plot of ground at Jezreel. This was fulfilled literally in 2 Kings 9:36–37 after Jehu had her thrown from a window. Elijah&#39;s oracle also pronounced that Ahab&#39;s blood would be licked up by dogs where Naboth&#39;s blood was spilled — place-specific, precise, and ultimately inescapable.</div>
+      </div>
+      <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="nav-btn" id="next-q9" onclick="nextQ(9)" disabled>NEXT &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-header">
+        <span class="q-number">QUESTION 10</span>
+      </div>
+      <div class="question-text">After Elijah pronounced full judgment on Ahab&#39;s house, why did God tell Elijah He would delay the disaster?</div>
+      <div class="choices">
+        <div class="choice" onclick="answer(this,'q10','A','wrong')">
+          <span class="choice-letter">A</span>
+          <span>Elijah interceded for Ahab and God relented out of regard for the prophet&#39;s prayer</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q10','B','correct')">
+          <span class="choice-letter">B</span>
+          <span>Ahab humbled himself — he tore his clothes, fasted, lay in sackcloth, and went about quietly</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q10','C','wrong')">
+          <span class="choice-letter">C</span>
+          <span>Ahab publicly confessed his sin and returned the vineyard to Naboth&#39;s sons</span>
+        </div>
+        <div class="choice" onclick="answer(this,'q10','D','wrong')">
+          <span class="choice-letter">D</span>
+          <span>Obadiah and a remnant of faithful Israelites offered sacrifice on Ahab&#39;s behalf</span>
+        </div>
+      </div>
+      <div class="feedback" id="fb-q10">
+        <div class="feedback-result" id="fb-q10-result"></div>
+        <div class="feedback-ref">1 Kings 21:27–29</div>
+        <div class="feedback-body">When Ahab heard Elijah&#39;s words, he tore his clothes, put on sackcloth, fasted, lay in the sackcloth, and went about meekly. The LORD told Elijah: "Have you noticed how Ahab has humbled himself before me? Because he has humbled himself, I will not bring this disaster in his day, but in the days of his son." Even the wicked Ahab found that genuine humility moved God. The delay is grace — not exoneration.</div>
+      </div>
+      <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="nav-btn" id="next-q10" onclick="showResults()" disabled>SEE RESULTS &rarr;</button>
+      </div>
+    </div>
+
+  </div><!-- #quiz-area -->
+
+  <!-- Results Screen -->
+  <div id="results-screen">
+    <div class="date-line" style="margin-bottom:8px;">DAY 179 &middot; JUNE 28, 2026</div>
+    <div class="title" style="margin-bottom:4px;">Quiz Complete</div>
+
+    <div class="score-ring-wrap">
+      <svg class="score-ring-svg" width="140" height="140" viewBox="0 0 140 140">
+        <circle cx="70" cy="70" r="58" fill="none" stroke="rgba(201,168,76,0.2)" stroke-width="10"/>
+        <circle id="ring-arc" cx="70" cy="70" r="58" fill="none" stroke="#c9a84c" stroke-width="10"
+                stroke-linecap="round" stroke-dasharray="364.4" stroke-dashoffset="364.4"
+                transform="rotate(-90 70 70)"/>
+        <text x="70" y="64" text-anchor="middle" class="score-ring-label" id="ring-label">0/10</text>
+        <text x="70" y="82" text-anchor="middle" class="score-ring-sub">CORRECT</text>
+      </svg>
+    </div>
+
+    <div class="result-message" id="result-message"></div>
+    <div class="result-sub" id="result-sub"></div>
+
+    <button class="nav-btn" onclick="resetQuiz()" style="margin-bottom:36px;">&#8635; TAKE AGAIN</button>
+
+    <div class="review-title">QUESTION REVIEW</div>
+    <div id="review-list"></div>
+  </div>
+
+</div><!-- .card -->
+
+<script>
+  const TOTAL = 10;
+  let score = 0;
+  let answers = {};
+
+  const questions = [
+    "Ahab initially agreed to Ben-hadad’s demands for silver, gold, wives, and children. What escalated the dispute and caused Ahab to refuse?",
+    "After Israel’s first defeat of his army, what tactical advice did Ben-hadad’s servants give him about where and how to fight Israel?",
+    "Who led the first Israelite attack against Ben-hadad’s army at Samaria, and at what time of day did the attack begin?",
+    "When Ben-hadad’s servants approached Ahab after the second defeat to plead for their master’s life, how were they dressed?",
+    "What verdict did the prophet pronounce against Ahab for releasing Ben-hadad instead of executing him?",
+    "After Israel routed the Aramean army at Aphek, what happened to the survivors who fled into the city?",
+    "When Ahab offered to buy Naboth’s vineyard or trade it for a better one, what reason did Naboth give for refusing?",
+    "What specific false charge did the two scoundrels bring against Naboth to secure his condemnation and execution?",
+    "What specific judgment did Elijah pronounce concerning Jezebel when he confronted Ahab in Naboth’s vineyard?",
+    "After Elijah pronounced full judgment on Ahab’s house, why did God tell Elijah He would delay the disaster?"
+  ];
+
+  const correctAnswers = {
+    q1: 'C', q2: 'A', q3: 'D', q4: 'B',
+    q5: 'A', q6: 'C', q7: 'D', q8: 'B',
+    q9: 'A', q10: 'B'
+  };
+
+  function answer(el, qId, letter, result) {
+    const block = document.getElementById(qId);
+    if (block.querySelector('.choice.locked')) return;
+
+    const isCorrect = (result === 'correct');
+    if (isCorrect) score++;
+
+    block.querySelectorAll('.choice').forEach(function(c) {
+      c.classList.add('locked');
+      var ltr = c.querySelector('.choice-letter').textContent.trim();
+      if (ltr === correctAnswers[qId]) c.classList.add('correct');
+    });
+    if (!isCorrect) el.classList.add('wrong');
+
+    var fb = document.getElementById('fb-' + qId);
+    var fbResult = document.getElementById('fb-' + qId + '-result');
+    fb.classList.add('show');
+    if (isCorrect) {
+      fbResult.textContent = 'CORRECT';
+      fbResult.className = 'feedback-result correct-text';
+    } else {
+      fbResult.textContent = 'INCORRECT';
+      fbResult.className = 'feedback-result wrong-text';
+    }
+
+    var chosenText = el.querySelector('span:last-child').textContent;
+    answers[qId] = { chosen: letter, correct: isCorrect, text: chosenText };
+
+    var qNum = parseInt(qId.replace('q', ''));
+    var nextBtn = document.getElementById('next-' + qId);
+    if (nextBtn) nextBtn.disabled = false;
+
+    updateProgress(qNum);
+  }
+
+  function updateProgress(qNum) {
+    var pct = Math.round((qNum / TOTAL) * 100);
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('prog-pct').textContent = pct + '%';
+  }
+
+  function nextQ(current) {
+    document.getElementById('q' + current).classList.remove('active');
+    var next = current + 1;
+    document.getElementById('q' + next).classList.add('active');
+    document.getElementById('prog-text').textContent = 'QUESTION ' + next + ' OF ' + TOTAL;
+  }
+
+  function showResults() {
+    document.getElementById('quiz-area').style.display = 'none';
+    var rs = document.getElementById('results-screen');
+    rs.classList.add('show');
+
+    var circumference = 364.4;
+    var offset = circumference - (score / TOTAL) * circumference;
+    document.getElementById('ring-label').textContent = score + '/10';
+    setTimeout(function() {
+      document.getElementById('ring-arc').style.strokeDashoffset = offset;
+    }, 100);
+
+    var msgs = [
+      ["BACK TO THE SCROLLS", "Even Ahab humbled himself — there is always room to grow."],
+      ["KEEP SEEKING", "The LORD knows who have not bowed the knee to Baal. Press on."],
+      ["GROWING STRONG", "The jar of flour is not exhausted. Neither is your knowledge."],
+      ["WELL DONE", "Like Naboth, you stood firm on what the LORD gave you."],
+      ["OUTSTANDING", "A perfect score — Elijah&#39;s faithfulness honored here!"]
+    ];
+    var idx = score <= 3 ? 0 : score <= 5 ? 1 : score <= 7 ? 2 : score <= 9 ? 3 : 4;
+    document.getElementById('result-message').textContent = msgs[idx][0];
+    document.getElementById('result-sub').innerHTML = msgs[idx][1];
+
+    var reviewList = document.getElementById('review-list');
+    reviewList.innerHTML = '';
+    for (var i = 1; i <= TOTAL; i++) {
+      var qId = 'q' + i;
+      var data = answers[qId];
+      var item = document.createElement('div');
+      item.className = 'review-item';
+      var icon = (data && data.correct) ? '&#9989;' : '&#10060;';
+      var answerText = data ? data.text : '—';
+      item.innerHTML =
+        '<span class="review-icon">' + icon + '</span>' +
+        '<div>' +
+          '<div class="review-q">' + questions[i - 1] + '</div>' +
+          '<div class="review-a">' + (data ? data.chosen + '. ' + answerText : 'Not answered') + '</div>' +
+        '</div>';
+      reviewList.appendChild(item);
+    }
+  }
+
+  function resetQuiz() {
+    score = 0;
+    answers = {};
+    document.getElementById('results-screen').classList.remove('show');
+    document.getElementById('quiz-area').style.display = 'block';
+
+    for (var i = 1; i <= TOTAL; i++) {
+      var block = document.getElementById('q' + i);
+      block.classList.remove('active');
+      block.querySelectorAll('.choice').forEach(function(c) {
+        c.classList.remove('correct', 'wrong', 'locked');
+      });
+      var fb = document.getElementById('fb-q' + i);
+      if (fb) fb.classList.remove('show');
+      var btn = document.getElementById('next-q' + i);
+      if (btn) btn.disabled = true;
+    }
+
+    document.getElementById('q1').classList.add('active');
+    document.getElementById('progress-fill').style.width = '0%';
+    document.getElementById('prog-pct').textContent = '0%';
+    document.getElementById('prog-text').textContent = 'QUESTION 1 OF 10';
+    document.getElementById('ring-arc').style.strokeDashoffset = '364.4';
+  }
+</script>
+
+</body>
+</html>
