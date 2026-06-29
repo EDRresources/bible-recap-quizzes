@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Recap Quiz — Day 180 · 1 Kings 22</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: #0e0a04;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(201,168,76,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(139,90,30,0.07) 0%, transparent 60%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2rem 1rem 4rem;
+    font-family: 'Crimson Text', serif;
+    color: #2c1a06;
+  }
+
+  .scroll-container {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── Header ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 1.8rem;
+    animation: fadeIn 0.8s ease both;
+  }
+
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: #f5e8c8;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    line-height: 1.2;
+    margin-bottom: 0.6rem;
+  }
+
+  .badges {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.7rem;
+  }
+
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    padding: 0.2rem 0.65rem;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+
+  .badge-challenging {
+    background: rgba(201,168,76,0.18);
+    color: #c9a84c;
+    border: 1px solid rgba(201,168,76,0.4);
+  }
+
+  .passage-tags {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .passage-tag {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 2px;
+    padding: 0.2rem 0.6rem;
+  }
+
+  /* ── Ornament ── */
+  .ornament {
+    text-align: center;
+    color: #c9a84c;
+    font-size: 1.1rem;
+    letter-spacing: 0.4em;
+    margin-bottom: 1.4rem;
+    opacity: 0.7;
+  }
+
+  /* ── Progress Bar ── */
+  .progress-wrap {
+    background: rgba(201,168,76,0.12);
+    border-radius: 4px;
+    height: 5px;
+    margin-bottom: 1.8rem;
+    overflow: hidden;
+    border: 1px solid rgba(201,168,76,0.2);
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8cc7a);
+    border-radius: 4px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    width: 0%;
+  }
+
+  /* ── Parchment Card ── */
+  .parchment {
+    background: linear-gradient(160deg,
+      #f5e8c8 0%,
+      #ede0b4 20%,
+      #e8d8a0 50%,
+      #edddb0 80%,
+      #f0e2be 100%);
+    border: 2px solid #c9a84c;
+    border-radius: 6px;
+    padding: 2rem 2.2rem;
+    box-shadow:
+      0 0 0 1px rgba(201,168,76,0.2),
+      0 8px 32px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .parchment::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* ── Question ── */
+  .question-block {
+    display: none;
+    animation: fadeIn 0.45s ease both;
+  }
+
+  .question-block.active {
+    display: block;
+  }
+
+  .question-number {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: #8b6914;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .detail-badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #7a4a10;
+    background: rgba(139,105,20,0.15);
+    border: 1px solid rgba(139,105,20,0.35);
+    border-radius: 2px;
+    padding: 0.1rem 0.45rem;
+    margin-left: 0.4rem;
+    vertical-align: middle;
+    text-transform: uppercase;
+  }
+
+  .question-text {
+    font-size: 1.22rem;
+    line-height: 1.55;
+    color: #1e0f02;
+    margin-bottom: 1.4rem;
+    font-weight: 400;
+  }
+
+  /* ── Answer Choices ── */
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(139,105,20,0.3);
+    border-radius: 4px;
+    padding: 0.7rem 0.9rem;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.18s, border-color 0.18s, transform 0.12s;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #1e0f02;
+    width: 100%;
+  }
+
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.18);
+    border-color: #c9a84c;
+    transform: translateY(-1px);
+  }
+
+  .choice-btn:disabled {
+    cursor: default;
+  }
+
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #8b6914;
+    min-width: 1.2rem;
+    padding-top: 0.1rem;
+    flex-shrink: 0;
+  }
+
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.15);
+    border-color: #1a5c2a;
+  }
+
+  .choice-btn.correct .choice-letter {
+    color: #1a5c2a;
+  }
+
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.12);
+    border-color: #8b1a1a;
+  }
+
+  .choice-btn.wrong .choice-letter {
+    color: #8b1a1a;
+  }
+
+  /* ── Feedback ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 1.2rem;
+    animation: fadeIn 0.3s ease both;
+    font-size: 1.05rem;
+    line-height: 1.55;
+  }
+
+  .feedback.correct {
+    background: rgba(26,92,42,0.12);
+    border: 1.5px solid rgba(26,92,42,0.4);
+    color: #0d3317;
+  }
+
+  .feedback.wrong {
+    background: rgba(139,26,26,0.1);
+    border: 1.5px solid rgba(139,26,26,0.35);
+    color: #3d0a0a;
+  }
+
+  .feedback-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+
+  .feedback.correct .feedback-label { color: #1a5c2a; }
+  .feedback.wrong .feedback-label { color: #8b1a1a; }
+
+  .scripture-ref {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    opacity: 0.75;
+    margin-top: 0.3rem;
+  }
+
+  /* ── Navigation ── */
+  .nav-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+  }
+
+  .next-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #a8872e);
+    color: #0e0a04;
+    border: none;
+    border-radius: 3px;
+    padding: 0.55rem 1.4rem;
+    cursor: pointer;
+    display: none;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+
+  .next-btn:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+  }
+
+  /* ── Results ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeIn 0.6s ease both;
+  }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e0f02;
+    margin-bottom: 0.4rem;
+  }
+
+  .results-subtitle {
+    font-size: 1rem;
+    color: #5a3a14;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Score Ring */
+  .score-ring-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .score-ring-svg {
+    transform: rotate(-90deg);
+  }
+
+  .ring-bg {
+    fill: none;
+    stroke: rgba(139,105,20,0.2);
+    stroke-width: 10;
+  }
+
+  .ring-fg {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 283;
+    stroke-dashoffset: 283;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .ring-fg.green { stroke: #1a5c2a; }
+  .ring-fg.red { stroke: #8b1a1a; }
+
+  .score-ring-inner {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 120px;
+  }
+
+  .score-ring-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .score-number {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e0f02;
+    line-height: 1;
+  }
+
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    color: #5a3a14;
+    letter-spacing: 0.1em;
+  }
+
+  .results-message {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: #2c1a06;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid rgba(139,105,20,0.3);
+    margin: 1.2rem 0;
+  }
+
+  /* Review */
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: #8b6914;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    text-align: left;
+  }
+
+  .review-item {
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+    margin-bottom: 0.9rem;
+    text-align: left;
+    font-size: 1.0rem;
+    line-height: 1.5;
+    color: #1e0f02;
+  }
+
+  .review-icon {
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+  }
+
+  .review-correct { color: #1a5c2a; }
+  .review-wrong { color: #8b1a1a; }
+
+  .review-item .answer-note {
+    font-size: 0.9rem;
+    color: #5a3a14;
+    font-style: italic;
+  }
+
+  /* Retry button */
+  .retry-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: transparent;
+    color: #8b6914;
+    border: 1.5px solid rgba(139,105,20,0.5);
+    border-radius: 3px;
+    padding: 0.55rem 1.4rem;
+    cursor: pointer;
+    margin-top: 1.2rem;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .retry-btn:hover {
+    background: rgba(201,168,76,0.15);
+    color: #5a3a14;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="scroll-container">
+
+  <!-- Header -->
+  <div class="quiz-header">
+    <div class="date-line">Monday, June 29, 2026 &middot; Day 180</div>
+    <div class="quiz-title">The Bible Recap</div>
+    <div class="badges">
+      <span class="badge badge-challenging">Challenging</span>
+    </div>
+    <div class="passage-tags">
+      <span class="passage-tag">1 Kings 22</span>
+    </div>
+  </div>
+
+  <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+
+  <!-- Quiz Card -->
+  <div class="parchment" id="quiz-card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-number">Question 1 of 10</div>
+      <p class="question-text">When Jehoshaphat asked for "a prophet of the LORD," what was Ahab's immediate response?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,1)"><span class="choice-letter">A</span><span>He said there was no true prophet of the LORD left in the land</span></button>
+        <button class="choice-btn" onclick="answer(this,false,1)"><span class="choice-letter">B</span><span>He sent servants to quickly gather more prophets before making any battle decision</span></button>
+        <button class="choice-btn" onclick="answer(this,false,1)"><span class="choice-letter">C</span><span>He told Jehoshaphat the 400 prophets they consulted were already prophets of the LORD</span></button>
+        <button class="choice-btn" onclick="answer(this,true,1)"><span class="choice-letter">D</span><span>He acknowledged one prophet existed — Micaiah — but said he hated him because he never prophesied anything good</span></button>
+      </div>
+      <div class="feedback" id="fb1">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next1" onclick="nextQ(1)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-number">Question 2 of 10</div>
+      <p class="question-text">What did Micaiah initially say when Ahab directly asked him whether to attack Ramoth Gilead?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,2)"><span class="choice-letter">A</span><span>"Attack and be victorious, for the LORD will give it into the king's hand"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,2)"><span class="choice-letter">B</span><span>"I will speak only what the LORD reveals to me, and I cannot yet speak"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,2)"><span class="choice-letter">C</span><span>"Do not go to battle, for the LORD has shown me your defeat"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,2)"><span class="choice-letter">D</span><span>"Consult the LORD yourself, for the spirit has not spoken to me today"</span></button>
+      </div>
+      <div class="feedback" id="fb2">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next2" onclick="nextQ(2)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-number">Question 3 of 10</div>
+      <p class="question-text">In Micaiah's vision of the LORD's heavenly court, how did a spirit volunteer to lead Ahab to his death?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,3)"><span class="choice-letter">A</span><span>By appearing as an angel of light to distort the visions of all the prophets</span></button>
+        <button class="choice-btn" onclick="answer(this,true,3)"><span class="choice-letter">B</span><span>By becoming a lying spirit in the mouths of all Ahab's prophets</span></button>
+        <button class="choice-btn" onclick="answer(this,false,3)"><span class="choice-letter">C</span><span>By whispering false counsel directly into Ahab's ears as he slept</span></button>
+        <button class="choice-btn" onclick="answer(this,false,3)"><span class="choice-letter">D</span><span>By sending a deceiving wind to confuse the understanding of the false prophets</span></button>
+      </div>
+      <div class="feedback" id="fb3">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next3" onclick="nextQ(3)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-number">Question 4 of 10</div>
+      <p class="question-text">What did Zedekiah son of Chenaanah do to illustrate his prophecy before the two kings?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,4)"><span class="choice-letter">A</span><span>He cast a vision of Ahab enthroned in Ramoth Gilead's palace for all the prophets to witness</span></button>
+        <button class="choice-btn" onclick="answer(this,false,4)"><span class="choice-letter">B</span><span>He led all 400 prophets in a unified prophetic chant before the kings</span></button>
+        <button class="choice-btn" onclick="answer(this,true,4)"><span class="choice-letter">C</span><span>He made iron horns and declared Ahab would gore the Arameans until they were destroyed</span></button>
+        <button class="choice-btn" onclick="answer(this,false,4)"><span class="choice-letter">D</span><span>He drew a map of the battle lines to show where the LORD would deliver the enemy into Ahab's hands</span></button>
+      </div>
+      <div class="feedback" id="fb4">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next4" onclick="nextQ(4)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-number">Question 5 of 10</div>
+      <p class="question-text">What arrangement did Ahab propose to Jehoshaphat before entering battle at Ramoth Gilead?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,5)"><span class="choice-letter">A</span><span>Ahab would disguise himself as a common soldier while Jehoshaphat wore his royal robes</span></button>
+        <button class="choice-btn" onclick="answer(this,false,5)"><span class="choice-letter">B</span><span>Jehoshaphat would command the infantry while Ahab led the chariot corps</span></button>
+        <button class="choice-btn" onclick="answer(this,false,5)"><span class="choice-letter">C</span><span>Both kings would ride together in the same chariot so the enemy could not single out one</span></button>
+        <button class="choice-btn" onclick="answer(this,false,5)"><span class="choice-letter">D</span><span>Ahab would remain behind the battle lines while Jehoshaphat bore the initial assault</span></button>
+      </div>
+      <div class="feedback" id="fb5">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next5" onclick="nextQ(5)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-number">Question 6 of 10 <span class="detail-badge">Detail</span></div>
+      <p class="question-text">After striking Micaiah on the cheek, what specific question did Zedekiah ask him?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,6)"><span class="choice-letter">A</span><span>"Who gave you authority to contradict the word of four hundred prophets of the king?"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,6)"><span class="choice-letter">B</span><span>"How will you explain yourself when the king returns victorious from Ramoth Gilead?"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,6)"><span class="choice-letter">C</span><span>"Do you think the Spirit of the LORD abandoned all of us to speak only to a lone dissenter like you?"</span></button>
+        <button class="choice-btn" onclick="answer(this,true,6)"><span class="choice-letter">D</span><span>"Which way did the Spirit of the LORD go when he left me to speak to you?"</span></button>
+      </div>
+      <div class="feedback" id="fb6">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next6" onclick="nextQ(6)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-number">Question 7 of 10</div>
+      <p class="question-text">How was Ahab mortally wounded, given that he had disguised himself for the battle?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,7)"><span class="choice-letter">A</span><span>An Aramean officer recognized his chariot and ordered archers to target him specifically</span></button>
+        <button class="choice-btn" onclick="answer(this,true,7)"><span class="choice-letter">B</span><span>An arrow shot at random struck him between the sections of his armor</span></button>
+        <button class="choice-btn" onclick="answer(this,false,7)"><span class="choice-letter">C</span><span>A sword thrust found the gap beneath his shield arm during close combat</span></button>
+        <button class="choice-btn" onclick="answer(this,false,7)"><span class="choice-letter">D</span><span>His horse was killed and he fell from his chariot, struck down in the chaos</span></button>
+      </div>
+      <div class="feedback" id="fb7">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next7" onclick="nextQ(7)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-number">Question 8 of 10 <span class="detail-badge">Detail</span></div>
+      <p class="question-text">After Ahab died, where was his chariot washed, and what happened there that fulfilled the LORD's word?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,8)"><span class="choice-letter">A</span><span>At the Jordan River, where servants buried his armor according to custom</span></button>
+        <button class="choice-btn" onclick="answer(this,false,8)"><span class="choice-letter">B</span><span>At the threshing floor of Naboth, where his servants mourned for seven days</span></button>
+        <button class="choice-btn" onclick="answer(this,true,8)"><span class="choice-letter">C</span><span>At the pool of Samaria, where dogs licked his blood as the LORD had declared</span></button>
+        <button class="choice-btn" onclick="answer(this,false,8)"><span class="choice-letter">D</span><span>At the gate of Jezreel, where his body was displayed before being entombed</span></button>
+      </div>
+      <div class="feedback" id="fb8">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next8" onclick="nextQ(8)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-number">Question 9 of 10 <span class="detail-badge">Detail</span></div>
+      <p class="question-text">Which best summarizes the evaluation Scripture gives of Jehoshaphat's reign in 1 Kings 22?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,9)"><span class="choice-letter">A</span><span>He did right in the LORD's eyes and followed his father Asa's ways — but he did not remove the high places, and he expelled the remaining male shrine prostitutes</span></button>
+        <button class="choice-btn" onclick="answer(this,false,9)"><span class="choice-letter">B</span><span>He removed all forms of idolatry from the land, including the high places and all Asherah poles</span></button>
+        <button class="choice-btn" onclick="answer(this,false,9)"><span class="choice-letter">C</span><span>He was righteous in all things and received the commendation that "his heart was fully devoted to the LORD like David his father"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,9)"><span class="choice-letter">D</span><span>He walked in the ways of the LORD but fell into idolatry after making a trade alliance with Ahaziah of Israel</span></button>
+      </div>
+      <div class="feedback" id="fb9">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next9" onclick="nextQ(9)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-number">Question 10 of 10</div>
+      <p class="question-text">What were Micaiah's final public words as he was led away to prison?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,10)"><span class="choice-letter">A</span><span>"Ahab, you will not see the gates of Samaria again, for the LORD has spoken against you"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,10)"><span class="choice-letter">B</span><span>"Mark this day — the blood of Naboth cries out for yours at the very place it was shed"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,10)"><span class="choice-letter">C</span><span>"I will await your return, and if you return, I myself will answer for what I have spoken"</span></button>
+        <button class="choice-btn" onclick="answer(this,true,10)"><span class="choice-letter">D</span><span>"If you ever return safely, the LORD has not spoken through me — mark my words, all you people!"</span></button>
+      </div>
+      <div class="feedback" id="fb10">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next10" onclick="showResults()">See Results &rarr;</button></div>
+    </div>
+
+    <!-- Results -->
+    <div id="results-screen">
+      <div class="results-title">Quiz Complete</div>
+      <div class="results-subtitle">Day 180 &middot; 1 Kings 22</div>
+
+      <div class="score-ring-wrap">
+        <div class="score-ring-container">
+          <svg class="score-ring-svg" width="120" height="120" viewBox="0 0 120 120">
+            <circle class="ring-bg" cx="60" cy="60" r="45"/>
+            <circle class="ring-fg" id="score-ring" cx="60" cy="60" r="45"/>
+          </svg>
+          <div class="score-ring-inner">
+            <div class="score-number" id="score-display">0</div>
+            <div class="score-denom">/ 10</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="results-message" id="results-message"></div>
+
+      <hr class="divider">
+
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+
+      <div style="text-align:center;">
+        <button class="retry-btn" onclick="resetQuiz()">Take Again</button>
+      </div>
+    </div>
+
+  </div><!-- end .parchment -->
+</div><!-- end .scroll-container -->
+
+<script>
+  const questions = [
+    {
+      correct: 3,
+      feedback: {
+        correct: "Ahab admitted there was one true prophet of the LORD — Micaiah son of Imlah — but said he hated him because he never prophesied good about him, only bad.",
+        wrong: "Ahab acknowledged Micaiah but expressed personal hatred for him, not institutional rejection."
+      },
+      ref: "1 Kings 22:8"
+    },
+    {
+      correct: 0,
+      feedback: {
+        correct: "Micaiah initially echoed the false prophets ironically — 'Attack and be victorious' — prompting Ahab to press him for the actual truth.",
+        wrong: "Micaiah's first response mirrored the 400 false prophets, a sarcastic echo that Ahab could see through, prompting his demand for truth."
+      },
+      ref: "1 Kings 22:15"
+    },
+    {
+      correct: 1,
+      feedback: {
+        correct: "In Micaiah's vision a spirit said, 'I will go and be a lying spirit in the mouths of all his prophets.' The LORD commissioned it, and all of Ahab's prophets prophesied falsely as a result.",
+        wrong: "The spirit volunteered to enter the mouths of the prophets — not to distort dreams or send wind — and the LORD sent it to do so."
+      },
+      ref: "1 Kings 22:21–23"
+    },
+    {
+      correct: 2,
+      feedback: {
+        correct: "Zedekiah made iron horns and declared, 'This is what the LORD says: With these you will gore the Arameans until they are destroyed.' It was a dramatic sign act to reinforce his false prophecy.",
+        wrong: "Zedekiah's prophetic act was crafting iron horns — a physical symbol meant to demonstrate Ahab's power over Aram."
+      },
+      ref: "1 Kings 22:11"
+    },
+    {
+      correct: 0,
+      feedback: {
+        correct: "Ahab said to Jehoshaphat, 'I will enter the battle in disguise, but you wear your royal robes.' The plan backfired — the Arameans initially pursued Jehoshaphat, but a random arrow still found Ahab.",
+        wrong: "Ahab disguised himself to avoid being targeted, while Jehoshaphat wore royal robes — essentially making Jehoshaphat the decoy."
+      },
+      ref: "1 Kings 22:30"
+    },
+    {
+      correct: 3,
+      feedback: {
+        correct: "After striking Micaiah, Zedekiah asked, 'Which way did the Spirit of the LORD go when he left me to speak to you?' Micaiah replied that Zedekiah would find out when he hid in an inner room on the day of disaster.",
+        wrong: "Zedekiah's taunt was specifically about the direction the Spirit traveled — a way of mocking Micaiah's claim to have the true word."
+      },
+      ref: "1 Kings 22:24"
+    },
+    {
+      correct: 1,
+      feedback: {
+        correct: "'Someone drew his bow at random and hit the king of Israel between the sections of his armor.' The disguise could not shield Ahab from the judgment the LORD had already declared through Micaiah.",
+        wrong: "No Aramean targeted Ahab intentionally — the arrow was drawn at random, yet it found the one gap in Ahab's armor."
+      },
+      ref: "1 Kings 22:34"
+    },
+    {
+      correct: 2,
+      feedback: {
+        correct: "The chariot was washed at a pool in Samaria — where the prostitutes bathed — and dogs licked Ahab's blood, fulfilling Elijah's earlier prophecy against the house of Ahab.",
+        wrong: "The fulfillment happened at the pool of Samaria, not at Jezreel or the Jordan. Dogs licking his blood was the specific sign the LORD had declared."
+      },
+      ref: "1 Kings 22:38"
+    },
+    {
+      correct: 0,
+      feedback: {
+        correct: "Jehoshaphat 'did what was right in the eyes of the LORD' and followed his father Asa's ways, but 'the high places were not removed, and the people continued to offer sacrifices and burn incense there.' He also expelled the remaining male shrine prostitutes from the land.",
+        wrong: "The text specifies that Jehoshaphat did right and followed Asa — yet the high places remained, and he expelled (not earlier — he finished what Asa started with) the male shrine prostitutes."
+      },
+      ref: "1 Kings 22:43–46"
+    },
+    {
+      correct: 3,
+      feedback: {
+        correct: "As Micaiah was taken away, he called out, 'If you ever return safely, the LORD has not spoken through me.' Then he addressed the crowd: 'Mark my words, all you people!' — making his prophecy a public witness, not merely a private word to the king.",
+        wrong: "Micaiah's final words were a conditional declaration and a public appeal — not a direct address to Ahab about Naboth or a promise to answer for himself."
+      },
+      ref: "1 Kings 22:28"
+    }
+  ];
+
+  const questionTexts = [
+    "When Jehoshaphat asked for \"a prophet of the LORD,\" what was Ahab's immediate response?",
+    "What did Micaiah initially say when Ahab directly asked him whether to attack Ramoth Gilead?",
+    "In Micaiah's vision of the LORD's heavenly court, how did a spirit volunteer to lead Ahab to his death?",
+    "What did Zedekiah son of Chenaanah do to illustrate his prophecy before the two kings?",
+    "What arrangement did Ahab propose to Jehoshaphat before entering battle at Ramoth Gilead?",
+    "After striking Micaiah on the cheek, what specific question did Zedekiah ask him?",
+    "How was Ahab mortally wounded, given that he had disguised himself for the battle?",
+    "After Ahab died, where was his chariot washed, and what happened there that fulfilled the LORD's word?",
+    "Which best summarizes the evaluation Scripture gives of Jehoshaphat's reign in 1 Kings 22?",
+    "What were Micaiah's final public words as he was led away to prison?"
+  ];
+
+  let currentQ = 1;
+  let score = 0;
+  let answers = [];
+
+  function answer(btn, isCorrect, qNum) {
+    const block = document.getElementById('q' + qNum);
+    const buttons = block.querySelectorAll('.choice-btn');
+    buttons.forEach(b => b.disabled = true);
+
+    const q = questions[qNum - 1];
+    buttons[q.correct].classList.add('correct');
+
+    const fb = document.getElementById('fb' + qNum);
+    fb.style.display = 'block';
+    const label = fb.querySelector('.feedback-label');
+    const body = fb.querySelector('.feedback-body');
+    const ref = fb.querySelector('.scripture-ref');
+
+    if (isCorrect) {
+      btn.classList.add('correct');
+      fb.classList.add('correct');
+      label.textContent = 'Correct';
+      body.textContent = q.feedback.correct;
+      score++;
+      answers.push({ correct: true });
+    } else {
+      btn.classList.add('wrong');
+      fb.classList.add('wrong');
+      label.textContent = 'Incorrect';
+      body.textContent = q.feedback.wrong;
+      answers.push({ correct: false });
+    }
+
+    ref.textContent = q.ref;
+
+    document.getElementById('next' + qNum).style.display = 'inline-block';
+    updateProgress(qNum);
+  }
+
+  function updateProgress(qNum) {
+    const pct = (qNum / 10) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+  }
+
+  function nextQ(qNum) {
+    document.getElementById('q' + qNum).classList.remove('active');
+    const next = qNum + 1;
+    document.getElementById('q' + next).classList.add('active');
+    currentQ = next;
+  }
+
+  function showResults() {
+    document.getElementById('q10').classList.remove('active');
+    document.getElementById('progress-bar').style.width = '100%';
+
+    const rs = document.getElementById('results-screen');
+    rs.style.display = 'block';
+
+    document.getElementById('score-display').textContent = score;
+
+    // Animate ring
+    const circumference = 283;
+    const offset = circumference - (score / 10) * circumference;
+    const ring = document.getElementById('score-ring');
+    setTimeout(() => {
+      ring.style.strokeDashoffset = offset;
+      if (score >= 8) ring.classList.add('green');
+      else if (score <= 4) ring.classList.add('red');
+    }, 100);
+
+    // Results message
+    const msg = document.getElementById('results-message');
+    if (score === 10) {
+      msg.textContent = "Perfect score. You read 1 Kings 22 with the attention it deserves — Micaiah's courage, Ahab's schemes, and the LORD's sovereign word came through in every answer.";
+    } else if (score >= 8) {
+      msg.textContent = "Excellent work. The story of Micaiah and Ahab is rich with prophetic irony and sovereign judgment — you caught nearly all of it.";
+    } else if (score >= 6) {
+      msg.textContent = "Good effort. 1 Kings 22 rewards close reading — a few details slipped by, but the main currents of judgment and prophecy came through.";
+    } else if (score >= 4) {
+      msg.textContent = "A solid start. The chapter is dense with intrigue — Micaiah's vision, Ahab's disguise, the random arrow. Go back and let those details sink in.";
+    } else {
+      msg.textContent = "This chapter repays slow, careful reading. Micaiah's prophetic courage and the LORD's sovereign hand over Ahab's death are worth revisiting closely.";
+    }
+
+    // Review list
+    const reviewList = document.getElementById('review-list');
+    reviewList.innerHTML = '';
+    answers.forEach((a, i) => {
+      const div = document.createElement('div');
+      div.className = 'review-item';
+      const icon = a.correct ? '&#9989;' : '&#10060;';
+      const cls = a.correct ? 'review-correct' : 'review-wrong';
+      div.innerHTML = `<span class="review-icon ${cls}">${icon}</span><div><strong>Q${i+1}:</strong> ${questionTexts[i]}${!a.correct ? '<br><span class="answer-note">' + questions[i].ref + '</span>' : ''}</div>`;
+      reviewList.appendChild(div);
+    });
+  }
+
+  function resetQuiz() {
+    score = 0;
+    answers = [];
+    currentQ = 1;
+
+    document.getElementById('results-screen').style.display = 'none';
+    document.getElementById('progress-bar').style.width = '0%';
+
+    const ring = document.getElementById('score-ring');
+    ring.style.strokeDashoffset = '283';
+    ring.classList.remove('green', 'red');
+
+    for (let i = 1; i <= 10; i++) {
+      const block = document.getElementById('q' + i);
+      block.classList.remove('active');
+
+      const buttons = block.querySelectorAll('.choice-btn');
+      buttons.forEach(b => {
+        b.disabled = false;
+        b.classList.remove('correct', 'wrong');
+      });
+
+      const fb = document.getElementById('fb' + i);
+      fb.style.display = 'none';
+      fb.className = 'feedback';
+
+      document.getElementById('next' + i).style.display = 'none';
+    }
+
+    document.getElementById('q1').classList.add('active');
+  }
+</script>
+</body>
+</html>
