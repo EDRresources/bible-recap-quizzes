@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Recap Quiz — Day 192 · Amos 1-5</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: #0e0a04;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(201,168,76,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(139,90,30,0.07) 0%, transparent 60%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2rem 1rem 4rem;
+    font-family: 'Crimson Text', serif;
+    color: #2c1a06;
+  }
+
+  .scroll-container {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── Header ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 1.8rem;
+    animation: fadeIn 0.8s ease both;
+  }
+
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: #f5e8c8;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    line-height: 1.2;
+    margin-bottom: 0.6rem;
+  }
+
+  .badges {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.7rem;
+  }
+
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    padding: 0.2rem 0.65rem;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+
+  .badge-challenging {
+    background: rgba(201,168,76,0.18);
+    color: #c9a84c;
+    border: 1px solid rgba(201,168,76,0.4);
+  }
+
+  .passage-tags {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .passage-tag {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 2px;
+    padding: 0.2rem 0.6rem;
+  }
+
+  /* ── Ornament ── */
+  .ornament {
+    text-align: center;
+    color: #c9a84c;
+    font-size: 1.1rem;
+    letter-spacing: 0.4em;
+    margin-bottom: 1.4rem;
+    opacity: 0.7;
+  }
+
+  /* ── Progress Bar ── */
+  .progress-wrap {
+    background: rgba(201,168,76,0.12);
+    border-radius: 4px;
+    height: 5px;
+    margin-bottom: 1.8rem;
+    overflow: hidden;
+    border: 1px solid rgba(201,168,76,0.2);
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8cc7a);
+    border-radius: 4px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    width: 0%;
+  }
+
+  /* ── Parchment Card ── */
+  .parchment {
+    background: linear-gradient(160deg,
+      #f5e8c8 0%,
+      #ede0b4 20%,
+      #e8d8a0 50%,
+      #edddb0 80%,
+      #f0e2be 100%);
+    border: 2px solid #c9a84c;
+    border-radius: 6px;
+    padding: 2rem 2.2rem;
+    box-shadow:
+      0 0 0 1px rgba(201,168,76,0.2),
+      0 8px 32px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .parchment::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* ── Question ── */
+  .question-block {
+    display: none;
+    animation: fadeIn 0.45s ease both;
+  }
+
+  .question-block.active {
+    display: block;
+  }
+
+  .question-number {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: #8b6914;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .detail-badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #7a4a10;
+    background: rgba(139,105,20,0.15);
+    border: 1px solid rgba(139,105,20,0.35);
+    border-radius: 2px;
+    padding: 0.1rem 0.45rem;
+    margin-left: 0.4rem;
+    vertical-align: middle;
+    text-transform: uppercase;
+  }
+
+  .question-text {
+    font-size: 1.22rem;
+    line-height: 1.55;
+    color: #1e0f02;
+    margin-bottom: 1.4rem;
+    font-weight: 400;
+  }
+
+  /* ── Answer Choices ── */
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(139,105,20,0.3);
+    border-radius: 4px;
+    padding: 0.7rem 0.9rem;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.18s, border-color 0.18s, transform 0.12s;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #1e0f02;
+    width: 100%;
+  }
+
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.18);
+    border-color: #c9a84c;
+    transform: translateY(-1px);
+  }
+
+  .choice-btn:disabled {
+    cursor: default;
+  }
+
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #8b6914;
+    min-width: 1.2rem;
+    padding-top: 0.1rem;
+    flex-shrink: 0;
+  }
+
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.15);
+    border-color: #1a5c2a;
+  }
+
+  .choice-btn.correct .choice-letter {
+    color: #1a5c2a;
+  }
+
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.12);
+    border-color: #8b1a1a;
+  }
+
+  .choice-btn.wrong .choice-letter {
+    color: #8b1a1a;
+  }
+
+  /* ── Feedback ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 1.2rem;
+    animation: fadeIn 0.3s ease both;
+    font-size: 1.05rem;
+    line-height: 1.55;
+  }
+
+  .feedback.correct {
+    background: rgba(26,92,42,0.12);
+    border: 1.5px solid rgba(26,92,42,0.4);
+    color: #0d3317;
+  }
+
+  .feedback.wrong {
+    background: rgba(139,26,26,0.1);
+    border: 1.5px solid rgba(139,26,26,0.35);
+    color: #3d0a0a;
+  }
+
+  .feedback-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+
+  .feedback.correct .feedback-label { color: #1a5c2a; }
+  .feedback.wrong .feedback-label { color: #8b1a1a; }
+
+  .scripture-ref {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    opacity: 0.75;
+    margin-top: 0.3rem;
+  }
+
+  /* ── Navigation ── */
+  .nav-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+  }
+
+  .next-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #a8872e);
+    color: #0e0a04;
+    border: none;
+    border-radius: 3px;
+    padding: 0.55rem 1.4rem;
+    cursor: pointer;
+    display: none;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+
+  .next-btn:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+  }
+
+  /* ── Results ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeIn 0.6s ease both;
+  }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e0f02;
+    margin-bottom: 0.4rem;
+  }
+
+  .results-subtitle {
+    font-size: 1rem;
+    color: #5a3a14;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Score Ring */
+  .score-ring-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .score-ring-svg {
+    transform: rotate(-90deg);
+  }
+
+  .ring-bg {
+    fill: none;
+    stroke: rgba(139,105,20,0.2);
+    stroke-width: 10;
+  }
+
+  .ring-fg {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 283;
+    stroke-dashoffset: 283;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .ring-fg.green { stroke: #1a5c2a; }
+  .ring-fg.red { stroke: #8b1a1a; }
+
+  .score-ring-inner {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 120px;
+  }
+
+  .score-ring-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .score-number {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e0f02;
+    line-height: 1;
+  }
+
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    color: #5a3a14;
+    letter-spacing: 0.1em;
+  }
+
+  .results-message {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: #2c1a06;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid rgba(139,105,20,0.3);
+    margin: 1.2rem 0;
+  }
+
+  /* Review */
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: #8b6914;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    text-align: left;
+  }
+
+  .review-item {
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+    margin-bottom: 0.9rem;
+    text-align: left;
+    font-size: 1.0rem;
+    line-height: 1.5;
+    color: #1e0f02;
+  }
+
+  .review-icon {
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+  }
+
+  .review-correct { color: #1a5c2a; }
+  .review-wrong { color: #8b1a1a; }
+
+  .review-item .answer-note {
+    font-size: 0.9rem;
+    color: #5a3a14;
+    font-style: italic;
+  }
+
+  /* Retry button */
+  .retry-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: transparent;
+    color: #8b6914;
+    border: 1.5px solid rgba(139,105,20,0.5);
+    border-radius: 3px;
+    padding: 0.55rem 1.4rem;
+    cursor: pointer;
+    margin-top: 1.2rem;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .retry-btn:hover {
+    background: rgba(201,168,76,0.15);
+    color: #5a3a14;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="scroll-container">
+
+  <!-- Header -->
+  <div class="quiz-header">
+    <div class="date-line">Saturday, July 11, 2026 &middot; Day 192</div>
+    <div class="quiz-title">The Bible Recap</div>
+    <div class="badges">
+      <span class="badge badge-challenging">Challenging</span>
+    </div>
+    <div class="passage-tags">
+      <span class="passage-tag">Amos 1-5</span>
+    </div>
+  </div>
+
+  <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+
+  <!-- Quiz Card -->
+  <div class="parchment" id="quiz-card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-number">Question 1 of 10 <span class="detail-badge">Detail</span></div>
+      <p class="question-text">In Amos 1:2, what happens to the pastures of the shepherds and the top of Carmel when the LORD roars from Zion and utters his voice from Jerusalem?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,1)"><span class="choice-letter">A</span><span>"the pastures of the shepherds mourn, and the top of Carmel withers"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,1)"><span class="choice-letter">B</span><span>"the strongholds of Damascus will be devoured by fire, and the people of Syria will go into exile to Kir"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,1)"><span class="choice-letter">C</span><span>"the wall of Gaza will be devoured by fire, and the remnant of the Philistines will perish"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,1)"><span class="choice-letter">D</span><span>"the wall of Tyre will be devoured by fire, for they did not remember the covenant of brotherhood"</span></button>
+      </div>
+      <div class="feedback" id="fb1">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next1" onclick="nextQ(1)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-number">Question 2 of 10</div>
+      <p class="question-text">Amos 1 pronounces "for three transgressions... and for four" against several surrounding nations. Which specific charge is leveled against Edom in verse 11?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,2)"><span class="choice-letter">A</span><span>"they carried into exile a whole people to deliver them up to Edom"</span></button>
+        <button class="choice-btn" onclick="answer(this,true,2)"><span class="choice-letter">B</span><span>"he pursued his brother with the sword and cast off all pity, and his anger tore perpetually, and he kept his wrath forever"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,2)"><span class="choice-letter">C</span><span>"they have ripped open pregnant women in Gilead, that they might enlarge their border"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,2)"><span class="choice-letter">D</span><span>"they delivered up a whole people to Edom, and did not remember the covenant of brotherhood"</span></button>
+      </div>
+      <div class="feedback" id="fb2">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next2" onclick="nextQ(2)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-number">Question 3 of 10</div>
+      <p class="question-text">Amos 2:4-5 indicts Judah for a different kind of sin than the social crimes charged against Israel in the verses that follow. What is Judah's specific charge?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,3)"><span class="choice-letter">A</span><span>"they sell the righteous for silver, and the needy for a pair of sandals"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,3)"><span class="choice-letter">B</span><span>"a man and his father go in to the same girl, so that my holy name is profaned"</span></button>
+        <button class="choice-btn" onclick="answer(this,true,3)"><span class="choice-letter">C</span><span>"they have rejected the law of the Lord, and have not kept his statutes, but their lies have led them astray, those after which their fathers walked"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,3)"><span class="choice-letter">D</span><span>"he burned to lime the bones of the king of Edom"</span></button>
+      </div>
+      <div class="feedback" id="fb3">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next3" onclick="nextQ(3)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-number">Question 4 of 10 <span class="detail-badge">Detail</span></div>
+      <p class="question-text">According to Amos 2:11-12, God raised up prophets and Nazirites from among Israel's own sons. How did Israel treat them?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,4)"><span class="choice-letter">A</span><span>"yet you did not return to me"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,4)"><span class="choice-letter">B</span><span>"they hate him who reproves in the gate, and they abhor him who speaks the truth"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,4)"><span class="choice-letter">C</span><span>"Prepare to meet your God, O Israel!"</span></button>
+        <button class="choice-btn" onclick="answer(this,true,4)"><span class="choice-letter">D</span><span>"you made the Nazirites drink wine, and commanded the prophets, saying, 'You shall not prophesy'"</span></button>
+      </div>
+      <div class="feedback" id="fb4">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next4" onclick="nextQ(4)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-number">Question 5 of 10</div>
+      <p class="question-text">Amos 3:3-8 strings together rhetorical questions — two walking together, a lion roaring, a bird caught in a snare, a trumpet sounding. What conclusion do they build toward?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,5)"><span class="choice-letter">A</span><span>"An adversary shall surround the land and bring down your defenses from you, and your strongholds shall be plundered"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,5)"><span class="choice-letter">B</span><span>"As the shepherd rescues from the mouth of the lion two legs, or a piece of an ear... with the corner of a couch and part of a bed"</span></button>
+        <button class="choice-btn" onclick="answer(this,true,5)"><span class="choice-letter">C</span><span>"Does disaster come to a city, unless the Lord has done it?"..."The Lord God has spoken; who can but prophesy?"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,5)"><span class="choice-letter">D</span><span>"on the day I punish Israel for his transgressions, I will punish the altars of Bethel"</span></button>
+      </div>
+      <div class="feedback" id="fb5">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next5" onclick="nextQ(5)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-number">Question 6 of 10 <span class="detail-badge">Detail</span></div>
+      <p class="question-text">Amos 3:12 pictures Samaria's coming judgment through a shepherd who rescues only scraps from a lion's mouth. What meager remnant does the image describe?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,6)"><span class="choice-letter">A</span><span>"two legs, or a piece of an ear... with the corner of a couch and part of a bed"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,6)"><span class="choice-letter">B</span><span>"cleanness of teeth in all your cities, and lack of bread in all your places"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,6)"><span class="choice-letter">C</span><span>"a brand plucked out of the burning"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,6)"><span class="choice-letter">D</span><span>"the horns of the altar shall be cut off and fall to the ground"</span></button>
+      </div>
+      <div class="feedback" id="fb6">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next6" onclick="nextQ(6)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-number">Question 7 of 10 <span class="detail-badge">Detail</span></div>
+      <p class="question-text">Amos 4:6-11 lists disasters God sent to bring Israel back to him, each closing with "yet you did not return to me." Which image is attached to the disaster compared to the overthrow of Sodom and Gomorrah?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,7)"><span class="choice-letter">A</span><span>"cleanness of teeth in all your cities, and lack of bread in all your places"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,7)"><span class="choice-letter">B</span><span>"I struck you with blight and mildew... the locust devoured" your gardens, vineyards, fig trees, and olive trees</span></button>
+        <button class="choice-btn" onclick="answer(this,false,7)"><span class="choice-letter">C</span><span>"I sent among you a pestilence after the manner of Egypt... and carried away your horses"</span></button>
+        <button class="choice-btn" onclick="answer(this,true,7)"><span class="choice-letter">D</span><span>"you were as a brand plucked out of the burning"</span></button>
+      </div>
+      <div class="feedback" id="fb7">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next7" onclick="nextQ(7)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-number">Question 8 of 10</div>
+      <p class="question-text">In Amos 4:1, what does the LORD charge the "cows of Bashan" — the wealthy women of Samaria — with doing?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,8)"><span class="choice-letter">A</span><span>"they sell the righteous for silver, and the needy for a pair of sandals"</span></button>
+        <button class="choice-btn" onclick="answer(this,true,8)"><span class="choice-letter">B</span><span>"who oppress the poor, who crush the needy, who say to your husbands, 'Bring, that we may drink!'"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,8)"><span class="choice-letter">C</span><span>"you trample on the poor and you exact taxes of grain from him... you have built houses of hewn stone, but you shall not dwell in them"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,8)"><span class="choice-letter">D</span><span>"a man and his father go in to the same girl, so that my holy name is profaned"</span></button>
+      </div>
+      <div class="feedback" id="fb8">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next8" onclick="nextQ(8)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-number">Question 9 of 10</div>
+      <p class="question-text">In Amos 5:4-6, what alternative does the LORD set over against seeking out the shrines at Bethel, Gilgal, or Beersheba?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,9)"><span class="choice-letter">A</span><span>"Seek me and live"..."Seek the Lord and live, lest he break out like fire in the house of Joseph"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,9)"><span class="choice-letter">B</span><span>"Seek good, and not evil, that you may live... establish justice in the gate"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,9)"><span class="choice-letter">C</span><span>"let justice roll down like waters, and righteousness like an ever-flowing stream"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,9)"><span class="choice-letter">D</span><span>"Prepare to meet your God, O Israel!"</span></button>
+      </div>
+      <div class="feedback" id="fb9">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next9" onclick="nextQ(9)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-number">Question 10 of 10 <span class="detail-badge">Detail</span></div>
+      <p class="question-text">Amos 5:18-20 warns those who long for the "day of the Lord." What image does verse 19 use to show that day will bring inescapable danger, not relief?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,10)"><span class="choice-letter">A</span><span>"he who made the Pleiades and Orion, and turns deep darkness into the morning"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,10)"><span class="choice-letter">B</span><span>"let justice roll down like waters, and righteousness like an ever-flowing stream"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,10)"><span class="choice-letter">C</span><span>"you shall take up Sikkuth your king, and Kiyyun your star-god"</span></button>
+        <button class="choice-btn" onclick="answer(this,true,10)"><span class="choice-letter">D</span><span>"as if a man fled from a lion, and a bear met him, or went into the house and leaned his hand against the wall, and a serpent bit him"</span></button>
+      </div>
+      <div class="feedback" id="fb10">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next10" onclick="nextQ(10)">See Results &rarr;</button></div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="results-screen">
+      <div class="results-title">Quiz Complete</div>
+      <div class="results-subtitle">Day 192 &middot; Amos 1-5</div>
+
+      <div class="score-ring-wrap">
+        <div class="score-ring-container">
+          <svg class="score-ring-svg" width="120" height="120" viewBox="0 0 120 120">
+            <circle class="ring-bg" cx="60" cy="60" r="45"/>
+            <circle class="ring-fg" id="ring-fg" cx="60" cy="60" r="45"/>
+          </svg>
+          <div class="score-ring-inner">
+            <div class="score-number" id="score-num">0</div>
+            <div class="score-denom">out of 10</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="results-message" id="results-msg"></div>
+
+      <hr class="divider">
+
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+
+      <button class="retry-btn" onclick="resetQuiz()">Take Again</button>
+    </div>
+
+  </div><!-- .parchment -->
+
+</div><!-- .scroll-container -->
+
+<script>
+const TOTAL = 10;
+let score = 0;
+let answered = new Array(TOTAL + 1).fill(false);
+let userCorrect = new Array(TOTAL + 1).fill(false);
+
+const questions = [
+  null, // index 0 unused
+  {
+    text: "In Amos 1:2, what happens to the pastures of the shepherds and the top of Carmel when the LORD roars from Zion and utters his voice from Jerusalem?",
+    correct: "\"the pastures of the shepherds mourn, and the top of Carmel withers\"",
+    ref: "Amos 1:2",
+    explanation: "\"The Lord roars from Zion and utters his voice from Jerusalem; the pastures of the shepherds mourn, and the top of Carmel withers\" (Amos 1:2). This opening image sets the tone for the whole book: the same voice that will indict nation after nation begins by making the land itself grieve."
+  },
+  {
+    text: "Amos 1 pronounces \"for three transgressions... and for four\" against several surrounding nations. Which specific charge is leveled against Edom in verse 11?",
+    correct: "\"he pursued his brother with the sword and cast off all pity, and his anger tore perpetually, and he kept his wrath forever\"",
+    ref: "Amos 1:11",
+    explanation: "\"For three transgressions of Edom, and for four, I will not revoke the punishment, because he pursued his brother with the sword and cast off all pity, and his anger tore perpetually, and he kept his wrath forever\" (Amos 1:11). Edom's guilt is framed in terms of kinship betrayed — Edom descends from Esau, brother to Jacob — making the unrelenting anger especially damning."
+  },
+  {
+    text: "Amos 2:4-5 indicts Judah for a different kind of sin than the social crimes charged against Israel in the verses that follow. What is Judah's specific charge?",
+    correct: "\"they have rejected the law of the Lord, and have not kept his statutes, but their lies have led them astray, those after which their fathers walked\"",
+    ref: "Amos 2:4",
+    explanation: "\"For three transgressions of Judah, and for four, I will not revoke the punishment, because they have rejected the law of the Lord, and have not kept his statutes, but their lies have led them astray, those after which their fathers walked\" (Amos 2:4). Judah's indictment is covenantal — rejecting the law itself — while Israel's charge (vv. 6-8) lists specific acts of exploitation and injustice."
+  },
+  {
+    text: "According to Amos 2:11-12, God raised up prophets and Nazirites from among Israel's own sons. How did Israel treat them?",
+    correct: "\"you made the Nazirites drink wine, and commanded the prophets, saying, 'You shall not prophesy'\"",
+    ref: "Amos 2:11-12",
+    explanation: "\"And I raised up some of your sons for prophets, and some of your young men for Nazirites... 'But you made the Nazirites drink wine, and commanded the prophets, saying, \\u2018You shall not prophesy\\u2019\" (Amos 2:11-12). Israel took two gifts meant to set them apart to the Lord and corrupted one, silenced the other."
+  },
+  {
+    text: "Amos 3:3-8 strings together rhetorical questions — two walking together, a lion roaring, a bird caught in a snare, a trumpet sounding. What conclusion do they build toward?",
+    correct: "\"Does disaster come to a city, unless the Lord has done it?\"...\"The Lord God has spoken; who can but prophesy?\"",
+    ref: "Amos 3:6, 8",
+    explanation: "Each question assumes an obvious cause behind its effect, climaxing in \"Does disaster come to a city, unless the Lord has done it?\" (3:6) and \"The lion has roared; who will not fear? The Lord God has spoken; who can but prophesy?\" (3:8). The logic defends Amos's own compulsion to speak: just as effects have causes, his prophecy has a divine source."
+  },
+  {
+    text: "Amos 3:12 pictures Samaria's coming judgment through a shepherd who rescues only scraps from a lion's mouth. What meager remnant does the image describe?",
+    correct: "\"two legs, or a piece of an ear... with the corner of a couch and part of a bed\"",
+    ref: "Amos 3:12",
+    explanation: "\"As the shepherd rescues from the mouth of the lion two legs, or a piece of an ear, so shall the people of Israel who dwell in Samaria be rescued, with the corner of a couch and part of a bed\" (Amos 3:12). The image is deliberately pitiful — not a rescue to celebrate, but proof of how nearly total the devastation will be."
+  },
+  {
+    text: "Amos 4:6-11 lists disasters God sent to bring Israel back to him, each closing with \"yet you did not return to me.\" Which image is attached to the disaster compared to the overthrow of Sodom and Gomorrah?",
+    correct: "\"you were as a brand plucked out of the burning\"",
+    ref: "Amos 4:11",
+    explanation: "\"I overthrew some of you, as when God overthrew Sodom and Gomorrah, and you were as a brand plucked out of the burning; yet you did not return to me\" (Amos 4:11). It is the last and most severe of the five disasters listed — famine, drought, blight, pestilence, and finally an overthrow like Sodom's — and still the refrain holds: no return."
+  },
+  {
+    text: "In Amos 4:1, what does the LORD charge the \"cows of Bashan\" — the wealthy women of Samaria — with doing?",
+    correct: "\"who oppress the poor, who crush the needy, who say to your husbands, 'Bring, that we may drink!'\"",
+    ref: "Amos 4:1",
+    explanation: "\"Hear this word, you cows of Bashan, who are on the mountain of Samaria, who oppress the poor, who crush the needy, who say to your husbands, \\u2018Bring, that we may drink!\\u2019\" (Amos 4:1). Bashan's cattle were proverbially fat and pampered; Amos turns the compliment into an accusation of complicit luxury built on others' suffering."
+  },
+  {
+    text: "In Amos 5:4-6, what alternative does the LORD set over against seeking out the shrines at Bethel, Gilgal, or Beersheba?",
+    correct: "\"Seek me and live\"...\"Seek the Lord and live, lest he break out like fire in the house of Joseph\"",
+    ref: "Amos 5:4, 6",
+    explanation: "\"For thus says the Lord to the house of Israel: 'Seek me and live; but do not seek Bethel, and do not enter into Gilgal or cross over to Beersheba... Seek the Lord and live, lest he break out like fire in the house of Joseph'\" (Amos 5:4-6). The shrines Israel trusted for worship are named as exactly what must be abandoned in favor of the Lord himself."
+  },
+  {
+    text: "Amos 5:18-20 warns those who long for the \"day of the Lord.\" What image does verse 19 use to show that day will bring inescapable danger, not relief?",
+    correct: "\"as if a man fled from a lion, and a bear met him, or went into the house and leaned his hand against the wall, and a serpent bit him\"",
+    ref: "Amos 5:19",
+    explanation: "\"As if a man fled from a lion, and a bear met him, or went into the house and leaned his hand against the wall, and a serpent bit him\" (Amos 5:19). Each escape only leads to a new threat — the point being that those presuming the day of the Lord will vindicate them are gravely mistaken about whose side judgment falls on."
+  }
+];
+
+function answer(btn, isCorrect, qNum) {
+  if (answered[qNum]) return;
+  answered[qNum] = true;
+  userCorrect[qNum] = isCorrect;
+  if (isCorrect) score++;
+
+  const block = document.getElementById('q' + qNum);
+  const allBtns = block.querySelectorAll('.choice-btn');
+  allBtns.forEach(b => {
+    b.disabled = true;
+    const txt = b.querySelector('span:last-child').textContent.trim();
+    const q = questions[qNum];
+    if (txt === q.correct || txt === q.correct.replace(/&#39;/g, "'")) {
+      b.classList.add('correct');
+    }
+  });
+  if (!isCorrect) btn.classList.add('wrong');
+
+  const fb = document.getElementById('fb' + qNum);
+  const label = fb.querySelector('.feedback-label');
+  const body = fb.querySelector('.feedback-body');
+  const ref = fb.querySelector('.scripture-ref');
+
+  fb.classList.add(isCorrect ? 'correct' : 'wrong');
+  label.textContent = isCorrect ? 'Correct' : 'Incorrect';
+  body.textContent = questions[qNum].explanation;
+  ref.textContent = questions[qNum].ref;
+  fb.style.display = 'block';
+
+  const nextBtn = document.getElementById('next' + qNum);
+  nextBtn.style.display = 'inline-block';
+
+  updateProgress(qNum);
+}
+
+function updateProgress(current) {
+  const pct = (current / TOTAL) * 100;
+  document.getElementById('progress-bar').style.width = pct + '%';
+}
+
+function nextQ(current) {
+  const currentBlock = document.getElementById('q' + current);
+  currentBlock.classList.remove('active');
+
+  if (current < TOTAL) {
+    const nextBlock = document.getElementById('q' + (current + 1));
+    nextBlock.classList.add('active');
+    nextBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('progress-bar').style.width = '100%';
+  const resultsScreen = document.getElementById('results-screen');
+
+  document.querySelectorAll('.question-block').forEach(b => b.style.display = 'none');
+  resultsScreen.style.display = 'block';
+
+  document.getElementById('score-num').textContent = score;
+
+  const ring = document.getElementById('ring-fg');
+  const circumference = 283;
+  const pct = score / TOTAL;
+  const offset = circumference - (circumference * pct);
+  setTimeout(() => {
+    ring.style.strokeDashoffset = offset;
+    if (pct >= 0.8) ring.classList.add('green');
+    else if (pct < 0.5) ring.classList.add('red');
+  }, 100);
+
+  const msg = document.getElementById('results-msg');
+  if (score === 10) {
+    msg.textContent = "Perfect score! From the roar over Damascus and Edom to the man fleeing a lion only to meet a bear, you tracked Amos's indictments and images with real precision.";
+  } else if (score >= 8) {
+    msg.textContent = "Excellent work. Amos moves quickly from nation to nation and then turns hardest on Israel itself — you held the specific charges and images together well.";
+  } else if (score >= 6) {
+    msg.textContent = "Good effort. Between the oracles against the nations, the recitation of God's past grace, and the warnings about the day of the Lord, there's a lot to track — review the feedback and see what slipped by.";
+  } else if (score >= 4) {
+    msg.textContent = "Amos 1-5 packs judgment on nine nations, a call to seek the Lord, and vivid images of inescapable danger into five short chapters — use the question review to return to the text and sharpen your reading.";
+  } else {
+    msg.textContent = "Keep going! Amos rewards a slow, careful read, especially in how each oracle's wording differs from the next. Use the review below to guide a second look at the text.";
+  }
+
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  for (let i = 1; i <= TOTAL; i++) {
+    const div = document.createElement('div');
+    div.className = 'review-item';
+    const correct = userCorrect[i];
+    div.innerHTML = `
+      <span class="review-icon ${correct ? 'review-correct' : 'review-wrong'}">${correct ? '&#10003;' : '&#10007;'}</span>
+      <div>
+        <strong>Q${i}:</strong> ${questions[i].text}
+        <div class="answer-note">${correct ? 'Correct' : 'Correct answer: ' + questions[i].correct} &mdash; ${questions[i].ref}</div>
+      </div>`;
+    reviewList.appendChild(div);
+  }
+
+  resultsScreen.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetQuiz() {
+  score = 0;
+  answered = new Array(TOTAL + 1).fill(false);
+  userCorrect = new Array(TOTAL + 1).fill(false);
+
+  document.getElementById('progress-bar').style.width = '0%';
+  document.getElementById('results-screen').style.display = 'none';
+
+  const ring = document.getElementById('ring-fg');
+  ring.style.strokeDashoffset = '283';
+  ring.classList.remove('green', 'red');
+
+  document.querySelectorAll('.question-block').forEach((b, i) => {
+    b.style.display = '';
+    b.classList.remove('active');
+    b.querySelectorAll('.choice-btn').forEach(btn => {
+      btn.disabled = false;
+      btn.classList.remove('correct', 'wrong');
+    });
+    const fb = b.querySelector('.feedback');
+    fb.style.display = 'none';
+    fb.classList.remove('correct', 'wrong');
+    const nextBtn = b.querySelector('.next-btn');
+    if (nextBtn) nextBtn.style.display = 'none';
+  });
+
+  document.getElementById('q1').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
