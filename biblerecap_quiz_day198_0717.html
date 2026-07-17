@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Recap Quiz — Day 198 · Isaiah 18-22</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: #0e0a04;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(201,168,76,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(139,90,30,0.07) 0%, transparent 60%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2rem 1rem 4rem;
+    font-family: 'Crimson Text', serif;
+    color: #2c1a06;
+  }
+
+  .scroll-container {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── Header ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 1.8rem;
+    animation: fadeIn 0.8s ease both;
+  }
+
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: #f5e8c8;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    line-height: 1.2;
+    margin-bottom: 0.6rem;
+  }
+
+  .badges {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.7rem;
+  }
+
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    padding: 0.2rem 0.65rem;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+
+  .badge-challenging {
+    background: rgba(201,168,76,0.18);
+    color: #c9a84c;
+    border: 1px solid rgba(201,168,76,0.4);
+  }
+
+  .passage-tags {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .passage-tag {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 2px;
+    padding: 0.2rem 0.6rem;
+  }
+
+  /* ── Ornament ── */
+  .ornament {
+    text-align: center;
+    color: #c9a84c;
+    font-size: 1.1rem;
+    letter-spacing: 0.4em;
+    margin-bottom: 1.4rem;
+    opacity: 0.7;
+  }
+
+  /* ── Progress Bar ── */
+  .progress-wrap {
+    background: rgba(201,168,76,0.12);
+    border-radius: 4px;
+    height: 5px;
+    margin-bottom: 1.8rem;
+    overflow: hidden;
+    border: 1px solid rgba(201,168,76,0.2);
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8cc7a);
+    border-radius: 4px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    width: 0%;
+  }
+
+  /* ── Parchment Card ── */
+  .parchment {
+    background: linear-gradient(160deg,
+      #f5e8c8 0%,
+      #ede0b4 20%,
+      #e8d8a0 50%,
+      #edddb0 80%,
+      #f0e2be 100%);
+    border: 2px solid #c9a84c;
+    border-radius: 6px;
+    padding: 2rem 2.2rem;
+    box-shadow:
+      0 0 0 1px rgba(201,168,76,0.2),
+      0 8px 32px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .parchment::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* ── Question ── */
+  .question-block {
+    display: none;
+    animation: fadeIn 0.45s ease both;
+  }
+
+  .question-block.active {
+    display: block;
+  }
+
+  .question-number {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: #8b6914;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .detail-badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #7a4a10;
+    background: rgba(139,105,20,0.15);
+    border: 1px solid rgba(139,105,20,0.35);
+    border-radius: 2px;
+    padding: 0.1rem 0.45rem;
+    margin-left: 0.4rem;
+    vertical-align: middle;
+    text-transform: uppercase;
+  }
+
+  .question-text {
+    font-size: 1.22rem;
+    line-height: 1.55;
+    color: #1e0f02;
+    margin-bottom: 1.4rem;
+    font-weight: 400;
+  }
+
+  /* ── Answer Choices ── */
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(139,105,20,0.3);
+    border-radius: 4px;
+    padding: 0.7rem 0.9rem;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.18s, border-color 0.18s, transform 0.12s;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #1e0f02;
+    width: 100%;
+  }
+
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.18);
+    border-color: #c9a84c;
+    transform: translateY(-1px);
+  }
+
+  .choice-btn:disabled {
+    cursor: default;
+  }
+
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #8b6914;
+    min-width: 1.2rem;
+    padding-top: 0.1rem;
+    flex-shrink: 0;
+  }
+
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.15);
+    border-color: #1a5c2a;
+  }
+
+  .choice-btn.correct .choice-letter {
+    color: #1a5c2a;
+  }
+
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.12);
+    border-color: #8b1a1a;
+  }
+
+  .choice-btn.wrong .choice-letter {
+    color: #8b1a1a;
+  }
+
+  /* ── Feedback ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 1.2rem;
+    animation: fadeIn 0.3s ease both;
+    font-size: 1.05rem;
+    line-height: 1.55;
+  }
+
+  .feedback.correct {
+    background: rgba(26,92,42,0.12);
+    border: 1.5px solid rgba(26,92,42,0.4);
+    color: #0d3317;
+  }
+
+  .feedback.wrong {
+    background: rgba(139,26,26,0.1);
+    border: 1.5px solid rgba(139,26,26,0.35);
+    color: #3d0a0a;
+  }
+
+  .feedback-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+
+  .feedback.correct .feedback-label { color: #1a5c2a; }
+  .feedback.wrong .feedback-label { color: #8b1a1a; }
+
+  .scripture-ref {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    opacity: 0.75;
+    margin-top: 0.3rem;
+  }
+
+  /* ── Navigation ── */
+  .nav-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+  }
+
+  .next-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #a8872e);
+    color: #0e0a04;
+    border: none;
+    border-radius: 3px;
+    padding: 0.55rem 1.4rem;
+    cursor: pointer;
+    display: none;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+
+  .next-btn:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+  }
+
+  /* ── Results ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeIn 0.6s ease both;
+  }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e0f02;
+    margin-bottom: 0.4rem;
+  }
+
+  .results-subtitle {
+    font-size: 1rem;
+    color: #5a3a14;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Score Ring */
+  .score-ring-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .score-ring-svg {
+    transform: rotate(-90deg);
+  }
+
+  .ring-bg {
+    fill: none;
+    stroke: rgba(139,105,20,0.2);
+    stroke-width: 10;
+  }
+
+  .ring-fg {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 283;
+    stroke-dashoffset: 283;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .ring-fg.green { stroke: #1a5c2a; }
+  .ring-fg.red { stroke: #8b1a1a; }
+
+  .score-ring-inner {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 120px;
+  }
+
+  .score-ring-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .score-number {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e0f02;
+    line-height: 1;
+  }
+
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    color: #5a3a14;
+    letter-spacing: 0.1em;
+  }
+
+  .results-message {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: #2c1a06;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid rgba(139,105,20,0.3);
+    margin: 1.2rem 0;
+  }
+
+  /* Review */
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: #8b6914;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    text-align: left;
+  }
+
+  .review-item {
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+    margin-bottom: 0.9rem;
+    text-align: left;
+    font-size: 1.0rem;
+    line-height: 1.5;
+    color: #1e0f02;
+  }
+
+  .review-icon {
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+  }
+
+  .review-correct { color: #1a5c2a; }
+  .review-wrong { color: #8b1a1a; }
+
+  .review-item .answer-note {
+    font-size: 0.9rem;
+    color: #5a3a14;
+    font-style: italic;
+  }
+
+  /* Retry button */
+  .retry-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: transparent;
+    color: #8b6914;
+    border: 1.5px solid rgba(139,105,20,0.5);
+    border-radius: 3px;
+    padding: 0.55rem 1.4rem;
+    cursor: pointer;
+    margin-top: 1.2rem;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .retry-btn:hover {
+    background: rgba(201,168,76,0.15);
+    color: #5a3a14;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="scroll-container">
+
+  <!-- Header -->
+  <div class="quiz-header">
+    <div class="date-line">Friday, July 17, 2026 &middot; Day 198</div>
+    <div class="quiz-title">The Bible Recap</div>
+    <div class="badges">
+      <span class="badge badge-challenging">Challenging</span>
+    </div>
+    <div class="passage-tags">
+      <span class="passage-tag">Isaiah 18-22</span>
+    </div>
+  </div>
+
+  <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+
+  <!-- Quiz Card -->
+  <div class="parchment" id="quiz-card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-number">Question 1 of 10 <span class="detail-badge">Detail</span></div>
+      <p class="question-text">DETAIL — According to Isaiah 18:4, what does the LORD say he will do from his dwelling while the events concerning Cush unfold?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,1)"><span class="choice-letter">A</span><span>Send swift messengers to intervene before the harvest arrives</span></button>
+        <button class="choice-btn" onclick="answer(this,false,1)"><span class="choice-letter">B</span><span>Raise a signal on the mountains and sound a trumpet at once</span></button>
+        <button class="choice-btn" onclick="answer(this,true,1)"><span class="choice-letter">C</span><span>Quietly look on, like clear heat in sunshine and a cloud of dew in the heat of harvest</span></button>
+        <button class="choice-btn" onclick="answer(this,false,1)"><span class="choice-letter">D</span><span>Cut off the shoots with pruning hooks before the blossom fades</span></button>
+      </div>
+      <div class="feedback" id="fb1">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next1" onclick="nextQ(1)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-number">Question 2 of 10</div>
+      <p class="question-text">The oracle concerning Cush in Isaiah 18 ends with tribute finally being brought "at that time." Where is it brought, and by whom?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,2)"><span class="choice-letter">A</span><span>To Mount Zion, brought by the very nation earlier described as "tall and smooth"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,2)"><span class="choice-letter">B</span><span>To Jerusalem's temple, brought by Egyptian priests fleeing civil war</span></button>
+        <button class="choice-btn" onclick="answer(this,false,2)"><span class="choice-letter">C</span><span>To Nineveh, brought by Cush as tribute of submission to Assyria</span></button>
+        <button class="choice-btn" onclick="answer(this,false,2)"><span class="choice-letter">D</span><span>To the wilderness of the sea, brought by Elam and Media</span></button>
+      </div>
+      <div class="feedback" id="fb2">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next2" onclick="nextQ(2)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-number">Question 3 of 10</div>
+      <p class="question-text">According to Isaiah 19:2, what specific internal catastrophe does the LORD say he will bring on Egypt, distinct from any foreign army?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,3)"><span class="choice-letter">A</span><span>A fierce king who will rule over them as a hard master</span></button>
+        <button class="choice-btn" onclick="answer(this,false,3)"><span class="choice-letter">B</span><span>Complete drying up of the Nile's waters and canals</span></button>
+        <button class="choice-btn" onclick="answer(this,false,3)"><span class="choice-letter">C</span><span>Confusion among the wisest counselors of Pharaoh</span></button>
+        <button class="choice-btn" onclick="answer(this,true,3)"><span class="choice-letter">D</span><span>Egyptians fighting Egyptians — city against city, kingdom against kingdom</span></button>
+      </div>
+      <div class="feedback" id="fb3">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next3" onclick="nextQ(3)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-number">Question 4 of 10 <span class="detail-badge">Detail</span></div>
+      <p class="question-text">DETAIL — Which group's counsel does Isaiah single out as "utterly foolish" in the oracle against Egypt?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,4)"><span class="choice-letter">A</span><span>The mediums and necromancers Egypt consults</span></button>
+        <button class="choice-btn" onclick="answer(this,true,4)"><span class="choice-letter">B</span><span>The princes of Zoan and the wisest counselors of Pharaoh</span></button>
+        <button class="choice-btn" onclick="answer(this,false,4)"><span class="choice-letter">C</span><span>The fishermen who cast hooks into the Nile</span></button>
+        <button class="choice-btn" onclick="answer(this,false,4)"><span class="choice-letter">D</span><span>The weavers of combed flax and white cotton</span></button>
+      </div>
+      <div class="feedback" id="fb4">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next4" onclick="nextQ(4)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-number">Question 5 of 10</div>
+      <p class="question-text">What striking threefold blessing does the LORD pronounce over Egypt, Assyria, and Israel together in Isaiah 19:25?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,5)"><span class="choice-letter">A</span><span>"Egypt my refuge, Assyria my strength, and Israel my glory"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,5)"><span class="choice-letter">B</span><span>"Egypt my servant, Assyria my instrument, and Israel my chosen"</span></button>
+        <button class="choice-btn" onclick="answer(this,true,5)"><span class="choice-letter">C</span><span>"Egypt my people, Assyria the work of my hands, and Israel my inheritance"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,5)"><span class="choice-letter">D</span><span>"Egypt my highway, Assyria my gateway, and Israel my dwelling place"</span></button>
+      </div>
+      <div class="feedback" id="fb5">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next5" onclick="nextQ(5)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-number">Question 6 of 10 <span class="detail-badge">Detail</span></div>
+      <p class="question-text">DETAIL — What historical event, named in Isaiah 20:1, triggered the LORD's command for Isaiah to walk naked and barefoot as a sign?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,6)"><span class="choice-letter">A</span><span>The Assyrian commander sent by Sargon captured Ashdod</span></button>
+        <button class="choice-btn" onclick="answer(this,false,6)"><span class="choice-letter">B</span><span>Sennacherib laid siege to Jerusalem itself</span></button>
+        <button class="choice-btn" onclick="answer(this,false,6)"><span class="choice-letter">C</span><span>Pharaoh's army was routed at the Nile</span></button>
+        <button class="choice-btn" onclick="answer(this,false,6)"><span class="choice-letter">D</span><span>The king of Babylon sent envoys to Hezekiah's court</span></button>
+      </div>
+      <div class="feedback" id="fb6">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next6" onclick="nextQ(6)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-number">Question 7 of 10</div>
+      <p class="question-text">Once Egypt and Cush are led away captive, what realization strikes "the inhabitants of this coastland" in Isaiah 20:5-6?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,7)"><span class="choice-letter">A</span><span>They rejoice that Assyria has finally been humbled</span></button>
+        <button class="choice-btn" onclick="answer(this,false,7)"><span class="choice-letter">B</span><span>They resolve to make a new alliance with Babylon instead</span></button>
+        <button class="choice-btn" onclick="answer(this,false,7)"><span class="choice-letter">C</span><span>They repent at once and turn to trust the LORD alone</span></button>
+        <button class="choice-btn" onclick="answer(this,true,7)"><span class="choice-letter">D</span><span>They are dismayed, since their hoped-for help has fallen, asking "we, how shall we escape?"</span></button>
+      </div>
+      <div class="feedback" id="fb7">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next7" onclick="nextQ(7)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-number">Question 8 of 10 <span class="detail-badge">Detail</span></div>
+      <p class="question-text">DETAIL — In the oracle concerning "the wilderness of the sea," which two nations does Isaiah 21:2 summon to "go up" and "lay siege"?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,8)"><span class="choice-letter">A</span><span>Egypt and Cush</span></button>
+        <button class="choice-btn" onclick="answer(this,true,8)"><span class="choice-letter">B</span><span>Elam and Media</span></button>
+        <button class="choice-btn" onclick="answer(this,false,8)"><span class="choice-letter">C</span><span>Kedar and Tema</span></button>
+        <button class="choice-btn" onclick="answer(this,false,8)"><span class="choice-letter">D</span><span>Moab and Edom</span></button>
+      </div>
+      <div class="feedback" id="fb8">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next8" onclick="nextQ(8)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-number">Question 9 of 10</div>
+      <p class="question-text">In the oracle concerning Dumah, what cryptic answer does the watchman give to the repeated cry, "Watchman, what time of the night?"</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,9)"><span class="choice-letter">A</span><span>"Fallen, fallen is Babylon, and her idols lie shattered on the ground"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,9)"><span class="choice-letter">B</span><span>"Bring water to the thirsty and meet the fugitive with bread"</span></button>
+        <button class="choice-btn" onclick="answer(this,true,9)"><span class="choice-letter">C</span><span>"Morning comes, and also the night. If you will inquire, inquire; come back again"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,9)"><span class="choice-letter">D</span><span>"Within a year, all the glory of Kedar will come to an end"</span></button>
+      </div>
+      <div class="feedback" id="fb9">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next9" onclick="nextQ(9)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-number">Question 10 of 10 <span class="detail-badge">Detail</span></div>
+      <p class="question-text">DETAIL — When Eliakim son of Hilkiah replaces the disgraced steward Shebna, what two things does the LORD promise concerning him in Isaiah 22:22-23?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,10)"><span class="choice-letter">A</span><span>He will be given the key of the house of David, and fastened like a peg in a secure place</span></button>
+        <button class="choice-btn" onclick="answer(this,false,10)"><span class="choice-letter">B</span><span>He will be crowned king over Judah and inherit Shebna's own carved tomb</span></button>
+        <button class="choice-btn" onclick="answer(this,false,10)"><span class="choice-letter">C</span><span>He will lead Judah's army against Assyria and rebuild the breached walls</span></button>
+        <button class="choice-btn" onclick="answer(this,false,10)"><span class="choice-letter">D</span><span>He will serve as high priest and offer sacrifice at the altar in Jerusalem</span></button>
+      </div>
+      <div class="feedback" id="fb10">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next10" onclick="nextQ(10)">See Results &rarr;</button></div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="results-screen">
+      <div class="results-title">Quiz Complete</div>
+      <div class="results-subtitle">Day 198 &middot; Isaiah 18-22</div>
+
+      <div class="score-ring-wrap">
+        <div class="score-ring-container">
+          <svg class="score-ring-svg" width="120" height="120" viewBox="0 0 120 120">
+            <circle class="ring-bg" cx="60" cy="60" r="45"/>
+            <circle class="ring-fg" id="ring-fg" cx="60" cy="60" r="45"/>
+          </svg>
+          <div class="score-ring-inner">
+            <div class="score-number" id="score-num">0</div>
+            <div class="score-denom">out of 10</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="results-message" id="results-msg"></div>
+
+      <hr class="divider">
+
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+
+      <button class="retry-btn" onclick="resetQuiz()">Take Again</button>
+    </div>
+
+  </div><!-- .parchment -->
+
+</div><!-- .scroll-container -->
+
+<script>
+const TOTAL = 10;
+let score = 0;
+let answered = new Array(TOTAL + 1).fill(false);
+let userCorrect = new Array(TOTAL + 1).fill(false);
+
+const questions = [
+  null, // index 0 unused
+  {
+    text: "DETAIL — According to Isaiah 18:4, what does the LORD say he will do from his dwelling while the events concerning Cush unfold?",
+    correct: "Quietly look on, like clear heat in sunshine and a cloud of dew in the heat of harvest",
+    ref: "Isaiah 18:4",
+    explanation: "\"For thus the LORD said to me: 'I will quietly look from my dwelling like clear heat in sunshine, like a cloud of dew in the heat of harvest'\" (Isaiah 18:4). The trumpet and signal of verse 3 and the pruning of verse 5 belong to other moments in the oracle — this verse alone describes the LORD's own quiet, patient watching before he acts."
+  },
+  {
+    text: "The oracle concerning Cush in Isaiah 18 ends with tribute finally being brought \"at that time.\" Where is it brought, and by whom?",
+    correct: "To Mount Zion, brought by the very nation earlier described as \"tall and smooth\"",
+    ref: "Isaiah 18:7",
+    explanation: "\"At that time tribute will be brought to the LORD of hosts from a people tall and smooth... to Mount Zion, the place of the name of the LORD of hosts\" (Isaiah 18:7). The very nation described in verse 2 as fearsome and conquering becomes, in the end, a bearer of tribute to the LORD himself."
+  },
+  {
+    text: "According to Isaiah 19:2, what specific internal catastrophe does the LORD say he will bring on Egypt, distinct from any foreign army?",
+    correct: "Egyptians fighting Egyptians — city against city, kingdom against kingdom",
+    ref: "Isaiah 19:2",
+    explanation: "\"And I will stir up Egyptians against Egyptians, and they will fight, each against another and each against his neighbor, city against city, kingdom against kingdom\" (Isaiah 19:2). This civil breakdown precedes and compounds the ecological disaster (v.5) and the hard foreign master (v.4) named later in the same oracle."
+  },
+  {
+    text: "DETAIL — Which group's counsel does Isaiah single out as \"utterly foolish\" in the oracle against Egypt?",
+    correct: "The princes of Zoan and the wisest counselors of Pharaoh",
+    ref: "Isaiah 19:11",
+    explanation: "\"The princes of Zoan are utterly foolish; the wisest counselors of Pharaoh give stupid counsel. How can you say to Pharaoh, 'I am a son of the wise, a son of ancient kings'?\" (Isaiah 19:11). Mediums, fishermen, and weavers all appear elsewhere in the same chapter's catalogue of Egypt's collapse, but it is Pharaoh's own counselors whose wisdom is exposed as empty."
+  },
+  {
+    text: "What striking threefold blessing does the LORD pronounce over Egypt, Assyria, and Israel together in Isaiah 19:25?",
+    correct: "\"Egypt my people, Assyria the work of my hands, and Israel my inheritance\"",
+    ref: "Isaiah 19:24-25",
+    explanation: "\"In that day Israel will be the third with Egypt and Assyria, a blessing in the midst of the earth... 'Blessed be Egypt my people, and Assyria the work of my hands, and Israel my inheritance'\" (Isaiah 19:24-25). Egypt and Assyria — Israel's two historic oppressors — are astonishingly folded into God's own family alongside Israel."
+  },
+  {
+    text: "DETAIL — What historical event, named in Isaiah 20:1, triggered the LORD's command for Isaiah to walk naked and barefoot as a sign?",
+    correct: "The Assyrian commander sent by Sargon captured Ashdod",
+    ref: "Isaiah 20:1",
+    explanation: "\"In the year that the commander in chief, who was sent by Sargon the king of Assyria, came to Ashdod and fought against it and captured it — at that time the LORD spoke by Isaiah\" (Isaiah 20:1-2). Sennacherib's siege of Jerusalem and Babylon's envoys to Hezekiah both belong to later Isaiah narratives (chapters 36-39); only the fall of Ashdod frames this particular sign-act."
+  },
+  {
+    text: "Once Egypt and Cush are led away captive, what realization strikes \"the inhabitants of this coastland\" in Isaiah 20:5-6?",
+    correct: "They are dismayed, since their hoped-for help has fallen, asking \"we, how shall we escape?\"",
+    ref: "Isaiah 20:5-6",
+    explanation: "\"Then they shall be dismayed and ashamed because of Cush their hope and of Egypt their boast. And the inhabitants of this coastland will say in that day... 'We, how shall we escape?'\" (Isaiah 20:5-6). Isaiah's three years of walking naked and barefoot become a living warning against trusting any nation instead of the LORD."
+  },
+  {
+    text: "DETAIL — In the oracle concerning \"the wilderness of the sea,\" which two nations does Isaiah 21:2 summon to \"go up\" and \"lay siege\"?",
+    correct: "Elam and Media",
+    ref: "Isaiah 21:2",
+    explanation: "\"A stern vision is told to me; the traitor betrays, and the destroyer destroys. Go up, O Elam; lay siege, O Media\" (Isaiah 21:2). Kedar and Tema belong to the later Arabia oracle in the same chapter, and Egypt/Cush and Moab/Edom belong to other surrounding oracles — not this one."
+  },
+  {
+    text: "In the oracle concerning Dumah, what cryptic answer does the watchman give to the repeated cry, \"Watchman, what time of the night?\"",
+    correct: "\"Morning comes, and also the night. If you will inquire, inquire; come back again\"",
+    ref: "Isaiah 21:11-12",
+    explanation: "\"One is calling to me from Seir, 'Watchman, what time of the night?... Watchman, what time of the night?' The watchman says: 'Morning comes, and also the night. If you will inquire, inquire; come back again'\" (Isaiah 21:11-12). The other lines belong to the Babylon oracle just before it (v.9) and the Arabia oracle just after it (vv.14, 16) — the Dumah answer alone is deliberately unresolved, offering neither full comfort nor full doom."
+  },
+  {
+    text: "DETAIL — When Eliakim son of Hilkiah replaces the disgraced steward Shebna, what two things does the LORD promise concerning him in Isaiah 22:22-23?",
+    correct: "He will be given the key of the house of David, and fastened like a peg in a secure place",
+    ref: "Isaiah 22:22-23",
+    explanation: "\"And I will place on his shoulder the key of the house of David... And I will fasten him like a peg in a secure place, and he will become a throne of honor to his father's house\" (Isaiah 22:22-23). Shebna's sin was carving himself a self-glorifying tomb in the rock (22:16); Eliakim's honor, by contrast, comes entirely as a gift from the LORD — though even this \"peg\" is later warned it will give way (22:25), since no human office can bear that weight forever."
+  }
+];
+
+function answer(btn, isCorrect, qNum) {
+  if (answered[qNum]) return;
+  answered[qNum] = true;
+  userCorrect[qNum] = isCorrect;
+  if (isCorrect) score++;
+
+  const block = document.getElementById('q' + qNum);
+  const allBtns = block.querySelectorAll('.choice-btn');
+  allBtns.forEach(b => {
+    b.disabled = true;
+    const txt = b.querySelector('span:last-child').textContent.trim();
+    const q = questions[qNum];
+    if (txt === q.correct || txt === q.correct.replace(/&#39;/g, "'")) {
+      b.classList.add('correct');
+    }
+  });
+  if (!isCorrect) btn.classList.add('wrong');
+
+  const fb = document.getElementById('fb' + qNum);
+  const label = fb.querySelector('.feedback-label');
+  const body = fb.querySelector('.feedback-body');
+  const ref = fb.querySelector('.scripture-ref');
+
+  fb.classList.add(isCorrect ? 'correct' : 'wrong');
+  label.textContent = isCorrect ? 'Correct' : 'Incorrect';
+  body.textContent = questions[qNum].explanation;
+  ref.textContent = questions[qNum].ref;
+  fb.style.display = 'block';
+
+  const nextBtn = document.getElementById('next' + qNum);
+  nextBtn.style.display = 'inline-block';
+
+  updateProgress(qNum);
+}
+
+function updateProgress(current) {
+  const pct = (current / TOTAL) * 100;
+  document.getElementById('progress-bar').style.width = pct + '%';
+}
+
+function nextQ(current) {
+  const currentBlock = document.getElementById('q' + current);
+  currentBlock.classList.remove('active');
+
+  if (current < TOTAL) {
+    const nextBlock = document.getElementById('q' + (current + 1));
+    nextBlock.classList.add('active');
+    nextBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('progress-bar').style.width = '100%';
+  const resultsScreen = document.getElementById('results-screen');
+
+  document.querySelectorAll('.question-block').forEach(b => b.style.display = 'none');
+  resultsScreen.style.display = 'block';
+
+  document.getElementById('score-num').textContent = score;
+
+  const ring = document.getElementById('ring-fg');
+  const circumference = 283;
+  const pct = score / TOTAL;
+  const offset = circumference - (circumference * pct);
+  setTimeout(() => {
+    ring.style.strokeDashoffset = offset;
+    if (pct >= 0.8) ring.classList.add('green');
+    else if (pct < 0.5) ring.classList.add('red');
+  }, 100);
+
+  const msg = document.getElementById('results-msg');
+  if (score === 10) {
+    msg.textContent = "Perfect score! From the quiet watcher of Isaiah 18 to Eliakim's peg in Isaiah 22, you tracked every detail across five oracles aimed at Cush, Egypt, Babylon, Dumah, Arabia, and Jerusalem itself.";
+  } else if (score >= 8) {
+    msg.textContent = "Excellent work. These oracles against the nations — and the sign-acts woven through them — are dense with specific detail, and you held the text together well.";
+  } else if (score >= 6) {
+    msg.textContent = "Good effort. Between Isaiah's naked sign against Egypt, the watchman's cryptic answers, and Shebna's fall, there's a lot happening across these chapters — review the feedback and see what slipped by.";
+  } else if (score >= 4) {
+    msg.textContent = "Isaiah's oracles against the nations reward a slow, careful read of who is judged, what sign is given, and why — use the question review to return to the text and sharpen your reading.";
+  } else {
+    msg.textContent = "Keep going! Isaiah 18-22 moves quickly between Cush, Egypt, Babylon, Dumah, Arabia, and Jerusalem, and the details matter. Use the review below to guide a second look at the text.";
+  }
+
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  for (let i = 1; i <= TOTAL; i++) {
+    const div = document.createElement('div');
+    div.className = 'review-item';
+    const correct = userCorrect[i];
+    div.innerHTML = `
+      <span class="review-icon ${correct ? 'review-correct' : 'review-wrong'}">${correct ? '&#10003;' : '&#10007;'}</span>
+      <div>
+        <strong>Q${i}:</strong> ${questions[i].text}
+        <div class="answer-note">${correct ? 'Correct' : 'Correct answer: ' + questions[i].correct} &mdash; ${questions[i].ref}</div>
+      </div>`;
+    reviewList.appendChild(div);
+  }
+
+  resultsScreen.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetQuiz() {
+  score = 0;
+  answered = new Array(TOTAL + 1).fill(false);
+  userCorrect = new Array(TOTAL + 1).fill(false);
+
+  document.getElementById('progress-bar').style.width = '0%';
+  document.getElementById('results-screen').style.display = 'none';
+
+  const ring = document.getElementById('ring-fg');
+  ring.style.strokeDashoffset = '283';
+  ring.classList.remove('green', 'red');
+
+  document.querySelectorAll('.question-block').forEach((b, i) => {
+    b.style.display = '';
+    b.classList.remove('active');
+    b.querySelectorAll('.choice-btn').forEach(btn => {
+      btn.disabled = false;
+      btn.classList.remove('correct', 'wrong');
+    });
+    const fb = b.querySelector('.feedback');
+    fb.style.display = 'none';
+    fb.classList.remove('correct', 'wrong');
+    const nextBtn = b.querySelector('.next-btn');
+    if (nextBtn) nextBtn.style.display = 'none';
+  });
+
+  document.getElementById('q1').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
