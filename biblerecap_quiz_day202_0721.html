@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Recap Quiz — Day 202 · Hosea 8-14</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: #0e0a04;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(201,168,76,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(139,90,30,0.07) 0%, transparent 60%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2rem 1rem 4rem;
+    font-family: 'Crimson Text', serif;
+    color: #2c1a06;
+  }
+
+  .scroll-container {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── Header ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 1.8rem;
+    animation: fadeIn 0.8s ease both;
+  }
+
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: #f5e8c8;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    line-height: 1.2;
+    margin-bottom: 0.6rem;
+  }
+
+  .badges {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.7rem;
+  }
+
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    padding: 0.2rem 0.65rem;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+
+  .badge-challenging {
+    background: rgba(201,168,76,0.18);
+    color: #c9a84c;
+    border: 1px solid rgba(201,168,76,0.4);
+  }
+
+  .passage-tags {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .passage-tag {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 2px;
+    padding: 0.2rem 0.6rem;
+  }
+
+  /* ── Ornament ── */
+  .ornament {
+    text-align: center;
+    color: #c9a84c;
+    font-size: 1.1rem;
+    letter-spacing: 0.4em;
+    margin-bottom: 1.4rem;
+    opacity: 0.7;
+  }
+
+  /* ── Progress Bar ── */
+  .progress-wrap {
+    background: rgba(201,168,76,0.12);
+    border-radius: 4px;
+    height: 5px;
+    margin-bottom: 1.8rem;
+    overflow: hidden;
+    border: 1px solid rgba(201,168,76,0.2);
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8cc7a);
+    border-radius: 4px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    width: 0%;
+  }
+
+  /* ── Parchment Card ── */
+  .parchment {
+    background: linear-gradient(160deg,
+      #f5e8c8 0%,
+      #ede0b4 20%,
+      #e8d8a0 50%,
+      #edddb0 80%,
+      #f0e2be 100%);
+    border: 2px solid #c9a84c;
+    border-radius: 6px;
+    padding: 2rem 2.2rem;
+    box-shadow:
+      0 0 0 1px rgba(201,168,76,0.2),
+      0 8px 32px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .parchment::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* ── Question ── */
+  .question-block {
+    display: none;
+    animation: fadeIn 0.45s ease both;
+  }
+
+  .question-block.active {
+    display: block;
+  }
+
+  .question-number {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: #8b6914;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .detail-badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #7a4a10;
+    background: rgba(139,105,20,0.15);
+    border: 1px solid rgba(139,105,20,0.35);
+    border-radius: 2px;
+    padding: 0.1rem 0.45rem;
+    margin-left: 0.4rem;
+    vertical-align: middle;
+    text-transform: uppercase;
+  }
+
+  .question-text {
+    font-size: 1.22rem;
+    line-height: 1.55;
+    color: #1e0f02;
+    margin-bottom: 1.4rem;
+    font-weight: 400;
+  }
+
+  /* ── Answer Choices ── */
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(139,105,20,0.3);
+    border-radius: 4px;
+    padding: 0.7rem 0.9rem;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.18s, border-color 0.18s, transform 0.12s;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #1e0f02;
+    width: 100%;
+  }
+
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.18);
+    border-color: #c9a84c;
+    transform: translateY(-1px);
+  }
+
+  .choice-btn:disabled {
+    cursor: default;
+  }
+
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #8b6914;
+    min-width: 1.2rem;
+    padding-top: 0.1rem;
+    flex-shrink: 0;
+  }
+
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.15);
+    border-color: #1a5c2a;
+  }
+
+  .choice-btn.correct .choice-letter {
+    color: #1a5c2a;
+  }
+
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.12);
+    border-color: #8b1a1a;
+  }
+
+  .choice-btn.wrong .choice-letter {
+    color: #8b1a1a;
+  }
+
+  /* ── Feedback ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 1.2rem;
+    animation: fadeIn 0.3s ease both;
+    font-size: 1.05rem;
+    line-height: 1.55;
+  }
+
+  .feedback.correct {
+    background: rgba(26,92,42,0.12);
+    border: 1.5px solid rgba(26,92,42,0.4);
+    color: #0d3317;
+  }
+
+  .feedback.wrong {
+    background: rgba(139,26,26,0.1);
+    border: 1.5px solid rgba(139,26,26,0.35);
+    color: #3d0a0a;
+  }
+
+  .feedback-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+
+  .feedback.correct .feedback-label { color: #1a5c2a; }
+  .feedback.wrong .feedback-label { color: #8b1a1a; }
+
+  .scripture-ref {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    opacity: 0.75;
+    margin-top: 0.3rem;
+  }
+
+  /* ── Navigation ── */
+  .nav-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+  }
+
+  .next-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #a8872e);
+    color: #0e0a04;
+    border: none;
+    border-radius: 3px;
+    padding: 0.55rem 1.4rem;
+    cursor: pointer;
+    display: none;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+
+  .next-btn:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+  }
+
+  /* ── Results ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeIn 0.6s ease both;
+  }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e0f02;
+    margin-bottom: 0.4rem;
+  }
+
+  .results-subtitle {
+    font-size: 1rem;
+    color: #5a3a14;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Score Ring */
+  .score-ring-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .score-ring-svg {
+    transform: rotate(-90deg);
+  }
+
+  .ring-bg {
+    fill: none;
+    stroke: rgba(139,105,20,0.2);
+    stroke-width: 10;
+  }
+
+  .ring-fg {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 283;
+    stroke-dashoffset: 283;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .ring-fg.green { stroke: #1a5c2a; }
+  .ring-fg.red { stroke: #8b1a1a; }
+
+  .score-ring-inner {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 120px;
+  }
+
+  .score-ring-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .score-number {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e0f02;
+    line-height: 1;
+  }
+
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    color: #5a3a14;
+    letter-spacing: 0.1em;
+  }
+
+  .results-message {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: #2c1a06;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid rgba(139,105,20,0.3);
+    margin: 1.2rem 0;
+  }
+
+  /* Review */
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: #8b6914;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    text-align: left;
+  }
+
+  .review-item {
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+    margin-bottom: 0.9rem;
+    text-align: left;
+    font-size: 1.0rem;
+    line-height: 1.5;
+    color: #1e0f02;
+  }
+
+  .review-icon {
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+  }
+
+  .review-correct { color: #1a5c2a; }
+  .review-wrong { color: #8b1a1a; }
+
+  .review-item .answer-note {
+    font-size: 0.9rem;
+    color: #5a3a14;
+    font-style: italic;
+  }
+
+  /* Retry button */
+  .retry-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: transparent;
+    color: #8b6914;
+    border: 1.5px solid rgba(139,105,20,0.5);
+    border-radius: 3px;
+    padding: 0.55rem 1.4rem;
+    cursor: pointer;
+    margin-top: 1.2rem;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .retry-btn:hover {
+    background: rgba(201,168,76,0.15);
+    color: #5a3a14;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="scroll-container">
+
+  <!-- Header -->
+  <div class="quiz-header">
+    <div class="date-line">Tuesday, July 21, 2026 &middot; Day 202</div>
+    <div class="quiz-title">The Bible Recap</div>
+    <div class="badges">
+      <span class="badge badge-challenging">Challenging</span>
+    </div>
+    <div class="passage-tags">
+      <span class="passage-tag">Hosea 8-14</span>
+    </div>
+  </div>
+
+  <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+
+  <!-- Quiz Card -->
+  <div class="parchment" id="quiz-card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-number">Question 1 of 10</div>
+      <p class="question-text">In Hosea 8:4, God diagnoses the root of Israel's political and religious disorder. What does he say Israel did regarding kings and princes, and what did they do with their silver and gold?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,1)"><span class="choice-letter">A</span><span>They asked Samuel for a king as in the days of the judges, and used silver and gold to fund the temple treasury</span></button>
+        <button class="choice-btn" onclick="answer(this,true,1)"><span class="choice-letter">B</span><span>They made kings and set up princes without the LORD's knowledge or approval, and used their silver and gold to make idols for their own destruction</span></button>
+        <button class="choice-btn" onclick="answer(this,false,1)"><span class="choice-letter">C</span><span>They rejected every king the LORD appointed through the prophets, and melted their silver and gold to pay tribute to Assyria</span></button>
+        <button class="choice-btn" onclick="answer(this,false,1)"><span class="choice-letter">D</span><span>They crowned only kings from the line of David, and hoarded silver and gold rather than offering it to the LORD</span></button>
+      </div>
+      <div class="feedback" id="fb1">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next1" onclick="nextQ(1)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-number">Question 2 of 10 <span class="detail-badge">Detail</span></div>
+      <p class="question-text">DETAIL — Hosea 8:7 uses agricultural imagery to describe the consequence of Israel's idolatry. What two-part picture does the verse give — the proverb about sowing and reaping, and what happens to the standing grain?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,2)"><span class="choice-letter">A</span><span>They sow in tears and reap in joy, and the standing grain multiplies until it overflows the threshing floor</span></button>
+        <button class="choice-btn" onclick="answer(this,false,2)"><span class="choice-letter">B</span><span>They sow among thorns and reap thistles, and the standing grain withers before the harvest even begins</span></button>
+        <button class="choice-btn" onclick="answer(this,false,2)"><span class="choice-letter">C</span><span>They sow to the wind and reap the east wind, and the grain is scattered before it can be gathered</span></button>
+        <button class="choice-btn" onclick="answer(this,true,2)"><span class="choice-letter">D</span><span>They sow the wind and reap the whirlwind, and the standing grain has no heads, yielding no flour — and if it did yield, strangers would devour it</span></button>
+      </div>
+      <div class="feedback" id="fb2">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next2" onclick="nextQ(2)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-number">Question 3 of 10</div>
+      <p class="question-text">In Hosea 9:10, God recalls how he first found Israel using two images of freshness and promise. What are those images, and what did Israel do at Baal-peor that corrupted them?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,3)"><span class="choice-letter">A</span><span>Like grapes in the wilderness and like the first fruit on the fig tree in its first season — but at Baal-peor they consecrated themselves to the thing of shame and became as detestable as the thing they loved</span></button>
+        <button class="choice-btn" onclick="answer(this,false,3)"><span class="choice-letter">B</span><span>Like a spring in the desert and like the dew on Mount Hermon — but at Baal-peor they built an altar and offered their firstborn sons</span></button>
+        <button class="choice-btn" onclick="answer(this,false,3)"><span class="choice-letter">C</span><span>Like a lily among thorns and like a cedar in Lebanon — but at Baal-peor they intermarried with the Moabites and adopted their laws</span></button>
+        <button class="choice-btn" onclick="answer(this,false,3)"><span class="choice-letter">D</span><span>Like an eagle's nest on a high cliff and like a young lion in its den — but at Baal-peor they abandoned the tabernacle for a pagan shrine</span></button>
+      </div>
+      <div class="feedback" id="fb3">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next3" onclick="nextQ(3)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-number">Question 4 of 10 <span class="detail-badge">Detail</span></div>
+      <p class="question-text">DETAIL — In Hosea 9:15, God names a specific location as the turning point of his hatred toward Israel and states a consequence for their leadership. What does the verse say?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,4)"><span class="choice-letter">A</span><span>"Every evil of theirs is in Bethel; there I began to hate them... I will remove their priests, for they have led my people astray"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,4)"><span class="choice-letter">B</span><span>"Every evil of theirs is in Samaria; there I began to hate them... I will tear down their palaces and scatter their wealth"</span></button>
+        <button class="choice-btn" onclick="answer(this,true,4)"><span class="choice-letter">C</span><span>"Every evil of theirs is in Gilgal; there I began to hate them... I will love them no more; all their princes are rebels"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,4)"><span class="choice-letter">D</span><span>"Every evil of theirs is in Shechem; there I began to hate them... I will strip their fields of every green thing"</span></button>
+      </div>
+      <div class="feedback" id="fb4">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next4" onclick="nextQ(4)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-number">Question 5 of 10</div>
+      <p class="question-text">Hosea 10:1-2 opens with an image of prosperity turned to guilt. What does the passage say Israel did as his fruit and prosperity increased, and what does that reveal about his heart?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,5)"><span class="choice-letter">A</span><span>As her fruit increased, she multiplied her offerings at the temple in Jerusalem, but her heart remained divided between the LORD and foreign kings</span></button>
+        <button class="choice-btn" onclick="answer(this,true,5)"><span class="choice-letter">B</span><span>As his fruit increased, he built more altars, and as his country improved, he improved his sacred pillars — his heart was false, and he must bear his guilt</span></button>
+        <button class="choice-btn" onclick="answer(this,false,5)"><span class="choice-letter">C</span><span>As her fruit increased, she stored up grain for the poor, but her heart secretly trusted in Egypt rather than the LORD</span></button>
+        <button class="choice-btn" onclick="answer(this,false,5)"><span class="choice-letter">D</span><span>As his fruit increased, he reduced his sacrifices, assuming prosperity itself was proof enough of the LORD's favor</span></button>
+      </div>
+      <div class="feedback" id="fb5">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next5" onclick="nextQ(5)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-number">Question 6 of 10</div>
+      <p class="question-text">Hosea 11:1-4 shifts from indictment to a tender memory of God's love for Israel as a child. According to the passage, how did God care for Ephraim even as Ephraim kept turning away?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,6)"><span class="choice-letter">A</span><span>It was God who taught Ephraim to walk, took them up by their arms, led them with cords of kindness and bands of love, eased the yoke on their jaws, and bent down to feed them</span></button>
+        <button class="choice-btn" onclick="answer(this,false,6)"><span class="choice-letter">B</span><span>It was God who carried Ephraim on eagles' wings out of Egypt and set them apart as a kingdom of priests, though they built the golden calf soon after</span></button>
+        <button class="choice-btn" onclick="answer(this,false,6)"><span class="choice-letter">C</span><span>It was God who gave Ephraim manna in the wilderness and water from the rock, sustaining them through forty years despite their grumbling</span></button>
+        <button class="choice-btn" onclick="answer(this,false,6)"><span class="choice-letter">D</span><span>It was God who raised up judges to rescue Ephraim from oppressors, cycle after cycle, even as they returned to idolatry each time</span></button>
+      </div>
+      <div class="feedback" id="fb6">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next6" onclick="nextQ(6)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-number">Question 7 of 10 <span class="detail-badge">Detail</span></div>
+      <p class="question-text">DETAIL — In Hosea 11:8-9, God wrestles aloud with the prospect of destroying Ephraim as he did Admah and Zeboiim. What reason does he give for holding back his wrath?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,7)"><span class="choice-letter">A</span><span>He recalls the oath he swore to Abraham never again to bring judgment as thorough as Sodom's on his offspring</span></button>
+        <button class="choice-btn" onclick="answer(this,false,7)"><span class="choice-letter">B</span><span>He points to the intercession of Moses, whose pleading once turned back his wrath in the wilderness</span></button>
+        <button class="choice-btn" onclick="answer(this,false,7)"><span class="choice-letter">C</span><span>He decides to wait until Judah's righteousness can be credited to Ephraim as well, delaying judgment for their sake</span></button>
+        <button class="choice-btn" onclick="answer(this,true,7)"><span class="choice-letter">D</span><span>His heart recoils within him and his compassion grows warm and tender, for he is God and not a man, the Holy One in their midst, and he will not come in wrath</span></button>
+      </div>
+      <div class="feedback" id="fb7">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next7" onclick="nextQ(7)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-number">Question 8 of 10</div>
+      <p class="question-text">Hosea 12:3-4 reaches back into Jacob's own history as a pattern for Israel. What two episodes from Jacob's life does the passage recall, and where does it say God spoke with "us"?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,8)"><span class="choice-letter">A</span><span>Jacob's ladder vision and his reconciliation with Esau — God spoke with Israel at Peniel</span></button>
+        <button class="choice-btn" onclick="answer(this,false,8)"><span class="choice-letter">B</span><span>Jacob's purchase of Esau's birthright and his flight to Haran — God spoke with Israel in the land of Aram</span></button>
+        <button class="choice-btn" onclick="answer(this,true,8)"><span class="choice-letter">C</span><span>In the womb Jacob took his brother by the heel, and in his manhood he strove with God, weeping and seeking his favor — he met God at Bethel, where God spoke with us</span></button>
+        <button class="choice-btn" onclick="answer(this,false,8)"><span class="choice-letter">D</span><span>Jacob's dream of the stairway to heaven and his wrestling with the angel at the Jabbok — God spoke with Israel at Shechem</span></button>
+      </div>
+      <div class="feedback" id="fb8">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next8" onclick="nextQ(8)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-number">Question 9 of 10 <span class="detail-badge">Detail</span></div>
+      <p class="question-text">DETAIL — Hosea 13:14 makes a striking promise about ransom from death, later echoed by Paul in 1 Corinthians 15. What does the verse say, immediately before the note that "compassion is hidden from my eyes"?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,9)"><span class="choice-letter">A</span><span>"I shall raise them up on the third day; O Grave, release your captives, for the Lord has need of them"</span></button>
+        <button class="choice-btn" onclick="answer(this,true,9)"><span class="choice-letter">B</span><span>"I shall ransom them from the power of Sheol; I shall redeem them from Death. O Death, where are your plagues? O Sheol, where is your sting?"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,9)"><span class="choice-letter">C</span><span>"I shall break the bars of Sheol and lead a great multitude out of the shadow of death into everlasting light"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,9)"><span class="choice-letter">D</span><span>"I shall swallow up Death forever and wipe away every tear, for Sheol has no claim on those I have redeemed"</span></button>
+      </div>
+      <div class="feedback" id="fb9">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next9" onclick="nextQ(9)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-number">Question 10 of 10</div>
+      <p class="question-text">Hosea 14:4 gives God's response to Israel's promised return described earlier in the chapter. What does he say he will do, and why?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,10)"><span class="choice-letter">A</span><span>"I will heal their apostasy; I will love them freely, for my anger has turned from them"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,10)"><span class="choice-letter">B</span><span>"I will remember their apostasy no more, once they have offered a sin offering for every generation of unfaithfulness"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,10)"><span class="choice-letter">C</span><span>"I will restore their fortunes gradually, testing their sincerity over forty years in the wilderness"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,10)"><span class="choice-letter">D</span><span>"I will heal their land and forgive their sin, but only after Israel and Judah are reunited under one king"</span></button>
+      </div>
+      <div class="feedback" id="fb10">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next10" onclick="nextQ(10)">See Results &rarr;</button></div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="results-screen">
+      <div class="results-title">Quiz Complete</div>
+      <div class="results-subtitle">Day 202 &middot; Hosea 8-14</div>
+
+      <div class="score-ring-wrap">
+        <div class="score-ring-container">
+          <svg class="score-ring-svg" width="120" height="120" viewBox="0 0 120 120">
+            <circle class="ring-bg" cx="60" cy="60" r="45"/>
+            <circle class="ring-fg" id="ring-fg" cx="60" cy="60" r="45"/>
+          </svg>
+          <div class="score-ring-inner">
+            <div class="score-number" id="score-num">0</div>
+            <div class="score-denom">out of 10</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="results-message" id="results-msg"></div>
+
+      <hr class="divider">
+
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+
+      <button class="retry-btn" onclick="resetQuiz()">Take Again</button>
+    </div>
+
+  </div><!-- .parchment -->
+
+</div><!-- .scroll-container -->
+
+<script>
+const TOTAL = 10;
+let score = 0;
+let answered = new Array(TOTAL + 1).fill(false);
+let userCorrect = new Array(TOTAL + 1).fill(false);
+
+const questions = [
+  null, // index 0 unused
+  {
+    text: "In Hosea 8:4, God diagnoses the root of Israel's political and religious disorder. What does he say Israel did regarding kings and princes, and what did they do with their silver and gold?",
+    correct: "They made kings and set up princes without the LORD's knowledge or approval, and used their silver and gold to make idols for their own destruction",
+    ref: "Hosea 8:4",
+    explanation: "\"They made kings, but not through me. They set up princes, but I knew it not. With their silver and gold they made idols for their own destruction\" (Hosea 8:4). Political self-rule and idol-making are treated as two faces of the same rebellion."
+  },
+  {
+    text: "DETAIL — Hosea 8:7 uses agricultural imagery to describe the consequence of Israel's idolatry. What two-part picture does the verse give — the proverb about sowing and reaping, and what happens to the standing grain?",
+    correct: "They sow the wind and reap the whirlwind, and the standing grain has no heads, yielding no flour — and if it did yield, strangers would devour it",
+    ref: "Hosea 8:7",
+    explanation: "\"For they sow the wind, and they shall reap the whirlwind. The standing grain has no heads; it shall yield no flour; if it were to yield, strangers would devour it\" (Hosea 8:7). Even a harvest that somehow survived would be taken by foreign invaders."
+  },
+  {
+    text: "In Hosea 9:10, God recalls how he first found Israel using two images of freshness and promise. What are those images, and what did Israel do at Baal-peor that corrupted them?",
+    correct: "Like grapes in the wilderness and like the first fruit on the fig tree in its first season — but at Baal-peor they consecrated themselves to the thing of shame and became as detestable as the thing they loved",
+    ref: "Hosea 9:10",
+    explanation: "\"Like grapes in the wilderness, I found Israel. Like the first fruit on the fig tree in its first season, I saw your fathers. But they came to Baal-peor and consecrated themselves to the thing of shame, and became detestable like the thing they loved\" (Hosea 9:10)."
+  },
+  {
+    text: "DETAIL — In Hosea 9:15, God names a specific location as the turning point of his hatred toward Israel and states a consequence for their leadership. What does the verse say?",
+    correct: "\"Every evil of theirs is in Gilgal; there I began to hate them... I will love them no more; all their princes are rebels\"",
+    ref: "Hosea 9:15",
+    explanation: "\"Every evil of theirs is in Gilgal; there I began to hate them. Because of the wickedness of their deeds I will drive them out of my house. I will love them no more; all their princes are rebels\" (Hosea 9:15)."
+  },
+  {
+    text: "Hosea 10:1-2 opens with an image of prosperity turned to guilt. What does the passage say Israel did as his fruit and prosperity increased, and what does that reveal about his heart?",
+    correct: "As his fruit increased, he built more altars, and as his country improved, he improved his sacred pillars — his heart was false, and he must bear his guilt",
+    ref: "Hosea 10:1-2",
+    explanation: "\"Israel is a luxuriant vine that yields its fruit. The more his fruit increased, the more altars he built; as his country improved, he improved his pillars. Their heart is false; now they must bear their guilt\" (Hosea 10:1-2). Prosperity fed idolatry instead of gratitude."
+  },
+  {
+    text: "Hosea 11:1-4 shifts from indictment to a tender memory of God's love for Israel as a child. According to the passage, how did God care for Ephraim even as Ephraim kept turning away?",
+    correct: "It was God who taught Ephraim to walk, took them up by their arms, led them with cords of kindness and bands of love, eased the yoke on their jaws, and bent down to feed them",
+    ref: "Hosea 11:3-4",
+    explanation: "\"Yet it was I who taught Ephraim to walk; I took them up by their arms, but they did not know that I healed them. I led them with cords of kindness, with the bands of love... and I bent down to them and fed them\" (Hosea 11:3-4)."
+  },
+  {
+    text: "DETAIL — In Hosea 11:8-9, God wrestles aloud with the prospect of destroying Ephraim as he did Admah and Zeboiim. What reason does he give for holding back his wrath?",
+    correct: "His heart recoils within him and his compassion grows warm and tender, for he is God and not a man, the Holy One in their midst, and he will not come in wrath",
+    ref: "Hosea 11:8-9",
+    explanation: "\"How can I give you up, O Ephraim?... My heart recoils within me; my compassion grows warm and tender. I will not execute my burning anger... for I am God and not a man, the Holy One in your midst, and I will not come in wrath\" (Hosea 11:8-9)."
+  },
+  {
+    text: "Hosea 12:3-4 reaches back into Jacob's own history as a pattern for Israel. What two episodes from Jacob's life does the passage recall, and where does it say God spoke with \"us\"?",
+    correct: "In the womb Jacob took his brother by the heel, and in his manhood he strove with God, weeping and seeking his favor — he met God at Bethel, where God spoke with us",
+    ref: "Hosea 12:3-4",
+    explanation: "\"In the womb he took his brother by the heel, and in his manhood he strove with God. He strove with the angel and prevailed; he wept and sought his favor. He met God at Bethel, and there God spoke with us\" (Hosea 12:3-4)."
+  },
+  {
+    text: "DETAIL — Hosea 13:14 makes a striking promise about ransom from death, later echoed by Paul in 1 Corinthians 15. What does the verse say, immediately before the note that \"compassion is hidden from my eyes\"?",
+    correct: "\"I shall ransom them from the power of Sheol; I shall redeem them from Death. O Death, where are your plagues? O Sheol, where is your sting?\"",
+    ref: "Hosea 13:14",
+    explanation: "\"I shall ransom them from the power of Sheol; I shall redeem them from Death. O Death, where are your plagues? O Sheol, where is your sting? Compassion is hidden from my eyes\" (Hosea 13:14). Paul later draws on this language in 1 Corinthians 15:55 to celebrate the resurrection's victory over death."
+  },
+  {
+    text: "Hosea 14:4 gives God's response to Israel's promised return described earlier in the chapter. What does he say he will do, and why?",
+    correct: "\"I will heal their apostasy; I will love them freely, for my anger has turned from them\"",
+    ref: "Hosea 14:4",
+    explanation: "\"I will heal their apostasy; I will love them freely, for my anger has turned from them\" (Hosea 14:4). The healing and love here are entirely God's initiative — freely given, not earned by Israel's return, a fitting close to the book's picture of grace toward an unfaithful people."
+  }
+];
+
+function answer(btn, isCorrect, qNum) {
+  if (answered[qNum]) return;
+  answered[qNum] = true;
+  userCorrect[qNum] = isCorrect;
+  if (isCorrect) score++;
+
+  const block = document.getElementById('q' + qNum);
+  const allBtns = block.querySelectorAll('.choice-btn');
+  allBtns.forEach(b => {
+    b.disabled = true;
+    const txt = b.querySelector('span:last-child').textContent.trim();
+    const q = questions[qNum];
+    if (txt === q.correct || txt === q.correct.replace(/&#39;/g, "'")) {
+      b.classList.add('correct');
+    }
+  });
+  if (!isCorrect) btn.classList.add('wrong');
+
+  const fb = document.getElementById('fb' + qNum);
+  const label = fb.querySelector('.feedback-label');
+  const body = fb.querySelector('.feedback-body');
+  const ref = fb.querySelector('.scripture-ref');
+
+  fb.classList.add(isCorrect ? 'correct' : 'wrong');
+  label.textContent = isCorrect ? 'Correct' : 'Incorrect';
+  body.textContent = questions[qNum].explanation;
+  ref.textContent = questions[qNum].ref;
+  fb.style.display = 'block';
+
+  const nextBtn = document.getElementById('next' + qNum);
+  nextBtn.style.display = 'inline-block';
+
+  updateProgress(qNum);
+}
+
+function updateProgress(current) {
+  const pct = (current / TOTAL) * 100;
+  document.getElementById('progress-bar').style.width = pct + '%';
+}
+
+function nextQ(current) {
+  const currentBlock = document.getElementById('q' + current);
+  currentBlock.classList.remove('active');
+
+  if (current < TOTAL) {
+    const nextBlock = document.getElementById('q' + (current + 1));
+    nextBlock.classList.add('active');
+    nextBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('progress-bar').style.width = '100%';
+  const resultsScreen = document.getElementById('results-screen');
+
+  document.querySelectorAll('.question-block').forEach(b => b.style.display = 'none');
+  resultsScreen.style.display = 'block';
+
+  document.getElementById('score-num').textContent = score;
+
+  const ring = document.getElementById('ring-fg');
+  const circumference = 283;
+  const pct = score / TOTAL;
+  const offset = circumference - (circumference * pct);
+  setTimeout(() => {
+    ring.style.strokeDashoffset = offset;
+    if (pct >= 0.8) ring.classList.add('green');
+    else if (pct < 0.5) ring.classList.add('red');
+  }, 100);
+
+  const msg = document.getElementById('results-msg');
+  if (score === 10) {
+    msg.textContent = "Perfect score! From the whirlwind of Hosea 8 to the freely-given healing of Hosea 14, you tracked God's judgment and mercy toward Israel with equal precision.";
+  } else if (score >= 8) {
+    msg.textContent = "Excellent work. Between Gilgal, Jacob at Bethel, and the ransom from Sheol, this stretch is dense with allusion, and you held it together well.";
+  } else if (score >= 6) {
+    msg.textContent = "Good effort. Hosea moves quickly from indictment to tenderness and back again, and the details compound fast — review the feedback and see what slipped by.";
+  } else if (score >= 4) {
+    msg.textContent = "Hosea 8-14 packs a lot into a few chapters — judgment, memory, and grace all at once. Use the question review to return to the text.";
+  } else {
+    msg.textContent = "Keep going! Hosea's closing chapters move from whirlwind judgment to a Father who cannot give up his child. Use the review below to guide a second look at the text.";
+  }
+
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  for (let i = 1; i <= TOTAL; i++) {
+    const div = document.createElement('div');
+    div.className = 'review-item';
+    const correct = userCorrect[i];
+    div.innerHTML = `
+      <span class="review-icon ${correct ? 'review-correct' : 'review-wrong'}">${correct ? '&#10003;' : '&#10007;'}</span>
+      <div>
+        <strong>Q${i}:</strong> ${questions[i].text}
+        <div class="answer-note">${correct ? 'Correct' : 'Correct answer: ' + questions[i].correct} &mdash; ${questions[i].ref}</div>
+      </div>`;
+    reviewList.appendChild(div);
+  }
+
+  resultsScreen.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetQuiz() {
+  score = 0;
+  answered = new Array(TOTAL + 1).fill(false);
+  userCorrect = new Array(TOTAL + 1).fill(false);
+
+  document.getElementById('progress-bar').style.width = '0%';
+  document.getElementById('results-screen').style.display = 'none';
+
+  const ring = document.getElementById('ring-fg');
+  ring.style.strokeDashoffset = '283';
+  ring.classList.remove('green', 'red');
+
+  document.querySelectorAll('.question-block').forEach((b, i) => {
+    b.style.display = '';
+    b.classList.remove('active');
+    b.querySelectorAll('.choice-btn').forEach(btn => {
+      btn.disabled = false;
+      btn.classList.remove('correct', 'wrong');
+    });
+    const fb = b.querySelector('.feedback');
+    fb.style.display = 'none';
+    fb.classList.remove('correct', 'wrong');
+    const nextBtn = b.querySelector('.next-btn');
+    if (nextBtn) nextBtn.style.display = 'none';
+  });
+
+  document.getElementById('q1').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
