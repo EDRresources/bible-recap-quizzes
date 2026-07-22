@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Recap Quiz — Day 203 · Isaiah 28-30</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: #0e0a04;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(201,168,76,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(139,90,30,0.07) 0%, transparent 60%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2rem 1rem 4rem;
+    font-family: 'Crimson Text', serif;
+    color: #2c1a06;
+  }
+
+  .scroll-container {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── Header ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 1.8rem;
+    animation: fadeIn 0.8s ease both;
+  }
+
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: #f5e8c8;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    line-height: 1.2;
+    margin-bottom: 0.6rem;
+  }
+
+  .badges {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.7rem;
+  }
+
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    padding: 0.2rem 0.65rem;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+
+  .badge-challenging {
+    background: rgba(201,168,76,0.18);
+    color: #c9a84c;
+    border: 1px solid rgba(201,168,76,0.4);
+  }
+
+  .passage-tags {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .passage-tag {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 2px;
+    padding: 0.2rem 0.6rem;
+  }
+
+  /* ── Ornament ── */
+  .ornament {
+    text-align: center;
+    color: #c9a84c;
+    font-size: 1.1rem;
+    letter-spacing: 0.4em;
+    margin-bottom: 1.4rem;
+    opacity: 0.7;
+  }
+
+  /* ── Progress Bar ── */
+  .progress-wrap {
+    background: rgba(201,168,76,0.12);
+    border-radius: 4px;
+    height: 5px;
+    margin-bottom: 1.8rem;
+    overflow: hidden;
+    border: 1px solid rgba(201,168,76,0.2);
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8cc7a);
+    border-radius: 4px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    width: 0%;
+  }
+
+  /* ── Parchment Card ── */
+  .parchment {
+    background: linear-gradient(160deg,
+      #f5e8c8 0%,
+      #ede0b4 20%,
+      #e8d8a0 50%,
+      #edddb0 80%,
+      #f0e2be 100%);
+    border: 2px solid #c9a84c;
+    border-radius: 6px;
+    padding: 2rem 2.2rem;
+    box-shadow:
+      0 0 0 1px rgba(201,168,76,0.2),
+      0 8px 32px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .parchment::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* ── Question ── */
+  .question-block {
+    display: none;
+    animation: fadeIn 0.45s ease both;
+  }
+
+  .question-block.active {
+    display: block;
+  }
+
+  .question-number {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: #8b6914;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .detail-badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #7a4a10;
+    background: rgba(139,105,20,0.15);
+    border: 1px solid rgba(139,105,20,0.35);
+    border-radius: 2px;
+    padding: 0.1rem 0.45rem;
+    margin-left: 0.4rem;
+    vertical-align: middle;
+    text-transform: uppercase;
+  }
+
+  .question-text {
+    font-size: 1.22rem;
+    line-height: 1.55;
+    color: #1e0f02;
+    margin-bottom: 1.4rem;
+    font-weight: 400;
+  }
+
+  /* ── Answer Choices ── */
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(139,105,20,0.3);
+    border-radius: 4px;
+    padding: 0.7rem 0.9rem;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.18s, border-color 0.18s, transform 0.12s;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #1e0f02;
+    width: 100%;
+  }
+
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.18);
+    border-color: #c9a84c;
+    transform: translateY(-1px);
+  }
+
+  .choice-btn:disabled {
+    cursor: default;
+  }
+
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #8b6914;
+    min-width: 1.2rem;
+    padding-top: 0.1rem;
+    flex-shrink: 0;
+  }
+
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.15);
+    border-color: #1a5c2a;
+  }
+
+  .choice-btn.correct .choice-letter {
+    color: #1a5c2a;
+  }
+
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.12);
+    border-color: #8b1a1a;
+  }
+
+  .choice-btn.wrong .choice-letter {
+    color: #8b1a1a;
+  }
+
+  /* ── Feedback ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 1.2rem;
+    animation: fadeIn 0.3s ease both;
+    font-size: 1.05rem;
+    line-height: 1.55;
+  }
+
+  .feedback.correct {
+    background: rgba(26,92,42,0.12);
+    border: 1.5px solid rgba(26,92,42,0.4);
+    color: #0d3317;
+  }
+
+  .feedback.wrong {
+    background: rgba(139,26,26,0.1);
+    border: 1.5px solid rgba(139,26,26,0.35);
+    color: #3d0a0a;
+  }
+
+  .feedback-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+
+  .feedback.correct .feedback-label { color: #1a5c2a; }
+  .feedback.wrong .feedback-label { color: #8b1a1a; }
+
+  .scripture-ref {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    opacity: 0.75;
+    margin-top: 0.3rem;
+  }
+
+  /* ── Navigation ── */
+  .nav-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+  }
+
+  .next-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #a8872e);
+    color: #0e0a04;
+    border: none;
+    border-radius: 3px;
+    padding: 0.55rem 1.4rem;
+    cursor: pointer;
+    display: none;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+
+  .next-btn:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+  }
+
+  /* ── Results ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeIn 0.6s ease both;
+  }
+
+  .results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e0f02;
+    margin-bottom: 0.4rem;
+  }
+
+  .results-subtitle {
+    font-size: 1rem;
+    color: #5a3a14;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Score Ring */
+  .score-ring-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .score-ring-svg {
+    transform: rotate(-90deg);
+  }
+
+  .ring-bg {
+    fill: none;
+    stroke: rgba(139,105,20,0.2);
+    stroke-width: 10;
+  }
+
+  .ring-fg {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 283;
+    stroke-dashoffset: 283;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .ring-fg.green { stroke: #1a5c2a; }
+  .ring-fg.red { stroke: #8b1a1a; }
+
+  .score-ring-inner {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 120px;
+  }
+
+  .score-ring-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .score-number {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e0f02;
+    line-height: 1;
+  }
+
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    color: #5a3a14;
+    letter-spacing: 0.1em;
+  }
+
+  .results-message {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: #2c1a06;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid rgba(139,105,20,0.3);
+    margin: 1.2rem 0;
+  }
+
+  /* Review */
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: #8b6914;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    text-align: left;
+  }
+
+  .review-item {
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+    margin-bottom: 0.9rem;
+    text-align: left;
+    font-size: 1.0rem;
+    line-height: 1.5;
+    color: #1e0f02;
+  }
+
+  .review-icon {
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+  }
+
+  .review-correct { color: #1a5c2a; }
+  .review-wrong { color: #8b1a1a; }
+
+  .review-item .answer-note {
+    font-size: 0.9rem;
+    color: #5a3a14;
+    font-style: italic;
+  }
+
+  /* Retry button */
+  .retry-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: transparent;
+    color: #8b6914;
+    border: 1.5px solid rgba(139,105,20,0.5);
+    border-radius: 3px;
+    padding: 0.55rem 1.4rem;
+    cursor: pointer;
+    margin-top: 1.2rem;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .retry-btn:hover {
+    background: rgba(201,168,76,0.15);
+    color: #5a3a14;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="scroll-container">
+
+  <!-- Header -->
+  <div class="quiz-header">
+    <div class="date-line">Wednesday, July 22, 2026 &middot; Day 203</div>
+    <div class="quiz-title">The Bible Recap</div>
+    <div class="badges">
+      <span class="badge badge-challenging">Challenging</span>
+    </div>
+    <div class="passage-tags">
+      <span class="passage-tag">Isaiah 28-30</span>
+    </div>
+  </div>
+
+  <div class="ornament">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+
+  <!-- Quiz Card -->
+  <div class="parchment" id="quiz-card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-number">Question 1 of 10 <span class="detail-badge">Detail</span></div>
+      <p class="question-text">DETAIL — Isaiah 28:1-4 pictures Ephraim's "fading flower" of pride giving way to Assyria's storm. What image does verse 4 use for how quickly that fading glory will be consumed?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,1)"><span class="choice-letter">A</span><span>Like the first ripe fig before summer — when someone sees it in his hand, he swallows it at once</span></button>
+        <button class="choice-btn" onclick="answer(this,false,1)"><span class="choice-letter">B</span><span>Like chaff that the wind drives away from the threshing floor</span></button>
+        <button class="choice-btn" onclick="answer(this,false,1)"><span class="choice-letter">C</span><span>Like a lamb led silently to the slaughter</span></button>
+        <button class="choice-btn" onclick="answer(this,false,1)"><span class="choice-letter">D</span><span>Like morning mist that vanishes the moment the sun rises</span></button>
+      </div>
+      <div class="feedback" id="fb1">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next1" onclick="nextQ(1)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-number">Question 2 of 10</div>
+      <p class="question-text">Isaiah 28:9-13 records the priests and prophets mocking Isaiah's preaching with the phrase "line upon line, line upon line; precept upon precept, precept upon precept; here a little, there a little." What does this mockery reveal about their attitude toward his message?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,2)"><span class="choice-letter">A</span><span>They found in it a comforting reminder of the covenant renewed with Abraham's line</span></button>
+        <button class="choice-btn" onclick="answer(this,true,2)"><span class="choice-letter">B</span><span>They dismissed it as fit only for weaned infants, sneering at Isaiah for teaching them like children</span></button>
+        <button class="choice-btn" onclick="answer(this,false,2)"><span class="choice-letter">C</span><span>They accepted it as a measuring line for rebuilding the city walls</span></button>
+        <button class="choice-btn" onclick="answer(this,false,2)"><span class="choice-letter">D</span><span>They recited it back to him as a genealogy read aloud in temple worship</span></button>
+      </div>
+      <div class="feedback" id="fb2">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next2" onclick="nextQ(2)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-number">Question 3 of 10</div>
+      <p class="question-text">Isaiah 28:16 announces a "tried stone, a precious cornerstone, a sure foundation" laid in Zion — a verse later applied to Christ in the New Testament. What does the verse promise to the one who trusts in it?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,3)"><span class="choice-letter">A</span><span>He will inherit the land promised to Abraham's offspring</span></button>
+        <button class="choice-btn" onclick="answer(this,false,3)"><span class="choice-letter">B</span><span>He will be established as a priest before the LORD forever</span></button>
+        <button class="choice-btn" onclick="answer(this,true,3)"><span class="choice-letter">C</span><span>He will not be in panic or put to shame — "whoever believes will not be in haste"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,3)"><span class="choice-letter">D</span><span>He will receive a new name written on a white stone</span></button>
+      </div>
+      <div class="feedback" id="fb3">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next3" onclick="nextQ(3)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-number">Question 4 of 10 <span class="detail-badge">Detail</span></div>
+      <p class="question-text">DETAIL — Isaiah 28's closing farming parable contrasts how different crops are threshed. According to verses 27-28, which crop is beaten out with a stick rather than crushed by a cart wheel or threshing sledge?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,4)"><span class="choice-letter">A</span><span>Wheat</span></button>
+        <button class="choice-btn" onclick="answer(this,false,4)"><span class="choice-letter">B</span><span>Barley</span></button>
+        <button class="choice-btn" onclick="answer(this,false,4)"><span class="choice-letter">C</span><span>Spelt</span></button>
+        <button class="choice-btn" onclick="answer(this,true,4)"><span class="choice-letter">D</span><span>Dill (and cumin, beaten with a rod)</span></button>
+      </div>
+      <div class="feedback" id="fb4">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next4" onclick="nextQ(4)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-number">Question 5 of 10</div>
+      <p class="question-text">Isaiah 29:1 opens a woe oracle against "Ariel." What city does the verse identify Ariel as, calling it "the city where David encamped"?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,5)"><span class="choice-letter">A</span><span>Jerusalem</span></button>
+        <button class="choice-btn" onclick="answer(this,false,5)"><span class="choice-letter">B</span><span>Samaria</span></button>
+        <button class="choice-btn" onclick="answer(this,false,5)"><span class="choice-letter">C</span><span>Bethlehem</span></button>
+        <button class="choice-btn" onclick="answer(this,false,5)"><span class="choice-letter">D</span><span>Hebron</span></button>
+      </div>
+      <div class="feedback" id="fb5">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next5" onclick="nextQ(5)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-number">Question 6 of 10 <span class="detail-badge">Detail</span></div>
+      <p class="question-text">DETAIL — Isaiah 29:13 diagnoses a worship that looks devout but isn't — a verse Jesus later quotes against the Pharisees. How does the verse describe the problem?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,6)"><span class="choice-letter">A</span><span>The people offer sacrifices at unauthorized altars outside Jerusalem</span></button>
+        <button class="choice-btn" onclick="answer(this,true,6)"><span class="choice-letter">B</span><span>The people honor God with their lips while their hearts are far from him, their fear of him merely a rule taught by men</span></button>
+        <button class="choice-btn" onclick="answer(this,false,6)"><span class="choice-letter">C</span><span>The people withhold their tithes and offerings from the temple treasury</span></button>
+        <button class="choice-btn" onclick="answer(this,false,6)"><span class="choice-letter">D</span><span>The people mix worship of the LORD with worship of Baal at the high places</span></button>
+      </div>
+      <div class="feedback" id="fb6">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next6" onclick="nextQ(6)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-number">Question 7 of 10</div>
+      <p class="question-text">Isaiah 29:16 rebukes the people's "turning of things upside down" by comparing it to an absurd reversal. What comparison does the verse use?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,7)"><span class="choice-letter">A</span><span>A shadow claiming that it, not the sun, gives light</span></button>
+        <button class="choice-btn" onclick="answer(this,false,7)"><span class="choice-letter">B</span><span>A servant presuming to instruct his own master</span></button>
+        <button class="choice-btn" onclick="answer(this,true,7)"><span class="choice-letter">C</span><span>The clay saying of the one who formed it, "He did not make me" or "he has no understanding"</span></button>
+        <button class="choice-btn" onclick="answer(this,false,7)"><span class="choice-letter">D</span><span>A river insisting it can flow uphill against its source</span></button>
+      </div>
+      <div class="feedback" id="fb7">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next7" onclick="nextQ(7)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-number">Question 8 of 10</div>
+      <p class="question-text">Isaiah 30 condemns Judah's rebellious envoys for making a costly journey through the Negev, loading treasure onto donkeys and camels to secure protection. Which nation were they seeking an alliance with instead of trusting the LORD?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,8)"><span class="choice-letter">A</span><span>Assyria</span></button>
+        <button class="choice-btn" onclick="answer(this,false,8)"><span class="choice-letter">B</span><span>Babylon</span></button>
+        <button class="choice-btn" onclick="answer(this,false,8)"><span class="choice-letter">C</span><span>Edom</span></button>
+        <button class="choice-btn" onclick="answer(this,true,8)"><span class="choice-letter">D</span><span>Egypt</span></button>
+      </div>
+      <div class="feedback" id="fb8">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next8" onclick="nextQ(8)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-number">Question 9 of 10 <span class="detail-badge">Detail</span></div>
+      <p class="question-text">DETAIL — Isaiah 30:15 states plainly what would have brought Judah salvation and strength, and just as plainly that they refused it. What does the verse say?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,true,9)"><span class="choice-letter">A</span><span>"In returning and rest you shall be saved; in quietness and in trust shall be your strength" — but they were unwilling</span></button>
+        <button class="choice-btn" onclick="answer(this,false,9)"><span class="choice-letter">B</span><span>"In fasting and sackcloth you shall be saved; in mourning and lament shall be your strength" — but they refused to weep</span></button>
+        <button class="choice-btn" onclick="answer(this,false,9)"><span class="choice-letter">C</span><span>"In alliance and armament you shall be saved; in chariots and horses shall be your strength" — but they trusted too little in Egypt</span></button>
+        <button class="choice-btn" onclick="answer(this,false,9)"><span class="choice-letter">D</span><span>"In sacrifice and offering you shall be saved; in incense and firstfruits shall be your strength" — but they withheld the tithe</span></button>
+      </div>
+      <div class="feedback" id="fb9">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next9" onclick="nextQ(9)">Next &rarr;</button></div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-number">Question 10 of 10</div>
+      <p class="question-text">Isaiah 30:26 pictures the day the LORD binds up his people's brokenness with an image of intensified light. What does the verse say will happen to the sun?</p>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(this,false,10)"><span class="choice-letter">A</span><span>A new star will rise and stand over Zion, visible day and night</span></button>
+        <button class="choice-btn" onclick="answer(this,true,10)"><span class="choice-letter">B</span><span>The sun's light will be sevenfold, like the light of seven days, and the moon will shine like the sun</span></button>
+        <button class="choice-btn" onclick="answer(this,false,10)"><span class="choice-letter">C</span><span>The moon will no longer wax or wane but remain full every night</span></button>
+        <button class="choice-btn" onclick="answer(this,false,10)"><span class="choice-letter">D</span><span>Fire will fall from heaven and rest continually over the temple</span></button>
+      </div>
+      <div class="feedback" id="fb10">
+        <div class="feedback-label"></div>
+        <div class="feedback-body"></div>
+        <div class="scripture-ref"></div>
+      </div>
+      <div class="nav-row"><button class="next-btn" id="next10" onclick="nextQ(10)">See Results &rarr;</button></div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="results-screen">
+      <div class="results-title">Quiz Complete</div>
+      <div class="results-subtitle">Day 203 &middot; Isaiah 28-30</div>
+
+      <div class="score-ring-wrap">
+        <div class="score-ring-container">
+          <svg class="score-ring-svg" width="120" height="120" viewBox="0 0 120 120">
+            <circle class="ring-bg" cx="60" cy="60" r="45"/>
+            <circle class="ring-fg" id="ring-fg" cx="60" cy="60" r="45"/>
+          </svg>
+          <div class="score-ring-inner">
+            <div class="score-number" id="score-num">0</div>
+            <div class="score-denom">out of 10</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="results-message" id="results-msg"></div>
+
+      <hr class="divider">
+
+      <div class="review-title">Question Review</div>
+      <div id="review-list"></div>
+
+      <button class="retry-btn" onclick="resetQuiz()">Take Again</button>
+    </div>
+
+  </div><!-- .parchment -->
+
+</div><!-- .scroll-container -->
+
+<script>
+const TOTAL = 10;
+let score = 0;
+let answered = new Array(TOTAL + 1).fill(false);
+let userCorrect = new Array(TOTAL + 1).fill(false);
+
+const questions = [
+  null, // index 0 unused
+  {
+    text: "DETAIL — Isaiah 28:1-4 pictures Ephraim's \"fading flower\" of pride giving way to Assyria's storm. What image does verse 4 use for how quickly that fading glory will be consumed?",
+    correct: "Like the first ripe fig before summer — when someone sees it in his hand, he swallows it at once",
+    ref: "Isaiah 28:4",
+    explanation: "\"It will be like a first-ripe fig before the summer: when someone sees it, he swallows it as soon as it is in his hand\" (Isaiah 28:4). Ephraim's celebrated glory — the fading flower on the head of the drunkards — will vanish just as quickly."
+  },
+  {
+    text: "Isaiah 28:9-13 records the priests and prophets mocking Isaiah's preaching with the phrase \"line upon line, line upon line; precept upon precept, precept upon precept; here a little, there a little.\" What does this mockery reveal about their attitude toward his message?",
+    correct: "They dismissed it as fit only for weaned infants, sneering at Isaiah for teaching them like children",
+    ref: "Isaiah 28:9-13",
+    explanation: "The scoffers sneer, \"Whom will he teach knowledge, and to whom will he explain the message? Those who are weaned from the milk, those taken from the breast?\" before mocking his teaching as childish repetition (Isaiah 28:9-10). Because they refuse this simple teaching, God says he will speak to them instead through a foreign tongue — the coming Assyrian invaders (28:11)."
+  },
+  {
+    text: "Isaiah 28:16 announces a \"tried stone, a precious cornerstone, a sure foundation\" laid in Zion — a verse later applied to Christ in the New Testament. What does the verse promise to the one who trusts in it?",
+    correct: "He will not be in panic or put to shame — \"whoever believes will not be in haste\"",
+    ref: "Isaiah 28:16",
+    explanation: "\"Behold, I am the one who has laid as a foundation in Zion, a stone, a tested stone, a precious cornerstone, of a sure foundation: Whoever believes will not be in haste\" (Isaiah 28:16). Paul and Peter both later apply this cornerstone to Christ (Romans 9:33; 1 Peter 2:6)."
+  },
+  {
+    text: "DETAIL — Isaiah 28's closing farming parable contrasts how different crops are threshed. According to verses 27-28, which crop is beaten out with a stick rather than crushed by a cart wheel or threshing sledge?",
+    correct: "Dill (and cumin, beaten with a rod)",
+    ref: "Isaiah 28:27-29",
+    explanation: "\"Dill is not threshed with a threshing sledge, nor is a cart wheel rolled over cumin, but dill is beaten out with a stick, and cumin with a rod\" (Isaiah 28:27). Grain for bread is crushed under the wheel, but even that is not threshed forever — God's discipline, like the farmer's method, fits the crop (28:28-29)."
+  },
+  {
+    text: "Isaiah 29:1 opens a woe oracle against \"Ariel.\" What city does the verse identify Ariel as, calling it \"the city where David encamped\"?",
+    correct: "Jerusalem",
+    ref: "Isaiah 29:1",
+    explanation: "\"Ah, Ariel, Ariel, the city where David encamped! Add year to year; let the feasts run their round\" (Isaiah 29:1). Ariel — likely meaning \"altar hearth\" or \"lion of God\" — is Isaiah's name for Jerusalem, which he pictures under siege in the verses that follow."
+  },
+  {
+    text: "DETAIL — Isaiah 29:13 diagnoses a worship that looks devout but isn't — a verse Jesus later quotes against the Pharisees. How does the verse describe the problem?",
+    correct: "The people honor God with their lips while their hearts are far from him, their fear of him merely a rule taught by men",
+    ref: "Isaiah 29:13",
+    explanation: "\"This people draw near with their mouth and honor me with their lips, while their hearts are far from me, and their fear of me is a commandment taught by men\" (Isaiah 29:13). Jesus quotes this verse against the Pharisees and scribes in Matthew 15:8-9 and Mark 7:6-7."
+  },
+  {
+    text: "Isaiah 29:16 rebukes the people's \"turning of things upside down\" by comparing it to an absurd reversal. What comparison does the verse use?",
+    correct: "The clay saying of the one who formed it, \"He did not make me\" or \"he has no understanding\"",
+    ref: "Isaiah 29:16",
+    explanation: "\"You turn things upside down! Shall the potter be regarded as the clay, that the thing made should say of its maker, 'He did not make me'; or the thing formed say of him who formed it, 'He has no understanding'?\" (Isaiah 29:16). Paul echoes this potter-and-clay logic in Romans 9:20."
+  },
+  {
+    text: "Isaiah 30 condemns Judah's rebellious envoys for making a costly journey through the Negev, loading treasure onto donkeys and camels to secure protection. Which nation were they seeking an alliance with instead of trusting the LORD?",
+    correct: "Egypt",
+    ref: "Isaiah 30:1-7",
+    explanation: "\"Woe to the rebellious children, declares the LORD, who carry out a plan, but not mine... who set out to go down to Egypt, without asking for my direction, to take refuge in the shadow of Pharaoh\" (Isaiah 30:1-2). Their envoys hauled treasure through the Negev's dangerous terrain to Egypt — Isaiah calls it \"Rahab who sits still,\" a people who cannot profit them (30:6-7)."
+  },
+  {
+    text: "DETAIL — Isaiah 30:15 states plainly what would have brought Judah salvation and strength, and just as plainly that they refused it. What does the verse say?",
+    correct: "\"In returning and rest you shall be saved; in quietness and in trust shall be your strength\" — but they were unwilling",
+    ref: "Isaiah 30:15",
+    explanation: "\"In returning and rest you shall be saved; in quietness and in trust shall be your strength. But you were unwilling\" (Isaiah 30:15). The very thing that would have saved them — resting in the LORD rather than scrambling for Egypt's help — is what they rejected."
+  },
+  {
+    text: "Isaiah 30:26 pictures the day the LORD binds up his people's brokenness with an image of intensified light. What does the verse say will happen to the sun?",
+    correct: "The sun's light will be sevenfold, like the light of seven days, and the moon will shine like the sun",
+    ref: "Isaiah 30:26",
+    explanation: "\"Moreover, the light of the moon will be as the light of the sun, and the light of the sun will be sevenfold, as the light of seven days, in the day when the LORD binds up the brokenness of his people\" (Isaiah 30:26). The promise of restoration is pictured in cosmic terms of overflowing light."
+  }
+];
+
+function answer(btn, isCorrect, qNum) {
+  if (answered[qNum]) return;
+  answered[qNum] = true;
+  userCorrect[qNum] = isCorrect;
+  if (isCorrect) score++;
+
+  const block = document.getElementById('q' + qNum);
+  const allBtns = block.querySelectorAll('.choice-btn');
+  allBtns.forEach(b => {
+    b.disabled = true;
+    const txt = b.querySelector('span:last-child').textContent.trim();
+    const q = questions[qNum];
+    if (txt === q.correct || txt === q.correct.replace(/&#39;/g, "'")) {
+      b.classList.add('correct');
+    }
+  });
+  if (!isCorrect) btn.classList.add('wrong');
+
+  const fb = document.getElementById('fb' + qNum);
+  const label = fb.querySelector('.feedback-label');
+  const body = fb.querySelector('.feedback-body');
+  const ref = fb.querySelector('.scripture-ref');
+
+  fb.classList.add(isCorrect ? 'correct' : 'wrong');
+  label.textContent = isCorrect ? 'Correct' : 'Incorrect';
+  body.textContent = questions[qNum].explanation;
+  ref.textContent = questions[qNum].ref;
+  fb.style.display = 'block';
+
+  const nextBtn = document.getElementById('next' + qNum);
+  nextBtn.style.display = 'inline-block';
+
+  updateProgress(qNum);
+}
+
+function updateProgress(current) {
+  const pct = (current / TOTAL) * 100;
+  document.getElementById('progress-bar').style.width = pct + '%';
+}
+
+function nextQ(current) {
+  const currentBlock = document.getElementById('q' + current);
+  currentBlock.classList.remove('active');
+
+  if (current < TOTAL) {
+    const nextBlock = document.getElementById('q' + (current + 1));
+    nextBlock.classList.add('active');
+    nextBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('progress-bar').style.width = '100%';
+  const resultsScreen = document.getElementById('results-screen');
+
+  document.querySelectorAll('.question-block').forEach(b => b.style.display = 'none');
+  resultsScreen.style.display = 'block';
+
+  document.getElementById('score-num').textContent = score;
+
+  const ring = document.getElementById('ring-fg');
+  const circumference = 283;
+  const pct = score / TOTAL;
+  const offset = circumference - (circumference * pct);
+  setTimeout(() => {
+    ring.style.strokeDashoffset = offset;
+    if (pct >= 0.8) ring.classList.add('green');
+    else if (pct < 0.5) ring.classList.add('red');
+  }, 100);
+
+  const msg = document.getElementById('results-msg');
+  if (score === 10) {
+    msg.textContent = "Perfect score! From Ephraim's fading flower to the sevenfold light of restoration, you tracked Isaiah's warnings and promises across all three chapters with precision.";
+  } else if (score >= 8) {
+    msg.textContent = "Excellent work. Between the cornerstone laid in Zion, the potter and the clay, and the call to quiet trust, this stretch is thick with imagery, and you handled it well.";
+  } else if (score >= 6) {
+    msg.textContent = "Good effort. Isaiah moves quickly between judgment on Ephraim, besieged Jerusalem, and Judah's failed alliance with Egypt — review the feedback to catch what slipped by.";
+  } else if (score >= 4) {
+    msg.textContent = "Isaiah 28-30 packs dense imagery into three chapters — cornerstones, clay, and a rejected rest. Use the question review to return to the text.";
+  } else {
+    msg.textContent = "Keep going! These chapters turn on a single line: \"in returning and rest you shall be saved.\" Use the review below to guide a second look at the text.";
+  }
+
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  for (let i = 1; i <= TOTAL; i++) {
+    const div = document.createElement('div');
+    div.className = 'review-item';
+    const correct = userCorrect[i];
+    div.innerHTML = `
+      <span class="review-icon ${correct ? 'review-correct' : 'review-wrong'}">${correct ? '&#10003;' : '&#10007;'}</span>
+      <div>
+        <strong>Q${i}:</strong> ${questions[i].text}
+        <div class="answer-note">${correct ? 'Correct' : 'Correct answer: ' + questions[i].correct} &mdash; ${questions[i].ref}</div>
+      </div>`;
+    reviewList.appendChild(div);
+  }
+
+  resultsScreen.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetQuiz() {
+  score = 0;
+  answered = new Array(TOTAL + 1).fill(false);
+  userCorrect = new Array(TOTAL + 1).fill(false);
+
+  document.getElementById('progress-bar').style.width = '0%';
+  document.getElementById('results-screen').style.display = 'none';
+
+  const ring = document.getElementById('ring-fg');
+  ring.style.strokeDashoffset = '283';
+  ring.classList.remove('green', 'red');
+
+  document.querySelectorAll('.question-block').forEach((b, i) => {
+    b.style.display = '';
+    b.classList.remove('active');
+    b.querySelectorAll('.choice-btn').forEach(btn => {
+      btn.disabled = false;
+      btn.classList.remove('correct', 'wrong');
+    });
+    const fb = b.querySelector('.feedback');
+    fb.style.display = 'none';
+    fb.classList.remove('correct', 'wrong');
+    const nextBtn = b.querySelector('.next-btn');
+    if (nextBtn) nextBtn.style.display = 'none';
+  });
+
+  document.getElementById('q1').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
