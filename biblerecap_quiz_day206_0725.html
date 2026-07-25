@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 206 Bible Recap Quiz — Isaiah 37–39</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 18px;
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.15);
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.3s ease forwards;
+  }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+    color: #1a3d1e;
+    display: block;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.1);
+    border: 1px solid #8b1a1a;
+    color: #5a0e0e;
+    display: block;
+  }
+  .feedback-icon { font-weight: 700; margin-right: 6px; }
+  .feedback-ref {
+    font-style: italic;
+    color: #5a4020;
+    font-size: 0.95rem;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.visible { display: inline-block; }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 22px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.15); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #c9a84c;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: #9a7a3a;
+    letter-spacing: 0.1em;
+  }
+
+  #results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #f5ead8;
+    margin-bottom: 10px;
+  }
+  #results-message {
+    color: #c9a84c;
+    font-size: 1.08rem;
+    line-height: 1.5;
+    margin-bottom: 26px;
+    font-style: italic;
+  }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+    margin-bottom: 32px;
+  }
+  .take-again-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ── REVIEW ── */
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    text-align: left;
+  }
+  .review-item {
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    text-align: left;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.10);
+    border: 1px solid #8b1a1a;
+  }
+  .review-q {
+    font-weight: 600;
+    color: #1e1208;
+    margin-bottom: 4px;
+  }
+  .review-ans { color: #3a2810; font-size: 0.95rem; }
+  .review-correct-lbl { color: #1a5c2a; font-weight: 700; }
+  .review-wrong-lbl { color: #8b1a1a; font-weight: 700; }
+
+  @media (max-width: 520px) {
+    .card { padding: 22px 18px; }
+    .quiz-title { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- HEADER -->
+  <header class="quiz-header">
+    <div class="quiz-date">Saturday, July 25, 2026 &middot; Day 206</div>
+    <h1 class="quiz-title">The Bible Recap &mdash; Daily Quiz</h1>
+    <div class="passage-tags">
+      <span class="passage-tag">Isaiah 37</span>
+      <span class="passage-tag">Isaiah 38</span>
+      <span class="passage-tag">Isaiah 39</span>
+    </div>
+    <span class="ornament">&#10022;</span>
+    <span class="difficulty-badge">Challenging</span>
+    <span class="ornament">&#10022;</span>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="prog-bar"></div>
+  </div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- CARD -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <span class="question-text">In his message to Isaiah (37:3), how does Hezekiah describe the crisis using the image of childbirth?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(1,'A')"><span class="choice-letter">A</span>"The pangs of labor have overtaken us like a woman in travail"</button>
+        <button class="choice-btn" onclick="answer(1,'B')"><span class="choice-letter">B</span>"Children have come to the point of birth, and there is no strength to bring them forth"</button>
+        <button class="choice-btn" onclick="answer(1,'C')"><span class="choice-letter">C</span>"We are as those who miscarry before the appointed time"</button>
+        <button class="choice-btn" onclick="answer(1,'D')"><span class="choice-letter">D</span>"The birth stool is set, but no child is born"</button>
+      </div>
+      <div class="feedback" id="fb1"></div>
+      <button class="next-btn" id="next1" onclick="advance(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">According to Isaiah's first word to Hezekiah's servants (37:6-7), what would happen to the king of Assyria?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(2,'A')"><span class="choice-letter">A</span>He would be struck with plague and die within the walls of Jerusalem</button>
+        <button class="choice-btn" onclick="answer(2,'B')"><span class="choice-letter">B</span>He would be captured alive and paraded before Hezekiah</button>
+        <button class="choice-btn" onclick="answer(2,'C')"><span class="choice-letter">C</span>He would hear a rumor, return to his own land, and fall by the sword there</button>
+        <button class="choice-btn" onclick="answer(2,'D')"><span class="choice-letter">D</span>He would abandon the siege after Tirhakah's army defeated him at Lachish</button>
+      </div>
+      <div class="feedback" id="fb2"></div>
+      <button class="next-btn" id="next2" onclick="advance(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <span class="question-text">What news, received by Sennacherib, prompted him to send Hezekiah another intimidating message rather than simply withdraw (37:9-10)?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(3,'A')"><span class="choice-letter">A</span>Word that Tirhakah king of Cush had set out to fight against him</button>
+        <button class="choice-btn" onclick="answer(3,'B')"><span class="choice-letter">B</span>A report that Hezekiah had made an alliance with Egypt's Pharaoh</button>
+        <button class="choice-btn" onclick="answer(3,'C')"><span class="choice-letter">C</span>News that the Rabshakeh had been ambushed near Libnah</button>
+        <button class="choice-btn" onclick="answer(3,'D')"><span class="choice-letter">D</span>A rumor that Jerusalem's wells had run dry</button>
+      </div>
+      <div class="feedback" id="fb3"></div>
+      <button class="next-btn" id="next3" onclick="advance(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">In his letter, which list of conquered peoples did Sennacherib cite as proof that no god could withstand Assyria (37:12)?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(4,'A')"><span class="choice-letter">A</span>Moab, Ammon, Edom, and the cities of the plain</button>
+        <button class="choice-btn" onclick="answer(4,'B')"><span class="choice-letter">B</span>Tyre, Sidon, and the coastlands of the Philistines</button>
+        <button class="choice-btn" onclick="answer(4,'C')"><span class="choice-letter">C</span>Nineveh, Babylon, and Ur of the Chaldeans</button>
+        <button class="choice-btn" onclick="answer(4,'D')"><span class="choice-letter">D</span>Gozan, Haran, Rezeph, and the people of Eden who were in Telassar</button>
+      </div>
+      <div class="feedback" id="fb4"></div>
+      <button class="next-btn" id="next4" onclick="advance(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+        <span class="question-text">What ultimate purpose does Hezekiah give for asking God to save Jerusalem in his prayer (37:20)?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(5,'A')"><span class="choice-letter">A</span>So that Judah could rebuild the temple treasury plundered by Assyria</button>
+        <button class="choice-btn" onclick="answer(5,'B')"><span class="choice-letter">B</span>So that all the kingdoms of the earth would know that the LORD alone is God</button>
+        <button class="choice-btn" onclick="answer(5,'C')"><span class="choice-letter">C</span>So that Hezekiah's dynasty would be preserved for future generations</button>
+        <button class="choice-btn" onclick="answer(5,'D')"><span class="choice-letter">D</span>So that the remnant could return to farming without fear of plunder</button>
+      </div>
+      <div class="feedback" id="fb5"></div>
+      <button class="next-btn" id="next5" onclick="advance(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">What image does the LORD use in 37:29 to describe how he will control Sennacherib because of his raging and complacency?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(6,'A')"><span class="choice-letter">A</span>A hook in his nose and a bit in his mouth, turning him back the way he came</button>
+        <button class="choice-btn" onclick="answer(6,'B')"><span class="choice-letter">B</span>A yoke on his neck and chains on his hands</button>
+        <button class="choice-btn" onclick="answer(6,'C')"><span class="choice-letter">C</span>A net cast over him as a fowler catches a bird</button>
+        <button class="choice-btn" onclick="answer(6,'D')"><span class="choice-letter">D</span>A muzzle on his mouth like an ox treading grain</button>
+      </div>
+      <div class="feedback" id="fb6"></div>
+      <button class="next-btn" id="next6" onclick="advance(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <span class="question-text">What sign did Isaiah give Hezekiah confirming that Jerusalem's deliverance would hold over the following years (37:30)?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(7,'A')"><span class="choice-letter">A</span>The shadow on the sundial would move forward instead of backward</button>
+        <button class="choice-btn" onclick="answer(7,'B')"><span class="choice-letter">B</span>A star would appear over Bethlehem for three consecutive nights</button>
+        <button class="choice-btn" onclick="answer(7,'C')"><span class="choice-letter">C</span>This year they would eat what grows of itself, the next what springs from that, and the third year sow, reap, and plant vineyards</button>
+        <button class="choice-btn" onclick="answer(7,'D')"><span class="choice-letter">D</span>The Assyrian camp would remain visible in ashes from the city walls for seven days</button>
+      </div>
+      <div class="feedback" id="fb7"></div>
+      <button class="next-btn" id="next7" onclick="advance(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">Where was Sennacherib when his own sons struck him down, and what became of them (37:38)?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(8,'A')"><span class="choice-letter">A</span>He was reviewing his troops on the plain of Nineveh; his sons were captured and executed</button>
+        <button class="choice-btn" onclick="answer(8,'B')"><span class="choice-letter">B</span>He was asleep in his palace chamber; his sons fled to Egypt and were never found</button>
+        <button class="choice-btn" onclick="answer(8,'C')"><span class="choice-letter">C</span>He was praying at an altar to Marduk in Babylon; his sons seized the throne themselves</button>
+        <button class="choice-btn" onclick="answer(8,'D')"><span class="choice-letter">D</span>He was worshiping in the house of his god Nisroch; his sons escaped to the land of Ararat</button>
+      </div>
+      <div class="feedback" id="fb8"></div>
+      <button class="next-btn" id="next8" onclick="advance(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <span class="question-text">What did Hezekiah appeal to in his prayer after receiving Isaiah's message that he would die (38:3)?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(9,'A')"><span class="choice-letter">A</span>The covenant promises made to his ancestor David</button>
+        <button class="choice-btn" onclick="answer(9,'B')"><span class="choice-letter">B</span>His faithful, wholehearted walk before the LORD and his obedience</button>
+        <button class="choice-btn" onclick="answer(9,'C')"><span class="choice-letter">C</span>The years of peace he had brought to Judah through diplomacy</button>
+        <button class="choice-btn" onclick="answer(9,'D')"><span class="choice-letter">D</span>The reforms he had made in tearing down the high places</button>
+      </div>
+      <div class="feedback" id="fb9"></div>
+      <button class="next-btn" id="next9" onclick="advance(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <span class="question-text">How did Hezekiah respond when Isaiah told him his treasures and descendants would be carried to Babylon (39:8)?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(10,'A')"><span class="choice-letter">A</span>He tore his clothes in repentance and pleaded for mercy, as he had during the Assyrian siege</button>
+        <button class="choice-btn" onclick="answer(10,'B')"><span class="choice-letter">B</span>He immediately began fortifying Jerusalem's walls against the coming Babylonian threat</button>
+        <button class="choice-btn" onclick="answer(10,'C')"><span class="choice-letter">C</span>He said the word of the LORD was good, thinking there would be peace and security in his own days</button>
+        <button class="choice-btn" onclick="answer(10,'D')"><span class="choice-letter">D</span>He rebuked Isaiah, insisting his sons would surely resist any deportation</button>
+      </div>
+      <div class="feedback" id="fb10"></div>
+      <button class="next-btn" id="next10" onclick="advance(10)">Show Results &rarr;</button>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 120 120">
+          <circle class="score-ring-bg" cx="60" cy="60" r="54"/>
+          <circle class="score-ring-fill" id="score-ring" cx="60" cy="60" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <span class="score-num" id="score-num">0</span>
+          <span class="score-denom">/ 10</span>
+        </div>
+      </div>
+      <div id="results-title"></div>
+      <div id="results-message"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+      <div class="review-title">&#10022; Question Review &#10022;</div>
+      <div id="review-list"></div>
+    </div>
+
+  </div><!-- /card -->
+</div><!-- /outer-wrap -->
+
+<script>
+const QUESTIONS = 10;
+const CORRECT = {
+  1: 'B', 2: 'C', 3: 'A', 4: 'D', 5: 'B',
+  6: 'A', 7: 'C', 8: 'D', 9: 'B', 10: 'C'
+};
+
+const FEEDBACK = {
+  1: {
+    correct: "Correct! Isaiah 37:3 records Hezekiah's message: 'This day is a day of distress, of rebuke, and of disgrace; children have come to the point of birth, and there is no strength to bring them forth.' Judah stands at the crisis point with no power of its own to deliver itself &mdash; only the LORD can bring the birth to completion.",
+    wrong: "Not quite. Hezekiah's exact words in 37:3 are: 'children have come to the point of birth, and there is no strength to bring them forth.' It pictures Judah trapped at the moment of greatest danger, utterly unable to save itself without God's intervention.",
+    ref: "Isaiah 37:3"
+  },
+  2: {
+    correct: "Correct! Isaiah 37:7 says, 'Behold, I will put a spirit in him, so that he shall hear a rumor and return to his own land, and I will make him fall by the sword in his own land.' This word is given before the larger battle even unfolds, and both parts come true exactly as spoken by the chapter's end.",
+    wrong: "Not quite. Isaiah's word in 37:7 promises that the king of Assyria will hear a rumor, return to his own land, and there fall by the sword &mdash; not die in Jerusalem or be captured. This first prophecy is fulfilled precisely in the chapter's closing verses.",
+    ref: "Isaiah 37:7"
+  },
+  3: {
+    correct: "Correct! Isaiah 37:9 says Sennacherib 'heard concerning Tirhakah king of Cush, “He has set out to fight against you.”' Facing this new threat, he sent messengers with an even more blasphemous letter rather than simply retreating from Jerusalem.",
+    wrong: "Not quite. Isaiah 37:9 specifies that Sennacherib heard Tirhakah king of Cush had set out to fight him. That approaching threat is what drove him to send a written ultimatum to Hezekiah instead of withdrawing quietly.",
+    ref: "Isaiah 37:9"
+  },
+  4: {
+    correct: "Correct! Sennacherib's letter in 37:12 boasts that his fathers destroyed 'Gozan, Haran, Rezeph, and the people of Eden who were in Telassar' along with the kings of Hamath, Arpad, Sepharvaim, Hena, and Ivvah &mdash; none of whose gods could save them. The list is meant to prove the LORD is no different.",
+    wrong: "Not quite. The letter specifically names Gozan, Haran, Rezeph, and the people of Eden in Telassar, along with several named kings, as nations whose gods failed to deliver them. Sennacherib's argument is that the LORD will fail Jerusalem the same way.",
+    ref: "Isaiah 37:12"
+  },
+  5: {
+    correct: "Correct! Hezekiah's prayer ends in 37:20, 'So now, O Lord our God, save us from his hand, that all the kingdoms of the earth may know that you alone are the Lord.' His plea is not merely for survival but for God's own glory to be displayed before every nation watching.",
+    wrong: "Not quite. Hezekiah's prayer closes with a request for deliverance so 'that all the kingdoms of the earth may know that you alone are the Lord' (37:20). The goal named in the prayer is God's glory among the nations, not Judah's material or political security.",
+    ref: "Isaiah 37:20"
+  },
+  6: {
+    correct: "Correct! The LORD declares in 37:29, 'I will put my hook in your nose and my bit in your mouth, and I will turn you back on the way by which you came.' Sennacherib, who thought himself unstoppable, is pictured as an animal led wherever God wills.",
+    wrong: "Not quite. Isaiah 37:29 uses the specific image of a hook in the nose and a bit in the mouth, by which the LORD will turn Sennacherib back the way he came. The proud king who raged against heaven is reduced to a beast led on a rein.",
+    ref: "Isaiah 37:29"
+  },
+  7: {
+    correct: "Correct! Isaiah 37:30 gives this three-year sign: 'this year you shall eat what grows of itself, and in the second year what springs from that. Then in the third year sow and reap, and plant vineyards, and eat their fruit.' Normal agricultural life would resume in full by the third year, proving the land's safety was lasting, not temporary.",
+    wrong: "Not quite. The sign in 37:30 is agricultural: eating what grows wild for two years, then returning to full sowing, reaping, and vineyard planting in the third. It is a quiet, practical proof that Judah's deliverance would endure long enough for ordinary life to resume.",
+    ref: "Isaiah 37:30"
+  },
+  8: {
+    correct: "Correct! Isaiah 37:38 says, 'as he was worshiping in the house of Nisroch his god, Adrammelech and Sharezer, his sons, struck him down with the sword. And after they escaped into the land of Ararat, Esarhaddon his son reigned in his place.' The mighty king who mocked the living God was cut down inside his own idol's temple.",
+    wrong: "Not quite. Isaiah 37:38 places Sennacherib worshiping in the house of his god Nisroch when his sons Adrammelech and Sharezer struck him down; the assassins then escaped to Ararat, and another son, Esarhaddon, took the throne. The irony is deliberate &mdash; he dies before the very idol he trusted.",
+    ref: "Isaiah 37:38"
+  },
+  9: {
+    correct: "Correct! Isaiah 38:3 records Hezekiah's plea: 'Please, O Lord, remember how I have walked before you in faithfulness and with a whole heart, and have done what is good in your sight.' He appeals to the character of his own devotion, not to any external covenant or political achievement, and weeps bitterly.",
+    wrong: "Not quite. Hezekiah's prayer in 38:3 appeals directly to his faithful, wholehearted walk before the LORD and the good he has done in God's sight &mdash; not to David's covenant, his diplomacy, or his religious reforms, though those were real parts of his reign.",
+    ref: "Isaiah 38:3"
+  },
+  10: {
+    correct: "Correct! Isaiah 39:8 says, 'Then Hezekiah said to Isaiah, “The word of the Lord that you have spoken is good.” For he thought, “There will be peace and security in my days.”' Rather than grieving over the coming exile of his own descendants, Hezekiah takes quiet comfort that judgment will not fall in his own lifetime.",
+    wrong: "Not quite. Isaiah 39:8 records Hezekiah accepting the word as good, privately reasoning that there would at least be peace and security in his own days. It is a sobering, self-focused response rather than repentance, resistance, or renewed fortification.",
+    ref: "Isaiah 39:8"
+  }
+};
+
+const SHORT_Q = [
+  "How does Hezekiah describe the crisis using childbirth imagery? (Isa 37:3)",
+  "What did Isaiah first promise would happen to the king of Assyria? (Isa 37:6-7)",
+  "What news drove Sennacherib to send another threat? (Isa 37:9-10)",
+  "Which conquered peoples did Sennacherib's letter cite? (Isa 37:12)",
+  "Why did Hezekiah ask God to save Jerusalem? (Isa 37:20)",
+  "What image describes God's control over Sennacherib? (Isa 37:29)",
+  "What sign confirmed Jerusalem's lasting deliverance? (Isa 37:30)",
+  "Where was Sennacherib when his sons struck him down? (Isa 37:38)",
+  "What did Hezekiah appeal to in his prayer for healing? (Isa 38:3)",
+  "How did Hezekiah respond to the Babylonian exile prophecy? (Isa 39:8)"
+];
+
+let score = 0;
+let answers = {};
+
+function answer(qNum, chosen) {
+  if (answers[qNum]) return;
+  answers[qNum] = chosen;
+
+  const correct = CORRECT[qNum];
+  const isRight = chosen === correct;
+  if (isRight) score++;
+
+  const block = document.getElementById('q' + qNum);
+  const btns = block.querySelectorAll('.choice-btn');
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    const letter = ['A','B','C','D'][i];
+    if (letter === correct) btn.classList.add('correct');
+    else if (letter === chosen && !isRight) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('fb' + qNum);
+  const info = FEEDBACK[qNum];
+  if (isRight) {
+    fb.className = 'feedback correct-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10003;</span>' + info.correct +
+      '<span class="feedback-ref">' + info.ref + '</span>';
+  } else {
+    fb.className = 'feedback wrong-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10007;</span>' + info.wrong +
+      '<span class="feedback-ref">' + info.ref + '</span>';
+  }
+
+  document.getElementById('next' + qNum).classList.add('visible');
+}
+
+function advance(qNum) {
+  if (qNum < QUESTIONS) {
+    document.getElementById('q' + qNum).classList.remove('active');
+    document.getElementById('q' + (qNum + 1)).classList.add('active');
+    const pct = Math.round(((qNum) / QUESTIONS) * 100);
+    document.getElementById('prog-bar').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = 'Question ' + (qNum + 1) + ' of ' + QUESTIONS;
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('q10').style.display = 'none';
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-label').textContent = 'Complete';
+
+  const rs = document.getElementById('results-screen');
+  rs.style.display = 'block';
+
+  document.getElementById('score-num').textContent = score;
+
+  const pct = score / QUESTIONS;
+  const circumference = 339.3;
+  const offset = circumference - (pct * circumference);
+  setTimeout(() => {
+    document.getElementById('score-ring').style.strokeDashoffset = offset;
+  }, 100);
+
+  let title, msg;
+  if (score === 10) {
+    title = 'Perfect Score!';
+    msg = '"I will deliver you and this city out of the hand of the king of Assyria, and will defend this city." You traced the full arc &mdash; deliverance, healing, and the sober warning that followed pride. &mdash; Isaiah 38:6';
+  } else if (score >= 8) {
+    title = 'Excellent Work!';
+    msg = 'You tracked Hezekiah closely through crisis, prayer, healing, and folly. Isaiah 37&ndash;39 shows a faithful king at his best and his weakest &mdash; and God faithful through both.';
+  } else if (score >= 6) {
+    title = 'Well Done!';
+    msg = 'A solid read of these three chapters. Notice how quickly Hezekiah moves from desperate prayer in chapter 37 to careless pride in chapter 39 &mdash; a warning worth sitting with.';
+  } else if (score >= 4) {
+    title = 'Good Effort';
+    msg = 'These chapters hold together deliverance from Assyria, healing from sickness, and a rebuke for showing off Judah’s treasures to Babylon’s envoys. A second pass will sharpen the details.';
+  } else {
+    title = 'Keep Studying!';
+    msg = '"I have heard your prayer; I have seen your tears." Read Isaiah 37&ndash;39 again slowly, watching how Hezekiah’s story turns from crisis to healing to compromise. &mdash; Isaiah 38:5';
+  }
+  document.getElementById('results-title').textContent = title;
+  document.getElementById('results-message').textContent = msg;
+
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  for (let i = 1; i <= QUESTIONS; i++) {
+    const chosen = answers[i];
+    const correct = CORRECT[i];
+    const isRight = chosen === correct;
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (isRight ? 'r-correct' : 'r-wrong');
+    div.innerHTML = '<div class="review-q">Q' + i + '. ' + SHORT_Q[i-1] + '</div>' +
+      '<div class="review-ans">' +
+      (isRight
+        ? '<span class="review-correct-lbl">&#10003; Correct</span> &mdash; ' + correct
+        : '<span class="review-wrong-lbl">&#10007; Your answer: ' + chosen + '</span> &nbsp;|&nbsp; Correct: ' + correct) +
+      '</div>';
+    reviewList.appendChild(div);
+  }
+}
+
+function resetQuiz() {
+  score = 0;
+  answers = {};
+  for (let i = 1; i <= QUESTIONS; i++) {
+    const block = document.getElementById('q' + i);
+    block.classList.remove('active');
+    const btns = block.querySelectorAll('.choice-btn');
+    btns.forEach(b => { b.disabled = false; b.className = 'choice-btn'; });
+    const fb = document.getElementById('fb' + i);
+    fb.className = 'feedback';
+    fb.innerHTML = '';
+    document.getElementById('next' + i).classList.remove('visible');
+    block.style.display = '';
+  }
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('q1').classList.add('active');
+  document.getElementById('prog-bar').style.width = '10%';
+  document.getElementById('prog-label').textContent = 'Question 1 of 10';
+  document.getElementById('score-ring').style.strokeDashoffset = '339.3';
+}
+</script>
+</body>
+</html>
