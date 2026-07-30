@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 211 Bible Recap Quiz — Isaiah 54-58</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 18px;
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.15);
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.3s ease forwards;
+  }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+    color: #1a3d1e;
+    display: block;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.1);
+    border: 1px solid #8b1a1a;
+    color: #5a0e0e;
+    display: block;
+  }
+  .feedback-icon { font-weight: 700; margin-right: 6px; }
+  .feedback-ref {
+    font-style: italic;
+    color: #5a4020;
+    font-size: 0.95rem;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.visible { display: inline-block; }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 22px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.15); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #c9a84c;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: #9a7a3a;
+    letter-spacing: 0.1em;
+  }
+
+  #results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #f5ead8;
+    margin-bottom: 10px;
+  }
+  #results-message {
+    color: #c9a84c;
+    font-size: 1.08rem;
+    line-height: 1.5;
+    margin-bottom: 26px;
+    font-style: italic;
+  }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+    margin-bottom: 32px;
+  }
+  .take-again-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ── REVIEW ── */
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    text-align: left;
+  }
+  .review-item {
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    text-align: left;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.10);
+    border: 1px solid #8b1a1a;
+  }
+  .review-q {
+    font-weight: 600;
+    color: #1e1208;
+    margin-bottom: 4px;
+  }
+  .review-ans { color: #3a2810; font-size: 0.95rem; }
+  .review-correct-lbl { color: #1a5c2a; font-weight: 700; }
+  .review-wrong-lbl { color: #8b1a1a; font-weight: 700; }
+
+  @media (max-width: 520px) {
+    .card { padding: 22px 18px; }
+    .quiz-title { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- HEADER -->
+  <header class="quiz-header">
+    <div class="quiz-date">Thursday, July 30, 2026 &middot; Day 211</div>
+    <h1 class="quiz-title">The Bible Recap &mdash; Daily Quiz</h1>
+    <div class="passage-tags">
+      <span class="passage-tag">Isaiah 54</span>
+      <span class="passage-tag">Isaiah 55</span>
+      <span class="passage-tag">Isaiah 56</span>
+      <span class="passage-tag">Isaiah 57</span>
+      <span class="passage-tag">Isaiah 58</span>
+    </div>
+    <span class="ornament">&#10022;</span>
+    <span class="difficulty-badge">Challenging</span>
+    <span class="ornament">&#10022;</span>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="prog-bar"></div>
+  </div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- CARD -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">In Isaiah 54:2-3, the Lord tells barren Zion to prepare for growth using tent imagery. What three actions does he command?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(1,'A')"><span class="choice-letter">A</span>Widen the gates, raise the walls, and light the lamps</button>
+        <button class="choice-btn" onclick="answer(1,'B')"><span class="choice-letter">B</span>Gather the outcasts, rebuild the altar, and restore the priesthood</button>
+        <button class="choice-btn" onclick="answer(1,'C')"><span class="choice-letter">C</span>Sing a new song, lift a banner, and sound the trumpet</button>
+        <button class="choice-btn" onclick="answer(1,'D')"><span class="choice-letter">D</span>Enlarge her tent, lengthen her cords, and strengthen her stakes</button>
+      </div>
+      <div class="feedback" id="fb1"></div>
+      <button class="next-btn" id="next1" onclick="advance(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+        <span class="question-text">In Isaiah 54:9, the Lord grounds his promise never to be angry with Zion again in a specific historical precedent. What is it?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(2,'A')"><span class="choice-letter">A</span>His covenant with Abraham to bless all nations</button>
+        <button class="choice-btn" onclick="answer(2,'B')"><span class="choice-letter">B</span>His deliverance of Israel through the Red Sea</button>
+        <button class="choice-btn" onclick="answer(2,'C')"><span class="choice-letter">C</span>His oath after the flood that the waters would never again cover the earth</button>
+        <button class="choice-btn" onclick="answer(2,'D')"><span class="choice-letter">D</span>His promise to David of an everlasting throne</button>
+      </div>
+      <div class="feedback" id="fb2"></div>
+      <button class="next-btn" id="next2" onclick="advance(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">Isaiah 55:1 issues a paradoxical invitation to "everyone who thirsts." What does it invite them to buy, and at what price?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(3,'A')"><span class="choice-letter">A</span>Bread and oil, at the price of repentance</button>
+        <button class="choice-btn" onclick="answer(3,'B')"><span class="choice-letter">B</span>Wine and milk, without money and without price</button>
+        <button class="choice-btn" onclick="answer(3,'C')"><span class="choice-letter">C</span>Wisdom and understanding, for silver and gold</button>
+        <button class="choice-btn" onclick="answer(3,'D')"><span class="choice-letter">D</span>Grain and wine, for the labor of their hands</button>
+      </div>
+      <div class="feedback" id="fb3"></div>
+      <button class="next-btn" id="next3" onclick="advance(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <span class="question-text">In Isaiah 55:10-11, the Lord compares his word to rain and snow. What does he say his word will accomplish?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(4,'A')"><span class="choice-letter">A</span>It will return to him empty, having tested the hearers' faith</button>
+        <button class="choice-btn" onclick="answer(4,'B')"><span class="choice-letter">B</span>It will water the earth for a season and then withhold itself</button>
+        <button class="choice-btn" onclick="answer(4,'C')"><span class="choice-letter">C</span>It will not return empty, but accomplish the purpose for which he sent it</button>
+        <button class="choice-btn" onclick="answer(4,'D')"><span class="choice-letter">D</span>It will fall silently and be gathered only by the faithful remnant</button>
+      </div>
+      <div class="feedback" id="fb4"></div>
+      <button class="next-btn" id="next4" onclick="advance(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">In Isaiah 56:4-5, what specific promise does the Lord make to eunuchs who keep his Sabbaths and hold fast his covenant?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(5,'A')"><span class="choice-letter">A</span>A monument and a name within his house, better than sons and daughters</button>
+        <button class="choice-btn" onclick="answer(5,'B')"><span class="choice-letter">B</span>Full priestly office alongside the sons of Levi</button>
+        <button class="choice-btn" onclick="answer(5,'C')"><span class="choice-letter">C</span>Restoration of physical wholeness in the age to come</button>
+        <button class="choice-btn" onclick="answer(5,'D')"><span class="choice-letter">D</span>Adoption as royal heirs to the Davidic throne</button>
+      </div>
+      <div class="feedback" id="fb5"></div>
+      <button class="next-btn" id="next5" onclick="advance(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <span class="question-text">What does Isaiah 56:7 say the Lord's house shall be called?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(6,'A')"><span class="choice-letter">A</span>A dwelling place for the redeemed of Israel alone</button>
+        <button class="choice-btn" onclick="answer(6,'B')"><span class="choice-letter">B</span>A refuge for the poor and the needy</button>
+        <button class="choice-btn" onclick="answer(6,'C')"><span class="choice-letter">C</span>A monument to the covenant of Noah</button>
+        <button class="choice-btn" onclick="answer(6,'D')"><span class="choice-letter">D</span>A house of prayer for all peoples</button>
+      </div>
+      <div class="feedback" id="fb6"></div>
+      <button class="next-btn" id="next6" onclick="advance(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <span class="question-text">Isaiah 57:15 pairs two very different dwelling places for God. Alongside "the high and holy place," where else does he say he dwells?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(7,'A')"><span class="choice-letter">A</span>In the assembly of the righteous</button>
+        <button class="choice-btn" onclick="answer(7,'B')"><span class="choice-letter">B</span>With him who is of a contrite and lowly spirit</button>
+        <button class="choice-btn" onclick="answer(7,'C')"><span class="choice-letter">C</span>In the sanctuary built by human hands</button>
+        <button class="choice-btn" onclick="answer(7,'D')"><span class="choice-letter">D</span>Among the poor and the fatherless</button>
+      </div>
+      <div class="feedback" id="fb7"></div>
+      <button class="next-btn" id="next7" onclick="advance(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">Isaiah 57:20-21 compares the wicked to the tossing sea, whose waters cast up what?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(8,'A')"><span class="choice-letter">A</span>Foam and driftwood</button>
+        <button class="choice-btn" onclick="answer(8,'B')"><span class="choice-letter">B</span>Storms and shipwrecks</button>
+        <button class="choice-btn" onclick="answer(8,'C')"><span class="choice-letter">C</span>Mire and dirt</button>
+        <button class="choice-btn" onclick="answer(8,'D')"><span class="choice-letter">D</span>Salt and sand</button>
+      </div>
+      <div class="feedback" id="fb8"></div>
+      <button class="next-btn" id="next8" onclick="advance(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <span class="question-text">According to Isaiah 58:6-7, what does the fast that the Lord chooses actually consist of?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(9,'A')"><span class="choice-letter">A</span>Loosing the bonds of wickedness, sharing bread with the hungry, and bringing the homeless poor into your house</button>
+        <button class="choice-btn" onclick="answer(9,'B')"><span class="choice-letter">B</span>Abstaining from meat and wine for a set number of days</button>
+        <button class="choice-btn" onclick="answer(9,'C')"><span class="choice-letter">C</span>Sackcloth, ashes, and public lamentation in the city gate</button>
+        <button class="choice-btn" onclick="answer(9,'D')"><span class="choice-letter">D</span>Silence, solitude, and withdrawal from daily labor</button>
+      </div>
+      <div class="feedback" id="fb9"></div>
+      <button class="next-btn" id="next9" onclick="advance(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">In Isaiah 58:13-14, what does the Lord say will follow from honoring the Sabbath by not seeking your own pleasure or speaking idle words on it?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(10,'A')"><span class="choice-letter">A</span>An increase in flocks, herds, and grain stores</button>
+        <button class="choice-btn" onclick="answer(10,'B')"><span class="choice-letter">B</span>Delight in the Lord and being made to ride on the heights of the earth</button>
+        <button class="choice-btn" onclick="answer(10,'C')"><span class="choice-letter">C</span>Deliverance from all future famine and drought</button>
+        <button class="choice-btn" onclick="answer(10,'D')"><span class="choice-letter">D</span>A doubled inheritance among the tribes of Israel</button>
+      </div>
+      <div class="feedback" id="fb10"></div>
+      <button class="next-btn" id="next10" onclick="advance(10)">Show Results &rarr;</button>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 120 120">
+          <circle class="score-ring-bg" cx="60" cy="60" r="54"/>
+          <circle class="score-ring-fill" id="score-ring" cx="60" cy="60" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <span class="score-num" id="score-num">0</span>
+          <span class="score-denom">/ 10</span>
+        </div>
+      </div>
+      <div id="results-title"></div>
+      <div id="results-message"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+      <div class="review-title">&#10022; Question Review &#10022;</div>
+      <div id="review-list"></div>
+    </div>
+
+  </div><!-- /card -->
+</div><!-- /outer-wrap -->
+
+<script>
+const QUESTIONS = 10;
+const CORRECT = {
+  1: 'D', 2: 'C', 3: 'B', 4: 'C', 5: 'A',
+  6: 'D', 7: 'B', 8: 'C', 9: 'A', 10: 'B'
+};
+
+const FEEDBACK = {
+  1: {
+    correct: "Correct! Isaiah 54:2-3 says, 'Enlarge the place of your tent... do not hold back; lengthen your cords and strengthen your stakes. For you will spread abroad to the right and to the left, and your offspring will possess the nations.' Barren Zion is told to prepare for a family too large for her present tent.",
+    wrong: "Not quite. Isaiah 54:2-3 commands three specific actions: enlarging the tent, lengthening the cords, and strengthening the stakes. Gates, walls, banners, and priesthood language belong to other passages, not this tent-and-family image of coming growth.",
+    ref: "Isaiah 54:2-3"
+  },
+  2: {
+    correct: "Correct! Isaiah 54:9 says, 'This is like the days of Noah to me: as I swore that the waters of Noah should no more go over the earth, so I have sworn that I will not be angry with you.' The Lord anchors his new, unshakable commitment to Zion in the same kind of oath he made after the flood.",
+    wrong: "Not quite. Isaiah 54:9 specifically invokes Noah's flood and the Lord's oath that its waters would never again cover the earth. The Abrahamic covenant, the Red Sea, and the Davidic throne are real biblical promises, but they are not the precedent named in this verse.",
+    ref: "Isaiah 54:9"
+  },
+  3: {
+    correct: "Correct! Isaiah 55:1 says, 'Come, everyone who thirsts, come to the waters; and he who has no money, come, buy and eat! Come, buy wine and milk without money and without price.' The invitation is deliberately upside-down &#8212; abundance offered freely to those who cannot pay for it.",
+    wrong: "Not quite. Isaiah 55:1 specifically names wine and milk, offered without money and without price. Bread and oil, wisdom for silver, and grain for labor are not the items or terms given in this verse &#8212; the whole point is that nothing is owed in exchange.",
+    ref: "Isaiah 55:1"
+  },
+  4: {
+    correct: "Correct! Isaiah 55:11 says the Lord's word 'shall not return to me empty, but it shall accomplish that which I purpose, and shall succeed in the thing for which I sent it,' just as rain and snow water the earth before returning to heaven. God's spoken word is pictured as unfailingly effective.",
+    wrong: "Not quite. Isaiah 55:10-11 says the word will not return empty but will accomplish God's purpose, just as rain and snow do not fall in vain. The verse does not describe the word returning empty, being withheld, or falling only for a remnant.",
+    ref: "Isaiah 55:10-11"
+  },
+  5: {
+    correct: "Correct! Isaiah 56:4-5 says, 'To the eunuchs who keep my Sabbaths... I will give in my house and within my walls a monument and a name better than sons and daughters; I will give them an everlasting name that shall not be cut off.' Those excluded from having descendants are promised a permanent place and name in God's own house.",
+    wrong: "Not quite. Isaiah 56:4-5 specifically promises eunuchs a monument and a name in God's house, better than sons and daughters, and an everlasting name. Priestly office, physical restoration, and royal adoption are not the terms of this promise.",
+    ref: "Isaiah 56:4-5"
+  },
+  6: {
+    correct: "Correct! Isaiah 56:7 declares, 'my house shall be called a house of prayer for all peoples.' The verse deliberately widens worship at God's house beyond Israel alone to include the foreigners and outcasts described earlier in the chapter.",
+    wrong: "Not quite. Isaiah 56:7 specifically calls the Lord's house 'a house of prayer for all peoples' &#8212; not for Israel alone, and not a refuge or monument. The emphasis of the verse is on the house's welcome to outsiders.",
+    ref: "Isaiah 56:7"
+  },
+  7: {
+    correct: "Correct! Isaiah 57:15 says the One 'who inhabits eternity' declares, 'I dwell in the high and holy place, and also with him who is of a contrite and lowly spirit, to revive the spirit of the lowly, and to revive the heart of the contrite.' God's transcendence and his nearness to the broken are held together in the same verse.",
+    wrong: "Not quite. Isaiah 57:15 specifically pairs God's dwelling in the high and holy place with his dwelling among 'him who is of a contrite and lowly spirit.' The assembly of the righteous, a human sanctuary, and the fatherless are not named in this verse.",
+    ref: "Isaiah 57:15"
+  },
+  8: {
+    correct: "Correct! Isaiah 57:20 says, 'the wicked are like the tossing sea; for it cannot be quiet, and its waters toss up mire and dirt.' Restlessness and filth, not calm, are the picture &#8212; and 57:21 concludes, 'There is no peace... for the wicked.'",
+    wrong: "Not quite. Isaiah 57:20 specifically says the tossing sea casts up 'mire and dirt,' not foam, driftwood, storms, or sand. The image emphasizes the wicked's inner restlessness churning up filth rather than settling into calm.",
+    ref: "Isaiah 57:20-21"
+  },
+  9: {
+    correct: "Correct! Isaiah 58:6-7 defines the fast God chooses as 'to loose the bonds of wickedness... to let the oppressed go free... to share your bread with the hungry and bring the homeless poor into your house.' True fasting is redefined as active mercy and justice, not ritual alone.",
+    wrong: "Not quite. Isaiah 58:6-7 defines the Lord's chosen fast as loosing the bonds of wickedness, sharing bread with the hungry, and housing the homeless poor. Abstaining from food, sackcloth and ashes, or withdrawal from labor are not what the passage names as true fasting.",
+    ref: "Isaiah 58:6-7"
+  },
+  10: {
+    correct: "Correct! Isaiah 58:13-14 promises, 'then you shall take delight in the Lord, and I will make you ride on the heights of the earth.' Honoring the Sabbath by setting aside self-interest leads not to loss but to a deeper joy in God himself.",
+    wrong: "Not quite. Isaiah 58:13-14 specifically promises delight in the Lord and being made to ride on the heights of the earth. Increased flocks, deliverance from famine, and a doubled inheritance are not the promises attached to this verse.",
+    ref: "Isaiah 58:13-14"
+  }
+};
+
+const SHORT_Q = [
+  "What three actions does the Lord command for Zion's tent? (Isa 54:2-3)",
+  "What precedent grounds God's promise not to be angry again? (Isa 54:9)",
+  "What are the thirsty invited to buy, and at what price? (Isa 55:1)",
+  "What does God's word accomplish, like rain and snow? (Isa 55:10-11)",
+  "What is promised to eunuchs who keep the Sabbath? (Isa 56:4-5)",
+  "What is the Lord's house called for all peoples? (Isa 56:7)",
+  "Alongside the high and holy place, where else does God dwell? (Isa 57:15)",
+  "What do the wicked, like the tossing sea, cast up? (Isa 57:20-21)",
+  "What does the fast God chooses actually consist of? (Isa 58:6-7)",
+  "What follows from honoring the Sabbath rightly? (Isa 58:13-14)"
+];
+
+let score = 0;
+let answers = {};
+
+function answer(qNum, chosen) {
+  if (answers[qNum]) return;
+  answers[qNum] = chosen;
+
+  const correct = CORRECT[qNum];
+  const isRight = chosen === correct;
+  if (isRight) score++;
+
+  const block = document.getElementById('q' + qNum);
+  const btns = block.querySelectorAll('.choice-btn');
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    const letter = ['A','B','C','D'][i];
+    if (letter === correct) btn.classList.add('correct');
+    else if (letter === chosen && !isRight) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('fb' + qNum);
+  const info = FEEDBACK[qNum];
+  if (isRight) {
+    fb.className = 'feedback correct-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10003;</span>' + info.correct +
+      '<span class="feedback-ref">' + info.ref + '</span>';
+  } else {
+    fb.className = 'feedback wrong-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10007;</span>' + info.wrong +
+      '<span class="feedback-ref">' + info.ref + '</span>';
+  }
+
+  document.getElementById('next' + qNum).classList.add('visible');
+}
+
+function advance(qNum) {
+  if (qNum < QUESTIONS) {
+    document.getElementById('q' + qNum).classList.remove('active');
+    document.getElementById('q' + (qNum + 1)).classList.add('active');
+    const pct = Math.round(((qNum) / QUESTIONS) * 100);
+    document.getElementById('prog-bar').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = 'Question ' + (qNum + 1) + ' of ' + QUESTIONS;
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('q10').style.display = 'none';
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-label').textContent = 'Complete';
+
+  const rs = document.getElementById('results-screen');
+  rs.style.display = 'block';
+
+  document.getElementById('score-num').textContent = score;
+
+  const pct = score / QUESTIONS;
+  const circumference = 339.3;
+  const offset = circumference - (pct * circumference);
+  setTimeout(() => {
+    document.getElementById('score-ring').style.strokeDashoffset = offset;
+  }, 100);
+
+  let title, msg;
+  if (score === 10) {
+    title = 'Perfect Score!';
+    msg = '"Come, everyone who thirsts, come to the waters... buy wine and milk without money and without price." You read Isaiah\'s invitation with a close and faithful eye. &#8212; Isaiah 55:1';
+  } else if (score >= 8) {
+    title = 'Excellent Work!';
+    msg = 'You tracked Isaiah closely &#8212; from the enlarged tent to the fast that actually pleases the Lord. This section overflows with gospel invitation and true worship.';
+  } else if (score >= 6) {
+    title = 'Well Done!';
+    msg = 'A solid read through Isaiah 54-58. Return especially to Isaiah 55:1-3 and 58:6-7 &#8212; the free invitation to the thirsty, and the fast God actually chooses.';
+  } else if (score >= 4) {
+    title = 'Good Effort';
+    msg = 'These chapters reward slow, attentive reading. The exact wording carries the weight &#8212; "a monument and a name better than sons and daughters," "to ride on the heights of the earth." Read Isaiah 54-58 again with that in mind.';
+  } else {
+    title = 'Keep Studying!';
+    msg = '"He dwells in the high and holy place, and also with him who is of a contrite and lowly spirit." Return to Isaiah 55-58 slowly &#8212; grace offered freely, and true worship defined by mercy. &#8212; Isaiah 57:15';
+  }
+  document.getElementById('results-title').textContent = title;
+  document.getElementById('results-message').textContent = msg;
+
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  for (let i = 1; i <= QUESTIONS; i++) {
+    const chosen = answers[i];
+    const correct = CORRECT[i];
+    const isRight = chosen === correct;
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (isRight ? 'r-correct' : 'r-wrong');
+    div.innerHTML = '<div class="review-q">Q' + i + '. ' + SHORT_Q[i-1] + '</div>' +
+      '<div class="review-ans">' +
+      (isRight
+        ? '<span class="review-correct-lbl">&#10003; Correct</span> &mdash; ' + correct
+        : '<span class="review-wrong-lbl">&#10007; Your answer: ' + chosen + '</span> &nbsp;|&nbsp; Correct: ' + correct) +
+      '</div>';
+    reviewList.appendChild(div);
+  }
+}
+
+function resetQuiz() {
+  score = 0;
+  answers = {};
+  for (let i = 1; i <= QUESTIONS; i++) {
+    const block = document.getElementById('q' + i);
+    block.classList.remove('active');
+    const btns = block.querySelectorAll('.choice-btn');
+    btns.forEach(b => { b.disabled = false; b.className = 'choice-btn'; });
+    const fb = document.getElementById('fb' + i);
+    fb.className = 'feedback';
+    fb.innerHTML = '';
+    document.getElementById('next' + i).classList.remove('visible');
+    block.style.display = '';
+  }
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('q1').classList.add('active');
+  document.getElementById('prog-bar').style.width = '10%';
+  document.getElementById('prog-label').textContent = 'Question 1 of 10';
+  document.getElementById('score-ring').style.strokeDashoffset = '339.3';
+}
+</script>
+</body>
+</html>
