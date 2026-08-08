@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Recap Quiz — Day 220 | Jeremiah 4–6</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2rem 1rem;
+    font-family: 'Crimson Text', Georgia, serif;
+  }
+
+  .scroll-container {
+    width: 100%;
+    max-width: 780px;
+  }
+
+  /* ── Parchment card ── */
+  .parchment {
+    background: linear-gradient(160deg, #f5ead6 0%, #ede0c4 30%, #e8d5b0 60%, #dfc89a 100%);
+    border-radius: 4px;
+    border: 2px solid #c9a84c;
+    box-shadow: 0 0 0 6px #0e0a04, 0 0 0 8px #c9a84c55, 0 12px 48px rgba(0,0,0,0.7);
+    padding: 2.5rem 2.8rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .parchment::before, .parchment::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    height: 18px;
+    background: repeating-linear-gradient(90deg, transparent, transparent 8px, #c9a84c33 8px, #c9a84c33 9px);
+    pointer-events: none;
+  }
+  .parchment::before { top: 0; }
+  .parchment::after  { bottom: 0; }
+
+  /* ── Header ── */
+  .quiz-header { text-align: center; margin-bottom: 1.8rem; }
+
+  .ornament { color: #c9a84c; font-size: 1.4rem; letter-spacing: 6px; margin-bottom: 0.4rem; }
+
+  .date-line {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 3px;
+    color: #7a5c28;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #3b2608;
+    line-height: 1.2;
+    margin-bottom: 0.6rem;
+  }
+
+  .passage-tags { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.8rem; }
+  .passage-tag {
+    background: #c9a84c22;
+    border: 1px solid #c9a84c;
+    border-radius: 2px;
+    padding: 0.15rem 0.65rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 1.5px;
+    color: #7a5c28;
+    text-transform: uppercase;
+  }
+
+  .badges { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+  .badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 2px;
+    padding: 0.2rem 0.7rem;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .badge-challenging { background: #8b1a1a22; border: 1px solid #8b1a1a; color: #8b1a1a; }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #c9a84c66;
+    margin: 1.2rem 0;
+  }
+
+  /* ── Progress bar ── */
+  .progress-wrap {
+    margin-bottom: 1.5rem;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 1.5px;
+    color: #7a5c28;
+    margin-bottom: 0.35rem;
+  }
+  .progress-track {
+    height: 6px;
+    background: #c9a84c33;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  /* ── Question card ── */
+  .question-card {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  .question-card.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.7rem;
+  }
+  .q-number {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    color: #7a5c28;
+    text-transform: uppercase;
+  }
+  .badge-detail {
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 1.5px;
+    padding: 0.15rem 0.55rem;
+    border-radius: 2px;
+    text-transform: uppercase;
+    background: #c9a84c22;
+    border: 1px solid #c9a84c;
+    color: #7a5c28;
+  }
+
+  .question-text {
+    font-size: 1.15rem;
+    color: #2a1a06;
+    line-height: 1.55;
+    margin-bottom: 1.1rem;
+    font-style: italic;
+  }
+
+  /* ── Answer choices ── */
+  .choices { display: flex; flex-direction: column; gap: 0.55rem; }
+
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    background: #c9a84c11;
+    border: 1.5px solid #c9a84c66;
+    border-radius: 3px;
+    padding: 0.65rem 0.9rem;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.2s, border-color 0.2s;
+    width: 100%;
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: 1rem;
+    color: #2a1a06;
+    line-height: 1.45;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: #c9a84c22;
+    border-color: #c9a84c;
+  }
+  .choice-btn:disabled { cursor: default; }
+
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 1.4rem;
+    padding-top: 0.1rem;
+  }
+
+  .choice-btn.correct {
+    background: #1a5c2a22;
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+
+  .choice-btn.wrong {
+    background: #8b1a1a22;
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── Feedback ── */
+  .feedback {
+    display: none;
+    margin-top: 1rem;
+    padding: 0.85rem 1rem;
+    border-radius: 3px;
+    border-left: 4px solid;
+    animation: fadeIn 0.3s ease;
+  }
+  .feedback.correct-fb { border-color: #1a5c2a; background: #1a5c2a18; }
+  .feedback.wrong-fb   { border-color: #8b1a1a; background: #8b1a1a18; }
+
+  .feedback-verdict {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.35rem;
+  }
+  .correct-fb .feedback-verdict { color: #1a5c2a; }
+  .wrong-fb   .feedback-verdict { color: #8b1a1a; }
+
+  .feedback-ref {
+    font-size: 0.88rem;
+    color: #3b2608;
+    line-height: 1.5;
+  }
+  .feedback-ref strong { font-weight: 600; }
+
+  /* ── Next button ── */
+  .next-btn {
+    display: none;
+    margin-top: 1.2rem;
+    width: 100%;
+    padding: 0.7rem;
+    background: transparent;
+    border: 1.5px solid #c9a84c;
+    border-radius: 3px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    color: #7a5c28;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.2s;
+  }
+  .next-btn:hover { background: #c9a84c22; }
+
+  /* ── Results screen ── */
+  #results-screen { display: none; animation: fadeIn 0.5s ease; }
+
+  .results-header {
+    text-align: center;
+    margin-bottom: 1.8rem;
+  }
+
+  /* Score ring */
+  .ring-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.2rem;
+  }
+  .ring-svg { width: 140px; height: 140px; transform: rotate(-90deg); }
+  .ring-bg   { fill: none; stroke: #c9a84c33; stroke-width: 10; }
+  .ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s ease;
+  }
+  .ring-text-wrap {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .ring-score {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #3b2608;
+  }
+  .ring-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 2px;
+    color: #7a5c28;
+    text-transform: uppercase;
+  }
+  .ring-container { position: relative; width: 140px; height: 140px; }
+
+  .results-message {
+    font-size: 1.15rem;
+    font-style: italic;
+    color: #3b2608;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+  }
+
+  /* Review list */
+  .review-list { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.7rem; }
+
+  .review-item {
+    border-radius: 3px;
+    padding: 0.7rem 0.9rem;
+    border-left: 4px solid;
+    font-size: 0.95rem;
+    color: #2a1a06;
+    line-height: 1.5;
+  }
+  .review-item.correct { border-color: #1a5c2a; background: #1a5c2a18; }
+  .review-item.wrong   { border-color: #8b1a1a; background: #8b1a1a18; }
+
+  .review-q {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+  .review-item.correct .review-q { color: #1a5c2a; }
+  .review-item.wrong   .review-q { color: #8b1a1a; }
+
+  .review-answer { font-size: 0.92rem; color: #3b2608; }
+
+  /* Take Again */
+  .take-again-btn {
+    display: block;
+    margin: 1.5rem auto 0;
+    padding: 0.75rem 2rem;
+    background: transparent;
+    border: 1.5px solid #c9a84c;
+    border-radius: 3px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 2.5px;
+    color: #7a5c28;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.2s;
+  }
+  .take-again-btn:hover { background: #c9a84c22; }
+</style>
+</head>
+<body>
+<div class="scroll-container">
+<div class="parchment">
+
+  <!-- Header -->
+  <div class="quiz-header">
+    <div class="ornament">✦ ✦ ✦</div>
+    <div class="date-line">Saturday, August 8, 2026 &middot; Day 220</div>
+    <div class="quiz-title">Bible Recap Daily Quiz</div>
+    <div class="passage-tags">
+      <span class="passage-tag">Jeremiah 4</span>
+      <span class="passage-tag">Jeremiah 5</span>
+      <span class="passage-tag">Jeremiah 6</span>
+    </div>
+    <div class="badges">
+      <span class="badge badge-challenging">Challenging</span>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span id="progress-text">Question 1 of 10</span>
+      <span id="progress-pct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+  </div>
+
+  <!-- Quiz area -->
+  <div id="quiz-area">
+
+    <!-- Q1 -->
+    <div class="question-card active" id="q1">
+      <div class="question-meta">
+        <span class="q-number">Question 1</span>
+        <span class="badge-detail">Detail</span>
+      </div>
+      <div class="question-text">
+        In Jeremiah 4:3&ndash;4, the LORD gives Judah two paired commands using agricultural and covenantal imagery. What does He tell them to do, and what does He warn will happen if they don't?
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(1,'A','A')">
+          <span class="choice-letter">A</span>
+          <span>Break up their unplowed ground and not sow among thorns; circumcise their hearts to the LORD, or His wrath will flare up like fire that no one can quench.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(1,'B','A')">
+          <span class="choice-letter">B</span>
+          <span>Tear down every high place and burn their idols in the Kidron Valley, or He will remove the lampstand from Jerusalem.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(1,'C','A')">
+          <span class="choice-letter">C</span>
+          <span>Return to Bethel and renew the covenant made at Sinai, or He will send locusts to devour their harvest.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(1,'D','A')">
+          <span class="choice-letter">D</span>
+          <span>Wash their hands in innocence and offer a freewill offering at the temple, or He will shut up the heavens so no rain falls.</span>
+        </button>
+      </div>
+      <div class="feedback" id="fb1">
+        <div class="feedback-verdict"></div>
+        <div class="feedback-ref"></div>
+      </div>
+      <button class="next-btn" id="next1" onclick="nextQuestion(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-card" id="q2">
+      <div class="question-meta">
+        <span class="q-number">Question 2</span>
+      </div>
+      <div class="question-text">
+        In Jeremiah 4:19&ndash;21, how does Jeremiah describe his own reaction upon hearing the trumpet and battle cry announcing the coming invasion?
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(2,'A','B')">
+          <span class="choice-letter">A</span>
+          <span>He falls facedown and cannot speak for seven days, as Ezekiel later would before the exiles.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(2,'B','B')">
+          <span class="choice-letter">B</span>
+          <span>He cries out in anguish, saying his heart pounds within him and he cannot keep silent, for he has heard the trumpet and the alarm of war.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(2,'C','B')">
+          <span class="choice-letter">C</span>
+          <span>He tears his robe and puts on sackcloth, then goes to intercede for the city at the temple gate.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(2,'D','B')">
+          <span class="choice-letter">D</span>
+          <span>He rejoices that judgment has finally come upon the wicked prophets and corrupt priests of Jerusalem.</span>
+        </button>
+      </div>
+      <div class="feedback" id="fb2">
+        <div class="feedback-verdict"></div>
+        <div class="feedback-ref"></div>
+      </div>
+      <button class="next-btn" id="next2" onclick="nextQuestion(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-card" id="q3">
+      <div class="question-meta">
+        <span class="q-number">Question 3</span>
+        <span class="badge-detail">Detail</span>
+      </div>
+      <div class="question-text">
+        Jeremiah 4:23&ndash;26 describes a vision of coming judgment using language that deliberately echoes Genesis 1. What does Jeremiah see?
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(3,'A','C')">
+          <span class="choice-letter">A</span>
+          <span>The sun turned to darkness and the moon to blood, while the stars fell from the sky like unripe figs.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(3,'B','C')">
+          <span class="choice-letter">B</span>
+          <span>The waters of the deep were opened up and the fountains of the great deep burst forth as in the days of Noah.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(3,'C','C')">
+          <span class="choice-letter">C</span>
+          <span>The earth is formless and empty, the heavens have no light, the mountains are quaking, and there is no one left &mdash; as if creation itself were being undone.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(3,'D','C')">
+          <span class="choice-letter">D</span>
+          <span>The ground opened its mouth and swallowed the wicked, while fire came down from heaven to consume the rest.</span>
+        </button>
+      </div>
+      <div class="feedback" id="fb3">
+        <div class="feedback-verdict"></div>
+        <div class="feedback-ref"></div>
+      </div>
+      <button class="next-btn" id="next3" onclick="nextQuestion(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-card" id="q4">
+      <div class="question-meta">
+        <span class="q-number">Question 4</span>
+      </div>
+      <div class="question-text">
+        In Jeremiah 5:1, what test does the LORD propose to determine whether He will forgive Jerusalem?
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(4,'A','D')">
+          <span class="choice-letter">A</span>
+          <span>If ten righteous people can be found within the city gates, He will withhold judgment, just as He told Abraham regarding Sodom.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(4,'B','D')">
+          <span class="choice-letter">B</span>
+          <span>If the priests will offer one true sacrifice without blemish, He will remove His anger from the temple.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(4,'C','D')">
+          <span class="choice-letter">C</span>
+          <span>If the king will tear down the high places his fathers built, He will spare Jerusalem as He spared Nineveh.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(4,'D','D')">
+          <span class="choice-letter">D</span>
+          <span>If even one person can be found in the city's streets and squares who deals honestly and seeks the truth, He will forgive the city.</span>
+        </button>
+      </div>
+      <div class="feedback" id="fb4">
+        <div class="feedback-verdict"></div>
+        <div class="feedback-ref"></div>
+      </div>
+      <button class="next-btn" id="next4" onclick="nextQuestion(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-card" id="q5">
+      <div class="question-meta">
+        <span class="q-number">Question 5</span>
+      </div>
+      <div class="question-text">
+        In Jeremiah 5:22, the LORD points to His control over the sea as evidence of why Judah should fear Him. What does He say?
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(5,'A','A')">
+          <span class="choice-letter">A</span>
+          <span>He made the sand a boundary for the sea, an everlasting barrier it cannot cross; though its waves roll and roar, they cannot prevail against it.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(5,'B','A')">
+          <span class="choice-letter">B</span>
+          <span>He set the sun and moon in their courses so they never collide, yet His own people collide with His commands daily.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(5,'C','A')">
+          <span class="choice-letter">C</span>
+          <span>He gathers the waters of the sea as in a bottle and stores up the deep in His storehouses, yet Judah will not store up His words.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(5,'D','A')">
+          <span class="choice-letter">D</span>
+          <span>He divided the sea for Israel's fathers at the exodus, yet this generation would not cross over into obedience.</span>
+        </button>
+      </div>
+      <div class="feedback" id="fb5">
+        <div class="feedback-verdict"></div>
+        <div class="feedback-ref"></div>
+      </div>
+      <button class="next-btn" id="next5" onclick="nextQuestion(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-card" id="q6">
+      <div class="question-meta">
+        <span class="q-number">Question 6</span>
+        <span class="badge-detail">Detail</span>
+      </div>
+      <div class="question-text">
+        Jeremiah 5:30&ndash;31 calls something "a horrible and shocking thing" happening in the land. What is it?
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(6,'A','B')">
+          <span class="choice-letter">A</span>
+          <span>The people have stopped bringing tithes altogether, and the priests have shut the doors of the temple for lack of offerings.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(6,'B','B')">
+          <span class="choice-letter">B</span>
+          <span>The prophets prophesy lies, the priests rule by their own authority, and the people love it this way.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(6,'C','B')">
+          <span class="choice-letter">C</span>
+          <span>Foreign idols have been set up inside the temple courts, and the priests burn incense to them alongside the LORD.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(6,'D','B')">
+          <span class="choice-letter">D</span>
+          <span>The king has sold the temple treasures to Egypt, and the priests have said nothing in protest.</span>
+        </button>
+      </div>
+      <div class="feedback" id="fb6">
+        <div class="feedback-verdict"></div>
+        <div class="feedback-ref"></div>
+      </div>
+      <button class="next-btn" id="next6" onclick="nextQuestion(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-card" id="q7">
+      <div class="question-meta">
+        <span class="q-number">Question 7</span>
+      </div>
+      <div class="question-text">
+        In Jeremiah 6:13&ndash;14, how do the prophets and priests treat the seriousness of the people's sin?
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(7,'A','C')">
+          <span class="choice-letter">A</span>
+          <span>They ignore it entirely, refusing to speak to the people at all until the invaders arrive.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(7,'B','C')">
+          <span class="choice-letter">B</span>
+          <span>They blame it on the surrounding nations rather than on the people's own greed and deceit.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(7,'C','C')">
+          <span class="choice-letter">C</span>
+          <span>They dress the wound of the people as though it were not serious, saying "Peace, peace," when there is no peace.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(7,'D','C')">
+          <span class="choice-letter">D</span>
+          <span>They insist the wound is fatal and tell the people to prepare for certain destruction with no hope of mercy.</span>
+        </button>
+      </div>
+      <div class="feedback" id="fb7">
+        <div class="feedback-verdict"></div>
+        <div class="feedback-ref"></div>
+      </div>
+      <button class="next-btn" id="next7" onclick="nextQuestion(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-card" id="q8">
+      <div class="question-meta">
+        <span class="q-number">Question 8</span>
+      </div>
+      <div class="question-text">
+        In Jeremiah 6:16, the LORD instructs the people to stand at the crossroads. What does He tell them to do, and how do they respond?
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(8,'A','D')">
+          <span class="choice-letter">A</span>
+          <span>He tells them to choose between the way of the covenant and the way of the nations &mdash; and they choose the nations without hesitation.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(8,'B','D')">
+          <span class="choice-letter">B</span>
+          <span>He tells them to wait for a sign before going up to battle &mdash; but they go up without waiting and are defeated.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(8,'C','D')">
+          <span class="choice-letter">C</span>
+          <span>He tells them to return to the well their fathers dug &mdash; but they say the water there has run dry.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(8,'D','D')">
+          <span class="choice-letter">D</span>
+          <span>He tells them to ask for the ancient paths, where the good way is, and walk in it so they will find rest for their souls &mdash; but they say, "We will not walk in it."</span>
+        </button>
+      </div>
+      <div class="feedback" id="fb8">
+        <div class="feedback-verdict"></div>
+        <div class="feedback-ref"></div>
+      </div>
+      <button class="next-btn" id="next8" onclick="nextQuestion(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-card" id="q9">
+      <div class="question-meta">
+        <span class="q-number">Question 9</span>
+        <span class="badge-detail">Detail</span>
+      </div>
+      <div class="question-text">
+        In Jeremiah 6:27&ndash;30, the LORD gives Jeremiah a specific role using a metallurgy image. What is it, and what is the outcome?
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(9,'A','B')">
+          <span class="choice-letter">A</span>
+          <span>Jeremiah is made a potter reshaping marred clay; but the clay hardens before it can be reformed, so the LORD breaks the vessel instead.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(9,'B','B')">
+          <span class="choice-letter">B</span>
+          <span>Jeremiah is made a tester of metals and the people the ore; the bellows blow fiercely to burn away the lead, but the refining is in vain, for the wicked are not purged out and are called "rejected silver."</span>
+        </button>
+        <button class="choice-btn" onclick="answer(9,'C','B')">
+          <span class="choice-letter">C</span>
+          <span>Jeremiah is made a watchman on the wall to sound the trumpet; but the people ignore the warning and the blood is on their own heads.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(9,'D','B')">
+          <span class="choice-letter">D</span>
+          <span>Jeremiah is made a plumb line held against the wall of Jerusalem; the wall is found crooked, so the LORD determines to tear it down.</span>
+        </button>
+      </div>
+      <div class="feedback" id="fb9">
+        <div class="feedback-verdict"></div>
+        <div class="feedback-ref"></div>
+      </div>
+      <button class="next-btn" id="next9" onclick="nextQuestion(10)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-card" id="q10">
+      <div class="question-meta">
+        <span class="q-number">Question 10</span>
+      </div>
+      <div class="question-text">
+        Jeremiah 4:30 pictures Judah dressing herself for her "lovers" as destruction approaches. What does the passage say about how those lovers will respond?
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(10,'A','B')">
+          <span class="choice-letter">A</span>
+          <span>Her lovers are moved by her beauty and come to rescue her from the invading armies at the last moment.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(10,'B','B')">
+          <span class="choice-letter">B</span>
+          <span>Though she dresses in scarlet, adorns herself with gold, and enlarges her eyes with paint, her lovers despise her and seek her life.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(10,'C','B')">
+          <span class="choice-letter">C</span>
+          <span>Her lovers demand tribute in exchange for protection, and she strips the temple of its gold to pay them.</span>
+        </button>
+        <button class="choice-btn" onclick="answer(10,'D','B')">
+          <span class="choice-letter">D</span>
+          <span>Her lovers mock her from a distance but ultimately submit to the LORD's judgment against Judah alongside her.</span>
+        </button>
+      </div>
+      <div class="feedback" id="fb10">
+        <div class="feedback-verdict"></div>
+        <div class="feedback-ref"></div>
+      </div>
+      <button class="next-btn" id="next10" onclick="showResults()">See Results &rarr;</button>
+    </div>
+
+  </div><!-- end quiz-area -->
+
+  <!-- Results Screen -->
+  <div id="results-screen">
+    <div class="results-header">
+      <div class="ornament">✦ ✦ ✦</div>
+      <div class="date-line">Day 220 &middot; Jeremiah 4&ndash;6</div>
+      <div class="quiz-title">Your Results</div>
+    </div>
+
+    <div class="ring-wrap">
+      <div class="ring-container">
+        <svg class="ring-svg" viewBox="0 0 120 120">
+          <circle class="ring-bg"   cx="60" cy="60" r="54"/>
+          <circle class="ring-fill" id="ring-fill" cx="60" cy="60" r="54"/>
+        </svg>
+        <div class="ring-text-wrap">
+          <span class="ring-score" id="ring-score">0/10</span>
+          <span class="ring-label">Score</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="results-message" id="results-message"></div>
+
+    <hr class="divider">
+
+    <div class="review-list" id="review-list"></div>
+
+    <button class="take-again-btn" onclick="resetQuiz()">&#8635; Take Again</button>
+  </div>
+
+</div><!-- end parchment -->
+</div><!-- end scroll-container -->
+
+<script>
+const questions = [
+  {
+    correct: 'A',
+    question: 'Jeremiah 4:3-4 — circumcise your hearts',
+    explanation: '<strong>Jeremiah 4:3&ndash;4</strong> — "Break up your unplowed ground and do not sow among thorns. Circumcise yourselves to the LORD, circumcise your hearts... or my wrath will flare up and burn like fire because of the evil you have done &mdash; burn with no one to quench it."'
+  },
+  {
+    correct: 'B',
+    question: 'Jeremiah 4:19-21 — Jeremiah\'s anguish at the trumpet of war',
+    explanation: '<strong>Jeremiah 4:19&ndash;21</strong> — "My anguish, my anguish! I writhe in pain. Oh, the agony of my heart! My heart pounds within me, I cannot keep silent. For I have heard the sound of the trumpet; I have heard the battle cry."'
+  },
+  {
+    correct: 'C',
+    question: 'Jeremiah 4:23-26 — formless and empty, echoing Genesis 1',
+    explanation: '<strong>Jeremiah 4:23&ndash;26</strong> — "I looked at the earth, and it was formless and empty; and at the heavens, and their light was gone... I looked, and the mountains were quaking... I looked, and there were no people." The language deliberately reverses Genesis 1, picturing judgment as an undoing of creation.'
+  },
+  {
+    correct: 'D',
+    question: 'Jeremiah 5:1 — search for one honest person',
+    explanation: '<strong>Jeremiah 5:1</strong> — "Go up and down the streets of Jerusalem, look around and consider, search through her squares. If you can find but one person who deals honestly and seeks the truth, I will forgive this city."'
+  },
+  {
+    correct: 'A',
+    question: 'Jeremiah 5:22 — the sand as a boundary for the sea',
+    explanation: '<strong>Jeremiah 5:22</strong> — "I made the sand a boundary for the sea, an everlasting barrier it cannot cross. The waves may roll but they cannot prevail; they may roar but they cannot cross it." The LORD points to His ordering of creation as reason to fear Him.'
+  },
+  {
+    correct: 'B',
+    question: 'Jeremiah 5:30-31 — the horrible and shocking thing',
+    explanation: '<strong>Jeremiah 5:30&ndash;31</strong> — "A horrible and shocking thing has happened in the land: The prophets prophesy lies, the priests rule by their own authority, and my people love it this way. But what will you do in the end?"'
+  },
+  {
+    correct: 'C',
+    question: 'Jeremiah 6:13-14 — "Peace, peace," when there is no peace',
+    explanation: '<strong>Jeremiah 6:13&ndash;14</strong> — "From the least to the greatest, all are greedy for gain... They dress the wound of my people as though it were not serious. \'Peace, peace,\' they say, when there is no peace."'
+  },
+  {
+    correct: 'D',
+    question: 'Jeremiah 6:16 — ask for the ancient paths',
+    explanation: '<strong>Jeremiah 6:16</strong> — "Stand at the crossroads and look; ask for the ancient paths, ask where the good way is, and walk in it, and you will find rest for your souls. But you said, \'We will not walk in it.\'"'
+  },
+  {
+    correct: 'B',
+    question: 'Jeremiah 6:27-30 — tester of metals, rejected silver',
+    explanation: '<strong>Jeremiah 6:27&ndash;30</strong> — "I have made you a tester of metals and my people the ore, that you may observe and test their ways... The bellows blow fiercely... but the refining goes on in vain; the wicked are not purged out... They are called rejected silver, because the LORD has rejected them."'
+  },
+  {
+    correct: 'B',
+    question: 'Jeremiah 4:30 — dressed for lovers who despise her',
+    explanation: '<strong>Jeremiah 4:30</strong> — "What are you doing, you devastated one? Why dress yourself in scarlet and put on jewels of gold? Why highlight your eyes with makeup? You adorn yourself in vain. Your lovers despise you; they want to kill you."'
+  }
+];
+
+let userAnswers = new Array(10).fill(null);
+let score = 0;
+
+function answer(qNum, chosen, correct) {
+  const idx = qNum - 1;
+  if (userAnswers[idx] !== null) return;
+
+  userAnswers[idx] = chosen;
+  const isCorrect = chosen === correct;
+  if (isCorrect) score++;
+
+  // Disable all buttons in this question
+  const card = document.getElementById('q' + qNum);
+  const btns = card.querySelectorAll('.choice-btn');
+  btns.forEach(btn => {
+    btn.disabled = true;
+    const letter = btn.querySelector('.choice-letter').textContent;
+    if (letter === correct) btn.classList.add('correct');
+    else if (letter === chosen && !isCorrect) btn.classList.add('wrong');
+  });
+
+  // Show feedback
+  const fb = document.getElementById('fb' + qNum);
+  fb.style.display = 'block';
+  fb.classList.add(isCorrect ? 'correct-fb' : 'wrong-fb');
+  fb.querySelector('.feedback-verdict').textContent = isCorrect ? '✓ Correct' : '✗ Incorrect';
+  fb.querySelector('.feedback-ref').innerHTML = questions[idx].explanation;
+
+  // Show next button
+  document.getElementById('next' + qNum).style.display = 'block';
+
+  // Update progress
+  const answered = userAnswers.filter(a => a !== null).length;
+  const pct = Math.round((answered / 10) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = pct + '%';
+}
+
+function nextQuestion(nextNum) {
+  document.getElementById('q' + (nextNum - 1)).classList.remove('active');
+  document.getElementById('q' + nextNum).classList.add('active');
+  document.getElementById('progress-text').textContent = 'Question ' + nextNum + ' of 10';
+}
+
+function showResults() {
+  document.getElementById('quiz-area').style.display = 'none';
+  document.getElementById('results-screen').style.display = 'block';
+
+  // Score ring
+  document.getElementById('ring-score').textContent = score + '/10';
+  const pct = score / 10;
+  const circumference = 2 * Math.PI * 54; // ~339.3
+  const offset = circumference * (1 - pct);
+  setTimeout(() => {
+    document.getElementById('ring-fill').style.strokeDashoffset = offset;
+  }, 100);
+
+  // Message
+  let msg;
+  if (score === 10) msg = 'Perfect score! You searched the streets of these chapters as closely as the LORD searched Jerusalem for one honest soul.';
+  else if (score >= 8) msg = 'Excellent work! You read Jeremiah 4&ndash;6 with careful attention.';
+  else if (score >= 6) msg = 'Well done &mdash; a solid grasp of Judah\'s coming judgment and the false comfort of "peace, peace." Review the ones you missed.';
+  else if (score >= 4) msg = 'A good effort. These chapters reward close re-reading; try again!';
+  else msg = 'Keep at it &mdash; ask for the ancient paths and walk through this passage once more.';
+  document.getElementById('results-message').textContent = msg;
+
+  // Review list
+  const list = document.getElementById('review-list');
+  list.innerHTML = '';
+  questions.forEach((q, i) => {
+    const chosen = userAnswers[i];
+    const isCorrect = chosen === q.correct;
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (isCorrect ? 'correct' : 'wrong');
+    div.innerHTML = `
+      <div class="review-q">${isCorrect ? '✓' : '✗'} Question ${i+1}</div>
+      <div class="review-answer">${q.explanation}</div>
+    `;
+    list.appendChild(div);
+  });
+}
+
+function resetQuiz() {
+  userAnswers = new Array(10).fill(null);
+  score = 0;
+
+  // Reset progress
+  document.getElementById('progress-fill').style.width = '0%';
+  document.getElementById('progress-pct').textContent = '0%';
+  document.getElementById('progress-text').textContent = 'Question 1 of 10';
+
+  // Reset all question cards
+  for (let i = 1; i <= 10; i++) {
+    const card = document.getElementById('q' + i);
+    card.classList.remove('active');
+    const btns = card.querySelectorAll('.choice-btn');
+    btns.forEach(btn => {
+      btn.disabled = false;
+      btn.classList.remove('correct', 'wrong');
+    });
+    const fb = document.getElementById('fb' + i);
+    fb.style.display = 'none';
+    fb.classList.remove('correct-fb', 'wrong-fb');
+    document.getElementById('next' + i).style.display = 'none';
+  }
+
+  // Reset ring
+  document.getElementById('ring-fill').style.strokeDashoffset = '339.3';
+
+  // Show first question
+  document.getElementById('q1').classList.add('active');
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('quiz-area').style.display = 'block';
+}
+</script>
+</body>
+</html>
