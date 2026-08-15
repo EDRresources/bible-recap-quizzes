@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 227 Bible Recap Quiz — Jeremiah 30–31</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 18px;
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.15);
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.3s ease forwards;
+  }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+    color: #1a3d1e;
+    display: block;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.1);
+    border: 1px solid #8b1a1a;
+    color: #5a0e0e;
+    display: block;
+  }
+  .feedback-icon { font-weight: 700; margin-right: 6px; }
+  .feedback-ref {
+    font-style: italic;
+    color: #5a4020;
+    font-size: 0.95rem;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.visible { display: inline-block; }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 22px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.15); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #c9a84c;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: #9a7a3a;
+    letter-spacing: 0.1em;
+  }
+
+  #results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #f5ead8;
+    margin-bottom: 10px;
+  }
+  #results-message {
+    color: #c9a84c;
+    font-size: 1.08rem;
+    line-height: 1.5;
+    margin-bottom: 26px;
+    font-style: italic;
+  }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+    margin-bottom: 32px;
+  }
+  .take-again-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ── REVIEW ── */
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    text-align: left;
+  }
+  .review-item {
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    text-align: left;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.10);
+    border: 1px solid #8b1a1a;
+  }
+  .review-q {
+    font-weight: 600;
+    color: #1e1208;
+    margin-bottom: 4px;
+  }
+  .review-ans { color: #3a2810; font-size: 0.95rem; }
+  .review-correct-lbl { color: #1a5c2a; font-weight: 700; }
+  .review-wrong-lbl { color: #8b1a1a; font-weight: 700; }
+
+  @media (max-width: 520px) {
+    .card { padding: 22px 18px; }
+    .quiz-title { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- HEADER -->
+  <header class="quiz-header">
+    <div class="quiz-date">Saturday, August 15, 2026 &middot; Day 227</div>
+    <h1 class="quiz-title">The Bible Recap &mdash; Daily Quiz</h1>
+    <div class="passage-tags">
+      <span class="passage-tag">Jeremiah 30</span>
+      <span class="passage-tag">Jeremiah 31</span>
+    </div>
+    <span class="ornament">&#10022;</span>
+    <span class="difficulty-badge">Challenging</span>
+    <span class="ornament">&#10022;</span>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="prog-bar"></div>
+  </div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- CARD -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <span class="question-text">In Jeremiah 30:5-7, the Lord describes a scene of terror using a jarring image. What is that image, and what does it depict?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(1,'A')"><span class="choice-letter">A</span>Every face has turned toward Egypt in flight &mdash; depicting a mass exodus from Babylon</button>
+        <button class="choice-btn" onclick="answer(1,'B')"><span class="choice-letter">B</span>Every man has his hands on his stomach like a woman in labor &mdash; depicting the incomparable "time of distress for Jacob"</button>
+        <button class="choice-btn" onclick="answer(1,'C')"><span class="choice-letter">C</span>Every mouth cries out for water &mdash; depicting drought as the sign of God's wrath</button>
+        <button class="choice-btn" onclick="answer(1,'D')"><span class="choice-letter">D</span>Every knee bows before the king &mdash; depicting forced submission to Babylon's yoke</button>
+      </div>
+      <div class="feedback" id="fb1"></div>
+      <button class="next-btn" id="next1" onclick="advance(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+        <span class="question-text">According to Jeremiah 30:8-9, once the Lord breaks the yoke off Jacob's neck, whom will the people serve?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(2,'A')"><span class="choice-letter">A</span>No one &mdash; they will live in complete independence, subject to no ruler at all</button>
+        <button class="choice-btn" onclick="answer(2,'B')"><span class="choice-letter">B</span>A council of elders chosen from among the twelve tribes</button>
+        <button class="choice-btn" onclick="answer(2,'C')"><span class="choice-letter">C</span>The Lord their God and David their king, whom I will raise up for them</button>
+        <button class="choice-btn" onclick="answer(2,'D')"><span class="choice-letter">D</span>The foreign king who had freed them from captivity, out of gratitude</button>
+      </div>
+      <div class="feedback" id="fb2"></div>
+      <button class="next-btn" id="next2" onclick="advance(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">In Jeremiah 30:12-15, when the Lord says "your hurt is incurable, and your wound is grievous," what reason does He give for withholding a cure?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(3,'A')"><span class="choice-letter">A</span>The wound is too fresh for any remedy to take effect yet</button>
+        <button class="choice-btn" onclick="answer(3,'B')"><span class="choice-letter">B</span>No physician remains alive in Judah skilled enough to treat it</button>
+        <button class="choice-btn" onclick="answer(3,'C')"><span class="choice-letter">C</span>The nations who might have healed them have themselves been destroyed</button>
+        <button class="choice-btn" onclick="answer(3,'D')"><span class="choice-letter">D</span>"Because your guilt is great, because your sins are flagrant" &mdash; the Lord himself dealt the blow as deserved punishment</button>
+      </div>
+      <div class="feedback" id="fb3"></div>
+      <button class="next-btn" id="next3" onclick="advance(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">In Jeremiah 30:21, the coming ruler is described as one the Lord will make "draw near" to approach Him. What rhetorical question underscores how remarkable this is?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(4,'A')"><span class="choice-letter">A</span>"For who would dare of himself to approach me?" &mdash; since none dares draw near to God on his own</button>
+        <button class="choice-btn" onclick="answer(4,'B')"><span class="choice-letter">B</span>"Who has believed what he has heard from us?" &mdash; questioning whether the message will be received</button>
+        <button class="choice-btn" onclick="answer(4,'C')"><span class="choice-letter">C</span>"Who is this that darkens counsel by words without knowledge?" &mdash; challenging pretenders to the throne</button>
+        <button class="choice-btn" onclick="answer(4,'D')"><span class="choice-letter">D</span>"Who can stand before his indignation?" &mdash; warning that no ruler survives God's wrath</button>
+      </div>
+      <div class="feedback" id="fb4"></div>
+      <button class="next-btn" id="next4" onclick="advance(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+        <span class="question-text">In Jeremiah 31:3, what reason does the Lord give for continuing His faithfulness to Israel?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(5,'A')"><span class="choice-letter">A</span>Because Israel had proven faithful in observing the covenant terms</button>
+        <button class="choice-btn" onclick="answer(5,'B')"><span class="choice-letter">B</span>Because the prophets had successfully interceded on Israel's behalf</button>
+        <button class="choice-btn" onclick="answer(5,'C')"><span class="choice-letter">C</span>"I have loved you with an everlasting love; therefore I have continued my faithfulness to you"</button>
+        <button class="choice-btn" onclick="answer(5,'D')"><span class="choice-letter">D</span>Because Israel's enemies had already been fully judged, leaving no rival claim</button>
+      </div>
+      <div class="feedback" id="fb5"></div>
+      <button class="next-btn" id="next5" onclick="advance(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <span class="question-text">In Jeremiah 31:8-9, how does the Lord describe leading His scattered people home, and whom does He single out?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(6,'A')"><span class="choice-letter">A</span>In chariots of war, with Judah singled out as the conquering tribe</button>
+        <button class="choice-btn" onclick="answer(6,'B')"><span class="choice-letter">B</span>With weeping and pleas for mercy, by a straight path along brooks of water, calling Ephraim "my firstborn"</button>
+        <button class="choice-btn" onclick="answer(6,'C')"><span class="choice-letter">C</span>By sea in ships of Tarshish, with Levi singled out for priestly honor</button>
+        <button class="choice-btn" onclick="answer(6,'D')"><span class="choice-letter">D</span>Through the wilderness by night, with Benjamin singled out to guide the way</button>
+      </div>
+      <div class="feedback" id="fb6"></div>
+      <button class="next-btn" id="next6" onclick="advance(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">In Jeremiah 31:15, what is heard "in Ramah," and how is Rachel described responding to it?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(7,'A')"><span class="choice-letter">A</span>A voice of rejoicing over Judah's return &mdash; Rachel dances among the daughters of Zion</button>
+        <button class="choice-btn" onclick="answer(7,'B')"><span class="choice-letter">B</span>A trumpet blast announcing the new covenant &mdash; Rachel gathers her children to hear it</button>
+        <button class="choice-btn" onclick="answer(7,'C')"><span class="choice-letter">C</span>Lamentation over the fall of the Northern Kingdom &mdash; Rachel intercedes and is comforted at once</button>
+        <button class="choice-btn" onclick="answer(7,'D')"><span class="choice-letter">D</span>Lamentation and bitter weeping &mdash; Rachel weeps for her children and refuses to be comforted, "because they are no more"</button>
+      </div>
+      <div class="feedback" id="fb7"></div>
+      <button class="next-btn" id="next7" onclick="advance(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+        <span class="question-text">In Jeremiah 31:20, how does the Lord describe His feelings toward Ephraim despite having spoken against him?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(8,'A')"><span class="choice-letter">A</span>"My heart yearns for him; I will surely have mercy on him" &mdash; even His discipline could not extinguish His compassion</button>
+        <button class="choice-btn" onclick="answer(8,'B')"><span class="choice-letter">B</span>"I have forgotten him as one forgets the dead" &mdash; His anger has replaced any former affection</button>
+        <button class="choice-btn" onclick="answer(8,'C')"><span class="choice-letter">C</span>"He is no longer my son, but a stranger to me" &mdash; the relationship has been formally severed</button>
+        <button class="choice-btn" onclick="answer(8,'D')"><span class="choice-letter">D</span>"I will remember his sin no more, but I will not call him my son" &mdash; forgiveness without restored relationship</button>
+      </div>
+      <div class="feedback" id="fb8"></div>
+      <button class="next-btn" id="next8" onclick="advance(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">In Jeremiah 31:22, what does the Lord call "a new thing on the earth"?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(9,'A')"><span class="choice-letter">A</span>A virgin shall conceive and bear a son who will be called Immanuel</button>
+        <button class="choice-btn" onclick="answer(9,'B')"><span class="choice-letter">B</span>The sun standing still over Gibeon for a full day</button>
+        <button class="choice-btn" onclick="answer(9,'C')"><span class="choice-letter">C</span>"A woman encircles a man" &mdash; a startling reversal named alongside the call for faithless Israel to return</button>
+        <button class="choice-btn" onclick="answer(9,'D')"><span class="choice-letter">D</span>A dry bone knitting itself back together with sinew and flesh</button>
+      </div>
+      <div class="feedback" id="fb9"></div>
+      <button class="next-btn" id="next9" onclick="advance(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <span class="question-text">In Jeremiah 31:33-34, what does the Lord promise as the heart of the new covenant?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(10,'A')"><span class="choice-letter">A</span>A rebuilt temple with a new order of priests drawn from all twelve tribes</button>
+        <button class="choice-btn" onclick="answer(10,'B')"><span class="choice-letter">B</span>"I will put my law within them, and I will write it on their hearts... for I will forgive their iniquity, and I will remember their sin no more"</button>
+        <button class="choice-btn" onclick="answer(10,'C')"><span class="choice-letter">C</span>A written code of civil law replacing the oral traditions of the elders</button>
+        <button class="choice-btn" onclick="answer(10,'D')"><span class="choice-letter">D</span>A new king from the line of David who will personally atone for the nation's sin</button>
+      </div>
+      <div class="feedback" id="fb10"></div>
+      <button class="next-btn" id="next10" onclick="advance(10)">Show Results &rarr;</button>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 120 120">
+          <circle class="score-ring-bg" cx="60" cy="60" r="54"/>
+          <circle class="score-ring-fill" id="score-ring" cx="60" cy="60" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <span class="score-num" id="score-num">0</span>
+          <span class="score-denom">/ 10</span>
+        </div>
+      </div>
+      <div id="results-title"></div>
+      <div id="results-message"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+      <div class="review-title">&#10022; Question Review &#10022;</div>
+      <div id="review-list"></div>
+    </div>
+
+  </div><!-- /card -->
+</div><!-- /outer-wrap -->
+
+<script>
+const QUESTIONS = 10;
+const CORRECT = {
+  1: 'B', 2: 'C', 3: 'D', 4: 'A', 5: 'C',
+  6: 'B', 7: 'D', 8: 'A', 9: 'C', 10: 'B'
+};
+
+const FEEDBACK = {
+  1: {
+    correct: "Correct! Jeremiah 30:6-7 asks, 'Why then do I see every man with his hands on his stomach like a woman in labor? Why has every face turned pale? Alas! That day is so great there is none like it; it is a time of distress for Jacob.' The jarring image of grown men doubled over like women in labor pains captures the sheer terror of that coming day &mdash; though the verse ends with hope: 'yet he shall be saved out of it.'",
+    wrong: "Not quite. Jeremiah 30:6-7 describes 'every man with his hands on his stomach like a woman in labor' as a picture of 'a time of distress for Jacob' unlike any other &mdash; though the Lord promises Jacob 'shall be saved out of it.'",
+    ref: "Jeremiah 30:6-7"
+  },
+  2: {
+    correct: "Correct! Jeremiah 30:8-9 says, 'I will break his yoke from off your neck... But they shall serve the Lord their God and David their king, whom I will raise up for them.' The breaking of Babylon's yoke does not mean freedom from all authority &mdash; it means a return to serving the Lord under a promised Davidic king.",
+    wrong: "Not quite. Jeremiah 30:8-9 states that once the yoke is broken, the people 'shall serve the Lord their God and David their king, whom I will raise up for them' &mdash; a pointer toward the messianic hope fulfilled in Christ, the greater Son of David.",
+    ref: "Jeremiah 30:8-9"
+  },
+  3: {
+    correct: "Correct! Jeremiah 30:14-15 explains, 'I have dealt you the blow of an enemy, the punishment of a merciless foe, because your guilt is great, because your sins are flagrant... I have done these things to you.' The wound is not accidental or untreatable by chance &mdash; it is the Lord's own just discipline for real, serious sin.",
+    wrong: "Not quite. Jeremiah 30:14-15 makes clear the wound is incurable specifically 'because your guilt is great, because your sins are flagrant' &mdash; the Lord himself struck the blow as deserved punishment, not because no remedy existed.",
+    ref: "Jeremiah 30:14-15"
+  },
+  4: {
+    correct: "Correct! Jeremiah 30:21 reads, 'I will make him draw near, and he shall approach me, for who would dare of himself to approach me? declares the Lord.' The question highlights that access to God is never self-generated &mdash; it must be granted, a truth that finds its fullest answer in Christ, our great High Priest.",
+    wrong: "Not quite. Jeremiah 30:21 asks, 'for who would dare of himself to approach me?' &mdash; underscoring that this ruler's nearness to God is a gift the Lord grants, not something any man could presume to take for himself.",
+    ref: "Jeremiah 30:21"
+  },
+  5: {
+    correct: "Correct! Jeremiah 31:3 grounds Israel's restoration entirely in God's character, not Israel's performance: 'I have loved you with an everlasting love; therefore I have continued my faithfulness to you.' The love comes first and causes the faithfulness &mdash; it is not a reward for anything the people did.",
+    wrong: "Not quite. Jeremiah 31:3 gives the reason as God's own unchanging love, not Israel's merit: 'I have loved you with an everlasting love; therefore I have continued my faithfulness to you.'",
+    ref: "Jeremiah 31:3"
+  },
+  6: {
+    correct: "Correct! Jeremiah 31:9 says, 'With weeping they shall come, and with pleas for mercy I will lead them back, I will make them walk by brooks of water, in a straight path in which they shall not stumble, for I am a father to Israel, and Ephraim is my firstborn.' The homecoming is gentle and shepherd-like, not triumphant conquest, and Ephraim is named with special tenderness.",
+    wrong: "Not quite. Jeremiah 31:9 pictures a tender, guided return &mdash; 'with weeping... by brooks of water, in a straight path' &mdash; with the Lord declaring, 'Ephraim is my firstborn,' not a military or ceremonial procession.",
+    ref: "Jeremiah 31:9"
+  },
+  7: {
+    correct: "Correct! Jeremiah 31:15 says, 'A voice is heard in Ramah, lamentation and bitter weeping. Rachel is weeping for her children; she refuses to be comforted for her children, because they are no more.' Matthew later cites this verse for Herod's slaughter of the infants in Bethlehem (Matt. 2:18), but here it first speaks of exile's grief.",
+    wrong: "Not quite. Jeremiah 31:15 describes 'lamentation and bitter weeping' in Ramah, with Rachel 'weeping for her children' and refusing comfort 'because they are no more' &mdash; raw grief, not premature celebration or resolved sorrow.",
+    ref: "Jeremiah 31:15"
+  },
+  8: {
+    correct: "Correct! Jeremiah 31:20 reads, 'Is Ephraim my dear son? Is he my darling child? For as often as I speak against him, I do remember him still. Therefore my heart yearns for him; I will surely have mercy on him, declares the Lord.' Even the Lord's words of judgment against Ephraim cannot extinguish His compassionate, fatherly love.",
+    wrong: "Not quite. Jeremiah 31:20 shows the Lord's discipline coexisting with deep affection: 'my heart yearns for him; I will surely have mercy on him' &mdash; not rejection, forgetting, or a severed relationship.",
+    ref: "Jeremiah 31:20"
+  },
+  9: {
+    correct: "Correct! Jeremiah 31:22 says, 'How long will you waver, O faithless daughter? For the Lord has created a new thing on the earth: a woman encircles a man.' The exact sense of this brief, much-debated line is uncertain, but it is offered as a sign of the reversal and renewal accompanying Israel's return &mdash; distinct from the virgin-birth prophecy of Isaiah 7:14 or the dry-bones vision of Ezekiel 37.",
+    wrong: "Not quite. Jeremiah 31:22 names 'a woman encircles a man' as the Lord's 'new thing on the earth,' paired with the call for 'faithless daughter' Israel to return. The virgin-birth and dry-bones images belong to Isaiah and Ezekiel, not this verse.",
+    ref: "Jeremiah 31:22"
+  },
+  10: {
+    correct: "Correct! Jeremiah 31:33-34 gives the heart of the new covenant: 'I will put my law within them, and I will write it on their hearts... for I will forgive their iniquity, and I will remember their sin no more.' This is quoted at length in Hebrews 8 as fulfilled in Christ &mdash; an internal, Spirit-written law joined to full and final forgiveness.",
+    wrong: "Not quite. Jeremiah 31:33-34 promises an internal transformation and complete pardon: 'I will put my law within them, and I will write it on their hearts... I will forgive their iniquity, and I will remember their sin no more' &mdash; not a new temple order, civil code, or atoning king distinct from this promise.",
+    ref: "Jeremiah 31:33-34"
+  }
+};
+
+const SHORT_Q = [
+  "What image depicts the day of Jacob&#39;s trouble, and what does it mean? (Jer 30:6-7)",
+  "Whom will the people serve once the yoke is broken? (Jer 30:8-9)",
+  "Why is the wound called incurable? (Jer 30:14-15)",
+  "What question underscores the wonder of the ruler&#39;s access to God? (Jer 30:21)",
+  "Why does the Lord continue His faithfulness to Israel? (Jer 31:3)",
+  "How does the Lord lead His people home, and whom does He single out? (Jer 31:8-9)",
+  "What is heard in Ramah, and how does Rachel respond? (Jer 31:15)",
+  "What does the Lord feel toward Ephraim despite His discipline? (Jer 31:20)",
+  "What &#39;new thing on the earth&#39; does the Lord name? (Jer 31:22)",
+  "What is the heart of the new covenant? (Jer 31:33-34)"
+];
+
+let score = 0;
+let answers = {};
+
+function answer(qNum, chosen) {
+  if (answers[qNum]) return;
+  answers[qNum] = chosen;
+
+  const correct = CORRECT[qNum];
+  const isRight = chosen === correct;
+  if (isRight) score++;
+
+  const block = document.getElementById('q' + qNum);
+  const btns = block.querySelectorAll('.choice-btn');
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    const letter = ['A','B','C','D'][i];
+    if (letter === correct) btn.classList.add('correct');
+    else if (letter === chosen && !isRight) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('fb' + qNum);
+  const info = FEEDBACK[qNum];
+  if (isRight) {
+    fb.className = 'feedback correct-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10003;</span>' + info.correct +
+      '<span class="feedback-ref">' + info.ref + '</span>';
+  } else {
+    fb.className = 'feedback wrong-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10007;</span>' + info.wrong +
+      '<span class="feedback-ref">' + info.ref + '</span>';
+  }
+
+  document.getElementById('next' + qNum).classList.add('visible');
+}
+
+function advance(qNum) {
+  if (qNum < QUESTIONS) {
+    document.getElementById('q' + qNum).classList.remove('active');
+    document.getElementById('q' + (qNum + 1)).classList.add('active');
+    const pct = Math.round(((qNum) / QUESTIONS) * 100);
+    document.getElementById('prog-bar').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = 'Question ' + (qNum + 1) + ' of ' + QUESTIONS;
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('q10').style.display = 'none';
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-label').textContent = 'Complete';
+
+  const rs = document.getElementById('results-screen');
+  rs.style.display = 'block';
+
+  document.getElementById('score-num').textContent = score;
+
+  const pct = score / QUESTIONS;
+  const circumference = 339.3;
+  const offset = circumference - (pct * circumference);
+  setTimeout(() => {
+    document.getElementById('score-ring').style.strokeDashoffset = offset;
+  }, 100);
+
+  let title, msg;
+  if (score === 10) {
+    title = 'Perfect Score!';
+    msg = '"I will put my law within them, and I will write it on their hearts... for I will forgive their iniquity, and I will remember their sin no more." You read the Book of Consolation with real care. &mdash; Jeremiah 31:33-34';
+  } else if (score >= 8) {
+    title = 'Excellent Work!';
+    msg = 'You tracked the promises of restoration closely &mdash; the broken yoke, Rachel&#39;s grief turned to hope, and the new covenant written on the heart. These are some of Scripture&#39;s richest chapters.';
+  } else if (score >= 6) {
+    title = 'Well Done!';
+    msg = 'A solid read through Jeremiah&#39;s Book of Consolation. Look again at chapter 31 and trace how mourning turns to joy, and how the new covenant answers the failures of the old.';
+  } else if (score >= 4) {
+    title = 'Good Effort';
+    msg = 'These two chapters move from the terror of judgment to the tenderness of restoration in just a few verses. It is worth reading Jeremiah 30-31 again slowly, watching how each promise answers a specific grief.';
+  } else {
+    title = 'Keep Studying!';
+    msg = '"I have loved you with an everlasting love; therefore I have continued my faithfulness to you." Even amid judgment, the Lord&#39;s covenant love does not fail. Read Jeremiah 30-31 again. &mdash; Jeremiah 31:3';
+  }
+  document.getElementById('results-title').textContent = title;
+  document.getElementById('results-message').textContent = msg;
+
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  for (let i = 1; i <= QUESTIONS; i++) {
+    const chosen = answers[i];
+    const correct = CORRECT[i];
+    const isRight = chosen === correct;
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (isRight ? 'r-correct' : 'r-wrong');
+    div.innerHTML = '<div class="review-q">Q' + i + '. ' + SHORT_Q[i-1] + '</div>' +
+      '<div class="review-ans">' +
+      (isRight
+        ? '<span class="review-correct-lbl">&#10003; Correct</span> &mdash; ' + correct
+        : '<span class="review-wrong-lbl">&#10007; Your answer: ' + chosen + '</span> &nbsp;|&nbsp; Correct: ' + correct) +
+      '</div>';
+    reviewList.appendChild(div);
+  }
+}
+
+function resetQuiz() {
+  score = 0;
+  answers = {};
+  for (let i = 1; i <= QUESTIONS; i++) {
+    const block = document.getElementById('q' + i);
+    block.classList.remove('active');
+    const btns = block.querySelectorAll('.choice-btn');
+    btns.forEach(b => { b.disabled = false; b.className = 'choice-btn'; });
+    const fb = document.getElementById('fb' + i);
+    fb.className = 'feedback';
+    fb.innerHTML = '';
+    document.getElementById('next' + i).classList.remove('visible');
+    block.style.display = '';
+  }
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('q1').classList.add('active');
+  document.getElementById('prog-bar').style.width = '10%';
+  document.getElementById('prog-label').textContent = 'Question 1 of 10';
+  document.getElementById('score-ring').style.strokeDashoffset = '339.3';
+}
+</script>
+</body>
+</html>
