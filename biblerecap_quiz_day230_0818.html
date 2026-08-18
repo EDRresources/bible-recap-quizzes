@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 230 Bible Recap Quiz — Jeremiah 38–40</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 18px;
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.15);
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.3s ease forwards;
+  }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+    color: #1a3d1e;
+    display: block;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.1);
+    border: 1px solid #8b1a1a;
+    color: #5a0e0e;
+    display: block;
+  }
+  .feedback-icon { font-weight: 700; margin-right: 6px; }
+  .feedback-ref {
+    font-style: italic;
+    color: #5a4020;
+    font-size: 0.95rem;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.visible { display: inline-block; }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 22px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.15); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #c9a84c;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: #9a7a3a;
+    letter-spacing: 0.1em;
+  }
+
+  #results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #f5ead8;
+    margin-bottom: 10px;
+  }
+  #results-message {
+    color: #c9a84c;
+    font-size: 1.08rem;
+    line-height: 1.5;
+    margin-bottom: 26px;
+    font-style: italic;
+  }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+    margin-bottom: 32px;
+  }
+  .take-again-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ── REVIEW ── */
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    text-align: left;
+  }
+  .review-item {
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    text-align: left;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.10);
+    border: 1px solid #8b1a1a;
+  }
+  .review-q {
+    font-weight: 600;
+    color: #1e1208;
+    margin-bottom: 4px;
+  }
+  .review-ans { color: #3a2810; font-size: 0.95rem; }
+  .review-correct-lbl { color: #1a5c2a; font-weight: 700; }
+  .review-wrong-lbl { color: #8b1a1a; font-weight: 700; }
+
+  @media (max-width: 520px) {
+    .card { padding: 22px 18px; }
+    .quiz-title { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- HEADER -->
+  <header class="quiz-header">
+    <div class="quiz-date">Tuesday, August 18, 2026 &middot; Day 230</div>
+    <h1 class="quiz-title">The Bible Recap &mdash; Daily Quiz</h1>
+    <div class="passage-tags">
+      <span class="passage-tag">Jeremiah 38</span>
+      <span class="passage-tag">Jeremiah 39</span>
+      <span class="passage-tag">Jeremiah 40</span>
+    </div>
+    <span class="ornament">&#10022;</span>
+    <span class="difficulty-badge">Challenging</span>
+    <span class="ornament">&#10022;</span>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="prog-bar"></div>
+  </div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- CARD -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">According to Jeremiah 38:1, which officials hear Jeremiah declaring that whoever stays in Jerusalem will die by sword, famine, and pestilence, but whoever goes out to the Chaldeans will live?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(1,'A')"><span class="choice-letter">A</span>Shephatiah son of Mattan, Gedaliah son of Pashhur, Jucal son of Shelemiah, and Pashhur son of Malchiah</button>
+        <button class="choice-btn" onclick="answer(1,'B')"><span class="choice-letter">B</span>Elnathan, Delaiah, and Gemariah</button>
+        <button class="choice-btn" onclick="answer(1,'C')"><span class="choice-letter">C</span>Irijah, Zephaniah, and Jehucal</button>
+        <button class="choice-btn" onclick="answer(1,'D')"><span class="choice-letter">D</span>Nergal-sharezer, Samgar-nebo, and Sarsechim</button>
+      </div>
+      <div class="feedback" id="fb1"></div>
+      <button class="next-btn" id="next1" onclick="advance(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+        <span class="question-text">Where do the officials cast Jeremiah after the king hands him over, and what condition does he find there according to Jeremiah 38:6?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(2,'A')"><span class="choice-letter">A</span>The dungeon in the house of Jonathan the scribe</button>
+        <button class="choice-btn" onclick="answer(2,'B')"><span class="choice-letter">B</span>The court of the guard alone, chained to a sentry</button>
+        <button class="choice-btn" onclick="answer(2,'C')"><span class="choice-letter">C</span>The cistern of Malchiah, the king's son, in the court of the guard, where there was no water but only mud, and Jeremiah sank in the mire</button>
+        <button class="choice-btn" onclick="answer(2,'D')"><span class="choice-letter">D</span>An empty well near the Benjamin Gate</button>
+      </div>
+      <div class="feedback" id="fb2"></div>
+      <button class="next-btn" id="next2" onclick="advance(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">Who is Ebed-Melech, and what does he tell King Zedekiah about the men who cast Jeremiah into the cistern, according to Jeremiah 38:7-9?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(3,'A')"><span class="choice-letter">A</span>One of the princes, who tells Zedekiah Jeremiah should be executed at once</button>
+        <button class="choice-btn" onclick="answer(3,'B')"><span class="choice-letter">B</span>An Ethiopian eunuch in the king's house, who tells Zedekiah the officials have done evil, and that Jeremiah is likely to die of hunger in the cistern since there is no more bread in the city</button>
+        <button class="choice-btn" onclick="answer(3,'C')"><span class="choice-letter">C</span>A prophet from Anathoth, who tells Zedekiah the imprisonment violates temple law</button>
+        <button class="choice-btn" onclick="answer(3,'D')"><span class="choice-letter">D</span>The captain of Babylon's guard, who warns Zedekiah of the coming siege</button>
+      </div>
+      <div class="feedback" id="fb3"></div>
+      <button class="next-btn" id="next3" onclick="advance(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">How does Ebed-Melech pull Jeremiah out of the cistern, according to Jeremiah 38:11-13?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(4,'A')"><span class="choice-letter">A</span>He lowers a rope ladder for Jeremiah to climb out himself</button>
+        <button class="choice-btn" onclick="answer(4,'B')"><span class="choice-letter">B</span>He digs a drainage trench to empty the mire before pulling Jeremiah out</button>
+        <button class="choice-btn" onclick="answer(4,'C')"><span class="choice-letter">C</span>He has Jeremiah drawn up by ropes alone, with no padding against the cords</button>
+        <button class="choice-btn" onclick="answer(4,'D')"><span class="choice-letter">D</span>He takes thirty men and lets down old rags and worn-out clothes under Jeremiah's armpits so the ropes will not hurt him, then draws him up</button>
+      </div>
+      <div class="feedback" id="fb4"></div>
+      <button class="next-btn" id="next4" onclick="advance(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+        <span class="question-text">When Zedekiah secretly asks Jeremiah for counsel, what does Jeremiah say will happen to the king and the city depending on whether he surrenders to Babylon's officials, according to Jeremiah 38:17-18?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(5,'A')"><span class="choice-letter">A</span>If he surrenders, he and his household will live and the city will not be burned; if he does not, the city will be given into the hands of the Chaldeans, who will burn it, and he will not escape</button>
+        <button class="choice-btn" onclick="answer(5,'B')"><span class="choice-letter">B</span>Regardless of his choice, the city will be spared because of God's covenant with David</button>
+        <button class="choice-btn" onclick="answer(5,'C')"><span class="choice-letter">C</span>If he surrenders he will be executed at once, but resistance will bring a miraculous deliverance</button>
+        <button class="choice-btn" onclick="answer(5,'D')"><span class="choice-letter">D</span>Jeremiah refuses to answer and directs Zedekiah to consult the temple prophets instead</button>
+      </div>
+      <div class="feedback" id="fb5"></div>
+      <button class="next-btn" id="next5" onclick="advance(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <span class="question-text">Why is Zedekiah afraid to surrender to the Chaldeans, according to his own words in Jeremiah 38:19?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(6,'A')"><span class="choice-letter">A</span>He fears his own officials will assassinate him the moment the gates open</button>
+        <button class="choice-btn" onclick="answer(6,'B')"><span class="choice-letter">B</span>He fears Nebuchadnezzar will execute him publicly no matter what he decides</button>
+        <button class="choice-btn" onclick="answer(6,'C')"><span class="choice-letter">C</span>He fears being handed over to the Jews who have already deserted to the Chaldeans, to be mocked by them</button>
+        <button class="choice-btn" onclick="answer(6,'D')"><span class="choice-letter">D</span>He fears the Egyptians will retaliate for abandoning their alliance</button>
+      </div>
+      <div class="feedback" id="fb6"></div>
+      <button class="next-btn" id="next6" onclick="advance(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">According to Jeremiah 39:3, where do the officials of the king of Babylon sit once Jerusalem's wall is broken through?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(7,'A')"><span class="choice-letter">A</span>The Sheep Gate</button>
+        <button class="choice-btn" onclick="answer(7,'B')"><span class="choice-letter">B</span>The middle gate</button>
+        <button class="choice-btn" onclick="answer(7,'C')"><span class="choice-letter">C</span>The Benjamin Gate</button>
+        <button class="choice-btn" onclick="answer(7,'D')"><span class="choice-letter">D</span>The Potter's Gate</button>
+      </div>
+      <div class="feedback" id="fb7"></div>
+      <button class="next-btn" id="next7" onclick="advance(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+        <span class="question-text">What happens to Zedekiah after he is captured fleeing toward the Arabah and brought to Nebuchadnezzar at Riblah, according to Jeremiah 39:5-7?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(8,'A')"><span class="choice-letter">A</span>He is executed alongside his sons at Riblah</button>
+        <button class="choice-btn" onclick="answer(8,'B')"><span class="choice-letter">B</span>He is blinded but permitted to remain as a vassal ruler in Jerusalem</button>
+        <button class="choice-btn" onclick="answer(8,'C')"><span class="choice-letter">C</span>He escapes to Egypt with a remnant of the army</button>
+        <button class="choice-btn" onclick="answer(8,'D')"><span class="choice-letter">D</span>His sons are slain before his eyes at Riblah, then his own eyes are put out and he is bound in bronze chains to be taken to Babylon</button>
+      </div>
+      <div class="feedback" id="fb8"></div>
+      <button class="next-btn" id="next8" onclick="advance(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">What command does Nebuchadnezzar give Nebuzaradan concerning Jeremiah, according to Jeremiah 39:11-12?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(9,'A')"><span class="choice-letter">A</span>Bring him to Babylon in honor as a royal advisor</button>
+        <button class="choice-btn" onclick="answer(9,'B')"><span class="choice-letter">B</span>Confine him permanently to the court of the guard for his own protection</button>
+        <button class="choice-btn" onclick="answer(9,'C')"><span class="choice-letter">C</span>Take him and look after him well; do him no harm, but deal with him as he tells you</button>
+        <button class="choice-btn" onclick="answer(9,'D')"><span class="choice-letter">D</span>Release him only after the temple treasures are inventoried</button>
+      </div>
+      <div class="feedback" id="fb9"></div>
+      <button class="next-btn" id="next9" onclick="advance(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <span class="question-text">When Johanan son of Kareah warns Gedaliah that Ishmael son of Nethaniah has been sent by Baalis king of the Ammonites to kill him, and offers to strike Ishmael down first, how does Gedaliah respond in Jeremiah 40:13-16?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(10,'A')"><span class="choice-letter">A</span>Gedaliah orders Ishmael arrested at once</button>
+        <button class="choice-btn" onclick="answer(10,'B')"><span class="choice-letter">B</span>Gedaliah does not believe the warning and refuses to let Johanan kill Ishmael in secret, telling him he is speaking falsely about Ishmael</button>
+        <button class="choice-btn" onclick="answer(10,'C')"><span class="choice-letter">C</span>Gedaliah flees to a fortress at Mizpah for safety</button>
+        <button class="choice-btn" onclick="answer(10,'D')"><span class="choice-letter">D</span>Gedaliah reports the plot to the Babylonian garrison for protection</button>
+      </div>
+      <div class="feedback" id="fb10"></div>
+      <button class="next-btn" id="next10" onclick="advance(10)">Show Results &rarr;</button>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 120 120">
+          <circle class="score-ring-bg" cx="60" cy="60" r="54"/>
+          <circle class="score-ring-fill" id="score-ring" cx="60" cy="60" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <span class="score-num" id="score-num">0</span>
+          <span class="score-denom">/ 10</span>
+        </div>
+      </div>
+      <div id="results-title"></div>
+      <div id="results-message"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+      <div class="review-title">&#10022; Question Review &#10022;</div>
+      <div id="review-list"></div>
+    </div>
+
+  </div><!-- /card -->
+</div><!-- /outer-wrap -->
+
+<script>
+const QUESTIONS = 10;
+const CORRECT = {
+  1: 'A', 2: 'C', 3: 'B', 4: 'D', 5: 'A',
+  6: 'C', 7: 'B', 8: 'D', 9: 'C', 10: 'B'
+};
+
+const FEEDBACK = {
+  1: {
+    correct: "Correct! Jeremiah 38:1 names Shephatiah son of Mattan, Gedaliah son of Pashhur, Jucal son of Shelemiah, and Pashhur son of Malchiah as the officials who hear Jeremiah's message and go on to demand his death for 'weakening the hands of the soldiers.'",
+    wrong: "Not quite. Jeremiah 38:1 names Shephatiah son of Mattan, Gedaliah son of Pashhur, Jucal son of Shelemiah, and Pashhur son of Malchiah &mdash; the other names listed belong to earlier or later episodes in Jeremiah.",
+    ref: "Jeremiah 38:1"
+  },
+  2: {
+    correct: "Correct! Jeremiah 38:6 says they let Jeremiah down by ropes into the cistern of Malchiah, the king's son, 'and in the cistern there was no water, but only mud, and Jeremiah sank in the mud.' It was meant to kill him slowly without directly shedding his blood.",
+    wrong: "Not quite. Jeremiah 38:6 specifies the cistern of Malchiah, the king's son, in the court of the guard &mdash; with no water, only mud that Jeremiah sank into &mdash; not the house of Jonathan the scribe or a well near the Benjamin Gate.",
+    ref: "Jeremiah 38:6"
+  },
+  3: {
+    correct: "Correct! Jeremiah 38:7-9 introduces Ebed-Melech, an Ethiopian in the king's house, who tells Zedekiah, 'My lord the king, these men have done evil in all they did to Jeremiah the prophet... and he is likely to die of hunger in the place where he is, for there is no bread left in the city.'",
+    wrong: "Not quite. Jeremiah 38:7-9 identifies Ebed-Melech as an Ethiopian (Cushite) official in the king's house who reports the officials' cruelty and Jeremiah's likely death by starvation &mdash; not a prince, a prophet from Anathoth, or a Babylonian captain.",
+    ref: "Jeremiah 38:7-9"
+  },
+  4: {
+    correct: "Correct! Jeremiah 38:11-13 describes Ebed-Melech taking thirty men, along with old rags and worn-out clothes let down by ropes for Jeremiah to put under his armpits, 'so the ropes would not hurt him,' before they drew him up out of the cistern.",
+    wrong: "Not quite. Jeremiah 38:11-13 describes Ebed-Melech using thirty men and padding the ropes with old rags and worn-out clothes under Jeremiah's arms &mdash; not a rope ladder, a drainage trench, or bare ropes.",
+    ref: "Jeremiah 38:11-13"
+  },
+  5: {
+    correct: "Correct! Jeremiah 38:17-18 records Jeremiah's answer: surrender to Babylon's officials means Zedekiah 'shall live, and this city shall not be burned' with his household spared; refusal means the city 'shall be given into the hand of the Chaldeans, and they shall burn it... and you shall not escape.'",
+    wrong: "Not quite. Jeremiah 38:17-18 lays out a clear either/or: surrender brings life and a spared city, refusal brings the city's burning and the king's capture &mdash; not a Davidic guarantee, an inverted outcome, or a refusal to answer.",
+    ref: "Jeremiah 38:17-18"
+  },
+  6: {
+    correct: "Correct! Jeremiah 38:19 has Zedekiah say, 'I am afraid of the Judeans who have deserted to the Chaldeans, lest I be handed over to them and they deal cruelly with me.' His fear of his own countrymen's mockery, not just Babylon, keeps him from obeying Jeremiah's counsel.",
+    wrong: "Not quite. Jeremiah 38:19 has Zedekiah voice fear specifically of the Jewish deserters who have already gone over to the Chaldeans, not his own officials, Nebuchadnezzar's public wrath, or Egyptian retaliation.",
+    ref: "Jeremiah 38:19"
+  },
+  7: {
+    correct: "Correct! Jeremiah 39:3 says that once the city was broken into, 'all the officials of the king of Babylon came and sat in the middle gate.' From there they oversee the final capture of the city and King Zedekiah.",
+    wrong: "Not quite. Jeremiah 39:3 places Babylon's officials at the middle gate &mdash; the Sheep Gate, Benjamin Gate, and Potter's Gate belong to other episodes in Jeremiah and elsewhere in the Old Testament.",
+    ref: "Jeremiah 39:3"
+  },
+  8: {
+    correct: "Correct! Jeremiah 39:6-7 records that the king of Babylon 'slaughtered the sons of Zedekiah at Riblah before his eyes... Then he put out the eyes of Zedekiah and bound him in chains to take him to Babylon.' It is the last thing Zedekiah sees.",
+    wrong: "Not quite. Jeremiah 39:6-7 describes Zedekiah's sons being killed before his eyes, followed by his own blinding and being bound in bronze chains for Babylon &mdash; he is not executed himself, left as a vassal, or able to escape to Egypt at this point.",
+    ref: "Jeremiah 39:5-7"
+  },
+  9: {
+    correct: "Correct! Jeremiah 39:11-12 records Nebuchadnezzar's order through Nebuzaradan: 'Take him, look after him well, and do him no harm, but deal with him as he tells you.' This fulfills earlier promises of protection for Jeremiah amid the city's fall.",
+    wrong: "Not quite. Jeremiah 39:11-12 records the command to look after Jeremiah well and do him no harm, deferring to his own wishes &mdash; not a royal advisory role in Babylon, permanent confinement, or a delay pending a temple inventory.",
+    ref: "Jeremiah 39:11-12"
+  },
+  10: {
+    correct: "Correct! Jeremiah 40:14-16 records Gedaliah dismissing the warning as false and telling Johanan, 'You shall not do this thing, for you are speaking falsely of Ishmael.' His refusal to act on a true warning sets up the assassination and turmoil in the chapter that follows.",
+    wrong: "Not quite. Jeremiah 40:14-16 shows Gedaliah refusing to believe the warning and forbidding Johanan from killing Ishmael in secret, insisting Johanan is lying about him &mdash; he does not arrest Ishmael, flee, or alert the Babylonians.",
+    ref: "Jeremiah 40:13-16"
+  }
+};
+
+const SHORT_Q = [
+  "Which officials accuse Jeremiah of weakening the soldiers' hands? (Jer 38:1)",
+  "Where is Jeremiah cast, and in what condition? (Jer 38:6)",
+  "Who is Ebed-Melech, and what does he tell Zedekiah? (Jer 38:7-9)",
+  "How does Ebed-Melech pull Jeremiah from the cistern? (Jer 38:11-13)",
+  "What outcomes does Jeremiah give for surrender vs. resistance? (Jer 38:17-18)",
+  "Why is Zedekiah afraid to surrender? (Jer 38:19)",
+  "Where do Babylon's officials sit after the wall is broken? (Jer 39:3)",
+  "What happens to Zedekiah at Riblah? (Jer 39:5-7)",
+  "What does Nebuchadnezzar command concerning Jeremiah? (Jer 39:11-12)",
+  "How does Gedaliah respond to Johanan's warning about Ishmael? (Jer 40:13-16)"
+];
+
+let score = 0;
+let answers = {};
+
+function answer(qNum, chosen) {
+  if (answers[qNum]) return;
+  answers[qNum] = chosen;
+
+  const correct = CORRECT[qNum];
+  const isRight = chosen === correct;
+  if (isRight) score++;
+
+  const block = document.getElementById('q' + qNum);
+  const btns = block.querySelectorAll('.choice-btn');
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    const letter = ['A','B','C','D'][i];
+    if (letter === correct) btn.classList.add('correct');
+    else if (letter === chosen && !isRight) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('fb' + qNum);
+  const info = FEEDBACK[qNum];
+  if (isRight) {
+    fb.className = 'feedback correct-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10003;</span>' + info.correct +
+      '<span class="feedback-ref">' + info.ref + '</span>';
+  } else {
+    fb.className = 'feedback wrong-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10007;</span>' + info.wrong +
+      '<span class="feedback-ref">' + info.ref + '</span>';
+  }
+
+  document.getElementById('next' + qNum).classList.add('visible');
+}
+
+function advance(qNum) {
+  if (qNum < QUESTIONS) {
+    document.getElementById('q' + qNum).classList.remove('active');
+    document.getElementById('q' + (qNum + 1)).classList.add('active');
+    const pct = Math.round(((qNum) / QUESTIONS) * 100);
+    document.getElementById('prog-bar').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = 'Question ' + (qNum + 1) + ' of ' + QUESTIONS;
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('q10').style.display = 'none';
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-label').textContent = 'Complete';
+
+  const rs = document.getElementById('results-screen');
+  rs.style.display = 'block';
+
+  document.getElementById('score-num').textContent = score;
+
+  const pct = score / QUESTIONS;
+  const circumference = 339.3;
+  const offset = circumference - (pct * circumference);
+  setTimeout(() => {
+    document.getElementById('score-ring').style.strokeDashoffset = offset;
+  }, 100);
+
+  let title, msg;
+  if (score === 10) {
+    title = 'Perfect Score!';
+    msg = '"Take him, look after him well, and do him no harm, but deal with him as he tells you." You tracked Jeremiah\'s cistern, Ebed-Melech\'s courage, and Jerusalem\'s fall with real care. &mdash; Jeremiah 39:12';
+  } else if (score >= 8) {
+    title = 'Excellent Work!';
+    msg = 'You followed Jeremiah from the mud of the cistern to the fall of the city and Gedaliah\'s uneasy governorship closely. These chapters set quiet faithfulness against royal indecision and violence, and God\'s protection against every human plot.';
+  } else if (score >= 6) {
+    title = 'Well Done!';
+    msg = 'A solid read through Jeremiah 38-40. Look again at how Ebed-Melech\'s courage, Zedekiah\'s fear, and Gedaliah\'s misplaced trust each reveal what it costs &mdash; and what it means &mdash; to heed the Lord\'s word.';
+  } else if (score >= 4) {
+    title = 'Good Effort';
+    msg = 'These chapters move from a cistern of mud to a captured king to a fragile new beginning under Gedaliah. It is worth reading Jeremiah 38-40 again slowly.';
+  } else {
+    title = 'Keep Studying!';
+    msg = '"I will surely save you, and you shall not fall by the sword." Read Jeremiah 38-40 again and watch how God preserves His word and His servants even as a kingdom collapses. &mdash; Jeremiah 39:18';
+  }
+  document.getElementById('results-title').textContent = title;
+  document.getElementById('results-message').textContent = msg;
+
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  for (let i = 1; i <= QUESTIONS; i++) {
+    const chosen = answers[i];
+    const correct = CORRECT[i];
+    const isRight = chosen === correct;
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (isRight ? 'r-correct' : 'r-wrong');
+    div.innerHTML = '<div class="review-q">Q' + i + '. ' + SHORT_Q[i-1] + '</div>' +
+      '<div class="review-ans">' +
+      (isRight
+        ? '<span class="review-correct-lbl">&#10003; Correct</span> &mdash; ' + correct
+        : '<span class="review-wrong-lbl">&#10007; Your answer: ' + chosen + '</span> &nbsp;|&nbsp; Correct: ' + correct) +
+      '</div>';
+    reviewList.appendChild(div);
+  }
+}
+
+function resetQuiz() {
+  score = 0;
+  answers = {};
+  for (let i = 1; i <= QUESTIONS; i++) {
+    const block = document.getElementById('q' + i);
+    block.classList.remove('active');
+    const btns = block.querySelectorAll('.choice-btn');
+    btns.forEach(b => { b.disabled = false; b.className = 'choice-btn'; });
+    const fb = document.getElementById('fb' + i);
+    fb.className = 'feedback';
+    fb.innerHTML = '';
+    document.getElementById('next' + i).classList.remove('visible');
+    block.style.display = '';
+  }
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('q1').classList.add('active');
+  document.getElementById('prog-bar').style.width = '10%';
+  document.getElementById('prog-label').textContent = 'Question 1 of 10';
+  document.getElementById('score-ring').style.strokeDashoffset = '339.3';
+}
+</script>
+</body>
+</html>
