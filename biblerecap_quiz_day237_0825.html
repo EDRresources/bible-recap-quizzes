@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 237 Bible Recap Quiz — Lamentations 1–2</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 18px;
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.15);
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.3s ease forwards;
+  }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+    color: #1a3d1e;
+    display: block;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.1);
+    border: 1px solid #8b1a1a;
+    color: #5a0e0e;
+    display: block;
+  }
+  .feedback-icon { font-weight: 700; margin-right: 6px; }
+  .feedback-ref {
+    font-style: italic;
+    color: #5a4020;
+    font-size: 0.95rem;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.visible { display: inline-block; }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 22px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.15); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #c9a84c;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: #9a7a3a;
+    letter-spacing: 0.1em;
+  }
+
+  #results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #f5ead8;
+    margin-bottom: 10px;
+  }
+  #results-message {
+    color: #c9a84c;
+    font-size: 1.08rem;
+    line-height: 1.5;
+    margin-bottom: 26px;
+    font-style: italic;
+  }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+    margin-bottom: 32px;
+  }
+  .take-again-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ── REVIEW ── */
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    text-align: left;
+  }
+  .review-item {
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    text-align: left;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.10);
+    border: 1px solid #8b1a1a;
+  }
+  .review-q {
+    font-weight: 600;
+    color: #1e1208;
+    margin-bottom: 4px;
+  }
+  .review-ans { color: #3a2810; font-size: 0.95rem; }
+  .review-correct-lbl { color: #1a5c2a; font-weight: 700; }
+  .review-wrong-lbl { color: #8b1a1a; font-weight: 700; }
+
+  @media (max-width: 520px) {
+    .card { padding: 22px 18px; }
+    .quiz-title { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- HEADER -->
+  <header class="quiz-header">
+    <div class="quiz-date">Tuesday, August 25, 2026 &middot; Day 237</div>
+    <h1 class="quiz-title">The Bible Recap &mdash; Daily Quiz</h1>
+    <div class="passage-tags">
+      <span class="passage-tag">Lamentations 1</span>
+      <span class="passage-tag">Lamentations 2</span>
+    </div>
+    <span class="ornament">&#10022;</span>
+    <span class="difficulty-badge">Challenging</span>
+    <span class="ornament">&#10022;</span>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="prog-bar"></div>
+  </div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- CARD -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <span class="question-text">Lamentations 1:1 opens by mourning what the once-great city has now become. What does the writer say she has become?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(1,'A')"><span class="choice-letter">A</span>A widow, tributary to others</button>
+        <button class="choice-btn" onclick="answer(1,'B')"><span class="choice-letter">B</span>A ruin, uninhabited by any living soul</button>
+        <button class="choice-btn" onclick="answer(1,'C')"><span class="choice-letter">C</span>A slave market, sold to foreign traders</button>
+        <button class="choice-btn" onclick="answer(1,'D')"><span class="choice-letter">D</span>A wilderness, reclaimed by wild beasts</button>
+      </div>
+      <div class="feedback" id="fb1"></div>
+      <button class="next-btn" id="next1" onclick="advance(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-top" style="margin-top:-14px;">
+        <span class="question-num">Q2</span>
+        <span class="question-text">In Lamentations 1:2, she weeps sore in the night with none to comfort her. Who does the text say has dealt treacherously with her?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(2,'A')"><span class="choice-letter">A</span>Her own priests, who ceased offering sacrifice</button>
+        <button class="choice-btn" onclick="answer(2,'B')"><span class="choice-letter">B</span>All her friends, who have become her enemies</button>
+        <button class="choice-btn" onclick="answer(2,'C')"><span class="choice-letter">C</span>Her allies among the surrounding nations, who abandoned the treaty</button>
+        <button class="choice-btn" onclick="answer(2,'D')"><span class="choice-letter">D</span>Her children, who fled into captivity without her</button>
+      </div>
+      <div class="feedback" id="fb2"></div>
+      <button class="next-btn" id="next2" onclick="advance(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <span class="question-text">Lamentations 1:5 says her adversaries have become "the chief" and prosper over her. Why does the writer say this has happened?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(3,'A')"><span class="choice-letter">A</span>Because her army was outnumbered in battle</button>
+        <button class="choice-btn" onclick="answer(3,'B')"><span class="choice-letter">B</span>Because her allies betrayed her at the treaty</button>
+        <button class="choice-btn" onclick="answer(3,'C')"><span class="choice-letter">C</span>Because the LORD hath afflicted her for the multitude of her transgressions</button>
+        <button class="choice-btn" onclick="answer(3,'D')"><span class="choice-letter">D</span>Because famine had already weakened her defenses</button>
+      </div>
+      <div class="feedback" id="fb3"></div>
+      <button class="next-btn" id="next3" onclick="advance(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-top" style="margin-top:-14px;">
+        <span class="question-num">Q4</span>
+        <span class="question-text">Lamentations 1:9 says her filthiness is in her skirts and she had no comforter, because she "remembereth not" what?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(4,'A')"><span class="choice-letter">A</span>Her covenant with the LORD at Sinai</button>
+        <button class="choice-btn" onclick="answer(4,'B')"><span class="choice-letter">B</span>The warnings of her prophets</button>
+        <button class="choice-btn" onclick="answer(4,'C')"><span class="choice-letter">C</span>Her former glory among the nations</button>
+        <button class="choice-btn" onclick="answer(4,'D')"><span class="choice-letter">D</span>Her last end</button>
+      </div>
+      <div class="feedback" id="fb4"></div>
+      <button class="next-btn" id="next4" onclick="advance(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+        <span class="question-text">In Lamentations 1:12, the writer cries out, "Is it nothing to you, all ye that pass by?" What does she ask onlookers to behold?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(5,'A')"><span class="choice-letter">A</span>Whether there be any sorrow like unto her sorrow</button>
+        <button class="choice-btn" onclick="answer(5,'B')"><span class="choice-letter">B</span>Whether her enemies will ever be punished</button>
+        <button class="choice-btn" onclick="answer(5,'C')"><span class="choice-letter">C</span>Whether her children will ever return</button>
+        <button class="choice-btn" onclick="answer(5,'D')"><span class="choice-letter">D</span>Whether the temple will ever be rebuilt</button>
+      </div>
+      <div class="feedback" id="fb5"></div>
+      <button class="next-btn" id="next5" onclick="advance(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <span class="question-text">Even in the midst of her judgment, how does the writer characterize the LORD in Lamentations 1:18?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(6,'A')"><span class="choice-letter">A</span>Silent and distant, unmoved by her cries</button>
+        <button class="choice-btn" onclick="answer(6,'B')"><span class="choice-letter">B</span>Righteous, because she has rebelled against his commandment</button>
+        <button class="choice-btn" onclick="answer(6,'C')"><span class="choice-letter">C</span>Merciless, since her sin was too great to forgive</button>
+        <button class="choice-btn" onclick="answer(6,'D')"><span class="choice-letter">D</span>Absent, having abandoned Zion altogether</button>
+      </div>
+      <div class="feedback" id="fb6"></div>
+      <button class="next-btn" id="next6" onclick="advance(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <span class="question-text">Lamentations 2:1 opens the second lament with a striking picture of what the Lord has done to "the daughter of Zion." What is it?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(7,'A')"><span class="choice-letter">A</span>He hid his face and would not look upon her at all</button>
+        <button class="choice-btn" onclick="answer(7,'B')"><span class="choice-letter">B</span>He sent locusts to devour every green thing in her land</button>
+        <button class="choice-btn" onclick="answer(7,'C')"><span class="choice-letter">C</span>He covered her with a cloud and cast down from heaven the beauty of Israel</button>
+        <button class="choice-btn" onclick="answer(7,'D')"><span class="choice-letter">D</span>He raised up a foreign king to sit on her throne</button>
+      </div>
+      <div class="feedback" id="fb7"></div>
+      <button class="next-btn" id="next7" onclick="advance(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-top" style="margin-top:-14px;">
+        <span class="question-num">Q8</span>
+        <span class="question-text">Lamentations 2:5 makes a strikingly direct statement about the Lord's own role in Zion's fall. What does it say?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(8,'A')"><span class="choice-letter">A</span>The Lord wept alongside Zion even as he judged her</button>
+        <button class="choice-btn" onclick="answer(8,'B')"><span class="choice-letter">B</span>The Lord withdrew entirely and let the Chaldeans act alone</button>
+        <button class="choice-btn" onclick="answer(8,'C')"><span class="choice-letter">C</span>The Lord sent an angel to soften the blow of judgment</button>
+        <button class="choice-btn" onclick="answer(8,'D')"><span class="choice-letter">D</span>The Lord was as an enemy, and had swallowed up Israel</button>
+      </div>
+      <div class="feedback" id="fb8"></div>
+      <button class="next-btn" id="next8" onclick="advance(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <span class="question-text">According to Lamentations 2:14, what does the writer say Zion's prophets failed to do before her judgment came?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(9,'A')"><span class="choice-letter">A</span>They failed to discover her iniquity or turn away her captivity, seeing only false and vain visions</button>
+        <button class="choice-btn" onclick="answer(9,'B')"><span class="choice-letter">B</span>They failed to warn her of the Babylonian army's approach</button>
+        <button class="choice-btn" onclick="answer(9,'C')"><span class="choice-letter">C</span>They failed to intercede for her in the temple courts</button>
+        <button class="choice-btn" onclick="answer(9,'D')"><span class="choice-letter">D</span>They failed to record her sins in the book of the law</button>
+      </div>
+      <div class="feedback" id="fb9"></div>
+      <button class="next-btn" id="next9" onclick="advance(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <span class="question-text">In her appeal to the LORD in Lamentations 2:20, what horrifying realities does the writer point to as proof of how deep the city's suffering has gone?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(10,'A')"><span class="choice-letter">A</span>That the elders no longer sit at the gate and the young men are ground at the mill</button>
+        <button class="choice-btn" onclick="answer(10,'B')"><span class="choice-letter">B</span>That women have eaten their own children, and priest and prophet were slain in the sanctuary</button>
+        <button class="choice-btn" onclick="answer(10,'C')"><span class="choice-letter">C</span>That the sun has darkened at noonday and the stars have withdrawn their light</button>
+        <button class="choice-btn" onclick="answer(10,'D')"><span class="choice-letter">D</span>That the ark of the covenant was carried away and never recovered</button>
+      </div>
+      <div class="feedback" id="fb10"></div>
+      <button class="next-btn" id="next10" onclick="advance(10)">Show Results &rarr;</button>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 120 120">
+          <circle class="score-ring-bg" cx="60" cy="60" r="54"/>
+          <circle class="score-ring-fill" id="score-ring" cx="60" cy="60" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <span class="score-num" id="score-num">0</span>
+          <span class="score-denom">/ 10</span>
+        </div>
+      </div>
+      <div id="results-title"></div>
+      <div id="results-message"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+      <div class="review-title">&#10022; Question Review &#10022;</div>
+      <div id="review-list"></div>
+    </div>
+
+  </div><!-- /card -->
+</div><!-- /outer-wrap -->
+
+<script>
+const QUESTIONS = 10;
+const CORRECT = {
+  1: 'A', 2: 'B', 3: 'C', 4: 'D', 5: 'A',
+  6: 'B', 7: 'C', 8: 'D', 9: 'A', 10: 'B'
+};
+
+const FEEDBACK = {
+  1: {
+    correct: "Correct! Lamentations 1:1 says, 'How doth the city sit solitary, that was full of people! how is she become as a widow! she that was great among the nations, and princess among the provinces, how is she become tributary!' The opening dirge pictures Jerusalem as a widow stripped of her former standing.",
+    wrong: "Not quite. Lamentations 1:1 specifically pictures the city 'become as a widow' and 'become tributary' &mdash; not emptied to a ruin, sold as a slave market, or reclaimed by wilderness.",
+    ref: "Lamentations 1:1"
+  },
+  2: {
+    correct: "Correct! Lamentations 1:2 says, 'among all her lovers she hath none to comfort her: all her friends have dealt treacherously with her, they are become her enemies.' Those she once trusted have turned against her.",
+    wrong: "Not quite. Lamentations 1:2 names 'all her friends' as those who 'have dealt treacherously with her' and 'are become her enemies' &mdash; not her priests, foreign allies, or her own children.",
+    ref: "Lamentations 1:2"
+  },
+  3: {
+    correct: "Correct! Lamentations 1:5 says, 'Her adversaries are the chief, her enemies prosper; for the LORD hath afflicted her for the multitude of her transgressions.' Her downfall is traced directly to the LORD's judgment on her sin, not merely to circumstance.",
+    wrong: "Not quite. Lamentations 1:5 gives the reason plainly: 'the LORD hath afflicted her for the multitude of her transgressions' &mdash; not an outnumbered army, betrayed treaty, or prior famine.",
+    ref: "Lamentations 1:5"
+  },
+  4: {
+    correct: "Correct! Lamentations 1:9 says, 'Her filthiness is in her skirts; she remembereth not her last end; therefore she came down wonderfully: she had no comforter.' Her ruin came because she gave no thought to where her sin was leading.",
+    wrong: "Not quite. Lamentations 1:9 says she 'remembereth not her last end' &mdash; not the Sinai covenant, prophetic warnings, or former glory, though those themes appear elsewhere in the chapter.",
+    ref: "Lamentations 1:9"
+  },
+  5: {
+    correct: "Correct! Lamentations 1:12 reads, 'Is it nothing to you, all ye that pass by? behold, and see if there be any sorrow like unto my sorrow, which is done unto me, wherewith the LORD hath afflicted me in the day of his fierce anger.' She calls witnesses to the unmatched depth of her grief.",
+    wrong: "Not quite. The specific appeal in 1:12 is to 'see if there be any sorrow like unto my sorrow' &mdash; not a request about her enemies' punishment, her children's return, or the temple's future.",
+    ref: "Lamentations 1:12"
+  },
+  6: {
+    correct: "Correct! Lamentations 1:18 says, 'The LORD is righteous; for I have rebelled against his commandment.' Even amid deep grief, the writer confesses that the judgment fits the sin &mdash; the LORD has not acted unjustly.",
+    wrong: "Not quite. Lamentations 1:18 is a confession, not a complaint: 'The LORD is righteous; for I have rebelled against his commandment.' He is not portrayed as silent, merciless, or absent here.",
+    ref: "Lamentations 1:18"
+  },
+  7: {
+    correct: "Correct! Lamentations 2:1 says, 'How hath the Lord covered the daughter of Zion with a cloud in his anger, and cast down from heaven unto the earth the beauty of Israel, and remembered not his footstool in the day of his anger!' The chapter opens with the Lord's own hand against Zion.",
+    wrong: "Not quite. Lamentations 2:1 pictures the Lord covering Zion 'with a cloud in his anger' and casting 'down from heaven&hellip; the beauty of Israel' &mdash; not hiding his face, sending locusts, or installing a foreign king.",
+    ref: "Lamentations 2:1"
+  },
+  8: {
+    correct: "Correct! Lamentations 2:5 says plainly, 'The Lord was as an enemy: he hath swallowed up Israel.' The chapter repeatedly insists that the destroyer of Zion is the Lord himself acting in judgment, not merely the Chaldean army.",
+    wrong: "Not quite. Lamentations 2:5 states directly, 'The Lord was as an enemy: he hath swallowed up Israel' &mdash; he is not pictured weeping alongside her, withdrawing, or sending an angel to soften the judgment.",
+    ref: "Lamentations 2:5"
+  },
+  9: {
+    correct: "Correct! Lamentations 2:14 says, 'Thy prophets have seen vain and foolish things for thee: and they have not discovered thine iniquity, to turn away thy captivity; but have seen for thee false burdens and causes of banishment.' Their false visions left her sin unexposed and her judgment unaverted.",
+    wrong: "Not quite. Lamentations 2:14 specifically faults the prophets for failing to 'discover thine iniquity, to turn away thy captivity' through their 'vain and foolish' visions &mdash; not a failure to warn of an army, intercede, or record sins.",
+    ref: "Lamentations 2:14"
+  },
+  10: {
+    correct: "Correct! Lamentations 2:20 asks, 'Shall the women eat their fruit, and children of a span long? shall the priest and the prophet be slain in the sanctuary of the Lord?' These horrors &mdash; cannibalism born of famine and slaughter in the holy place &mdash; measure how far judgment has fallen.",
+    wrong: "Not quite. Lamentations 2:20 points to the shocking specifics of women eating their own children and priest and prophet slain in the sanctuary &mdash; not the elders at the gate, darkened skies, or the ark's loss.",
+    ref: "Lamentations 2:20"
+  }
+};
+
+const SHORT_Q = [
+  "What has the once-great city become? (Lam 1:1)",
+  "Who has dealt treacherously with her? (Lam 1:2)",
+  "Why have her adversaries prospered? (Lam 1:5)",
+  "What does she not remember? (Lam 1:9)",
+  "What does she ask onlookers to behold? (Lam 1:12)",
+  "How does she characterize the LORD? (Lam 1:18)",
+  "What has the Lord done to the daughter of Zion? (Lam 2:1)",
+  "What direct statement is made about the Lord's role? (Lam 2:5)",
+  "What did the prophets fail to do? (Lam 2:14)",
+  "What horrors mark the depth of suffering? (Lam 2:20)"
+];
+
+let score = 0;
+let answers = {};
+
+function answer(qNum, chosen) {
+  if (answers[qNum]) return;
+  answers[qNum] = chosen;
+
+  const correct = CORRECT[qNum];
+  const isRight = chosen === correct;
+  if (isRight) score++;
+
+  const block = document.getElementById('q' + qNum);
+  const btns = block.querySelectorAll('.choice-btn');
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    const letter = ['A','B','C','D'][i];
+    if (letter === correct) btn.classList.add('correct');
+    else if (letter === chosen && !isRight) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('fb' + qNum);
+  const info = FEEDBACK[qNum];
+  if (isRight) {
+    fb.className = 'feedback correct-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10003;</span>' + info.correct +
+      '<span class="feedback-ref">' + info.ref + '</span>';
+  } else {
+    fb.className = 'feedback wrong-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10007;</span>' + info.wrong +
+      '<span class="feedback-ref">' + info.ref + '</span>';
+  }
+
+  document.getElementById('next' + qNum).classList.add('visible');
+}
+
+function advance(qNum) {
+  if (qNum < QUESTIONS) {
+    document.getElementById('q' + qNum).classList.remove('active');
+    document.getElementById('q' + (qNum + 1)).classList.add('active');
+    const pct = Math.round(((qNum) / QUESTIONS) * 100);
+    document.getElementById('prog-bar').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = 'Question ' + (qNum + 1) + ' of ' + QUESTIONS;
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('q10').style.display = 'none';
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-label').textContent = 'Complete';
+
+  const rs = document.getElementById('results-screen');
+  rs.style.display = 'block';
+
+  document.getElementById('score-num').textContent = score;
+
+  const pct = score / QUESTIONS;
+  const circumference = 339.3;
+  const offset = circumference - (pct * circumference);
+  setTimeout(() => {
+    document.getElementById('score-ring').style.strokeDashoffset = offset;
+  }, 100);
+
+  let title, msg;
+  if (score === 10) {
+    title = 'Perfect Score!';
+    msg = '"The LORD is righteous; for I have rebelled against his commandment." You tracked the depth of Zion\'s grief and her honest confession with a careful eye. &mdash; Lamentations 1:18';
+  } else if (score >= 8) {
+    title = 'Excellent Work!';
+    msg = 'You followed the lament closely &mdash; these two heavy chapters reward exactly that kind of attention to the writer\'s grief and confession.';
+  } else if (score >= 6) {
+    title = 'Well Done!';
+    msg = 'A solid read through Zion\'s fall and her cry to the LORD. Look again at the specific images &mdash; the widow, the cloud, the false prophets &mdash; and what each one pictures.';
+  } else if (score >= 4) {
+    title = 'Good Effort';
+    msg = 'Lamentations 1-2 move slowly through grief, confession, and judgment. It is worth reading both chapters again slowly, verse by verse.';
+  } else {
+    title = 'Keep Studying!';
+    msg = 'Even in the ashes of judgment, the writer confesses, "The LORD is righteous." Read Lamentations 1-2 again with that confession in view. &mdash; Lamentations 1:18';
+  }
+  document.getElementById('results-title').textContent = title;
+  document.getElementById('results-message').textContent = msg;
+
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  for (let i = 1; i <= QUESTIONS; i++) {
+    const chosen = answers[i];
+    const correct = CORRECT[i];
+    const isRight = chosen === correct;
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (isRight ? 'r-correct' : 'r-wrong');
+    div.innerHTML = '<div class="review-q">Q' + i + '. ' + SHORT_Q[i-1] + '</div>' +
+      '<div class="review-ans">' +
+      (isRight
+        ? '<span class="review-correct-lbl">&#10003; Correct</span> &mdash; ' + correct
+        : '<span class="review-wrong-lbl">&#10007; Your answer: ' + chosen + '</span> &nbsp;|&nbsp; Correct: ' + correct) +
+      '</div>';
+    reviewList.appendChild(div);
+  }
+}
+
+function resetQuiz() {
+  score = 0;
+  answers = {};
+  for (let i = 1; i <= QUESTIONS; i++) {
+    const block = document.getElementById('q' + i);
+    block.classList.remove('active');
+    const btns = block.querySelectorAll('.choice-btn');
+    btns.forEach(b => { b.disabled = false; b.className = 'choice-btn'; });
+    const fb = document.getElementById('fb' + i);
+    fb.className = 'feedback';
+    fb.innerHTML = '';
+    document.getElementById('next' + i).classList.remove('visible');
+    block.style.display = '';
+  }
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('q1').classList.add('active');
+  document.getElementById('prog-bar').style.width = '10%';
+  document.getElementById('prog-label').textContent = 'Question 1 of 10';
+  document.getElementById('score-ring').style.strokeDashoffset = '339.3';
+}
+</script>
+</body>
+</html>
