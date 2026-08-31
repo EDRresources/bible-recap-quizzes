@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 243 Bible Recap Quiz — Ezekiel 16–17</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 18px;
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.15);
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.3s ease forwards;
+  }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+    color: #1a3d1e;
+    display: block;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.1);
+    border: 1px solid #8b1a1a;
+    color: #5a0e0e;
+    display: block;
+  }
+  .feedback-icon { font-weight: 700; margin-right: 6px; }
+  .feedback-ref {
+    font-style: italic;
+    color: #5a4020;
+    font-size: 0.95rem;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.visible { display: inline-block; }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 22px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.15); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #c9a84c;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: #9a7a3a;
+    letter-spacing: 0.1em;
+  }
+
+  #results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #f5ead8;
+    margin-bottom: 10px;
+  }
+  #results-message {
+    color: #c9a84c;
+    font-size: 1.08rem;
+    line-height: 1.5;
+    margin-bottom: 26px;
+    font-style: italic;
+  }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+    margin-bottom: 32px;
+  }
+  .take-again-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ── REVIEW ── */
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    text-align: left;
+  }
+  .review-item {
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    text-align: left;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.10);
+    border: 1px solid #8b1a1a;
+  }
+  .review-q {
+    font-weight: 600;
+    color: #1e1208;
+    margin-bottom: 4px;
+  }
+  .review-ans { color: #3a2810; font-size: 0.95rem; }
+  .review-correct-lbl { color: #1a5c2a; font-weight: 700; }
+  .review-wrong-lbl { color: #8b1a1a; font-weight: 700; }
+
+  @media (max-width: 520px) {
+    .card { padding: 22px 18px; }
+    .quiz-title { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- HEADER -->
+  <header class="quiz-header">
+    <div class="quiz-date">Monday, August 31, 2026 &middot; Day 243</div>
+    <h1 class="quiz-title">The Bible Recap &mdash; Daily Quiz</h1>
+    <div class="passage-tags">
+      <span class="passage-tag">Ezekiel 16</span>
+      <span class="passage-tag">Ezekiel 17</span>
+    </div>
+    <span class="ornament">&#10022;</span>
+    <span class="difficulty-badge">Challenging</span>
+    <span class="ornament">&#10022;</span>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="prog-bar"></div>
+  </div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- CARD -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-top" style="margin-top:-14px;">
+        <span class="question-num">Q1</span>
+        <span class="question-text">Ezekiel 16:4 lists several things not done for the infant Jerusalem on the day of her birth. Which of the following is NOT one of them?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(1,'A')"><span class="choice-letter">A</span>She was not nursed with milk after birth</button>
+        <button class="choice-btn" onclick="answer(1,'B')"><span class="choice-letter">B</span>Her navel cord was not cut</button>
+        <button class="choice-btn" onclick="answer(1,'C')"><span class="choice-letter">C</span>She was not washed with water to cleanse her</button>
+        <button class="choice-btn" onclick="answer(1,'D')"><span class="choice-letter">D</span>She was not rubbed with salt</button>
+      </div>
+      <div class="feedback" id="fb1"></div>
+      <button class="next-btn" id="next1" onclick="advance(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+        <span class="question-text">In Ezekiel 16:6, the LORD passes by and sees the infant flailing helplessly in her own blood. What does he say to her?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(2,'A')"><span class="choice-letter">A</span>"You are mine forever"</button>
+        <button class="choice-btn" onclick="answer(2,'B')"><span class="choice-letter">B</span>"Rise and be clean"</button>
+        <button class="choice-btn" onclick="answer(2,'C')"><span class="choice-letter">C</span>"Live! ... Live!"</button>
+        <button class="choice-btn" onclick="answer(2,'D')"><span class="choice-letter">D</span>"I have chosen you"</button>
+      </div>
+      <div class="feedback" id="fb2"></div>
+      <button class="next-btn" id="next2" onclick="advance(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <span class="question-text">When the LORD passes by again in Ezekiel 16:8 and finds her at the age for love, what does he do to enter into covenant with her?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(3,'A')"><span class="choice-letter">A</span>He sends servants to adopt her formally</button>
+        <button class="choice-btn" onclick="answer(3,'B')"><span class="choice-letter">B</span>He crowns her queen immediately, without covenant</button>
+        <button class="choice-btn" onclick="answer(3,'C')"><span class="choice-letter">C</span>He gives her to a foreign king in marriage</button>
+        <button class="choice-btn" onclick="answer(3,'D')"><span class="choice-letter">D</span>He spreads the corner of his garment over her and pledges himself to her</button>
+      </div>
+      <div class="feedback" id="fb3"></div>
+      <button class="next-btn" id="next3" onclick="advance(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-top" style="margin-top:-14px;">
+        <span class="question-num">Q4</span>
+        <span class="question-text">Among the adornments the LORD gives her in Ezekiel 16:12, what unusual piece of jewelry is placed on her nose?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(4,'A')"><span class="choice-letter">A</span>A ring</button>
+        <button class="choice-btn" onclick="answer(4,'B')"><span class="choice-letter">B</span>A veil of fine linen</button>
+        <button class="choice-btn" onclick="answer(4,'C')"><span class="choice-letter">C</span>A chain of gold</button>
+        <button class="choice-btn" onclick="answer(4,'D')"><span class="choice-letter">D</span>A signet seal</button>
+      </div>
+      <div class="feedback" id="fb4"></div>
+      <button class="next-btn" id="next4" onclick="advance(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+        <span class="question-text">Ezekiel 16:15-19 describes her unfaithfulness. What did she do with the very garments and gold and silver the LORD had given her?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(5,'A')"><span class="choice-letter">A</span>She stored them for her children's inheritance</button>
+        <button class="choice-btn" onclick="answer(5,'B')"><span class="choice-letter">B</span>She used them to make high places and images for idol worship</button>
+        <button class="choice-btn" onclick="answer(5,'C')"><span class="choice-letter">C</span>She returned them to the LORD in repentance</button>
+        <button class="choice-btn" onclick="answer(5,'D')"><span class="choice-letter">D</span>She sold them to fund the temple treasury</button>
+      </div>
+      <div class="feedback" id="fb5"></div>
+      <button class="next-btn" id="next5" onclick="advance(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-top" style="margin-top:-14px;">
+        <span class="question-num">Q6</span>
+        <span class="question-text">Ezekiel 16:33-34 says her whoring was the reverse of an ordinary prostitute's. In what specific way?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(6,'A')"><span class="choice-letter">A</span>She refused payment altogether</button>
+        <button class="choice-btn" onclick="answer(6,'B')"><span class="choice-letter">B</span>She had only one lover instead of many</button>
+        <button class="choice-btn" onclick="answer(6,'C')"><span class="choice-letter">C</span>She demanded marriage instead of payment</button>
+        <button class="choice-btn" onclick="answer(6,'D')"><span class="choice-letter">D</span>She paid her lovers instead of receiving payment from them</button>
+      </div>
+      <div class="feedback" id="fb6"></div>
+      <button class="next-btn" id="next6" onclick="advance(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <span class="question-text">According to Ezekiel 16:49, what specifically was the sin of Jerusalem's sister Sodom?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(7,'A')"><span class="choice-letter">A</span>Idolatry and child sacrifice alone</button>
+        <button class="choice-btn" onclick="answer(7,'B')"><span class="choice-letter">B</span>Violence and bloodshed in the streets</button>
+        <button class="choice-btn" onclick="answer(7,'C')"><span class="choice-letter">C</span>Pride, fullness of bread, and careless ease, without aiding the poor and needy</button>
+        <button class="choice-btn" onclick="answer(7,'D')"><span class="choice-letter">D</span>Rejecting the prophets sent to warn her</button>
+      </div>
+      <div class="feedback" id="fb7"></div>
+      <button class="next-btn" id="next7" onclick="advance(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+        <span class="question-text">In the parable of Ezekiel 17, the first great eagle that carries off the top of the cedar to a land of trade represents whom, according to Ezekiel's own interpretation?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(8,'A')"><span class="choice-letter">A</span>The king of Babylon</button>
+        <button class="choice-btn" onclick="answer(8,'B')"><span class="choice-letter">B</span>Pharaoh of Egypt</button>
+        <button class="choice-btn" onclick="answer(8,'C')"><span class="choice-letter">C</span>The king of Assyria</button>
+        <button class="choice-btn" onclick="answer(8,'D')"><span class="choice-letter">D</span>The high priest in Jerusalem</button>
+      </div>
+      <div class="feedback" id="fb8"></div>
+      <button class="next-btn" id="next8" onclick="advance(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="detail-badge">Detail</span>
+      </div>
+      <div class="question-top" style="margin-top:-14px;">
+        <span class="question-num">Q9</span>
+        <span class="question-text">Ezekiel 17:15 describes how the transplanted vine (Zedekiah) broke covenant with the eagle who planted him. How?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(9,'A')"><span class="choice-letter">A</span>By refusing to pay tribute to Babylon</button>
+        <button class="choice-btn" onclick="answer(9,'B')"><span class="choice-letter">B</span>By assassinating Babylonian officials</button>
+        <button class="choice-btn" onclick="answer(9,'C')"><span class="choice-letter">C</span>By sending ambassadors to Egypt for horses and a large army</button>
+        <button class="choice-btn" onclick="answer(9,'D')"><span class="choice-letter">D</span>By rebuilding the walls of Jerusalem without permission</button>
+      </div>
+      <div class="feedback" id="fb9"></div>
+      <button class="next-btn" id="next9" onclick="advance(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <span class="question-text">In Ezekiel 17:22-23, what does the LORD himself promise to do, in contrast to the failed vine of Zedekiah's rebellion?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(10,'A')"><span class="choice-letter">A</span>Replant Sodom and restore its fortunes first</button>
+        <button class="choice-btn" onclick="answer(10,'B')"><span class="choice-letter">B</span>Take a sprig from the lofty top of the cedar and plant it on a high mountain, where it will become a noble cedar sheltering birds of every kind</button>
+        <button class="choice-btn" onclick="answer(10,'C')"><span class="choice-letter">C</span>Send another eagle to punish Babylon on Jerusalem's behalf</button>
+        <button class="choice-btn" onclick="answer(10,'D')"><span class="choice-letter">D</span>Command the vine to reroot itself toward the first eagle</button>
+      </div>
+      <div class="feedback" id="fb10"></div>
+      <button class="next-btn" id="next10" onclick="advance(10)">Show Results &rarr;</button>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 120 120">
+          <circle class="score-ring-bg" cx="60" cy="60" r="54"/>
+          <circle class="score-ring-fill" id="score-ring" cx="60" cy="60" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <span class="score-num" id="score-num">0</span>
+          <span class="score-denom">/ 10</span>
+        </div>
+      </div>
+      <div id="results-title"></div>
+      <div id="results-message"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+      <div class="review-title">&#10022; Question Review &#10022;</div>
+      <div id="review-list"></div>
+    </div>
+
+  </div><!-- /card -->
+</div><!-- /outer-wrap -->
+
+<script>
+const QUESTIONS = 10;
+const CORRECT = {
+  1: 'A', 2: 'C', 3: 'D', 4: 'A', 5: 'B',
+  6: 'D', 7: 'C', 8: 'A', 9: 'C', 10: 'B'
+};
+
+const FEEDBACK = {
+  1: {
+    correct: "Correct! Ezekiel 16:4 lists cord uncut, unwashed with water, unrubbed with salt, and unwrapped in cloths &mdash; being nursed with milk is not part of the list at all, since she was abandoned before any of that could happen.",
+    wrong: "Not quite. Ezekiel 16:4 specifically names the cord, the water-washing, and the salt-rubbing (along with the cloth-wrapping) as things withheld &mdash; nursing with milk is never mentioned, since she was cast out before it could occur.",
+    ref: "Ezekiel 16:4"
+  },
+  2: {
+    correct: "Correct! Ezekiel 16:6 has the LORD say, \"Live! ... Live!\" &mdash; a bare command of life spoken over an infant left to die, with nothing in her to earn it.",
+    wrong: "Not quite. Ezekiel 16:6 records the LORD's word as simply \"Live! ... Live!\" &mdash; not a promise of belonging, a call to rise, or a statement of choosing.",
+    ref: "Ezekiel 16:6"
+  },
+  3: {
+    correct: "Correct! Ezekiel 16:8 says, \"I spread the corner of my garment over you and covered your nakedness; I made my vow to you and entered into a covenant with you.\" The gesture itself is the marriage pledge.",
+    wrong: "Not quite. Ezekiel 16:8 pictures the LORD spreading his garment over her as the covenant act itself &mdash; not formal adoption, an uncovenanted crowning, or marriage to a foreign king.",
+    ref: "Ezekiel 16:8"
+  },
+  4: {
+    correct: "Correct! Ezekiel 16:12 says, \"And I put a ring on your nose and earrings in your ears and a beautiful crown on your head.\" The nose ring is an unusual, deliberately specific detail of royal adornment.",
+    wrong: "Not quite. Ezekiel 16:12 specifically places a ring on her nose (along with earrings and a crown) &mdash; not a veil, a gold chain, or a signet.",
+    ref: "Ezekiel 16:12"
+  },
+  5: {
+    correct: "Correct! Ezekiel 16:16-18 describes her taking the very garments, gold, and silver the LORD gave her and using them to make and clothe idols &mdash; turning his gifts into instruments of her unfaithfulness.",
+    wrong: "Not quite. Ezekiel 16:16-18 has her turn the LORD's own gifts into high places and idol images &mdash; not inheritance, repentance, or temple funding.",
+    ref: "Ezekiel 16:16-18"
+  },
+  6: {
+    correct: "Correct! Ezekiel 16:33-34 observes, \"Men give gifts to all prostitutes, but you gave your gifts to all your lovers... so you were the opposite of other women in your whorings.\" She paid to be desired rather than being paid.",
+    wrong: "Not quite. Ezekiel 16:33-34 says she paid her lovers rather than receiving payment &mdash; the text does not say she refused payment, kept one lover, or demanded marriage.",
+    ref: "Ezekiel 16:33-34"
+  },
+  7: {
+    correct: "Correct! Ezekiel 16:49 states plainly, \"Behold, this was the guilt of your sister Sodom: she and her daughters had pride, excess of food, and prosperous ease, but did not aid the poor and needy.\" Sodom's sin is named as complacent, self-satisfied neglect.",
+    wrong: "Not quite. Ezekiel 16:49 names pride, excess food, and careless ease toward the poor as Sodom's guilt &mdash; not idolatry alone, street violence, or rejecting prophets.",
+    ref: "Ezekiel 16:49"
+  },
+  8: {
+    correct: "Correct! Ezekiel 17:12 has the prophet explain his own riddle: \"the king of Babylon came to Jerusalem, and took her king and her princes and brought them to him to Babylon.\" The first eagle is Babylon.",
+    wrong: "Not quite. Ezekiel 17:12 identifies the first eagle as the king of Babylon &mdash; not Pharaoh, the king of Assyria, or the high priest.",
+    ref: "Ezekiel 17:12"
+  },
+  9: {
+    correct: "Correct! Ezekiel 17:15 says he \"rebelled against him by sending his ambassadors to Egypt, that they might give him horses and a large army.\" Reaching for Egypt's help was itself the treachery against Babylon's covenant.",
+    wrong: "Not quite. Ezekiel 17:15 names sending ambassadors to Egypt for horses and an army as the act of rebellion &mdash; not withheld tribute, assassination, or unauthorized rebuilding.",
+    ref: "Ezekiel 17:15"
+  },
+  10: {
+    correct: "Correct! Ezekiel 17:22-23 reads, \"I myself will take a sprig from the lofty top of the cedar... I will plant it on a high and lofty mountain... it will produce branches and bear fruit and become a noble cedar. And under it will dwell every kind of bird.\" What Zedekiah ruined by treachery, God himself will plant and establish.",
+    wrong: "Not quite. Ezekiel 17:22-23 has the LORD himself plant a sprig from the cedar's top on a high mountain, where it grows into a noble cedar sheltering every kind of bird &mdash; not a replanted Sodom, a punishing eagle, or a self-rerooting vine.",
+    ref: "Ezekiel 17:22-23"
+  }
+};
+
+const SHORT_Q = [
+  "Which detail is NOT among the things withheld at her birth? (Ezek 16:4)",
+  "What does the LORD say when he finds her in her blood? (Ezek 16:6)",
+  "How does the LORD enter covenant with her? (Ezek 16:8)",
+  "What unusual jewelry is placed on her nose? (Ezek 16:12)",
+  "What does she do with the LORD's gifts of gold and garments? (Ezek 16:16-18)",
+  "How is her whoring the reverse of an ordinary prostitute's? (Ezek 16:33-34)",
+  "What specifically was Sodom's sin? (Ezek 16:49)",
+  "Whom does the first eagle represent? (Ezek 17:12)",
+  "How did the transplanted vine break covenant? (Ezek 17:15)",
+  "What does the LORD promise to plant himself? (Ezek 17:22-23)"
+];
+
+let score = 0;
+let answers = {};
+
+function answer(qNum, chosen) {
+  if (answers[qNum]) return;
+  answers[qNum] = chosen;
+
+  const correct = CORRECT[qNum];
+  const isRight = chosen === correct;
+  if (isRight) score++;
+
+  const block = document.getElementById('q' + qNum);
+  const btns = block.querySelectorAll('.choice-btn');
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    const letter = ['A','B','C','D'][i];
+    if (letter === correct) btn.classList.add('correct');
+    else if (letter === chosen && !isRight) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('fb' + qNum);
+  const info = FEEDBACK[qNum];
+  if (isRight) {
+    fb.className = 'feedback correct-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10003;</span>' + info.correct +
+      '<span class="feedback-ref">' + info.ref + '</span>';
+  } else {
+    fb.className = 'feedback wrong-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10007;</span>' + info.wrong +
+      '<span class="feedback-ref">' + info.ref + '</span>';
+  }
+
+  document.getElementById('next' + qNum).classList.add('visible');
+}
+
+function advance(qNum) {
+  if (qNum < QUESTIONS) {
+    document.getElementById('q' + qNum).classList.remove('active');
+    document.getElementById('q' + (qNum + 1)).classList.add('active');
+    const pct = Math.round(((qNum) / QUESTIONS) * 100);
+    document.getElementById('prog-bar').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = 'Question ' + (qNum + 1) + ' of ' + QUESTIONS;
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('q10').style.display = 'none';
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-label').textContent = 'Complete';
+
+  const rs = document.getElementById('results-screen');
+  rs.style.display = 'block';
+
+  document.getElementById('score-num').textContent = score;
+
+  const pct = score / QUESTIONS;
+  const circumference = 339.3;
+  const offset = circumference - (pct * circumference);
+  setTimeout(() => {
+    document.getElementById('score-ring').style.strokeDashoffset = offset;
+  }, 100);
+
+  let title, msg;
+  if (score === 10) {
+    title = 'Perfect Score!';
+    msg = '"I passed by you and saw you... and I said to you, \\'Live!\\'" You tracked the whole sweep of grace and betrayal in these chapters &mdash; from an abandoned infant to a noble cedar God plants himself. &mdash; Ezekiel 16:6';
+  } else if (score >= 8) {
+    title = 'Excellent Work!';
+    msg = 'You followed the covenant of chapter 16 and the eagle-and-vine riddle of chapter 17 closely &mdash; these dense, image-heavy chapters reward exactly that kind of careful reading.';
+  } else if (score >= 6) {
+    title = 'Well Done!';
+    msg = 'A solid read through Jerusalem\\'s adoption, unfaithfulness, and the parable of the two eagles. Look again at the specific details &mdash; the nose ring, the reversed payment, Sodom\\'s named sin &mdash; and what each pictures.';
+  } else if (score >= 4) {
+    title = 'Good Effort';
+    msg = 'Ezekiel 16-17 move from an abandoned infant raised as a bride to a planted vine that reaches for the wrong help. It is worth reading both chapters again slowly, verse by verse.';
+  } else {
+    title = 'Keep Studying!';
+    msg = 'Even amid these hard chapters, God\\'s covenant love outlasts Jerusalem\\'s unfaithfulness &mdash; he himself plants the cedar in the end. Read Ezekiel 16-17 again with that promise in view. &mdash; Ezekiel 17:22';
+  }
+  document.getElementById('results-title').textContent = title;
+  document.getElementById('results-message').textContent = msg;
+
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  for (let i = 1; i <= QUESTIONS; i++) {
+    const chosen = answers[i];
+    const correct = CORRECT[i];
+    const isRight = chosen === correct;
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (isRight ? 'r-correct' : 'r-wrong');
+    div.innerHTML = '<div class="review-q">Q' + i + '. ' + SHORT_Q[i-1] + '</div>' +
+      '<div class="review-ans">' +
+      (isRight
+        ? '<span class="review-correct-lbl">&#10003; Correct</span> &mdash; ' + correct
+        : '<span class="review-wrong-lbl">&#10007; Your answer: ' + chosen + '</span> &nbsp;|&nbsp; Correct: ' + correct) +
+      '</div>';
+    reviewList.appendChild(div);
+  }
+}
+
+function resetQuiz() {
+  score = 0;
+  answers = {};
+  for (let i = 1; i <= QUESTIONS; i++) {
+    const block = document.getElementById('q' + i);
+    block.classList.remove('active');
+    const btns = block.querySelectorAll('.choice-btn');
+    btns.forEach(b => { b.disabled = false; b.className = 'choice-btn'; });
+    const fb = document.getElementById('fb' + i);
+    fb.className = 'feedback';
+    fb.innerHTML = '';
+    document.getElementById('next' + i).classList.remove('visible');
+    block.style.display = '';
+  }
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('q1').classList.add('active');
+  document.getElementById('prog-bar').style.width = '10%';
+  document.getElementById('prog-label').textContent = 'Question 1 of 10';
+  document.getElementById('score-ring').style.strokeDashoffset = '339.3';
+}
+</script>
+</body>
+</html>
