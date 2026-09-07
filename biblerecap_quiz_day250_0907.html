@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 250 Bible Recap Quiz — Ezekiel 34–36</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 18px;
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.15);
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.3s ease forwards;
+  }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+    color: #1a3d1e;
+    display: block;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.1);
+    border: 1px solid #8b1a1a;
+    color: #5a0e0e;
+    display: block;
+  }
+  .feedback-icon { font-weight: 700; margin-right: 6px; }
+  .feedback-ref {
+    font-style: italic;
+    color: #5a4020;
+    font-size: 0.95rem;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.visible { display: inline-block; }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 22px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.15); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #c9a84c;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: #9a7a3a;
+    letter-spacing: 0.1em;
+  }
+
+  #results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #f5ead8;
+    margin-bottom: 10px;
+  }
+  #results-message {
+    color: #c9a84c;
+    font-size: 1.08rem;
+    line-height: 1.5;
+    margin-bottom: 26px;
+    font-style: italic;
+  }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+    margin-bottom: 32px;
+  }
+  .take-again-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ── REVIEW ── */
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    text-align: left;
+  }
+  .review-item {
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    text-align: left;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.10);
+    border: 1px solid #8b1a1a;
+  }
+  .review-q {
+    font-weight: 600;
+    color: #1e1208;
+    margin-bottom: 4px;
+  }
+  .review-ans { color: #3a2810; font-size: 0.95rem; }
+  .review-correct-lbl { color: #1a5c2a; font-weight: 700; }
+  .review-wrong-lbl { color: #8b1a1a; font-weight: 700; }
+
+  @media (max-width: 520px) {
+    .card { padding: 22px 18px; }
+    .quiz-title { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- HEADER -->
+  <header class="quiz-header">
+    <div class="quiz-date">Monday, September 7, 2026 &middot; Day 250</div>
+    <h1 class="quiz-title">The Bible Recap &mdash; Daily Quiz</h1>
+    <div class="passage-tags">
+      <span class="passage-tag">Ezekiel 34</span>
+      <span class="passage-tag">Ezekiel 35</span>
+      <span class="passage-tag">Ezekiel 36</span>
+    </div>
+    <span class="ornament">&#10022;</span>
+    <span class="difficulty-badge">Challenging</span>
+    <span class="ornament">&#10022;</span>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="prog-bar"></div>
+  </div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- CARD -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <span class="question-text">Ezekiel 34:3-4 lists specific failures of Israel's shepherds even as they profited from the flock. Which pairing of accusations appears in that indictment?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(1,'A')"><span class="choice-letter">A</span>They fed the sheep well but sheared them without mercy, and refused to seek new pasture</button>
+        <button class="choice-btn" onclick="answer(1,'B')"><span class="choice-letter">B</span>They slaughtered only the sick and injured, leaving the strong to fend for themselves</button>
+        <button class="choice-btn" onclick="answer(1,'C')"><span class="choice-letter">C</span>They ate the fat and wore the wool, yet left the weak unstrengthened, the sick unhealed, and the lost unsought</button>
+        <button class="choice-btn" onclick="answer(1,'D')"><span class="choice-letter">D</span>They abandoned the flock entirely, never touching the fat, the wool, or the sick</button>
+      </div>
+      <div class="feedback" id="fb1"></div>
+      <button class="next-btn" id="next1" onclick="advance(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">In Ezekiel 34:16, after promising to seek the lost, bring back the strayed, and bind up the injured, what does God say he will do to "the fat and the strong"?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(2,'A')"><span class="choice-letter">A</span>Multiply them so they become the core of the restored flock</button>
+        <button class="choice-btn" onclick="answer(2,'B')"><span class="choice-letter">B</span>Destroy them, and feed the flock in justice</button>
+        <button class="choice-btn" onclick="answer(2,'C')"><span class="choice-letter">C</span>Set them apart as under-shepherds to help govern the rest</button>
+        <button class="choice-btn" onclick="answer(2,'D')"><span class="choice-letter">D</span>Send them into exile alongside the wicked nations</button>
+      </div>
+      <div class="feedback" id="fb2"></div>
+      <button class="next-btn" id="next2" onclick="advance(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <span class="question-text">Ezekiel 34:23-24 promises that God will set up "one shepherd" over the reunited flock. Who is this shepherd, and what title does he hold alongside the Lord being their God?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(3,'A')"><span class="choice-letter">A</span>My servant David, who shall be prince among them</button>
+        <button class="choice-btn" onclick="answer(3,'B')"><span class="choice-letter">B</span>A new Moses, who shall be judge over them</button>
+        <button class="choice-btn" onclick="answer(3,'C')"><span class="choice-letter">C</span>An angel of the Lord, who shall be their eternal priest</button>
+        <button class="choice-btn" onclick="answer(3,'D')"><span class="choice-letter">D</span>Aaron's descendant, who shall be their high priest forever</button>
+      </div>
+      <div class="feedback" id="fb3"></div>
+      <button class="next-btn" id="next3" onclick="advance(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">Ezekiel 34:25-27 describes the Lord's "covenant of peace." Which combination of blessings appears in that covenant?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(4,'A')"><span class="choice-letter">A</span>Restored temple worship, a rebuilt Jerusalem wall, and a new priesthood</button>
+        <button class="choice-btn" onclick="answer(4,'B')"><span class="choice-letter">B</span>Victory over Babylon, the return of the ark, and a doubled inheritance</button>
+        <button class="choice-btn" onclick="answer(4,'C')"><span class="choice-letter">C</span>Forgiveness of debts, release from bondage every seventh year, and rest from labor</button>
+        <button class="choice-btn" onclick="answer(4,'D')"><span class="choice-letter">D</span>Wild beasts banished from the land, showers of blessing in their season, and broken bars of the yoke</button>
+      </div>
+      <div class="feedback" id="fb4"></div>
+      <button class="next-btn" id="next4" onclick="advance(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+        <span class="question-text">According to Ezekiel 35:10, what claim did Edom make about Israel and Judah, and what detail makes that claim especially brazen?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(5,'A')"><span class="choice-letter">A</span>That the two nations had willingly surrendered to Edom, when in fact they had surrendered to Babylon</button>
+        <button class="choice-btn" onclick="answer(5,'B')"><span class="choice-letter">B</span>That Edom's gods had defeated the God of Israel, when in fact no battle had occurred</button>
+        <button class="choice-btn" onclick="answer(5,'C')"><span class="choice-letter">C</span>That the two nations "shall be mine, and we will take possession of them" &mdash; even though the Lord himself was there</button>
+        <button class="choice-btn" onclick="answer(5,'D')"><span class="choice-letter">D</span>That Israel and Judah had always belonged to Edom by ancient right, when no such record existed</button>
+      </div>
+      <div class="feedback" id="fb5"></div>
+      <button class="next-btn" id="next5" onclick="advance(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">Ezekiel 35:5-6 gives a reason for Edom's judgment tied directly to their own attitude toward violence. What is that reason?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(6,'A')"><span class="choice-letter">A</span>Because Edom did not hate bloodshed, therefore blood would pursue Edom itself</button>
+        <button class="choice-btn" onclick="answer(6,'B')"><span class="choice-letter">B</span>Because Edom shed no blood at all, God judged their indifference</button>
+        <button class="choice-btn" onclick="answer(6,'C')"><span class="choice-letter">C</span>Because Edom hated bloodshed too much and refused to fight for Israel</button>
+        <button class="choice-btn" onclick="answer(6,'D')"><span class="choice-letter">D</span>Because Edom's bloodshed was accidental, so God offered them mercy instead</button>
+      </div>
+      <div class="feedback" id="fb6"></div>
+      <button class="next-btn" id="next6" onclick="advance(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <span class="question-text">Ezekiel 35:12-13 says God "heard" specific words from Edom against the mountains of Israel. What had Edom said?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(7,'A')"><span class="choice-letter">A</span>"Their God has abandoned them forever; they shall never return"</button>
+        <button class="choice-btn" onclick="answer(7,'B')"><span class="choice-letter">B</span>"We will rebuild what they have destroyed and claim the glory"</button>
+        <button class="choice-btn" onclick="answer(7,'C')"><span class="choice-letter">C</span>"Their king is dead; let us divide his kingdom among ourselves"</button>
+        <button class="choice-btn" onclick="answer(7,'D')"><span class="choice-letter">D</span>"They are laid desolate; they are given us to devour"</button>
+      </div>
+      <div class="feedback" id="fb7"></div>
+      <button class="next-btn" id="next7" onclick="advance(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+        <span class="question-text">Ezekiel 36:6-7 responds to the reproach Israel's mountains suffered from surrounding nations. What does God swear will happen to those nations?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(8,'A')"><span class="choice-letter">A</span>They will be given a final chance to repent before judgment falls</button>
+        <button class="choice-btn" onclick="answer(8,'B')"><span class="choice-letter">B</span>They themselves shall suffer reproach, in a reversal of what they inflicted</button>
+        <button class="choice-btn" onclick="answer(8,'C')"><span class="choice-letter">C</span>They will be absorbed into Israel and made to worship the Lord</button>
+        <button class="choice-btn" onclick="answer(8,'D')"><span class="choice-letter">D</span>They will be spared entirely, since Israel's own sin caused the reproach</button>
+      </div>
+      <div class="feedback" id="fb8"></div>
+      <button class="next-btn" id="next8" onclick="advance(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <span class="question-text">In Ezekiel 36:22, God explicitly rules out one motive for restoring Israel and names the true one instead. What are they?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(9,'A')"><span class="choice-letter">A</span>Not for Israel's own sake, but for the sake of his holy name</button>
+        <button class="choice-btn" onclick="answer(9,'B')"><span class="choice-letter">B</span>Not because of a covenant obligation, but purely out of pity</button>
+        <button class="choice-btn" onclick="answer(9,'C')"><span class="choice-letter">C</span>Not because Israel repented, but because Babylon had grown too powerful</button>
+        <button class="choice-btn" onclick="answer(9,'D')"><span class="choice-letter">D</span>Not for any stated reason, since the verse leaves the motive unexplained</button>
+      </div>
+      <div class="feedback" id="fb9"></div>
+      <button class="next-btn" id="next9" onclick="advance(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">Ezekiel 36:25-27 describes a specific sequence of inward transformation. Which of the following matches what the text actually says God will do?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(10,'A')"><span class="choice-letter">A</span>Give a heart of stone to replace a heart grown too soft, then withdraw his Spirit until obedience is proven</button>
+        <button class="choice-btn" onclick="answer(10,'B')"><span class="choice-letter">B</span>Remove the heart of flesh and replace it with a heart of stone to make Israel unshakeable</button>
+        <button class="choice-btn" onclick="answer(10,'C')"><span class="choice-letter">C</span>Sprinkle clean water to cleanse them, give a new heart and new spirit, remove the heart of stone, and put his own Spirit within them to cause obedience</button>
+        <button class="choice-btn" onclick="answer(10,'D')"><span class="choice-letter">D</span>Wait for Israel to first cleanse themselves before offering any new heart or spirit</button>
+      </div>
+      <div class="feedback" id="fb10"></div>
+      <button class="next-btn" id="next10" onclick="advance(10)">Show Results &rarr;</button>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 120 120">
+          <circle class="score-ring-bg" cx="60" cy="60" r="54"/>
+          <circle class="score-ring-fill" id="score-ring" cx="60" cy="60" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <span class="score-num" id="score-num">0</span>
+          <span class="score-denom">/ 10</span>
+        </div>
+      </div>
+      <div id="results-title"></div>
+      <div id="results-message"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+      <div class="review-title">&#10022; Question Review &#10022;</div>
+      <div id="review-list"></div>
+    </div>
+
+  </div><!-- /card -->
+</div><!-- /outer-wrap -->
+
+<script>
+const QUESTIONS = 10;
+const CORRECT = {
+  1: 'C', 2: 'B', 3: 'A', 4: 'D', 5: 'C',
+  6: 'A', 7: 'D', 8: 'B', 9: 'A', 10: 'C'
+};
+
+const FEEDBACK = {
+  1: {
+    correct: "Correct! Ezekiel 34:3-4 charges the shepherds with taking the flock's fat and wool for themselves while leaving the weak unstrengthened, the sick unhealed, the injured unbound, the strayed unreturned, and the lost unsought &mdash; ruling instead with force and harshness.",
+    wrong: "Not quite. Ezekiel 34:3-4 says the shepherds ate the fat and wore the wool while failing the weak, sick, injured, strayed, and lost &mdash; self-enrichment paired with total neglect of the flock's needs.",
+    ref: "Ezekiel 34:3-4"
+  },
+  2: {
+    correct: "Correct! Ezekiel 34:16 pairs mercy toward the weak with judgment on those who had grown fat and strong at the flock's expense: 'the fat and the strong I will destroy; I will feed them in justice.' God's shepherding includes real judgment, not only comfort.",
+    wrong: "Not quite. Ezekiel 34:16 says God will destroy the fat and the strong and feed the flock in justice &mdash; the same care that restores the weak brings judgment on those who had grown strong by preying on others.",
+    ref: "Ezekiel 34:16"
+  },
+  3: {
+    correct: "Correct! Ezekiel 34:23-24 names 'my servant David' as the one shepherd who will feed the flock, with David as prince among them while the Lord himself remains their God &mdash; a promise pointing beyond the historical David to great David's greater Son.",
+    wrong: "Not quite. Ezekiel 34:23-24 specifically names 'my servant David' as the one shepherd, made prince among the people, while the Lord remains their God &mdash; not Moses, an angel, or a priestly figure.",
+    ref: "Ezekiel 34:23-24"
+  },
+  4: {
+    correct: "Correct! Ezekiel 34:25-27 pictures the covenant of peace as banishing wild beasts so the flock can dwell securely, sending 'showers of blessing' in their season, and breaking the bars of their yoke to deliver them from those who enslaved them.",
+    wrong: "Not quite. Ezekiel 34:25-27 names wild beasts banished from the land, showers of blessing in their season, and the bars of the yoke broken &mdash; security, fruitfulness, and freedom, not temple worship, military victory, or debt release.",
+    ref: "Ezekiel 34:25-27"
+  },
+  5: {
+    correct: "Correct! Ezekiel 35:10 quotes Edom's claim word for word: 'These two nations and these two countries shall be mine, and we will take possession of them' &mdash; adding the pointed detail 'although the Lord was there,' exposing the claim as defiance of God himself, not just a land dispute.",
+    wrong: "Not quite. Ezekiel 35:10 has Edom claiming outright possession of Israel and Judah, 'although the Lord was there' &mdash; the brazenness is in claiming land where God himself was present, not a theological or historical argument.",
+    ref: "Ezekiel 35:10"
+  },
+  6: {
+    correct: "Correct! Ezekiel 35:6 makes the logic explicit: 'because you did not hate bloodshed, therefore blood shall pursue you.' Edom's casual relationship with violence against Israel becomes the exact measure of the judgment poured back on them.",
+    wrong: "Not quite. Ezekiel 35:6 states the reasoning plainly: because Edom did not hate bloodshed, blood would pursue Edom in turn &mdash; a judgment that matches their own indifference to violence, not the other options.",
+    ref: "Ezekiel 35:5-6"
+  },
+  7: {
+    correct: "Correct! Ezekiel 35:12-13 has God declare, 'I have heard all the revilings that you uttered against the mountains of Israel, saying, “They are laid desolate; they are given us to devour.”' Edom's gloating over Israel's ruin was not private &mdash; God heard every word.",
+    wrong: "Not quite. Ezekiel 35:12-13 quotes Edom's exact taunt: 'They are laid desolate; they are given us to devour.' God specifically says he heard this and their self-magnifying words against him.",
+    ref: "Ezekiel 35:12-13"
+  },
+  8: {
+    correct: "Correct! Ezekiel 36:7 has God swear that the nations surrounding Israel 'shall themselves suffer reproach' &mdash; the very shame and mockery they heaped on Israel's ruined land turns back on them.",
+    wrong: "Not quite. Ezekiel 36:7 is a direct reversal: God swears the surrounding nations will themselves suffer reproach, not receive another chance, absorption into Israel, or a pass because of Israel's sin.",
+    ref: "Ezekiel 36:6-7"
+  },
+  9: {
+    correct: "Correct! Ezekiel 36:22 states it without hedging: 'It is not for your sake, O house of Israel, that I am about to act, but for the sake of my holy name.' Restoration flows from God's own character and name, not Israel's merit &mdash; a striking picture of grace rather than reward.",
+    wrong: "Not quite. Ezekiel 36:22 explicitly denies that Israel's own sake is the motive and names God's holy name instead &mdash; restoration by grace, not by anything Israel had earned or done.",
+    ref: "Ezekiel 36:22"
+  },
+  10: {
+    correct: "Correct! Ezekiel 36:25-27 lays out the sequence precisely: clean water sprinkled to cleanse them, a new heart and new spirit given, the heart of stone removed and a heart of flesh given, and God's own Spirit put within them to cause them to walk in his statutes. Cleansing and transformation both come from God, not from Israel's own effort.",
+    wrong: "Not quite. Ezekiel 36:25-27 has God sprinkling clean water, giving a new heart and spirit, removing the heart of stone for a heart of flesh, and putting his own Spirit within them &mdash; the reverse of hardening, and entirely God's initiative rather than Israel's.",
+    ref: "Ezekiel 36:25-27"
+  }
+};
+
+const SHORT_Q = [
+  "What did Israel's shepherds do while neglecting the flock's needs? (Ezek 34:3-4)",
+  "What does God say he will do to 'the fat and the strong'? (Ezek 34:16)",
+  "Who is the 'one shepherd' God sets up over the flock? (Ezek 34:23-24)",
+  "What blessings make up the 'covenant of peace'? (Ezek 34:25-27)",
+  "What claim did Edom make about Israel and Judah? (Ezek 35:10)",
+  "Why would blood pursue Edom, according to the text? (Ezek 35:5-6)",
+  "What taunt against the mountains of Israel did God hear? (Ezek 35:12-13)",
+  "What does God swear will happen to the surrounding nations? (Ezek 36:6-7)",
+  "What motive does God deny, and which does he affirm, for restoring Israel? (Ezek 36:22)",
+  "What sequence of inward transformation does God describe? (Ezek 36:25-27)"
+];
+
+let score = 0;
+let answers = {};
+
+function answer(qNum, chosen) {
+  if (answers[qNum]) return;
+  answers[qNum] = chosen;
+
+  const correct = CORRECT[qNum];
+  const isRight = chosen === correct;
+  if (isRight) score++;
+
+  const block = document.getElementById('q' + qNum);
+  const btns = block.querySelectorAll('.choice-btn');
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    const letter = ['A','B','C','D'][i];
+    if (letter === correct) btn.classList.add('correct');
+    else if (letter === chosen && !isRight) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('fb' + qNum);
+  const info = FEEDBACK[qNum];
+  if (isRight) {
+    fb.className = 'feedback correct-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10003;</span>' + info.correct +
+      '<span class="feedback-ref">' + info.ref + '</span>';
+  } else {
+    fb.className = 'feedback wrong-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10007;</span>' + info.wrong +
+      '<span class="feedback-ref">' + info.ref + '</span>';
+  }
+
+  document.getElementById('next' + qNum).classList.add('visible');
+}
+
+function advance(qNum) {
+  if (qNum < QUESTIONS) {
+    document.getElementById('q' + qNum).classList.remove('active');
+    document.getElementById('q' + (qNum + 1)).classList.add('active');
+    const pct = Math.round(((qNum) / QUESTIONS) * 100);
+    document.getElementById('prog-bar').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = 'Question ' + (qNum + 1) + ' of ' + QUESTIONS;
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('q10').style.display = 'none';
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-label').textContent = 'Complete';
+
+  const rs = document.getElementById('results-screen');
+  rs.style.display = 'block';
+
+  document.getElementById('score-num').textContent = score;
+
+  const pct = score / QUESTIONS;
+  const circumference = 339.3;
+  const offset = circumference - (pct * circumference);
+  setTimeout(() => {
+    document.getElementById('score-ring').style.strokeDashoffset = offset;
+  }, 100);
+
+  let title, msg;
+  if (score === 10) {
+    title = 'Perfect Score!';
+    msg = '"It is not for your sake, O house of Israel, that I am about to act, but for the sake of my holy name." You read Ezekiel\'s shepherd, judgment, and new-heart chapters with real care. &mdash; Ezekiel 36:22';
+  } else if (score >= 8) {
+    title = 'Excellent Work!';
+    msg = 'You tracked the failed shepherds, Edom\'s judgment, and Israel\'s promised new heart with sharp attention. Three chapters, one thread: God restores not because of merit, but for the sake of his own name.';
+  } else if (score >= 6) {
+    title = 'Well Done!';
+    msg = 'A solid read through the shepherd oracle, the oracle against Edom, and the promise of a new heart. Look again especially at chapter 36 &mdash; it names the whole reason for grace in a single verse.';
+  } else if (score >= 4) {
+    title = 'Good Effort';
+    msg = 'These chapters reward close reading. The false shepherds, Mount Seir\'s judgment, and the sprinkled clean water all point to the same truth: restoration is God\'s doing, not something earned.';
+  } else {
+    title = 'Keep Studying!';
+    msg = '"I will give you a new heart, and a new spirit I will put within you." Read Ezekiel 34-36 again slowly, and notice whose initiative restores the flock. &mdash; Ezekiel 36:26';
+  }
+  document.getElementById('results-title').textContent = title;
+  document.getElementById('results-message').textContent = msg;
+
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  for (let i = 1; i <= QUESTIONS; i++) {
+    const chosen = answers[i];
+    const correct = CORRECT[i];
+    const isRight = chosen === correct;
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (isRight ? 'r-correct' : 'r-wrong');
+    div.innerHTML = '<div class="review-q">Q' + i + '. ' + SHORT_Q[i-1] + '</div>' +
+      '<div class="review-ans">' +
+      (isRight
+        ? '<span class="review-correct-lbl">&#10003; Correct</span> &mdash; ' + correct
+        : '<span class="review-wrong-lbl">&#10007; Your answer: ' + chosen + '</span> &nbsp;|&nbsp; Correct: ' + correct) +
+      '</div>';
+    reviewList.appendChild(div);
+  }
+}
+
+function resetQuiz() {
+  score = 0;
+  answers = {};
+  for (let i = 1; i <= QUESTIONS; i++) {
+    const block = document.getElementById('q' + i);
+    block.classList.remove('active');
+    const btns = block.querySelectorAll('.choice-btn');
+    btns.forEach(b => { b.disabled = false; b.className = 'choice-btn'; });
+    const fb = document.getElementById('fb' + i);
+    fb.className = 'feedback';
+    fb.innerHTML = '';
+    document.getElementById('next' + i).classList.remove('visible');
+    block.style.display = '';
+  }
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('q1').classList.add('active');
+  document.getElementById('prog-bar').style.width = '10%';
+  document.getElementById('prog-label').textContent = 'Question 1 of 10';
+  document.getElementById('score-ring').style.strokeDashoffset = '339.3';
+}
+</script>
+</body>
+</html>
