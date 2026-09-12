@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 255 Bible Recap Quiz — Joel 1–3</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0a04;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 16px 60px;
+    font-family: 'Crimson Text', Georgia, serif;
+    color: #2a1a08;
+  }
+
+  .outer-wrap {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  /* ── HEADER ── */
+  .quiz-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .quiz-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .quiz-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #f5ead8;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .passage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .passage-tag {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .difficulty-badge {
+    display: inline-block;
+    background: rgba(139,26,26,0.25);
+    border: 1px solid #8b1a1a;
+    color: #e07070;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 3px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .ornament {
+    color: #c9a84c;
+    font-size: 1.1rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 100%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e8c96a);
+    border-radius: 3px;
+    width: 10%;
+    transition: width 0.5s ease;
+  }
+  .progress-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: #c9a84c;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: linear-gradient(160deg, #f5ead8 0%, #ede0c4 40%, #e8d5b0 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 6px;
+    padding: 32px 36px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  }
+
+  /* ── QUESTION ── */
+  .question-block {
+    display: none;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+  .question-block.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .question-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: #9a7a3a;
+    white-space: nowrap;
+    padding-top: 3px;
+    text-transform: uppercase;
+  }
+  .detail-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid #c9a84c;
+    color: #9a7a3a;
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .question-text {
+    font-size: 1.18rem;
+    line-height: 1.5;
+    color: #1e1208;
+    font-weight: 600;
+  }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .choice-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(201,168,76,0.35);
+    border-radius: 4px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: #2a1a08;
+    line-height: 1.4;
+  }
+  .choice-btn:hover:not(:disabled) {
+    background: rgba(201,168,76,0.15);
+    border-color: #c9a84c;
+    transform: translateX(3px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #c9a84c;
+    min-width: 18px;
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+  .choice-btn.correct {
+    background: rgba(26,92,42,0.18);
+    border-color: #1a5c2a;
+  }
+  .choice-btn.correct .choice-letter { color: #1a5c2a; }
+  .choice-btn.wrong {
+    background: rgba(139,26,26,0.15);
+    border-color: #8b1a1a;
+  }
+  .choice-btn.wrong .choice-letter { color: #8b1a1a; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.3s ease forwards;
+  }
+  .feedback.correct-fb {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+    color: #1a3d1e;
+    display: block;
+  }
+  .feedback.wrong-fb {
+    background: rgba(139,26,26,0.1);
+    border: 1px solid #8b1a1a;
+    color: #5a0e0e;
+    display: block;
+  }
+  .feedback-icon { font-weight: 700; margin-right: 6px; }
+  .feedback-ref {
+    font-style: italic;
+    color: #5a4020;
+    font-size: 0.95rem;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+  }
+  .next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .next-btn.visible { display: inline-block; }
+
+  /* ── RESULTS ── */
+  #results-screen {
+    display: none;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .score-ring-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 22px;
+  }
+  .score-ring-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(201,168,76,0.15); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none;
+    stroke: #c9a84c;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #c9a84c;
+    line-height: 1;
+  }
+  .score-denom {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: #9a7a3a;
+    letter-spacing: 0.1em;
+  }
+
+  #results-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #f5ead8;
+    margin-bottom: 10px;
+  }
+  #results-message {
+    color: #c9a84c;
+    font-size: 1.08rem;
+    line-height: 1.5;
+    margin-bottom: 26px;
+    font-style: italic;
+  }
+
+  .take-again-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c, #e8c96a);
+    color: #1e0e00;
+    border: none;
+    border-radius: 3px;
+    padding: 11px 28px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+    margin-bottom: 32px;
+  }
+  .take-again-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ── REVIEW ── */
+  .review-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    text-align: left;
+  }
+  .review-item {
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    text-align: left;
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .review-item.r-correct {
+    background: rgba(26,92,42,0.12);
+    border: 1px solid #1a5c2a;
+  }
+  .review-item.r-wrong {
+    background: rgba(139,26,26,0.10);
+    border: 1px solid #8b1a1a;
+  }
+  .review-q {
+    font-weight: 600;
+    color: #1e1208;
+    margin-bottom: 4px;
+  }
+  .review-ans { color: #3a2810; font-size: 0.95rem; }
+  .review-correct-lbl { color: #1a5c2a; font-weight: 700; }
+  .review-wrong-lbl { color: #8b1a1a; font-weight: 700; }
+
+  @media (max-width: 520px) {
+    .card { padding: 22px 18px; }
+    .quiz-title { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="outer-wrap">
+
+  <!-- HEADER -->
+  <header class="quiz-header">
+    <div class="quiz-date">Saturday, September 12, 2026 &middot; Day 255</div>
+    <h1 class="quiz-title">The Bible Recap &mdash; Daily Quiz</h1>
+    <div class="passage-tags">
+      <span class="passage-tag">Joel 1</span>
+      <span class="passage-tag">Joel 2</span>
+      <span class="passage-tag">Joel 3</span>
+    </div>
+    <span class="ornament">&#10022;</span>
+    <span class="difficulty-badge">Challenging</span>
+    <span class="ornament">&#10022;</span>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="prog-bar"></div>
+  </div>
+  <div class="progress-label" id="prog-label">Question 1 of 10</div>
+
+  <!-- CARD -->
+  <div class="card">
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <div class="question-top">
+        <span class="question-num">Q1</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">Joel 1:4 describes the locust plague in four successive waves, each finishing off what the last one left behind. In what order does the prophet name them?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(1,'A')"><span class="choice-letter">A</span>Locust, cankerworm, caterpillar, palmerworm</button>
+        <button class="choice-btn" onclick="answer(1,'B')"><span class="choice-letter">B</span>Palmerworm, locust, cankerworm, caterpillar</button>
+        <button class="choice-btn" onclick="answer(1,'C')"><span class="choice-letter">C</span>Caterpillar, palmerworm, locust, cankerworm</button>
+        <button class="choice-btn" onclick="answer(1,'D')"><span class="choice-letter">D</span>Cankerworm, caterpillar, palmerworm, locust</button>
+      </div>
+      <div class="feedback" id="fb1"></div>
+      <button class="next-btn" id="next1" onclick="advance(1)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <div class="question-top">
+        <span class="question-num">Q2</span>
+        <span class="question-text">In Joel 1:8, the prophet calls the land to lament "like a virgin girded with sackcloth" mourning for whom?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(2,'A')"><span class="choice-letter">A</span>Her father</button>
+        <button class="choice-btn" onclick="answer(2,'B')"><span class="choice-letter">B</span>Her firstborn son</button>
+        <button class="choice-btn" onclick="answer(2,'C')"><span class="choice-letter">C</span>The priest of her city</button>
+        <button class="choice-btn" onclick="answer(2,'D')"><span class="choice-letter">D</span>The husband of her youth</button>
+      </div>
+      <div class="feedback" id="fb2"></div>
+      <button class="next-btn" id="next2" onclick="advance(2)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <div class="question-top">
+        <span class="question-num">Q3</span>
+        <span class="question-text">Joel 2:3 pictures the invading army's advance by contrasting the land before it and behind it. What is that contrast?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(3,'A')"><span class="choice-letter">A</span>Like the garden of Eden before them, and a desolate wilderness behind them</button>
+        <button class="choice-btn" onclick="answer(3,'B')"><span class="choice-letter">B</span>Like a wilderness before them, and the garden of Eden behind them</button>
+        <button class="choice-btn" onclick="answer(3,'C')"><span class="choice-letter">C</span>Like a furnace before them, and cold ashes behind them</button>
+        <button class="choice-btn" onclick="answer(3,'D')"><span class="choice-letter">D</span>Like a threshing floor before them, and scattered chaff behind them</button>
+      </div>
+      <div class="feedback" id="fb3"></div>
+      <button class="next-btn" id="next3" onclick="advance(3)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <div class="question-top">
+        <span class="question-num">Q4</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">Joel 2:13 calls the people to repentance with a specific image of tearing. What does the LORD say to tear, instead of garments?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(4,'A')"><span class="choice-letter">A</span>Their sackcloth</button>
+        <button class="choice-btn" onclick="answer(4,'B')"><span class="choice-letter">B</span>Their altars</button>
+        <button class="choice-btn" onclick="answer(4,'C')"><span class="choice-letter">C</span>Their hearts</button>
+        <button class="choice-btn" onclick="answer(4,'D')"><span class="choice-letter">D</span>Their tents</button>
+      </div>
+      <div class="feedback" id="fb4"></div>
+      <button class="next-btn" id="next4" onclick="advance(4)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <div class="question-top">
+        <span class="question-num">Q5</span>
+        <span class="question-text">Joel 2:16 calls for a solemn assembly with no exceptions for anyone's private life. Who specifically is told to leave their chamber and closet to attend?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(5,'A')"><span class="choice-letter">A</span>Elders and children</button>
+        <button class="choice-btn" onclick="answer(5,'B')"><span class="choice-letter">B</span>The bridegroom and the bride</button>
+        <button class="choice-btn" onclick="answer(5,'C')"><span class="choice-letter">C</span>Priests and Levites</button>
+        <button class="choice-btn" onclick="answer(5,'D')"><span class="choice-letter">D</span>Farmers and vinedressers</button>
+      </div>
+      <div class="feedback" id="fb5"></div>
+      <button class="next-btn" id="next5" onclick="advance(5)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="q6">
+      <div class="question-top">
+        <span class="question-num">Q6</span>
+        <span class="question-text">In Joel 2:25, once the people repent, what does the LORD specifically promise to restore to them?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(6,'A')"><span class="choice-letter">A</span>The years that the locust has eaten</button>
+        <button class="choice-btn" onclick="answer(6,'B')"><span class="choice-letter">B</span>The cities that were burned</button>
+        <button class="choice-btn" onclick="answer(6,'C')"><span class="choice-letter">C</span>The vineyards that were trampled by soldiers</button>
+        <button class="choice-btn" onclick="answer(6,'D')"><span class="choice-letter">D</span>The temple vessels taken into exile</button>
+      </div>
+      <div class="feedback" id="fb6"></div>
+      <button class="next-btn" id="next6" onclick="advance(6)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-block" id="q7">
+      <div class="question-top">
+        <span class="question-num">Q7</span>
+        <span class="question-text">Joel 2:28-29 describes the outpouring of God's Spirit "afterward." Upon whom does the text say this outpouring falls?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(7,'A')"><span class="choice-letter">A</span>Only the priests and prophets</button>
+        <button class="choice-btn" onclick="answer(7,'B')"><span class="choice-letter">B</span>Only the elders of Israel</button>
+        <button class="choice-btn" onclick="answer(7,'C')"><span class="choice-letter">C</span>Only the king's household</button>
+        <button class="choice-btn" onclick="answer(7,'D')"><span class="choice-letter">D</span>All flesh &mdash; sons and daughters, old men and young men, even male and female servants</button>
+      </div>
+      <div class="feedback" id="fb7"></div>
+      <button class="next-btn" id="next7" onclick="advance(7)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-block" id="q8">
+      <div class="question-top">
+        <span class="question-num">Q8</span>
+        <div>
+          <span class="detail-badge">Detail</span><br>
+          <span class="question-text">One line from Joel 2:32 is later quoted directly by both Peter at Pentecost (Acts 2) and Paul (Romans 10). Which line is it?</span>
+        </div>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(8,'A')"><span class="choice-letter">A</span>"The sun shall be turned into darkness, and the moon into blood"</button>
+        <button class="choice-btn" onclick="answer(8,'B')"><span class="choice-letter">B</span>"I will show wonders in the heavens and in the earth"</button>
+        <button class="choice-btn" onclick="answer(8,'C')"><span class="choice-letter">C</span>"Whosoever shall call on the name of the LORD shall be delivered"</button>
+        <button class="choice-btn" onclick="answer(8,'D')"><span class="choice-letter">D</span>"Your old men shall dream dreams, your young men shall see visions"</button>
+      </div>
+      <div class="feedback" id="fb8"></div>
+      <button class="next-btn" id="next8" onclick="advance(8)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-block" id="q9">
+      <div class="question-top">
+        <span class="question-num">Q9</span>
+        <span class="question-text">Joel 3:10 deliberately reverses a famous image found in Isaiah 2 and Micah 4. What does Joel command the nations to do?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(9,'A')"><span class="choice-letter">A</span>Beat their plowshares into swords and their pruninghooks into spears</button>
+        <button class="choice-btn" onclick="answer(9,'B')"><span class="choice-letter">B</span>Turn their swords into plowshares and their spears into pruninghooks</button>
+        <button class="choice-btn" onclick="answer(9,'C')"><span class="choice-letter">C</span>Break their bows and burn their chariots in the fire</button>
+        <button class="choice-btn" onclick="answer(9,'D')"><span class="choice-letter">D</span>Melt down their idols to forge farming tools</button>
+      </div>
+      <div class="feedback" id="fb9"></div>
+      <button class="next-btn" id="next9" onclick="advance(9)">Next Question &rarr;</button>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-block" id="q10">
+      <div class="question-top">
+        <span class="question-num">Q10</span>
+        <span class="question-text">Joel 3 names the valley where the LORD gathers the nations to enter into judgment. What is that valley called?</span>
+      </div>
+      <div class="choices">
+        <button class="choice-btn" onclick="answer(10,'A')"><span class="choice-letter">A</span>The Valley of Achor</button>
+        <button class="choice-btn" onclick="answer(10,'B')"><span class="choice-letter">B</span>The Valley of Jehoshaphat</button>
+        <button class="choice-btn" onclick="answer(10,'C')"><span class="choice-letter">C</span>The Valley of Elah</button>
+        <button class="choice-btn" onclick="answer(10,'D')"><span class="choice-letter">D</span>The Valley of Hinnom</button>
+      </div>
+      <div class="feedback" id="fb10"></div>
+      <button class="next-btn" id="next10" onclick="advance(10)">Show Results &rarr;</button>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="results-screen">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 120 120">
+          <circle class="score-ring-bg" cx="60" cy="60" r="54"/>
+          <circle class="score-ring-fill" id="score-ring" cx="60" cy="60" r="54"/>
+        </svg>
+        <div class="score-ring-text">
+          <span class="score-num" id="score-num">0</span>
+          <span class="score-denom">/ 10</span>
+        </div>
+      </div>
+      <div id="results-title"></div>
+      <div id="results-message"></div>
+      <button class="take-again-btn" onclick="resetQuiz()">Take Again</button>
+      <div class="review-title">&#10022; Question Review &#10022;</div>
+      <div id="review-list"></div>
+    </div>
+
+  </div><!-- /card -->
+</div><!-- /outer-wrap -->
+
+<script>
+const QUESTIONS = 10;
+const CORRECT = {
+  1: 'B', 2: 'D', 3: 'A', 4: 'C', 5: 'B',
+  6: 'A', 7: 'D', 8: 'C', 9: 'A', 10: 'B'
+};
+
+const FEEDBACK = {
+  1: {
+    correct: "Correct! Joel 1:4 says, 'What the palmerworm has left, the locust has eaten. What the locust has left, the cankerworm has eaten. And what the cankerworm has left, the caterpillar has eaten.' Four waves of devastation, each one finishing what the last began.",
+    wrong: "Not quite. Joel 1:4 specifically runs palmerworm, then locust, then cankerworm, then caterpillar &mdash; a chain of destruction, not the other orderings offered here.",
+    ref: "Joel 1:4"
+  },
+  2: {
+    correct: "Correct! Joel 1:8 says, 'Lament like a virgin girded with sackcloth for the husband of her youth.' The grief pictured is the rawest kind &mdash; a young bride mourning the sudden loss of her new husband, applied to the whole devastated land.",
+    wrong: "Not quite. Joel 1:8 specifically pictures a young bride mourning the husband of her youth &mdash; not a father, a firstborn son, or a priest.",
+    ref: "Joel 1:8"
+  },
+  3: {
+    correct: "Correct! Joel 2:3 says of the invading army, 'The land is like the garden of Eden before them, but behind them a desolate wilderness.' Wherever this army passes, paradise is left in ruins.",
+    wrong: "Not quite. Joel 2:3 specifically reverses the order given here &mdash; Eden before the army and wilderness behind it, not a furnace, threshing floor, or the wilderness coming first.",
+    ref: "Joel 2:3"
+  },
+  4: {
+    correct: "Correct! Joel 2:13 says, 'Rend your heart, and not your garments, and turn unto the LORD your God: for he is gracious and merciful, slow to anger, and of great kindness.' Outward ritual mourning means nothing without inward repentance.",
+    wrong: "Not quite. Joel 2:13 specifically calls for hearts to be torn, not garments &mdash; not sackcloth, altars, or tents.",
+    ref: "Joel 2:13"
+  },
+  5: {
+    correct: "Correct! Joel 2:16 says to gather the people, sanctify the congregation, and 'let the bridegroom go forth of his chamber, and the bride out of her closet.' Even a wedding &mdash; the most private, joyful exception imaginable &mdash; must yield to the call for national repentance.",
+    wrong: "Not quite. Joel 2:16 specifically names the bridegroom and bride as having no exception &mdash; not elders and children, priests and Levites, or farmers and vinedressers.",
+    ref: "Joel 2:16"
+  },
+  6: {
+    correct: "Correct! Joel 2:25 says, 'I will restore to you the years that the locust hath eaten.' The LORD promises not just to stop the judgment but to give back what the plague itself consumed &mdash; time and provision lost to devastation.",
+    wrong: "Not quite. Joel 2:25 specifically promises to restore the years the locust ate &mdash; not burned cities, trampled vineyards, or exiled temple vessels, none of which this passage mentions.",
+    ref: "Joel 2:25"
+  },
+  7: {
+    correct: "Correct! Joel 2:28-29 says, 'I will pour out my spirit upon all flesh; and your sons and your daughters shall prophesy, your old men shall dream dreams, your young men shall see visions: and also upon the servants and upon the handmaids in those days will I pour out my spirit.' The gift crosses every line of age, sex, and social status.",
+    wrong: "Not quite. Joel 2:28-29 specifically extends the outpouring to all flesh &mdash; sons, daughters, old men, young men, and even servants &mdash; not a restricted group of priests, elders, or royalty.",
+    ref: "Joel 2:28-29"
+  },
+  8: {
+    correct: "Correct! Joel 2:32 says, 'Whosoever shall call on the name of the LORD shall be delivered.' Peter quotes it in his Pentecost sermon (Acts 2:21) and Paul quotes it in Romans 10:13 to describe salvation offered to all who call on Christ.",
+    wrong: "Not quite. It is specifically 'Whosoever shall call on the name of the LORD shall be delivered' that Peter and Paul quote &mdash; the other lines describe cosmic signs and the Spirit's outpouring, but are not the verse cited in Acts 2 or Romans 10.",
+    ref: "Joel 2:32"
+  },
+  9: {
+    correct: "Correct! Joel 3:10 says, 'Beat your plowshares into swords and your pruninghooks into spears.' Isaiah 2:4 and Micah 4:3 picture nations beating swords into plowshares for an age of peace; Joel deliberately inverts it as a call to war for the coming judgment.",
+    wrong: "Not quite. Joel 3:10 specifically commands the reverse of the Isaiah/Micah image &mdash; plowshares into swords, not swords into plowshares, and not the bow-breaking or idol-melting offered here.",
+    ref: "Joel 3:10"
+  },
+  10: {
+    correct: "Correct! Joel 3:2 and 3:12 both name it: 'I will also gather all nations... and will plead with them there for my people... let the heathen be wakened, and come up to the valley of Jehoshaphat.' The name means 'the LORD judges,' fitting the scene of God's judgment on the nations.",
+    wrong: "Not quite. Joel 3 specifically names the Valley of Jehoshaphat as the place of judgment &mdash; not Achor, Elah, or Hinnom, none of which appear in this passage.",
+    ref: "Joel 3:2, 12"
+  }
+};
+
+const SHORT_Q = [
+  "In what order does Joel 1:4 name the four waves of locusts?",
+  "Whom does the virgin in sackcloth mourn for in Joel 1:8?",
+  "What is the land's condition before and behind the army in Joel 2:3?",
+  "What does Joel 2:13 say to tear instead of garments?",
+  "Who has no exception from the solemn assembly in Joel 2:16?",
+  "What does the LORD promise to restore in Joel 2:25?",
+  "Upon whom is the Spirit poured out in Joel 2:28-29?",
+  "Which line of Joel 2:32 is quoted in Acts 2 and Romans 10?",
+  "What reversal of Isaiah/Micah appears in Joel 3:10?",
+  "What is the valley of judgment named in Joel 3?"
+];
+
+let score = 0;
+let answers = {};
+
+function answer(qNum, chosen) {
+  if (answers[qNum]) return;
+  answers[qNum] = chosen;
+
+  const correct = CORRECT[qNum];
+  const isRight = chosen === correct;
+  if (isRight) score++;
+
+  const block = document.getElementById('q' + qNum);
+  const btns = block.querySelectorAll('.choice-btn');
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    const letter = ['A','B','C','D'][i];
+    if (letter === correct) btn.classList.add('correct');
+    else if (letter === chosen && !isRight) btn.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('fb' + qNum);
+  const info = FEEDBACK[qNum];
+  if (isRight) {
+    fb.className = 'feedback correct-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10003;</span>' + info.correct +
+      '<span class="feedback-ref">' + info.ref + '</span>';
+  } else {
+    fb.className = 'feedback wrong-fb';
+    fb.innerHTML = '<span class="feedback-icon">&#10007;</span>' + info.wrong +
+      '<span class="feedback-ref">' + info.ref + '</span>';
+  }
+
+  document.getElementById('next' + qNum).classList.add('visible');
+}
+
+function advance(qNum) {
+  if (qNum < QUESTIONS) {
+    document.getElementById('q' + qNum).classList.remove('active');
+    document.getElementById('q' + (qNum + 1)).classList.add('active');
+    const pct = Math.round(((qNum) / QUESTIONS) * 100);
+    document.getElementById('prog-bar').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = 'Question ' + (qNum + 1) + ' of ' + QUESTIONS;
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('q10').style.display = 'none';
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-label').textContent = 'Complete';
+
+  const rs = document.getElementById('results-screen');
+  rs.style.display = 'block';
+
+  document.getElementById('score-num').textContent = score;
+
+  const pct = score / QUESTIONS;
+  const circumference = 339.3;
+  const offset = circumference - (pct * circumference);
+  setTimeout(() => {
+    document.getElementById('score-ring').style.strokeDashoffset = offset;
+  }, 100);
+
+  let title, msg;
+  if (score === 10) {
+    title = 'Perfect Score!';
+    msg = "\"Whosoever shall call on the name of the LORD shall be delivered.\" You tracked the locust plague, the torn heart, and the Spirit poured out on all flesh &mdash; a book of judgment that ends in a promise of grace. — Joel 2:32";
+  } else if (score >= 8) {
+    title = 'Excellent Work!';
+    msg = "You followed Joel from ruined fields to the outpoured Spirit to the valley of judgment. Notice how repeatedly this short book turns from disaster toward mercy for those who call on the LORD.";
+  } else if (score >= 6) {
+    title = 'Well Done!';
+    msg = "A solid read through Joel's three chapters. The locust plague, the call to rend hearts not garments, and the promise of the Spirit all point toward the same gracious, merciful God.";
+  } else if (score >= 4) {
+    title = 'Good Effort';
+    msg = "These chapters reward slow, careful reading. From the four waves of locusts to the bridegroom leaving his chamber to the Spirit poured on all flesh, everything turns on genuine repentance meeting God's mercy.";
+  } else {
+    title = 'Keep Studying!';
+    msg = "\"Rend your heart, and not your garments... for he is gracious and merciful.\" Read Joel 1-3 again slowly, watching how devastation gives way to restoration and the Spirit poured out on all flesh. — Joel 2:13";
+  }
+  document.getElementById('results-title').textContent = title;
+  document.getElementById('results-message').textContent = msg;
+
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  for (let i = 1; i <= QUESTIONS; i++) {
+    const chosen = answers[i];
+    const correct = CORRECT[i];
+    const isRight = chosen === correct;
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (isRight ? 'r-correct' : 'r-wrong');
+    div.innerHTML = '<div class="review-q">Q' + i + '. ' + SHORT_Q[i-1] + '</div>' +
+      '<div class="review-ans">' +
+      (isRight
+        ? '<span class="review-correct-lbl">&#10003; Correct</span> &mdash; ' + correct
+        : '<span class="review-wrong-lbl">&#10007; Your answer: ' + chosen + '</span> &nbsp;|&nbsp; Correct: ' + correct) +
+      '</div>';
+    reviewList.appendChild(div);
+  }
+}
+
+function resetQuiz() {
+  score = 0;
+  answers = {};
+  for (let i = 1; i <= QUESTIONS; i++) {
+    const block = document.getElementById('q' + i);
+    block.classList.remove('active');
+    const btns = block.querySelectorAll('.choice-btn');
+    btns.forEach(b => { b.disabled = false; b.className = 'choice-btn'; });
+    const fb = document.getElementById('fb' + i);
+    fb.className = 'feedback';
+    fb.innerHTML = '';
+    document.getElementById('next' + i).classList.remove('visible');
+    block.style.display = '';
+  }
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('q1').classList.add('active');
+  document.getElementById('prog-bar').style.width = '10%';
+  document.getElementById('prog-label').textContent = 'Question 1 of 10';
+  document.getElementById('score-ring').style.strokeDashoffset = '339.3';
+}
+</script>
+</body>
+</html>
